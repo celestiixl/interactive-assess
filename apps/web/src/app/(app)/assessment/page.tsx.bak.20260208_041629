@@ -1,0 +1,286 @@
+import Link from "next/link";
+
+function Pill({
+  children,
+  tone = "neutral",
+}: {
+  children: React.ReactNode;
+  tone?: "neutral" | "teal" | "amber" | "violet" | "slate" | "emerald";
+}) {
+  const base = "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold shadow-sm";
+  const tones: Record<string, string> = {
+    neutral: "border-white/14 bg-background text-foreground/90 dark:text-zinc-100",
+    teal: "border-teal-300/30 bg-teal-400/15 text-teal-950 dark:text-teal-200 shadow-[0_0_0_1px_rgba(45,212,191,0.06)]",
+    emerald: "border-emerald-300/30 bg-emerald-400/15 text-emerald-950 dark:text-emerald-200 shadow-[0_0_0_1px_rgba(52,211,153,0.06)]",
+    amber: "border-amber-300/35 bg-amber-400/18 text-amber-950 dark:text-amber-200 shadow-[0_0_0_1px_rgba(251,191,36,0.06)]",
+    violet: "border-violet-300/30 bg-violet-400/15 text-violet-950 dark:text-violet-200 shadow-[0_0_0_1px_rgba(167,139,250,0.06)]",
+    slate: "border-slate-300/25 bg-slate-400/12 text-slate-950 dark:text-zinc-100 shadow-[0_0_0_1px_rgba(148,163,184,0.06)]",
+  };
+  return <span className={`${base} ${tones[tone]}`}>{children}</span>;
+}
+
+function NavItem({
+  href,
+  label,
+  active,
+  tone = "neutral",
+}: {
+  href: string;
+  label: string;
+  active?: boolean;
+  tone?: "neutral" | "teal" | "amber" | "violet" | "slate" | "emerald";
+}) {
+  return (
+    <Link
+      href={href}
+      className={
+        "flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm font-medium transition " +
+        (active
+          ? "border-white/16 bg-muted/40"
+          : "border-white/14 bg-background hover:bg-muted/30")
+      }
+    >
+      <span className="truncate">{label}</span>
+      <Pill tone={tone}>{tone}</Pill>
+    </Link>
+  );
+}
+
+function ActionCard({
+  href,
+  title,
+  desc,
+  chips,
+  accent,
+}: {
+  href: string;
+  title: string;
+  desc: string;
+  chips: string[];
+  accent: "teal" | "slate" | "amber" | "violet" | "emerald";
+}) {
+  const accentBar =
+    accent === "teal"
+      ? "bg-teal-500"
+      : accent === "amber"
+      ? "bg-amber-500"
+      : accent === "violet"
+      ? "bg-violet-500"
+      : accent === "emerald"
+      ? "bg-emerald-500"
+      : "bg-slate-500";
+
+  const accentGlow =
+    accent === "teal"
+      ? "from-teal-500/15"
+      : accent === "amber"
+      ? "from-amber-500/15"
+      : accent === "violet"
+      ? "from-violet-500/15"
+      : accent === "emerald"
+      ? "from-emerald-500/15"
+      : "from-slate-500/12";
+
+  return (
+    <Link
+      href={href}
+      className="group relative overflow-hidden rounded-2xl border border-white/14 bg-background/95 dark:bg-zinc-900/55 p-6 shadow-[0_14px_50px_rgba(0,0,0,0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_55px_rgba(2,6,23,0.06)]"
+    >
+      <div className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b ${accentGlow} to-transparent`} />
+      <div className={`pointer-events-none absolute left-0 top-0 h-full w-[6px] ${accentBar}`} />
+      <div className="flex items-start justify-between gap-6">
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+          <p className="mt-2 text-sm text-foreground/90 dark:text-zinc-100">{desc}</p>
+        </div>
+        <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/14 bg-muted/20 text-lg text-foreground/90 dark:text-zinc-100 transition group-hover:bg-muted/35 group-hover:text-foreground">
+          →
+        </div>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        {chips.map((c, i) => {
+          const cycle: Array<"teal" | "emerald" | "amber" | "violet" | "slate"> = [
+            "teal",
+            "emerald",
+            "amber",
+            "violet",
+            "slate",
+          ];
+          return (
+            <Pill key={c} tone={cycle[i % cycle.length]}>
+              {c}
+            </Pill>
+          );
+        })}
+      </div>
+    </Link>
+  );
+}
+
+export default function AssessmentDashboardEntry() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-zinc-950 dark:to-slate-950">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[42vh] bg-[radial-gradient(520px_260px_at_18%_18%,rgba(45,212,191,0.04),transparent),radial-gradient(520px_260px_at_78%_22%,rgba(245,158,11,0.04),transparent),radial-gradient(640px_320px_at_52%_80%,rgba(139,92,246,0.03),transparent)]" />
+      {/* Top bar */}
+      <header className="sticky top-0 z-20 border-b border-white/14 bg-zinc-950/80 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-4 px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/14 bg-muted/30 text-sm font-bold">
+              IA
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-foreground/90">
+                interactive-assess
+              </div>
+              <div className="text-xs text-muted-foreground dark:text-zinc-300">
+                STAAR Biology • interactive items • practice + test
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden items-center gap-2 md:flex">
+            <Pill tone="violet">STAAR aligned</Pill>
+            <Pill tone="teal">Interactive</Pill>
+            <Pill tone="amber">Practice/Test</Pill>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link
+              href="/practice"
+              className="rounded-xl border border-white/14 bg-muted/20 px-4 py-2 text-sm font-semibold transition hover:bg-muted/35"
+            >
+              Open Practice
+            </Link>
+            <Link
+              href="/teacher/dashboard"
+              className="rounded-xl border border-white/14 bg-muted/20 px-4 py-2 text-sm font-semibold transition hover:bg-muted/35"
+            >
+              Teacher
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Shell */}
+      <div className="mx-auto grid w-full max-w-screen-2xl grid-cols-1 gap-6 px-6 py-8 lg:grid-cols-[280px_1fr]">
+        {/* Sidebar */}
+        <aside className="rounded-2xl border border-white/14 bg-background/95 dark:bg-zinc-900/55 p-4 shadow-[0_14px_40px_rgba(2,6,23,0.06)]">
+          <div className="mb-4">
+            <div className="text-sm font-semibold">Navigation</div>
+            <div className="mt-1 text-xs text-muted-foreground dark:text-zinc-300">
+              Jump between roles and test screens.
+            </div>
+          </div>
+
+          <div className="grid gap-2">
+            <NavItem href="/assessment" label="Assessment Home" active tone="slate" />
+            <NavItem href="/student/assessment" label="Student Assessment Lab" tone="teal" />
+            <NavItem href="/student/assessment/items" label="Items Test Screen" tone="emerald" />
+            <NavItem href="/practice" label="Practice Runner" tone="amber" />
+            <NavItem href="/teacher/dashboard" label="Teacher Dashboard" tone="slate" />
+          </div>
+
+          <div className="mt-5 rounded-2xl border border-white/14 bg-muted/15 p-4">
+            <div className="text-xs font-semibold text-foreground/90">Status</div>
+            <div className="mt-2 text-sm">
+              <span className="font-semibold">Mode:</span>{" "}
+              <span className="text-foreground/90 dark:text-zinc-100">prototype</span>
+            </div>
+            <div className="mt-1 text-sm">
+              <span className="font-semibold">Next build:</span>{" "}
+              <span className="text-foreground/90 dark:text-zinc-100">Inline Choice first-class</span>
+            </div>
+          </div>
+        </aside>
+
+        {/* Main */}
+        <main id="assessment-root" className="space-y-6">
+<div>
+            <h1 className="text-2xl font-semibold tracking-tight">Assessment</h1>
+            <p className="mt-2 max-w-2xl text-sm text-foreground/90 dark:text-zinc-100">
+              Choose your view. Student is the practice + item sandbox. Teacher is building,
+              managing, and analytics.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+            <ActionCard
+              href="/student/assessment"
+              accent="teal"
+              title="Continue as Student"
+              desc="Practice runner entry, interactive item testing, goals, and progress."
+              chips={["Practice", "Interactive items", "Goals", "Mastery"]}
+            />
+            <ActionCard
+              href="/teacher/dashboard"
+              accent="slate"
+              title="Continue as Teacher"
+              desc="Build items, manage assessments, view analytics, and jump into student view."
+              chips={["Builder", "Analytics", "Assign", "Student view"]}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+            <div className="xl:col-span-2 rounded-2xl border border-white/14 bg-background/95 dark:bg-zinc-900/55 p-6 shadow-[0_14px_40px_rgba(2,6,23,0.06)]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-semibold">Quick actions</div>
+                  <div className="mt-1 text-xs text-muted-foreground dark:text-zinc-300">
+                    Handy jumps while you’re building and testing.
+                  </div>
+                </div>
+                <Pill tone="slate">shortcuts</Pill>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link
+                  href="/practice"
+                  className="rounded-xl border border-white/14 bg-muted/20 px-4 py-2 text-sm font-semibold transition hover:bg-muted/35"
+                >
+                  Practice Runner
+                </Link>
+                <Link
+                  href="/student/assessment/items"
+                  className="rounded-xl border border-white/14 bg-muted/20 px-4 py-2 text-sm font-semibold transition hover:bg-muted/35"
+                >
+                  Items Test Screen
+                </Link>
+                <Link
+                  href="/student/assessment"
+                  className="rounded-xl border border-white/14 bg-muted/20 px-4 py-2 text-sm font-semibold transition hover:bg-muted/35"
+                >
+                  Student Lab
+                </Link>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/14 bg-background/95 dark:bg-zinc-900/55 p-6 shadow-[0_14px_40px_rgba(2,6,23,0.06)]">
+              <div className="flex items-center justify-between">
+                <div className="text-sm font-semibold">What’s next</div>
+                <Pill tone="amber">roadmap</Pill>
+              </div>
+              <ul className="mt-3 space-y-2 text-sm text-foreground/90 dark:text-zinc-100">
+                <li className="flex gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  Inline Choice: show in pills + builder + runner (no hook errors)
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-teal-500" />
+                  Role-based login routing (student/teacher) + remember my view
+                </li>
+                <li className="flex gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-amber-500" />
+                  Accommodations: text-to-speech, extended time, reduced answer choices
+                </li>
+              </ul>
+              <div className="mt-4 text-xs text-muted-foreground dark:text-zinc-300">
+                Tip: once we add auth, this page becomes the smart gate that routes by role automatically.
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,40 @@
+import Link from "next/link";
+
+export default function AssessmentHome() {
+  return (
+    <main className="mx-auto w-full max-w-5xl px-6 py-12">
+      <h1 className="text-3xl font-semibold tracking-tight">Assessment</h1>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Choose your view. (Next upgrade: auto-route based on login + role.)
+      </p>
+
+      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Link
+          href="/student/assessment"
+          className="group rounded-2xl border p-6 shadow-sm transition hover:bg-muted/40"
+        >
+          <div className="text-base font-semibold">Continue as Student</div>
+          <div className="mt-2 text-sm text-muted-foreground">
+            Practice runner, interactive items testing, goals, and progress.
+          </div>
+          <div className="mt-4 text-lg opacity-70 group-hover:opacity-100">→</div>
+        </Link>
+
+        <Link
+          href="/teacher/dashboard"
+          className="group rounded-2xl border p-6 shadow-sm transition hover:bg-muted/40"
+        >
+          <div className="text-base font-semibold">Continue as Teacher</div>
+          <div className="mt-2 text-sm text-muted-foreground">
+            Build items, manage assessments, view analytics, and jump into student view.
+          </div>
+          <div className="mt-4 text-lg opacity-70 group-hover:opacity-100">→</div>
+        </Link>
+      </div>
+
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        0
+      </div>
+    </main>
+  );
+}

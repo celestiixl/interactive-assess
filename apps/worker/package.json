@@ -1,0 +1,12 @@
+{
+  "name": "worker",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.0",
+    "@types/node": "^20.12.12"
+  }
+}

@@ -1,0 +1,15 @@
+import "./globals.css";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className="min-h-screen bg-neutral-50 text-neutral-900 antialiased [color-scheme:light]">
+        <div className="mx-auto max-w-7xl p-6">{children}</div>
+      </body>
+    </html>
+  );
+}

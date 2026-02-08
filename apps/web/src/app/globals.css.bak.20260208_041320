@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* WOS BIOSCIENCE TOKENS */
+@layer base {
+  :root {
+    /* backgrounds + text */
+    --bg-main: #fafaf8;          /* soft off-white, slightly warm */
+    --bg-elev: #ffffff;          /* card surface */
+    --text-main: #1f2933;        /* charcoal */
+    --text-muted: #52616b;       /* calm secondary */
+    --border-soft: #e6e8eb;      /* quiet dividers */
+
+    /* accents (meaningful) */
+    --accent-growth: #2f7d5c;    /* chlorophyll */
+    --accent-teal:   #4f9da6;    /* membranes / water */
+    --accent-amber:  #d4a72c;    /* revise / attention */
+    --accent-slate:  #64748b;    /* neutral data */
+
+    /* radii */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    /* subtle texture knobs */
+    --noise-opacity: 0.035;
+    --gradient-opacity: 0.12;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    color: var(--text-main);
+    background: var(--bg-main);
+    line-height: 1.55;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3 {
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Subtle bioscience texture: faint gradient + gentle noise (barely noticeable) */
+@layer base {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: var(--gradient-opacity);
+    background:
+      radial-gradient(60% 60% at 20% 15%, rgba(79,157,166,0.22) 0%, transparent 55%),
+      radial-gradient(55% 55% at 85% 20%, rgba(47,125,92,0.20) 0%, transparent 58%),
+      radial-gradient(70% 70% at 65% 85%, rgba(100,116,139,0.16) 0%, transparent 60%);
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: var(--noise-opacity);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+    background-size: 320px 320px;
+    mix-blend-mode: multiply;
+  }
+}
+
+/* Components: microscope-slide cards + non-pill buttons */
+@layer components {
+  .card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  }
+
+  .card-soft {
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(230,232,235,0.9);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(8px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    border-radius: var(--radius-md); /* NOT pill */
+    border: 1px solid var(--border-soft);
+    background: var(--bg-elev);
+    color: var(--text-main);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  }
+  .btn:hover { background: rgba(255,255,255,0.92); }
+  .btn:active { transform: translateY(0.5px); }
+
+  .btn-primary {
+    border-color: rgba(47,125,92,0.35);
+    background: rgba(47,125,92,0.10);
+    color: #145239;
+  }
+  .btn-primary:hover { background: rgba(47,125,92,0.14); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .2rem .55rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-soft);
+    background: rgba(255,255,255,0.70);
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.2;
+  }
+}
+
+@import "tailwindcss";
+
+/* ---- Brand tokens (adjust anytime) ---- */
+:root{
+  --brand:#10b981;       /* emerald-500 */
+  --brand-ink:#065f46;   /* emerald-800 */
+  --brand-50:#ecfdf5;
+  --accent:#7c3aed;      /* violet-600 */
+  --rose:#fb7185;        /* rose-400 */
+  --muted:#6b7280;
+}
+
+/* ---- Background: soft pastel blend ---- */
+html,body{
+  min-height:100%;
+  background:
+   radial-gradient(1200px 800px at -10% 0%, #ecfeff 0%, transparent 60%),
+   radial-gradient(1000px 700px at 120% -10%, #f5f3ff 0%, transparent 55%),
+   radial-gradient(900px 600px at 50% -20%, #ecfdf5 0%, transparent 55%),
+   #ffffff;
+  color:#111827;
+}
+
+/* ---- “Card” look ---- */
+.card{
+  @apply rounded-2xl border bg-white/90 backdrop-blur shadow-sm;
+  border-color:#e5e7eb;
+}
+
+/* ---- Buttons ---- */
+.btn{
+  @apply inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm transition;
+  border-color:#e5e7eb;
+}
+.btn:hover{ @apply bg-neutral-50 shadow-sm translate-y-[-1px]; }
+.btn:focus-visible{ outline:none; box-shadow:0 0 0 2px #fff,0 0 0 6px var(--brand); }
+
+.btn-brand{
+  background:linear-gradient(180deg, var(--brand) 0%, #059669 100%);
+  color:white;
+  border-color:transparent;
+}
+.btn-brand:hover{ filter:brightness(0.98); transform:translateY(-1px); }
+.btn-ghost{ background:white; }
+
+/* ---- Pills / chips ---- */
+.pill{
+  @apply inline-flex items-center rounded-full border px-2.5 py-1 text-xs;
+  border-color:#e5e7eb; background:#fafafa;
+}
+.pill-brand{ background:var(--brand-50); color:var(--brand-ink); border-color:#a7f3d0; }
+.pill-rose{ background:#fff1f2; color:#9f1239; border-color:#fecdd3; }
+
+/* ---- Focus rings unify ---- */
+:where(button,a,input,select,textarea):focus-visible{
+  outline:none; box-shadow:0 0 0 2px #fff,0 0 0 6px var(--brand); border-radius:12px;
+}
+
+
+/* ---------- Cute tooltip bubble ---------- */
+.has-tip { position: relative; display: inline-block; }
+.tip-card{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  bottom: calc(100% + 10px);
+  z-index: 50;
+  white-space: normal;
+  max-width: 30ch;
+  padding: .45rem .55rem;
+  font-size: .75rem; /* 12px */
+  line-height: 1.1rem;
+  color: #064e3b; /* brand ink */
+  background: #ecfdf5; /* brand-50 */
+  border: 1px solid #a7f3d0; /* emerald-200 */
+  border-radius: .6rem;
+  box-shadow: 0 10px 20px rgba(0,0,0,.06);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+}
+
+.tip-card::after{
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px 8px 0 8px;
+  border-style: solid;
+  border-color: #ecfdf5 transparent transparent transparent;
+}
+.tip-card::before{
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 9px 9px 0 9px;
+  border-style: solid;
+  border-color: #a7f3d0 transparent transparent transparent; /* border */
+}
+
+/* Show tip only on mouse hover or keyboard focus */
+.has-tip:hover .tip-card,
+.has-tip:focus-within .tip-card{
+  opacity:1;
+  visibility:visible;
+  transform: translateX(-50%) translateY(-10px);
+  transition-delay: 0s;
+}
+
+
+.btn-primary{ @apply inline-flex items-center gap-2 px-3 py-2 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-50; }
+.card{ @apply rounded-md border p-3 bg-white; }
+.pill{ @apply px-2 py-0.5 rounded-full border text-[12px] bg-white; }
+
+/* UI base font bump */
+html { font-size: 16px; } /* try 16; use 17 if still small */
+
+/* UI base font bump */
+html { font-size: 16px; } /* try 16; use 17 if still small */

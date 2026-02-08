@@ -1,0 +1,174 @@
+"use client";
+
+import * as React from "react";
+
+type PeerBar = { label: string; pct: number };
+
+export function ResultsDrawer({
+  open,
+  onClose,
+  correct,
+  score,
+  max,
+  timeSeconds,
+  attemptsLeft,
+  explanation,
+  peer,
+}: {
+  open: boolean;
+  onClose: () => void;
+
+  // correctness + scoring
+  correct?: boolean; // undefined = checked but not gradable
+  score?: number;
+  max?: number;
+
+  // simple stats
+  timeSeconds?: number;
+
+  // null = not applicable, Infinity = unlimited
+  attemptsLeft?: number | null;
+
+  // only pass this when it is allowed to show
+  explanation?: string;
+
+  peer?: PeerBar[];
+}) {
+  const [showMore, setShowMore] = React.useState(false);
+
+  React.useEffect(() => {
+    if (open) setShowMore(false);
+  }, [open]);
+
+  if (!open) return null;
+
+  const summary =
+    correct === true
+      ? "Correct! Nice work."
+      : correct === false
+        ? "Not quite yet — try again."
+        : "Checked.";
+
+  const advice =
+    correct === false
+      ? "Tip: slow down and double-check each match before you re-check."
+      : correct === true
+        ? "Tip: if you can explain WHY it’s correct, you really know it."
+        : "Tip: review your answer and check again if needed.";
+
+  const attemptsLine =
+    attemptsLeft === Infinity
+      ? "Attempts: unlimited"
+      : typeof attemptsLeft === "number"
+        ? `Attempts left: ${Math.max(0, attemptsLeft)}`
+        : null;
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <div
+        className="absolute inset-0 bg-black/20"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <aside className="absolute right-0 top-0 h-full w-full max-w-[420px] bg-white border-l shadow-xl flex flex-col">
+        <div className="px-4 py-3 border-b flex items-center justify-between">
+          <div className="text-sm font-semibold text-slate-900">Check</div>
+          <button
+            className="rounded-md border px-3 py-1.5 text-sm hover:bg-neutral-100"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        </div>
+
+        <div className="p-4 space-y-4 overflow-auto">
+          <div className="rounded-xl border p-3">
+            <div className="text-sm font-semibold text-slate-900">
+              Student-friendly summary
+            </div>
+            <div className="mt-1 text-sm text-slate-700">{summary}</div>
+            <div className="mt-1 text-xs text-slate-600">{advice}</div>
+
+            {attemptsLine ? (
+              <div className="mt-2 text-xs text-slate-600">{attemptsLine}</div>
+            ) : null}
+
+            <div className="mt-3">
+              <button
+                className="rounded-md border px-3 py-1.5 text-sm hover:bg-neutral-100"
+                onClick={() => setShowMore((v) => !v)}
+              >
+                {showMore ? "Hide details" : "More details"}
+              </button>
+            </div>
+          </div>
+
+          {showMore ? (
+            <>
+              {peer?.length ? (
+                <div className="rounded-xl border p-3">
+                  <div className="text-sm font-semibold text-slate-900">
+                    Peer comparison
+                  </div>
+                  <div className="mt-2 space-y-2">
+                    {peer.map((p) => (
+                      <div key={p.label} className="flex items-center gap-2">
+                        <div className="w-6 text-xs text-slate-600">
+                          {p.label}
+                        </div>
+                        <div className="h-2 flex-1 rounded bg-slate-100 overflow-hidden">
+                          <div
+                            className="h-full bg-emerald-500"
+                            style={{ width: `${Math.max(0, Math.min(100, p.pct))}%` }}
+                          />
+                        </div>
+                        <div className="w-10 text-right text-xs text-slate-600">
+                          {p.pct}%
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="rounded-xl border p-3 grid grid-cols-2 gap-3">
+                <div>
+                  <div className="text-xs text-slate-600">Time to answer</div>
+                  <div className="text-sm font-semibold text-slate-900">
+                    {typeof timeSeconds === "number" ? `${timeSeconds}s` : "—"}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-600">Score</div>
+                  <div className="text-sm font-semibold text-slate-900">
+                    {typeof score === "number" && typeof max === "number"
+                      ? `${score}/${max}`
+                      : "—"}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : null}
+
+          {explanation ? (
+            <div className="rounded-xl border p-3">
+              <div className="text-sm font-semibold text-slate-900">
+                Explanation
+              </div>
+              <div className="mt-1 text-sm text-slate-700">{explanation}</div>
+            </div>
+          ) : (
+            <div className="rounded-xl border p-3">
+              <div className="text-sm font-semibold text-slate-900">
+                Explanation
+              </div>
+              <div className="mt-1 text-sm text-slate-700">
+                Explanation is locked until you use your attempts.
+              </div>
+            </div>
+          )}
+        </div>
+      </aside>
+    </div>
+  );
+}

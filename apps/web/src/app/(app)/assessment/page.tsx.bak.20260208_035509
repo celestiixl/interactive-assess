@@ -1,0 +1,245 @@
+import Link from "next/link";
+
+function Chip({
+  children,
+  tone = "neutral",
+}: {
+  children: React.ReactNode;
+  tone?: "neutral" | "teal" | "emerald" | "amber" | "slate" | "violet";
+}) {
+  const base =
+    "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold backdrop-blur shadow-[0_1px_0_rgba(2,6,23,0.06)]";
+
+  const tones: Record<string, string> = {
+    neutral:
+      "border-foreground/20 bg-background/90 text-foreground shadow-[0_6px_14px_rgba(2,6,23,0.10)]",
+
+    teal:
+      "border-teal-600/40 bg-teal-400/25 text-teal-950 dark:text-teal-100 shadow-[0_6px_14px_rgba(2,6,23,0.10)]",
+
+    emerald:
+      "border-emerald-600/40 bg-emerald-400/25 text-emerald-950 dark:text-emerald-100 shadow-[0_6px_14px_rgba(2,6,23,0.10)]",
+
+    amber:
+      "border-amber-600/40 bg-amber-400/30 text-amber-950 dark:text-amber-100 shadow-[0_6px_14px_rgba(2,6,23,0.10)]",
+
+    slate:
+      "border-slate-600/40 bg-slate-400/25 text-slate-950 dark:text-slate-100 shadow-[0_6px_14px_rgba(2,6,23,0.10)]",
+
+    violet:
+      "border-violet-600/40 bg-violet-400/25 text-violet-950 dark:text-violet-100 shadow-[0_6px_14px_rgba(2,6,23,0.10)]",
+  };
+
+  return <span className={`${base} ${tones[tone] ?? tones.neutral}`}>{children}</span>;
+}
+
+
+function CardLink({ href, title, desc, chips, badge, accent }: { href: string; title: string; desc: string; chips: string[]; badge: string; accent: "teal" | "slate" | "amber"; }) {
+  return (
+    <Link
+      href={href}
+      className="group relative overflow-hidden rounded-2xl border border-foreground/10 bg-background/70 p-6 shadow-[0_10px_30px_rgba(2,6,23,0.10)] backdrop-blur transition hover:-translate-y-0.5 hover:shadow-[0_14px_40px_rgba(2,6,23,0.14)]"
+      data-accent={accent}
+    >
+      {/* accent wash */}
+      <div
+        className={
+          "pointer-events-none absolute inset-x-0 top-0 h-24 opacity-60 " +
+          (accent === "teal"
+            ? "bg-gradient-to-b from-teal-400/20 to-transparent"
+            : accent === "amber"
+            ? "bg-gradient-to-b from-amber-300/20 to-transparent"
+            : "bg-gradient-to-b from-slate-400/20 to-transparent")
+        }
+      />
+
+      {/* top highlight */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
+
+      {/* accent rail */}
+      <div
+        className={
+          "pointer-events-none absolute left-0 top-0 h-full w-[5px] opacity-70 " +
+          (accent === "teal"
+            ? "bg-teal-500/80"
+            : accent === "amber"
+            ? "bg-amber-500/80"
+            : "bg-slate-500/60")
+        }
+      />
+      {/* subtle corner glow */}
+      <div className="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-emerald-500/10 blur-2xl transition group-hover:bg-emerald-500/15" />
+      <div className="pointer-events-none absolute -left-28 -bottom-28 h-56 w-56 rounded-full bg-teal-500/10 blur-3xl transition group-hover:bg-teal-500/15" />
+      <div className="pointer-events-none absolute right-10 top-10 h-28 w-28 rounded-full bg-amber-500/8 blur-2xl transition group-hover:bg-amber-500/12" />
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center rounded-full border bg-muted/40 px-2 py-1 text-[11px] font-semibold text-foreground/70">
+              {badge}
+            </span>
+          </div>
+          <h2 className="mt-3 text-lg font-semibold tracking-tight text-foreground">{title}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-foreground/70">{desc}</p>
+        </div>
+
+        <div className="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-xl border bg-muted/30 text-base text-muted-foreground transition group-hover:bg-muted/50 group-hover:text-foreground">
+          →
+        </div>
+      </div>
+
+      
+      <div className="mt-5 flex flex-wrap gap-2">
+        {chips.map((c, i) => {
+          const cycle: Array<"teal" | "emerald" | "amber" | "slate" | "violet"> = [
+            "teal",
+            "emerald",
+            "amber",
+            "slate",
+            "violet",
+          ];
+          const tone = cycle[i % cycle.length];
+          return (
+            <Chip key={c} tone={tone}>
+              {c}
+            </Chip>
+          );
+        })}
+      </div>
+    </Link>
+  );
+}
+
+export default function AssessmentHome() {
+  return (
+    <main className="relative min-h-screen">
+      {/* background */}
+      <div className="pointer-events-none fixed inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/6 via-teal-500/4 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(60%_50%_at_35%_0%,rgba(20,184,166,0.14),rgba(255,255,255,0))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(50%_45%_at_70%_10%,rgba(245,158,11,0.10),rgba(255,255,255,0))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(35%_30%_at_18%_28%,rgba(236,72,153,0.06),rgba(255,255,255,0))]" />
+        <div className="absolute inset-0 opacity-[0.035] [background-image:radial-gradient(rgba(2,6,23,1)_1px,transparent_1px)] [background-size:26px_26px]" />
+      </div>
+
+      <div className="relative mx-auto w-full max-w-screen-2xl px-6 py-12 2xl:px-10">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <Chip tone="violet">STAAR Biology aligned</Chip>
+              <Chip tone="teal">Interactive items</Chip>
+              <Chip tone="amber">Practice + Test modes</Chip>
+            </div>
+
+            <h1 className="text-4xl font-semibold tracking-tight text-foreground">
+              Assessment
+            </h1>
+            <div className="mt-2 h-px w-40 bg-gradient-to-r from-teal-500/60 via-emerald-500/40 to-amber-500/40" />
+            <p className="max-w-2xl text-sm leading-relaxed text-foreground/70">
+              Pick a view to continue. Student is the practice + item sandbox. Teacher is building, managing, and analytics.
+              (Next upgrade: auto-route based on login + role.)
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+            
+          <div className="xl:col-span-2 grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <CardLink
+              href="/student/assessment"
+              badge="Student"
+              accent="teal"
+              title="Continue as Student"
+              desc="Jump into practice runner, interactive item testing, goals, and progress."
+              chips={["Practice", "Interactive items", "Goals", "Mastery"]}
+            />
+            <CardLink
+              href="/teacher/dashboard"
+              badge="Teacher"
+              accent="slate"
+              title="Continue as Teacher"
+              desc="Build items, manage assessments, view analytics, and jump into student view."
+              chips={["Builder", "Analytics", "Assign", "Student view"]}
+            />
+          </div>
+
+          <div className="xl:col-span-1">
+
+          </div>
+
+          </div>
+
+                <div className="mt-1 text-xs text-muted-foreground">
+                  Handy jumps while you’re building and testing.
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/practice"
+                  className="rounded-xl border bg-muted/30 px-4 py-2 text-sm font-medium transition hover:bg-muted/50"
+                >
+                  Practice Runner
+                </Link>
+                <Link
+                  href="/student/assessment/items"
+                  className="rounded-xl border bg-muted/30 px-4 py-2 text-sm font-medium transition hover:bg-muted/50"
+                >
+                  Items Test Screen
+                </Link>
+                <Link
+                  href="/teacher/dashboard"
+                  className="rounded-xl border bg-muted/30 px-4 py-2 text-sm font-medium transition hover:bg-muted/50"
+                >
+                  Teacher Dashboard
+                </Link>
+              </div>
+            </div>
+          
+          <div className="xl:col-span-1">
+<div className="rounded-2xl border border-foreground/10 bg-background/70 p-6 backdrop-blur shadow-[0_10px_30px_rgba(2,6,23,0.10)]">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <div className="pointer-events-none absolute -left-24 -top-24 h-56 w-56 rounded-full bg-teal-500/10 blur-3xl" />
+            <div className="pointer-events-none absolute right-10 top-10 h-40 w-40 rounded-full bg-amber-500/8 blur-3xl" />
+            <div className="flex items-center justify-between">
+                <div className="text-sm font-semibold text-foreground">Quick links</div>
+                <span className="inline-flex items-center rounded-full border border-foreground/10 bg-muted/30 px-2 py-1 text-[11px] font-semibold text-foreground/70">shortcuts</span>
+              </div>
+          
+          <div className="relative mt-4 rounded-2xl border border-foreground/10 bg-background/65 p-5 backdrop-blur shadow-[0_10px_26px_rgba(2,6,23,0.10)]">
+            <div className="pointer-events-none absolute" />
+            <div className="pointer-events-none absolute -left-24 -top-24 h-56 w-56 rounded-full bg-teal-500/10 blur-3xl" />
+            <div className="pointer-events-none absolute right-10 top-10 h-40 w-40 rounded-full bg-amber-500/8 blur-3xl" />
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium">What’s next</div>
+              <span className="inline-flex items-center rounded-full border bg-muted/40 px-2 py-1 text-[11px] font-semibold text-foreground/70">
+                roadmap
+              </span>
+            </div>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              <li className="flex gap-2">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-teal-500/80" />
+                <span>Inline Choice: show in pills + builder + runner (no hook errors).</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500/80" />
+                <span>Role-based login routing (student/teacher) + “remember my view”.</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-slate-500/60" />
+                <span>Accommodations: text-to-speech, extended time, reduced answer choices.</span>
+              </li>
+            </ul>
+          </div>
+
+          </div>
+
+</div>
+
+          <div className="pt-2 text-xs text-muted-foreground">
+            Tip: once we add auth, this page becomes the smart gate that routes by role automatically.
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}

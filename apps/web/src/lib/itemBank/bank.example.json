@@ -1,0 +1,81 @@
+{
+  "version": "0.1.0",
+  "items": [
+    {
+      "id": "bank_geneexpr_cardsort_001",
+      "title": "Transcription vs Translation Sort",
+      "teks": ["BIO.7B"],
+      "topic": "Gene Expression",
+      "gradeBand": "HS",
+      "difficulty": "medium",
+      "staarStyle": true,
+      "itemType": "card_sort",
+      "stimulus": { "kind": "none" },
+      "prompt": "Sort each step into Transcription vs Translation.",
+      "answer": {
+        "kind": "card_sort",
+        "columns": [
+          { "id": "transcription", "label": "Transcription" },
+          { "id": "translation", "label": "Translation" },
+          { "id": "bank", "label": "Word Bank" }
+        ],
+        "cards": [
+          { "id": "c1", "label": "RNA polymerase uses DNA as a template to build mRNA", "correctColId": "transcription" },
+          { "id": "c2", "label": "mRNA moves to a ribosome in the cytoplasm", "correctColId": "translation" },
+          { "id": "c3", "label": "tRNA matches anticodons to mRNA codons", "correctColId": "translation" },
+          { "id": "c4", "label": "A chain of amino acids forms a protein", "correctColId": "translation" }
+        ]
+      },
+      "misconceptionTags": ["location_confusion", "molecule_role_confusion"]
+    },
+    {
+      "id": "bank_geneexpr_diagram_001",
+      "title": "DNA → RNA → Protein Flow",
+      "teks": ["BIO.7B"],
+      "topic": "Gene Expression",
+      "gradeBand": "HS",
+      "difficulty": "easy",
+      "staarStyle": true,
+      "itemType": "diagram_label",
+      "stimulus": { "kind": "text", "text": "Complete the model of how genetic information becomes a trait." },
+      "prompt": "Select the correct answer for each box.",
+      "answer": {
+        "kind": "diagram_label",
+        "options": [
+          { "id": "o1", "label": "DNA" },
+          { "id": "o2", "label": "mRNA" },
+          { "id": "o3", "label": "Protein" },
+          { "id": "o4", "label": "Transcription" },
+          { "id": "o5", "label": "Translation" }
+        ],
+        "blanks": [
+          { "id": "b1", "correctOptionId": "o1" },
+          { "id": "b2", "correctOptionId": "o4" },
+          { "id": "b3", "correctOptionId": "o2" },
+          { "id": "b4", "correctOptionId": "o5" },
+          { "id": "b5", "correctOptionId": "o3" }
+        ]
+      }
+    },
+    {
+      "id": "bank_cells_mc_001",
+      "title": "Prokaryotic vs Eukaryotic Structure",
+      "teks": ["BIO.4A"],
+      "topic": "Cells",
+      "gradeBand": "HS",
+      "difficulty": "easy",
+      "staarStyle": true,
+      "itemType": "multiple_choice",
+      "stimulus": { "kind": "text", "text": "A student observes a cell with an electron microscope." },
+      "prompt": "Which feature most strongly indicates the cell is prokaryotic?",
+      "choices": [
+        { "id": "A", "label": "A nucleus surrounded by a membrane" },
+        { "id": "B", "label": "DNA located in the cytoplasm without a nucleus" },
+        { "id": "C", "label": "Chloroplasts that capture light energy" },
+        { "id": "D", "label": "Mitochondria that produce ATP" }
+      ],
+      "answer": { "kind": "single", "choiceId": "B" },
+      "misconceptionTags": ["organelle_presence"]
+    }
+  ]
+}

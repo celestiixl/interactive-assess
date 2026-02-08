@@ -1,0 +1,20 @@
+export default function AssessmentEntry() {
+  return (
+    <main style={{ padding: 24 }}>
+      <h1 style={{ fontSize: 24, fontWeight: 700 }}>Assessment</h1>
+      <p style={{ marginTop: 8, maxWidth: 720 }}>
+        I created <code>/assessment</code>, but I couldn’t auto-detect your student dashboard route.
+      </p>
+      <p style={{ marginTop: 8 }}>
+        Common routes I checked:
+        <code> /student</code>, <code> /dashboard</code>, <code> /student/dashboard</code>, <code> /student/home</code>
+      </p>
+      <p style={{ marginTop: 12 }}>
+        Quick links:
+      </p>
+      <ul style={{ marginTop: 8 }}>
+        <li><a href="/practice">Practice Runner</a></li>
+      </ul>
+    </main>
+  );
+}

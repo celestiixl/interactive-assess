@@ -1,0 +1,12 @@
+{
+  "scanned": 3,
+  "jsonBanks": [],
+  "tsBanks": [
+    "/workspaces/interactive-assess/apps/web/src/components/ItemRenderer.tsx",
+    "/workspaces/interactive-assess/apps/web/src/components/items/ItemRenderer.tsx",
+    "/workspaces/interactive-assess/apps/web/src/types/item.ts"
+  ],
+  "updated": [],
+  "missingTeks": [],
+  "unknownTeks": []
+}

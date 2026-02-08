@@ -1,0 +1,465 @@
+"use client";
+import SegmentedDonut from "@/components/charts/SegmentedDonut";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { bio9Items } from "@/data/biology9";
+import { STAAR_BIO } from "@/data/staar_bio";
+import Tooltip from "@/components/ui/Tooltip";
+import { TEKS_BIO_DESC } from "@/data/teks_bio_descriptions";
+
+// --------- tiny donut (no deps) ----------
+function Donut({
+  percent,
+  size = 140,
+  stroke = 14,
+  color = "#111",
+}: {
+  percent: number;
+  size?: number;
+  stroke?: number;
+  color?: string;
+}) {
+  const r = (size - stroke) / 2,
+    c = 2 * Math.PI * r,
+    p = Math.max(0, Math.min(100, Math.round(percent)));
+  const dash = (p / 100) * c;
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        stroke="#e5e5e5"
+        strokeWidth={stroke}
+        fill="none"
+      />
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        stroke={color}
+        strokeWidth={stroke}
+        fill="none"
+        strokeDasharray={`${dash} ${c - dash}`}
+        strokeLinecap="round"
+        transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        style={{ transition: "stroke-dasharray 500ms ease-out" }}
+      />
+      <text
+        x="50%"
+        y="50%"
+        dominantBaseline="central"
+        textAnchor="middle"
+        fontWeight="700"
+        fontFamily="ui-sans-serif,system-ui"
+        fontSize="22"
+      >
+        {p}%
+      </text>
+    </svg>
+  );
+}
+
+// --------- supports state (persisted) ----------
+type Supports = {
+  accommodations: boolean;
+  scaffolding: "off" | "light" | "full";
+  clarifiers: boolean;
+  language: string;
+};
+const SUPPORTS_KEY = "ia-supports";
+function useSupports(): [Supports, (u: Partial<Supports>) => void] {
+  const [s, setS] = useState<Supports>({
+    accommodations: false,
+    scaffolding: "off",
+    clarifiers: false,
+    language: "en",
+  });
+  useEffect(() => {
+    const raw = localStorage.getItem(SUPPORTS_KEY);
+    if (raw) setS((old) => ({ ...old, ...JSON.parse(raw) }));
+  }, []);
+  const update = (u: Partial<Supports>) => {
+    const next = { ...s, ...u };
+    setS(next);
+    localStorage.setItem(SUPPORTS_KEY, JSON.stringify(next));
+    localStorage.setItem("ia-ping", String(Date.now()));
+  };
+  return [s, update];
+}
+
+// --------- readiness bands ----------
+
+function bandFromPct(p: number) {
+  if (p >= 85)
+    return {
+      label: "Masters",
+      color: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    };
+  if (p >= 70)
+    return {
+      label: "Meets",
+      color: "bg-green-100 text-green-800 border-green-300",
+    };
+  if (p >= 50)
+    return {
+      label: "Approaches",
+      color: "bg-amber-100 text-amber-800 border-amber-300",
+    };
+  return {
+    label: "Did Not Meet",
+    color: "bg-rose-100 text-rose-800 border-rose-300",
+  };
+}
+
+export default function Dashboard() {
+  const [userId, setUserId] = useState("");
+  const [supports, setSupports] = useSupports();
+
+  // map itemId -> tags
+  const items = bio9Items;
+  const tagMap = useMemo(() => {
+    const m = new Map<string, string[]>();
+    items.forEach((it) => m.set(it.id, (it as any).tags ?? ["Uncategorized"]));
+    return m;
+  }, [items]);
+
+  // fetch latest (per item) from backend
+  const [latest, setLatest] = useState<
+    Record<string, { score: number; maxScore: number; ts: number }>
+  >({});
+  useEffect(() => {
+    let id = localStorage.getItem("ia-user-id");
+    if (!id) {
+      id = "u_" + Math.random().toString(36).slice(2);
+      localStorage.setItem("ia-user-id", id);
+    }
+    setUserId(id);
+  }, []);
+  async function refresh() {
+    if (!userId) return;
+    const ids = items.map((i) => i.id).join(",");
+    const r = await fetch(
+      `/api/mastery?userId=${encodeURIComponent(userId)}&itemIds=${encodeURIComponent(ids)}`,
+      { cache: "no-store" },
+    );
+    const j = await r.json();
+    if (j?.ok) setLatest(j.latest);
+  }
+  useEffect(() => {
+    if (userId) refresh();
+  }, [userId]);
+  useEffect(() => {
+    const onPing = (e: StorageEvent) => {
+      if (e.key === "ia-ping") refresh();
+    };
+    window.addEventListener("storage", onPing);
+    return () => window.removeEventListener("storage", onPing);
+  }, [userId]);
+
+  // TEKS mastery rollup
+  const teksAgg = useMemo(() => {
+    const agg: Record<string, { correct: number; total: number }> = {};
+    for (const it of items) {
+      const row = latest[it.id];
+      const tags = tagMap.get(it.id) ?? ["Uncategorized"];
+      tags.forEach((tag) => {
+        const a = agg[tag] ?? { correct: 0, total: 0 };
+        if (row) {
+          a.total += 1;
+          if (row.score >= row.maxScore) a.correct += 1;
+        }
+        agg[tag] = a;
+      });
+    }
+    let correct = 0,
+      total = 0;
+    Object.values(agg).forEach((v) => {
+      correct += v.correct;
+      total += v.total;
+    });
+    const overall = total ? Math.round((correct / total) * 100) : 0;
+    return { agg, overall };
+  }, [items, latest, tagMap]);
+
+  // STAAR categories rollup (from TEKS codes)
+  const staarAgg = useMemo(() => {
+    const out: Record<
+      string,
+      { correct: number; total: number; teks: string[] }
+    > = {};
+    for (const [cat, codes] of Object.entries(STAAR_BIO)) {
+      let correct = 0,
+        total = 0;
+      const codeSet = new Set(codes);
+      for (const it of items) {
+        const row = latest[it.id];
+        const t = tagMap.get(it.id) ?? [];
+        const matches = t.some((code) => codeSet.has(code));
+        if (!matches) continue;
+        if (row) {
+          total += 1;
+          if (row.score >= row.maxScore) correct += 1;
+        }
+      }
+      out[cat] = { correct, total, teks: codes };
+    }
+    return out;
+  }, [items, latest, tagMap]);
+
+  const band = bandFromPct(teksAgg.overall);
+
+  // build chart segments for the donut
+  const chartSegments = useMemo(() => {
+    const palette = [
+      "#10b981", // RC1 emerald
+      "#6366f1", // RC2 indigo
+      "#f59e0b", // RC3 amber
+      "#ef4444", // RC4 red
+    ];
+    const keys = Object.keys(staarAgg);
+    return keys.map((cat, i) => {
+      const v = (staarAgg as any)[cat];
+      const total = v.total || 0;
+      const correct = v.correct || 0;
+      return {
+        id: cat,
+        label: cat,
+        value: Math.max(0.5, total), // wedge size (give tiny sliver if 0)
+        progress: total ? correct / total : 0,
+        color: palette[i % palette.length],
+        href: `/practice?rc=${encodeURIComponent(cat)}`,
+      };
+    });
+  }, [staarAgg]);
+
+  // 🎉 fire confetti when any category newly reaches 100%
+  import("canvas-confetti"); // warm up chunk
+  const categoryConfettiRef = { current: {} as Record<string, number> };
+
+  // monitor staarAgg after it's calculated
+  useEffect(() => {
+    (async () => {
+      const { default: confetti } = await import("canvas-confetti");
+      for (const [cat, v] of Object.entries(staarAgg)) {
+        const pct = v.total ? Math.round((v.correct / v.total) * 100) : 0;
+        const prev = (categoryConfettiRef.current as any)[cat] ?? 0;
+        (categoryConfettiRef.current as any)[cat] = pct;
+        if (prev < 100 && pct === 100) {
+          confetti({ particleCount: 120, spread: 70, origin: { y: 0.2 } });
+        }
+      }
+    })();
+  }, [staarAgg]);
+
+  return (
+    <main className="space-y-8">
+      <header>
+        <h1 className="text-3xl font-extrabold">
+          Biology 9 — Readiness Dashboard
+        </h1>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <Link
+          href="/teacher/builder"
+          className="inline-flex items-center rounded-xl border bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
+        >
+          Teacher Builder →
+        </Link>
+      </div>
+
+        <p className="text-sm text-neutral-600">
+          TEKS mastery & STAAR readiness (latest attempt per item)
+        </p>
+        <div
+          data-brand-badge
+          className="mt-2 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm bg-brand"
+        >
+          Brand preview
+        </div>
+      </header>
+
+      {/* overall donut + band */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6 items-start">
+        <div className="flex items-start justify-center shrink-0">
+  <div className="w-[320px] h-[320px]">
+    <SegmentedDonut
+            segments={chartSegments}
+            size={300}
+            label="STAAR category mastery"
+          />
+          </div>
+</div>
+        <div className="lg:col-span-1 2xl:col-span-2 min-w-0">
+          <div
+            className={`inline-flex items-center gap-2 border px-3 py-2 rounded-md ${band.color}`}
+          >
+            <span className="text-sm font-semibold">STAAR Predicted Score:</span>
+            <span className="text-base font-bold">{band.label}</span>
+          </div>
+          <p className="mt-2 text-sm text-neutral-700">
+            Wedge size shows assessed volume per category. Bright ring shows
+            mastery progress for that category. Click a wedge or a legend to
+            practice.
+          </p>
+
+          {/* Legend */}
+          <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2">
+            {Object.entries(staarAgg).map(([cat, v], i) => {
+              const pct = v.total ? Math.round((v.correct / v.total) * 100) : 0;
+              const swatch = ["#10b981", "#6366f1", "#f59e0b", "#ef4444"][
+                i % 4
+              ];
+              return (
+                <Link
+                  key={cat}
+                  href={`/practice?rc=${encodeURIComponent(cat)}`}
+                  className="card p-3 hover:shadow-md transition"
+                >
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="inline-block w-3.5 h-3.5 rounded-full"
+                      style={{ background: swatch }}
+                    ></span>
+                    <div className="text-sm font-medium truncate">{cat}</div>
+                    <span className="ml-auto pill">{pct}%</span>
+                  </div>
+                  <div className="mt-1 text-[11px] text-neutral-600">
+                    {v.correct} mastered / {v.total} assessed
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* STAAR reporting categories */}
+      <section className="space-y-3">
+        <h2 className="text-lg font-semibold">STAAR Reporting Categories</h2>
+        <div className="grid md:grid-cols-2 gap-4">
+          {Object.entries(staarAgg).map(([cat, v]) => {
+            const pct = v.total ? Math.round((v.correct / v.total) * 100) : 0;
+            const b = bandFromPct(pct);
+            const href = `/practice?rc=${encodeURIComponent(cat)}`;
+            return (
+              <div key={cat} className="border rounded-md p-3 bg-white">
+                <div className="flex items-center justify-between">
+                  <div className="font-medium">{cat}</div>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded border ${b.color}`}
+                  >
+                    {pct}%
+                  </span>
+                </div>
+                <div className="mt-1 text-xs text-neutral-600">
+                  {v.correct} mastered / {v.total} assessed
+                </div>
+
+                <div className="mt-2">
+                  <div className="text-xs font-semibold">TEKS included:</div>
+                  <div className="mt-1 flex flex-wrap gap-1 items-start">
+                    {v.teks.map((code) => (
+                      <span key={code} className="has-tip">
+                        {" "}
+                        <span className="pill pill-brand">{code}</span>{" "}
+                        <span
+                          role="tooltip"
+                          className="tip-card"
+                          data-show={true}
+                        >
+                          {TEKS_BIO_DESC[code] ?? code}
+                        </span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-3">
+                  <Link
+                    href={href}
+                    className="inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm hover:bg-neutral-100"
+                  >
+                    Practice this category
+                    <span aria-hidden>→</span>
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Supports */}
+      <section className="space-y-3">
+        <h2 className="text-lg font-semibold">Supports</h2>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="border rounded-md p-3">
+            <h3 className="font-medium mb-2">Accommodations</h3>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={supports.accommodations}
+                onChange={(e) =>
+                  setSupports({ accommodations: e.target.checked })
+                }
+              />
+              Enable text-to-speech, extended time indicators, larger font
+            </label>
+          </div>
+          <div className="border rounded-md p-3">
+            <h3 className="font-medium mb-2">Scaffolding</h3>
+            <select
+              className="border rounded px-2 py-1 text-sm"
+              value={supports.scaffolding}
+              onChange={(e) =>
+                setSupports({
+                  scaffolding: (e.target as HTMLSelectElement).value as any,
+                })
+              }
+            >
+              <option value="off">Off</option>
+              <option value="light">Hints only</option>
+              <option value="full">Step-by-step</option>
+            </select>
+            <p className="mt-2 text-xs text-neutral-600">
+              Item components can read this and provide hints or break steps.
+            </p>
+          </div>
+          <div className="border rounded-md p-3">
+            <h3 className="font-medium mb-2">Content Clarifiers</h3>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={supports.clarifiers}
+                onChange={(e) => setSupports({ clarifiers: e.target.checked })}
+              />
+              Show inline glossary/definition tooltips
+            </label>
+          </div>
+          <div className="border rounded-md p-3">
+            <h3 className="font-medium mb-2">Translation</h3>
+            <div className="flex items-center gap-2">
+              <select
+                className="border rounded px-2 py-1 text-sm"
+                value={supports.language}
+                onChange={(e) =>
+                  setSupports({
+                    language: (e.target as HTMLSelectElement).value,
+                  })
+                }
+              >
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="zh">中文</option>
+              </select>
+              <span className="text-xs text-neutral-600">
+                Preference saved — item UIs can translate text.
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}

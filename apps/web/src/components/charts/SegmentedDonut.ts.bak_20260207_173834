@@ -1,0 +1,153 @@
+"use client";
+
+import * as React from "react";
+
+type Segment = {
+  id: string;          // e.g. "RC1"
+  value: number;       // wedge size weight (assessed volume)
+  progress?: number;   // 0..1 (optional, for inner ring)
+};
+
+const RC_DISPLAY: Record<string, string> = {
+  RC1: "RC1: Scientific Investigation & Reasoning",
+  RC2: "RC2: Cell Structure & Function",
+  RC3: "RC3: Genetics & Biological Processes",
+  RC4: "RC4: Interactions & Interdependence",
+};
+
+function clamp(n: number, a: number, b: number) {
+  return Math.max(a, Math.min(b, n));
+}
+
+function polarToCartesian(cx: number, cy: number, r: number, angleRad: number) {
+  return { x: cx + r * Math.cos(angleRad), y: cy + r * Math.sin(angleRad) };
+}
+
+function arcPath(cx: number, cy: number, rOuter: number, rInner: number, a0: number, a1: number) {
+  const largeArc = a1 - a0 > Math.PI ? 1 : 0;
+
+  const p0 = polarToCartesian(cx, cy, rOuter, a0);
+  const p1 = polarToCartesian(cx, cy, rOuter, a1);
+  const p2 = polarToCartesian(cx, cy, rInner, a1);
+  const p3 = polarToCartesian(cx, cy, rInner, a0);
+
+  return [
+    `M ${p0.x} ${p0.y}`,
+    `A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${p1.x} ${p1.y}`,
+    `L ${p2.x} ${p2.y}`,
+    `A ${rInner} ${rInner} 0 ${largeArc} 0 ${p3.x} ${p3.y}`,
+    "Z",
+  ].join(" ");
+}
+
+export default function SegmentedDonut(props: {
+  segments: Segment[];
+  size?: number;
+  label?: string;
+}) {
+  const size = props.size ?? 300;
+  const cx = size / 2;
+  const cy = size / 2;
+
+  const outer = size * 0.46;
+  const inner = size * 0.30;
+
+  const ringOuter = size * 0.27;
+  const ringInner = size * 0.23;
+
+  const total =
+    props.segments.reduce((acc, s) => acc + (Number.isFinite(s.value) ? s.value : 0), 0) || 1;
+
+  const slices = React.useMemo(() => {
+    const start0 = -Math.PI / 2;
+    let cursor = start0;
+    return props.segments.map((s) => {
+      const frac = clamp((s.value || 0) / total, 0, 1);
+      const sweep = frac * Math.PI * 2;
+      const start = cursor;
+      const end = cursor + sweep;
+      cursor = end;
+      return { s, start, end, frac };
+    });
+  }, [props.segments, total]);
+
+  const [hoverId, setHoverId] = React.useState<string | null>(null);
+
+  const centerText = hoverId
+    ? (RC_DISPLAY[hoverId] ?? hoverId)
+    : (props.label ?? "Category mastery");
+
+  return (
+    <div className="relative inline-flex items-center justify-center">
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        className="select-none"
+      >
+        {/* Wedges */}
+        {slices.map(({ s, start, end }) => {
+          // If you set colors elsewhere, keep them. Otherwise fall back to slate-ish.
+          const fill = "rgba(100,116,139,0.20)";
+          const stroke = "rgba(100,116,139,0.45)";
+          const d = arcPath(cx, cy, outer, inner, start, end);
+
+          return (
+            <path
+              key={s.id}
+              d={d}
+              fill={fill}
+              stroke={stroke}
+              strokeWidth={1}
+              className="cursor-pointer"
+              onMouseEnter={() => setHoverId(s.id)}
+              onMouseLeave={() => setHoverId(null)}
+              onFocus={() => setHoverId(s.id)}
+              onBlur={() => setHoverId(null)}
+              tabIndex={0}
+              aria-label={RC_DISPLAY[s.id] ?? s.id}
+            >
+              <title>{RC_DISPLAY[s.id] ?? s.id}</title>
+            </path>
+          );
+        })}
+
+        {/* Progress ring (optional per slice) */}
+        {slices.map(({ s, start, end }) => {
+          const prog = clamp(s.progress ?? 0, 0, 1);
+          if (prog <= 0) return null;
+
+          const sweep = (end - start) * prog;
+          const d = arcPath(cx, cy, ringOuter, ringInner, start, start + sweep);
+
+          return (
+            <path
+              key={`${s.id}_ring`}
+              d={d}
+              fill={"rgba(47,125,92,0.35)"}
+              stroke={"rgba(47,125,92,0.55)"}
+              strokeWidth={0.8}
+              pointerEvents="none"
+            />
+          );
+        })}
+
+        {/* Donut hole overlay MUST NOT block hover */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r={inner - 2}
+          fill="rgba(250,250,248,0.94)"
+          pointerEvents="none"
+        />
+      </svg>
+
+      {/* Center label */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-6 text-center">
+        <div className="text-sm font-semibold text-slate-800 leading-snug">
+          {centerText}
+        </div>
+      </div>
+    </div>
+  );
+}
