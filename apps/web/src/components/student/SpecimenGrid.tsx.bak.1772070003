@@ -1,0 +1,13 @@
+export const SPECIMENGRID__PATCH_MARKER = "SPECIMENGRID__PATCH_MARKER";
+type Segment = {
+  key: string;
+  label: string;
+  value: number;
+  group: string;
+};
+
+type Props = { segments: Segment[] };
+
+export default function SpecimenGrid({ segments }: Props) {
+  return null;
+}

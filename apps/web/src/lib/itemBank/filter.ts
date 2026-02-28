@@ -18,7 +18,8 @@ export function filterItems(items: Item[], query: BankQuery): Item[] {
   const q = query.q?.trim().toLowerCase();
 
   return items.filter((it) => {
-    if (teks && !it.teks.some((t) => t.toLowerCase() === teks.toLowerCase())) return false;
+    if (teks && !it.teks.some((t) => t.toLowerCase() === teks.toLowerCase()))
+      return false;
     if (topic && it.topic.toLowerCase() !== topic) return false;
     if (type && it.itemType !== type) return false;
     if (difficulty && it.difficulty !== difficulty) return false;

@@ -2,7 +2,9 @@
 
 import type { SupportLanguage } from "./supportsStore";
 
-export type Bilingual = Partial<Record<SupportLanguage, string>> & { en: string };
+export type Bilingual = Partial<Record<SupportLanguage, string>> & {
+  en: string;
+};
 
 export function BilingualText(props: {
   text: string | Bilingual | null | undefined;
@@ -27,7 +29,11 @@ export function BilingualText(props: {
     <div>
       <div className={props.classNameEn ?? ""}>{en}</div>
       {sup ? (
-        <div className={props.classNameSupport ?? "mt-1 text-xs text-slate-500 italic"}>
+        <div
+          className={
+            props.classNameSupport ?? "mt-1 text-xs text-slate-500 italic"
+          }
+        >
           {sup}
         </div>
       ) : null}

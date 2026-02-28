@@ -12,7 +12,10 @@ export type Stimulus =
   | { kind: "none" }
   | { kind: "text"; text: string }
   | { kind: "image"; src: string; alt: string }
-  | { kind: "table"; table: { headers: string[]; rows: (string | number)[][] } };
+  | {
+      kind: "table";
+      table: { headers: string[]; rows: (string | number)[][] };
+    };
 
 export type Choice = {
   id: string;
@@ -43,7 +46,7 @@ export type Item = {
   id: string;
   title: string;
   teks: string[]; // ex: ["BIO.7B"]
-  topic: string;  // ex: "Gene Expression"
+  topic: string; // ex: "Gene Expression"
   gradeBand: "MS" | "HS";
   difficulty: Difficulty;
   staarStyle: boolean;

@@ -1,0 +1,111 @@
+"use client";
+
+import * as React from "react";
+import { pickDailyQuestion } from "@/lib/hotqDaily";
+import {
+  recordResponse,
+  getAnsweredToday,
+  setAnsweredToday,
+  getTodayKeyForUI,
+} from "@/lib/hotqStorage";
+
+export default function HotQuestionStudentCard() {
+  const [q, setQ] = React.useState(() => pickDailyQuestion());
+  const [selected, setSelected] = React.useState<number | null>(null);
+  const [submitted, setSubmitted] = React.useState(false);
+
+  React.useEffect(() => {
+    const qq = pickDailyQuestion();
+    setQ(qq);
+    if (!qq) return;
+
+    const lock = getAnsweredToday(qq.id);
+    if (lock.answered) {
+      setSubmitted(true);
+      setSelected(lock.choiceIndex);
+    } else {
+      setSubmitted(false);
+      setSelected(null);
+    }
+  }, []);
+
+  if (!q) return null;
+
+  const submit = () => {
+    if (selected === null) return;
+    if (submitted) return;
+
+    recordResponse(q.id, q.choices.length, selected);
+    setAnsweredToday(q.id, selected);
+    setSubmitted(true);
+  };
+
+  const dateLabel = getTodayKeyForUI();
+
+  return (
+    <div className="rounded-3xl border bg-white p-5 shadow-sm">
+      <div className="mb-2 flex items-start justify-between gap-3">
+        <div>
+          <div className="text-sm font-semibold text-slate-900">
+            Hot Question of the Day
+          </div>
+          <div className="text-xs text-slate-500">
+            {dateLabel}
+            {q.teks ? ` • TEKS: ${q.teks}` : ""}
+          </div>
+        </div>
+      </div>
+
+      <div className="text-sm text-slate-900">{q.prompt}</div>
+
+      <div className="mt-3 space-y-2">
+        {q.choices.map((c, i) => {
+          const active = selected === i;
+          return (
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                if (!submitted) setSelected(i);
+              }}
+              className={[
+                "w-full rounded-2xl border px-3 py-2 text-left text-sm",
+                active ? "border-slate-900" : "border-slate-200",
+                submitted
+                  ? "opacity-70 cursor-not-allowed"
+                  : "hover:border-slate-400",
+              ].join(" ")}
+            >
+              <span className="mr-2 font-semibold text-slate-700">
+                {String.fromCharCode(65 + i)}.
+              </span>
+              {c}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={submit}
+          disabled={submitted || selected === null}
+          className={[
+            "rounded-xl px-3 py-2 text-sm",
+            submitted || selected === null
+              ? "bg-slate-200 text-slate-500"
+              : "bg-slate-900 text-white",
+          ].join(" ")}
+        >
+          {submitted ? "Submitted" : "Submit"}
+        </button>
+
+        {submitted ? (
+          <div className="text-sm text-slate-700">Locked for today.</div>
+        ) : (
+          <div className="text-sm text-slate-400">Pick an answer.</div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -154,7 +154,9 @@ export default function Hotspot({
       </div>
 
       <div className="flex gap-2">
-        <button data-check-button="true" onClick={scoreNow} className="hidden">Check</button>
+        <button data-check-button="true" onClick={scoreNow} className="hidden">
+          Check
+        </button>
         {item.rationale && (
           <div className="text-sm text-neutral-700">Hint: {item.rationale}</div>
         )}

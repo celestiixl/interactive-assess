@@ -1,0 +1,70 @@
+"use client";
+
+import * as React from "react";
+import { HOT_QUESTIONS } from "@/lib/hotQuestions";
+
+function pickRandom(excludeId?: string) {
+  if (HOT_QUESTIONS.length === 0) return null;
+  if (HOT_QUESTIONS.length === 1) return HOT_QUESTIONS[0];
+
+  let q = HOT_QUESTIONS[Math.floor(Math.random() * HOT_QUESTIONS.length)];
+  while (excludeId && q.id === excludeId) {
+    q = HOT_QUESTIONS[Math.floor(Math.random() * HOT_QUESTIONS.length)];
+  }
+  return q;
+}
+
+export default function HotQuestionCard() {
+  const [q, setQ] = React.useState(() => pickRandom());
+  const [show, setShow] = React.useState(false);
+
+  if (!q) return null;
+  const answer = String.fromCharCode(65 + q.answerIndex);
+
+  return (
+    <div className="/0 p-5 ia-card-soft ">
+      <div className="flex justify-between mb-3">
+        <div>
+          <div className="font-semibold text-sm">Hot Question of the Day</div>
+          {q.teks && (
+            <div className="text-xs text-slate-500">TEKS: {q.teks}</div>
+          )}
+        </div>
+        <button
+          className="border rounded-xl px-3 py-1 text-sm"
+          onClick={() => {
+            setQ(pickRandom(q.id));
+            setShow(false);
+          }}
+        >
+          New
+        </button>
+      </div>
+
+      <div className="text-sm mb-3">{q.prompt}</div>
+
+      <div className="space-y-2">
+        {q.choices.map((c, i) => (
+          <div key={i} className="border rounded-xl px-3 py-2 text-sm">
+            <b>{String.fromCharCode(65 + i)}.</b> {c}
+          </div>
+        ))}
+      </div>
+
+      <button
+        className="mt-4 bg-slate-900 text-white rounded-xl px-3 py-2 text-sm"
+        onClick={() => setShow((v) => !v)}
+      >
+        {show ? "Hide answer" : "Reveal answer"}
+      </button>
+
+      {show && (
+        <div className="mt-3 text-sm text-slate-700">
+          <b>Answer:</b> {answer}
+          <br />
+          {q.explanation}
+        </div>
+      )}
+    </div>
+  );
+}

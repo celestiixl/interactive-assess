@@ -1,11 +1,11 @@
 export type ReportingCategory = "RC1" | "RC2" | "RC3" | "RC4";
 
 export type TeksEntry = {
-  id: string;            // e.g., "BIO.8B"
-  unit: number;          // your unit guide number
-  strand: string;        // short teacher grouping
-  title: string;         // short student-friendly title
-  description: string;   // teacher-facing description
+  id: string; // e.g., "BIO.8B"
+  unit: number; // your unit guide number
+  strand: string; // short teacher grouping
+  title: string; // short student-friendly title
+  description: string; // teacher-facing description
 };
 
 export const RC_LABELS: Record<ReportingCategory, string> = {

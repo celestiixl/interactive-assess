@@ -1,0 +1,23 @@
+export const SPECIMENGRID__PATCH_MARKER = "SPECIMENGRID__PATCH_MARKER";
+type Segment = {
+  key: string;
+  label: string;
+  value: number;
+  group: string;
+};
+
+type Props = { segments: Segment[] };
+
+export default function SpecimenGrid({ segments }: Props)
+
+const ORGANISMS = [
+  { match: "cell", name: "Amoeba", icon: "🦠" },
+  { match: "photosynthesis", name: "Elodea", icon: "🌿" },
+  { match: "genetic", name: "Fruit Fly", icon: "🪰" },
+  { match: "selection", name: "Finch", icon: "🐦" },
+  { match: "ecosystem", name: "Wolf", icon: "🐺" },
+  { match: "energy", name: "Mushroom", icon: "🍄" },
+];
+ {
+  return null;
+}

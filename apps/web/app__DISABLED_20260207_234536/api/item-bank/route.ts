@@ -11,6 +11,6 @@ export async function GET(req: Request) {
   return NextResponse.json({
     version: bank.version,
     count: items.length,
-    items
+    items,
   });
 }

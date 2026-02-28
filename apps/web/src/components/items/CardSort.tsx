@@ -30,7 +30,9 @@ export default function CardSort({
   const [dragId, setDragId] = useState<string | null>(null);
 
   // Keep "bank" as a list of ids, and columns as id arrays.
-  const [bank, setBank] = useState<string[]>(() => item.cards.map((c: any) => c.id));
+  const [bank, setBank] = useState<string[]>(() =>
+    item.cards.map((c: any) => c.id),
+  );
   const [cols, setCols] = useState<Record<Exclude<ColId, "bank">, string[]>>({
     transcription: [],
     translation: [],
@@ -49,7 +51,14 @@ export default function CardSort({
   }, [item.cards]);
 
   const getCardLabel = (c: any) =>
-    c.label ?? c.text ?? c.term ?? c.prompt ?? c.title ?? c.value ?? c.content ?? c.id;
+    c.label ??
+    c.text ??
+    c.term ??
+    c.prompt ??
+    c.title ??
+    c.value ??
+    c.content ??
+    c.id;
 
   const normalize = (v: any): "transcription" | "translation" | null => {
     if (v == null) return null;
@@ -108,7 +117,9 @@ export default function CardSort({
     } else {
       setCols((prev) => ({
         ...prev,
-        [destination]: prev[destination].includes(id) ? prev[destination] : [...prev[destination], id],
+        [destination]: prev[destination].includes(id)
+          ? prev[destination]
+          : [...prev[destination], id],
       }));
     }
   };
@@ -215,7 +226,9 @@ export default function CardSort({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      <div style={{ fontSize: 22, fontWeight: 650 }}>Sort each step into Transcription vs Translation.</div>
+      <div style={{ fontSize: 22, fontWeight: 650 }}>
+        Sort each step into Transcription vs Translation.
+      </div>
 
       {/* Columns */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
@@ -244,7 +257,9 @@ export default function CardSort({
 
       {/* Word Bank */}
       <Zone title="Word Bank" id="bank">
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, minHeight: 56 }}>
+        <div
+          style={{ display: "flex", flexWrap: "wrap", gap: 10, minHeight: 56 }}
+        >
           {bank.map((id) => (
             <div key={id} style={{ flex: "0 1 auto" }}>
               <Card id={id} />
@@ -269,7 +284,12 @@ export default function CardSort({
         }}
       >
         <div style={{ opacity: 0.75 }}>
-          Score: <span style={{ fontWeight: 650 }}>{checkedOnce ? `${lastScore} / ${lastMax}` : `0 / ${item.cards.length}`}</span>
+          Score:{" "}
+          <span style={{ fontWeight: 650 }}>
+            {checkedOnce
+              ? `${lastScore} / ${lastMax}`
+              : `0 / ${item.cards.length}`}
+          </span>
         </div>
 
         <div style={{ display: "flex", gap: 10 }}>

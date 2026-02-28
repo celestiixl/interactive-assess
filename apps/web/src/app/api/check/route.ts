@@ -28,26 +28,24 @@ export async function POST(req: Request) {
   }
 }
 
+if (item?.type === "inline_choice") {
+  const correctByBlank: Record<string, string> = item.correctByBlank || {};
+  const response: Record<string, string> = body?.response || body?.answer || {};
 
-  if (item?.type === "inline_choice") {
-    const correctByBlank: Record<string, string> = item.correctByBlank || {};
-    const response: Record<string, string> = body?.response || body?.answer || {};
+  const blanks = Object.keys(correctByBlank);
+  const max = blanks.length || 0;
+  let score = 0;
 
-    const blanks = Object.keys(correctByBlank);
-    const max = blanks.length || 0;
-    let score = 0;
-
-    for (const b of blanks) {
-      const want = (correctByBlank[b] ?? b).toString().trim();
-      const got = (response?.[b] ?? "").toString().trim();
-      if (got && want && got === want) score += 1;
-    }
-
-    return Response.json({
-      correct: score === max && max > 0,
-      score,
-      max,
-      detail: { blanks, correctByBlank, response },
-    });
+  for (const b of blanks) {
+    const want = (correctByBlank[b] ?? b).toString().trim();
+    const got = (response?.[b] ?? "").toString().trim();
+    if (got && want && got === want) score += 1;
   }
 
+  return Response.json({
+    correct: score === max && max > 0,
+    score,
+    max,
+    detail: { blanks, correctByBlank, response },
+  });
+}

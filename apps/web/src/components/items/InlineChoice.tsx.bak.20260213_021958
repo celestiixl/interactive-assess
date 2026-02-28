@@ -1,0 +1,83 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
+type InlineChoiceItem = {
+  id: string;
+  type: "inline_choice";
+  prompt?: string;
+  clozeText: string;
+  clozeOptions: Record<string, string[]>;
+};
+
+export default function InlineChoice({
+  item,
+  onChange,
+  disabled,
+}: {
+  item: InlineChoiceItem;
+  onChange?: (response: Record<string, string>) => void;
+  disabled?: boolean;
+}) {
+  const [resp, setResp] = useState<Record<string, string>>({});
+
+  const parts = useMemo(() => {
+    const text = item.clozeText || "";
+    const re = /\[\[([^\]]+)\]\]/g;
+    const out: Array<{ t: "text" | "blank"; v: string }> = [];
+    let last = 0;
+    let m: RegExpExecArray | null;
+
+    while ((m = re.exec(text)) !== null) {
+      const start = m.index;
+      const end = re.lastIndex;
+      if (start > last) out.push({ t: "text", v: text.slice(last, start) });
+      out.push({ t: "blank", v: (m[1] || "").trim() });
+      last = end;
+    }
+    if (last < text.length) out.push({ t: "text", v: text.slice(last) });
+    return out;
+  }, [item.clozeText]);
+
+  function setBlank(blank: string, value: string) {
+    setResp((prev) => {
+      const next = { ...prev, [blank]: value };
+      onChange?.(next);
+      return next;
+    });
+  }
+
+  return (
+    <div className="rounded-2xl border bg-white p-4 shadow-sm">
+      {item.prompt ? <div className="mb-3 text-sm font-semibold text-slate-900">{item.prompt}</div> : null}
+
+      <div className="text-base text-slate-900 leading-relaxed whitespace-pre-wrap">
+        {parts.map((p, i) => {
+          if (p.t === "text") return <span key={i}>{p.v}</span>;
+
+          const list = (item.clozeOptions?.[p.v] || [p.v]).filter(Boolean);
+          const value = resp[p.v] || "";
+          return (
+            <span key={i} className="inline-flex items-center">
+              <select
+                className="mx-1 rounded-lg border bg-white px-2 py-1 text-sm shadow-sm disabled:opacity-60"
+                value={value}
+                disabled={!!disabled}
+                onChange={(e) => setBlank(p.v, e.target.value)}
+              >
+                <option value="" disabled>
+                  Select…
+                </option>
+                {list.map((o) => (
+                  <option key={o} value={o}>
+                    {o}
+                  </option>
+                ))}
+              </select>
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

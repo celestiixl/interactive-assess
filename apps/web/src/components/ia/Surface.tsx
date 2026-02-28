@@ -10,7 +10,7 @@ export function Surface({
   return (
     <div
       className={
-        "rounded-2xl border border-slate-200/80 bg-white/90 shadow-[0_16px_45px_rgba(2,6,23,0.06)] " +
+        "rounded-2xl border border-slate-200/80 bg-white/0/90 shadow-[0_16px_45px_rgba(2,6,23,0.06)] " +
         className
       }
     >

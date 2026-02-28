@@ -5,9 +5,12 @@ export default function InteractiveItemsTestScreen() {
     <main className="mx-auto w-full max-w-5xl px-6 py-10">
       <div className="flex items-start justify-between gap-6">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Interactive Items Test Screen</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Interactive Items Test Screen
+          </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Placeholder sandbox. Next patch will render a small demo set (including Inline Choice).
+            Placeholder sandbox. Next patch will render a small demo set
+            (including Inline Choice).
           </p>
         </div>
 

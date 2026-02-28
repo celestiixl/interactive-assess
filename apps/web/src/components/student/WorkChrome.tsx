@@ -1,15 +1,25 @@
-"use client"
+"use client";
 
-export type ItemType = "mcq" | "constructed" | "card_sort" | "drag_drop" | "hotspot"
+export type ItemType =
+  | "mcq"
+  | "constructed"
+  | "card_sort"
+  | "drag_drop"
+  | "hotspot";
 
 export function WorkHeader({
   type,
   meta,
   onReset,
 }: {
-  type: ItemType
-  meta?: { placed?: number; total?: number; wordCount?: number; maxWords?: number }
-  onReset?: () => void
+  type: ItemType;
+  meta?: {
+    placed?: number;
+    total?: number;
+    wordCount?: number;
+    maxWords?: number;
+  };
+  onReset?: () => void;
 }) {
   return (
     <div className="flex items-center justify-between gap-3">
@@ -39,13 +49,16 @@ export function WorkHeader({
         ) : null}
 
         {onReset ? (
-          <button onClick={onReset} className="rounded-xl border px-2 py-1 text-xs hover:bg-muted/30">
+          <button
+            onClick={onReset}
+            className="rounded-xl border px-2 py-1 text-xs hover:bg-muted/30"
+          >
             Reset
           </button>
         ) : null}
       </div>
     </div>
-  )
+  );
 }
 
 export function WorkFooter({
@@ -53,30 +66,36 @@ export function WorkFooter({
   onSave,
   onSubmit,
 }: {
-  status?: "saved" | "saving" | "unsaved"
-  onSave: () => void
-  onSubmit: () => void
+  status?: "saved" | "saving" | "unsaved";
+  onSave: () => void;
+  onSubmit: () => void;
 }) {
   const label =
     status === "saving"
       ? "Saving..."
       : status === "saved"
-      ? "Saved"
-      : status === "unsaved"
-      ? "Unsaved"
-      : ""
+        ? "Saved"
+        : status === "unsaved"
+          ? "Unsaved"
+          : "";
 
   return (
     <div className="flex items-center justify-between">
       <div className="text-xs text-muted-foreground">{label}</div>
       <div className="flex items-center gap-2">
-        <button onClick={onSave} className="rounded-xl border px-3 py-2 text-sm hover:bg-muted/30">
+        <button
+          onClick={onSave}
+          className="rounded-xl border px-3 py-2 text-sm hover:bg-muted/30"
+        >
           Save
         </button>
-        <button onClick={onSubmit} className="rounded-xl bg-primary px-3 py-2 text-sm text-primary-foreground">
+        <button
+          onClick={onSubmit}
+          className="rounded-xl bg-primary px-3 py-2 text-sm text-primary-foreground"
+        >
           Submit
         </button>
       </div>
     </div>
-  )
+  );
 }

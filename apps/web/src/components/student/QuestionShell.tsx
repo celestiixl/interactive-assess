@@ -6,7 +6,7 @@ type Mode = "learn" | "test";
 
 export function QuestionShell({
   mode,
-  maxAttempts,     // number | "unlimited"
+  maxAttempts, // number | "unlimited"
   explanation,
   onCheck,
   children,
@@ -17,39 +17,33 @@ export function QuestionShell({
   onCheck: () => boolean; // returns correct or not
   children: React.ReactNode;
 }) {
-  const effectiveMax =
-    mode === "test" ? 1 : maxAttempts;
+  const effectiveMax = mode === "test" ? 1 : maxAttempts;
 
-  const unlimited =
-    mode === "learn" && maxAttempts === "unlimited";
+  const unlimited = mode === "learn" && maxAttempts === "unlimited";
 
   const [attempts, setAttempts] = useState(0);
   const [correct, setCorrect] = useState<boolean | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
 
-  const attemptsLeft =
-    unlimited ? Infinity : (effectiveMax as number) - attempts;
+  const attemptsLeft = unlimited
+    ? Infinity
+    : (effectiveMax as number) - attempts;
 
-  const canCheck =
-    unlimited || attemptsLeft > 0;
+  const canCheck = unlimited || attemptsLeft > 0;
 
   const handleCheck = () => {
     if (!canCheck) return;
 
     const isCorrect = onCheck();
     setCorrect(isCorrect);
-    setAttempts(a => a + 1);
+    setAttempts((a) => a + 1);
 
-    if (
-      !unlimited &&
-      attempts + 1 >= (effectiveMax as number)
-    ) {
+    if (!unlimited && attempts + 1 >= (effectiveMax as number)) {
       setShowExplanation(true);
     }
   };
 
-  const canShowExplanation =
-    unlimited || showExplanation;
+  const canShowExplanation = unlimited || showExplanation;
 
   return (
     <div className="space-y-4">
@@ -72,7 +66,7 @@ export function QuestionShell({
       </div>
 
       {canShowExplanation && explanation && (
-        <div className="mt-3 rounded-lg border bg-slate-50 p-3 text-sm">
+        <div className="mt-3 rounded-lg border  p-3 text-sm">
           {explanation}
         </div>
       )}
@@ -87,9 +81,7 @@ export function QuestionShell({
       )}
 
       {correct !== null && (
-        <div className="text-sm">
-          {correct ? "Correct" : "Not yet"}
-        </div>
+        <div className="text-sm">{correct ? "Correct" : "Not yet"}</div>
       )}
     </div>
   );

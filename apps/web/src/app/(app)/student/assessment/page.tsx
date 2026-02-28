@@ -1,78 +1,156 @@
 import Link from "next/link";
 
-const DEFAULT_RC = 'RC1 • Cell Structure & Function';
-
-export default function StudentAssessmentLab() {
-  const rc = encodeURIComponent(DEFAULT_RC);
+function Card({
+  title,
+  desc,
+  href,
+  badge,
+  tone = "slate",
+}: {
+  title: string;
+  desc: string;
+  href: string;
+  badge?: string;
+  tone?: "slate" | "teal" | "amber" | "green" | "purple";
+}) {
+  const tones: Record<string, string> = {
+    slate: "border-slate-200 bg-white/95",
+    teal: "border-teal-200 bg-teal-50/40",
+    amber: "border-amber-200 bg-amber-50/40",
+    green: "border-green-200 bg-green-50/40",
+    purple: "border-purple-200 bg-purple-50/40",
+  };
 
   return (
-    <main className="w-full px-6 py-10 min-h-dvh py-8 bg-slate-50 text-slate-900">
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Assessment Lab</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Quick entry points for student-facing practice and interactive item testing.
-          </p>
-
-<div className="mt-5 flex flex-wrap gap-2">
-  <a href="/student/dashboard" className="ia-btn-primary text-sm">Open Student Dashboard</a>
-</div>
+    <Link
+      href={href}
+      className={[
+        "group block rounded-3xl border p-5 shadow-sm transition hover:shadow-md",
+        tones[tone],
+      ].join(" ")}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <div className="text-sm font-semibold text-slate-900">{title}</div>
+            {badge ? (
+              <span className="rounded-full border bg-white/95 px-2 py-0.5 text-xs text-slate-600">
+                {badge}
+              </span>
+            ) : null}
+          </div>
+          <div className="mt-1 text-sm text-slate-600">{desc}</div>
         </div>
-
-        <Link
-          href="/teacher/dashboard"
-          className="rounded-lg border px-3 py-2 text-sm hover:bg-muted"
-        >
-          Back to Teacher Dashboard
-        </Link>
+        <div className="text-lg opacity-70 group-hover:opacity-100">→</div>
       </div>
+    </Link>
+  );
+}
 
-      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Link
-          href={`/practice?rc=${rc}`}
-          className="group rounded-2xl border p-5 shadow-sm transition hover:bg-muted/40"
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="text-base font-semibold">Demo Student Practice Runner</div>
-              <div className="mt-1 text-sm text-muted-foreground">
-                Opens the student practice runner with a safe default reporting category.
+export default function StudentAssessmentLabPage() {
+  return (
+    <main className="min-h-dvh  text-slate-900">
+      <div className="mx-auto max-w-6xl px-6 py-10">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-xl">
+            <h1 className="text-3xl font-semibold tracking-tight">
+              Assessment Lab
+            </h1>
+            <p className="mt-2 text-sm text-slate-600">
+              Quick entry points for student-facing practice and interactive
+              item testing.
+            </p>
+
+            <div className="mt-6  /0 p-5 ia-card-soft ">
+              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Quick links
               </div>
-              <div className="mt-3 text-xs text-muted-foreground">
-                Default RC: <span className="font-medium text-foreground">{DEFAULT_RC}</span>
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Card
+                  title="Open Student Dashboard"
+                  desc="Mastery donut + specimens + goals."
+                  href="/student/dashboard"
+                  tone="teal"
+                />
+                <Card
+                  title="Practice Runner"
+                  desc="Run a practice set (demo)."
+                  href="/practice"
+                  tone="green"
+                />
+                <Card
+                  title="Items Test Screen"
+                  desc="Render items & verify checks."
+                  href="/student/assessment/items"
+                  tone="purple"
+                />
+                <Card
+                  title="Hot Question"
+                  desc="Bellringer question (if enabled)."
+                  href="/student/hotq"
+                  tone="amber"
+                  badge="beta"
+                />
+              </div>
+
+              <div className="mt-4 text-xs text-slate-500">
+                Tip: Use this page as your “sandbox hub” while you build.
               </div>
             </div>
-            <div className="text-lg opacity-70 group-hover:opacity-100">→</div>
           </div>
-        </Link>
 
-        <Link
-          href="/student/assessment/items"
-          className="group rounded-2xl border p-5 shadow-sm transition hover:bg-muted/40"
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="text-base font-semibold">Interactive Items Test Screen</div>
-
-  <a href="/student/dashboard" className="block rounded-2xl border bg-white p-6 shadow-sm hover:bg-slate-50">
-    <div className="flex items-center justify-between">
-      <div>
-        <div className="text-sm font-semibold text-slate-900">Student Dashboard (demo)</div>
-        <div className="mt-1 text-sm text-slate-600">Personal mastery donut + next steps.</div>
-      </div>
-      <span className="text-slate-600">→</span>
-    </div>
-  </a>
-              <div className="mt-1 text-sm text-muted-foreground">
-                Sandbox screen to verify item rendering, pills, attempts, and check behavior.
+          <div className="w-full max-w-xl">
+            <div className="/0 p-6 ia-card-soft ">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold text-slate-900">
+                    Student Assessment Lab
+                  </div>
+                  <div className="mt-1 text-sm text-slate-600">
+                    Sandbox screen to verify item rendering, pills, attempts,
+                    and check behavior.
+                  </div>
+                  <div className="mt-3 text-xs text-slate-500">
+                    (We&apos;ll wire real test data next.)
+                  </div>
+                </div>
+                <div className="text-sm text-slate-500 tabular-nums">v0.1</div>
               </div>
-              <div className="mt-3 text-xs text-muted-foreground">
-                (We’ll wire real test data next.)
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/student/assessment/items"
+                  className="rounded-2xl border bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                >
+                  Open Items Test →
+                </Link>
+                <Link
+                  href="/student/dashboard"
+                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+                >
+                  Go to Dashboard →
+                </Link>
               </div>
             </div>
-            <div className="text-lg opacity-70 group-hover:opacity-100">→</div>
+
+            <div className="mt-6  /0 p-6 ia-card-soft ">
+              <div className="text-sm font-semibold text-slate-900">
+                What this page is for
+              </div>
+              <ul className="mt-3 space-y-2 text-sm text-slate-600">
+                <li>
+                  • Validate interactive items render correctly across screens.
+                </li>
+                <li>
+                  • Confirm attempt limits, reveal behavior, and feedback UI.
+                </li>
+                <li>
+                  • Quickly jump between Student Dashboard and practice flows.
+                </li>
+              </ul>
+            </div>
           </div>
-        </Link>
+        </div>
       </div>
     </main>
   );

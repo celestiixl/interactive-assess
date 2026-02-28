@@ -23,13 +23,21 @@ const TEKS_CATALOG = {
 };
 
 function normalizeTeksId(id) {
-  return String(id || "").trim().toUpperCase().replace(/\s+/g, "");
+  return String(id || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "");
 }
 
 function inferRC(teksId) {
   const id = normalizeTeksId(teksId);
   if (id.startsWith("BIO.7") || id.startsWith("BIO.8")) return "RC2";
-  if (id.startsWith("BIO.9") || id.startsWith("BIO.10") || id.startsWith("BIO.11")) return "RC3";
+  if (
+    id.startsWith("BIO.9") ||
+    id.startsWith("BIO.10") ||
+    id.startsWith("BIO.11")
+  )
+    return "RC3";
   if (id.startsWith("BIO.12") || id.startsWith("BIO.13")) return "RC4";
   if (id.startsWith("BIO.5") || id.startsWith("BIO.6")) return "RC1";
   return "RC4";
@@ -48,11 +56,13 @@ function walk(dir) {
 
 const files = walk(SRC);
 const candidates = files.filter((f) =>
-  /item|items|question|bank|seed|content/i.test(path.basename(f))
+  /item|items|question|bank|seed|content/i.test(path.basename(f)),
 );
 
 const jsonBanks = candidates.filter((f) => f.endsWith(".json"));
-const tsBanks = candidates.filter((f) => f.endsWith(".ts") || f.endsWith(".tsx"));
+const tsBanks = candidates.filter(
+  (f) => f.endsWith(".ts") || f.endsWith(".tsx"),
+);
 
 const report = {
   scanned: candidates.length,
@@ -77,7 +87,9 @@ for (const file of jsonBanks) {
   for (const item of raw) {
     if (!item || typeof item !== "object") continue;
 
-    const teks = Array.isArray(item.teks) ? item.teks.map(normalizeTeksId) : null;
+    const teks = Array.isArray(item.teks)
+      ? item.teks.map(normalizeTeksId)
+      : null;
     if (!teks || teks.length === 0) {
       report.missingTeks.push({ file, id: item.id ?? null });
       continue;
@@ -115,7 +127,7 @@ fs.mkdirSync(path.join(ROOT, "scripts", "out"), { recursive: true });
 fs.writeFileSync(
   path.join(ROOT, "scripts", "out", "teks-align-report.json"),
   JSON.stringify(report, null, 2) + "\n",
-  "utf-8"
+  "utf-8",
 );
 
 console.log("Done.");
@@ -126,6 +138,8 @@ console.log("Report saved to scripts/out/teks-align-report.json");
 
 if (report.tsBanks.length) {
   console.log("\nTS/TSX candidates (not auto-edited):");
-  for (const f of report.tsBanks.slice(0, 30)) console.log(" -", path.relative(ROOT, f));
-  if (report.tsBanks.length > 30) console.log(` ...and ${report.tsBanks.length - 30} more`);
+  for (const f of report.tsBanks.slice(0, 30))
+    console.log(" -", path.relative(ROOT, f));
+  if (report.tsBanks.length > 30)
+    console.log(` ...and ${report.tsBanks.length - 30} more`);
 }

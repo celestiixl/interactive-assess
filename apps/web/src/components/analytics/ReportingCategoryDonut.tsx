@@ -12,8 +12,13 @@ function clamp01(n: number) {
   return Math.max(0, Math.min(1, n));
 }
 
-export default function ReportingCategoryDonut({ masteryByRc, size = 220 }: Props) {
-  const [hoverId, setHoverId] = useState<"RC1" | "RC2" | "RC3" | "RC4" | null>(null);
+export default function ReportingCategoryDonut({
+  masteryByRc,
+  size = 220,
+}: Props) {
+  const [hoverId, setHoverId] = useState<"RC1" | "RC2" | "RC3" | "RC4" | null>(
+    null,
+  );
 
   const data = useMemo(() => {
     return REPORTING_CATEGORIES.map((rc) => {
@@ -48,27 +53,38 @@ export default function ReportingCategoryDonut({ masteryByRc, size = 220 }: Prop
   const hovered = hoverId ? data.find((d) => d.id === hoverId) : null;
 
   function arcPath(start: number, end: number) {
-    const a0 = (start * 2 * Math.PI) - Math.PI / 2;
-    const a1 = (end * 2 * Math.PI) - Math.PI / 2;
+    const a0 = start * 2 * Math.PI - Math.PI / 2;
+    const a1 = end * 2 * Math.PI - Math.PI / 2;
 
     const x0 = cx + r * Math.cos(a0);
     const y0 = cy + r * Math.sin(a0);
     const x1 = cx + r * Math.cos(a1);
     const y1 = cy + r * Math.sin(a1);
 
-    const large = (end - start) > 0.5 ? 1 : 0;
+    const large = end - start > 0.5 ? 1 : 0;
     return `M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1}`;
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="text-lg font-semibold text-slate-900">Mastery by Reporting Category</div>
-      <div className="mt-1 text-sm text-slate-600">Hover a slice to see details.</div>
+    <div className="border -slate-200 /0 p-5 ia-card-soft ">
+      <div className="text-lg font-semibold text-slate-900">
+        Mastery by Reporting Category
+      </div>
+      <div className="mt-1 text-sm text-slate-600">
+        Hover a slice to see details.
+      </div>
 
       <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-center">
         <div className="relative" style={{ width: size, height: size }}>
           <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-            <circle cx={cx} cy={cy} r={r} fill="none" stroke="#E5E7EB" strokeWidth={stroke} />
+            <circle
+              cx={cx}
+              cy={cy}
+              r={r}
+              fill="none"
+              stroke="#E5E7EB"
+              strokeWidth={stroke}
+            />
             {segments.map(({ rc, start, end }) => {
               const s = start + gap;
               const e = Math.max(s, end - gap);
@@ -89,18 +105,34 @@ export default function ReportingCategoryDonut({ masteryByRc, size = 220 }: Prop
                 />
               );
             })}
-            <text x={cx} y={cy - 2} textAnchor="middle" className="fill-slate-900" style={{ fontSize: 22, fontWeight: 700 }}>
+            <text
+              x={cx}
+              y={cy - 2}
+              textAnchor="middle"
+              className="fill-slate-900"
+              style={{ fontSize: 22, fontWeight: 700 }}
+            >
               {Math.round(avg * 100)}%
             </text>
-            <text x={cx} y={cy + 20} textAnchor="middle" className="fill-slate-600" style={{ fontSize: 12 }}>
+            <text
+              x={cx}
+              y={cy + 20}
+              textAnchor="middle"
+              className="fill-slate-600"
+              style={{ fontSize: 12 }}
+            >
               average mastery
             </text>
           </svg>
 
           {hovered ? (
-            <div className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-md">
-              <div className="font-semibold text-slate-900">{hovered.id} • {hovered.name}</div>
-              <div className="text-slate-700">{Math.round(hovered.value * 100)}% mastery</div>
+            <div className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 rounded-xl border border-slate-200 bg-white/0 px-3 py-2 text-sm shadow-md">
+              <div className="font-semibold text-slate-900">
+                {hovered.id} • {hovered.name}
+              </div>
+              <div className="text-slate-700">
+                {Math.round(hovered.value * 100)}% mastery
+              </div>
             </div>
           ) : null}
         </div>
@@ -115,16 +147,28 @@ export default function ReportingCategoryDonut({ masteryByRc, size = 220 }: Prop
             >
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="font-semibold text-slate-900">{rc.id} • {rc.name}</div>
-                  <div className="mt-1 text-sm text-slate-600">{rc.description}</div>
+                  <div className="font-semibold text-slate-900">
+                    {rc.id} • {rc.name}
+                  </div>
+                  <div className="mt-1 text-sm text-slate-600">
+                    {rc.description}
+                  </div>
                 </div>
                 <div className="shrink-0 text-right">
-                  <div className="text-lg font-semibold text-slate-900">{Math.round(rc.value * 100)}%</div>
+                  <div className="text-lg font-semibold text-slate-900">
+                    {Math.round(rc.value * 100)}%
+                  </div>
                   <div className="text-xs text-slate-600">mastery</div>
                 </div>
               </div>
               <div className="mt-2 h-2 w-full rounded-full bg-slate-100">
-                <div className="h-2 rounded-full" style={{ width: `${Math.round(rc.value * 100)}%`, backgroundColor: colors[rc.id] }} />
+                <div
+                  className="h-2 rounded-full"
+                  style={{
+                    width: `${Math.round(rc.value * 100)}%`,
+                    backgroundColor: colors[rc.id],
+                  }}
+                />
               </div>
             </div>
           ))}

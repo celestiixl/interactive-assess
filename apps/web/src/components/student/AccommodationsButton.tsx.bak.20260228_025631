@@ -1,0 +1,214 @@
+"use client";
+
+import React, { useEffect, useMemo, useState } from "react";
+import { applyAccToDocument, DEFAULT_ACC, loadAcc, saveAcc, type Accommodations } from "@/lib/accommodations";
+
+type Props = {
+  label?: string; // e.g., "Accommodations"
+  compact?: boolean; // icon-ish button
+};
+
+function ToggleRow({
+  title,
+  desc,
+  checked,
+  onChange,
+}: {
+  title: string;
+  desc?: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className="flex w-full items-start justify-between gap-4 rounded-2xl border bg-white px-4 py-3 text-left shadow-sm"
+    >
+      <div>
+        <div className="text-sm font-semibold text-slate-900">{title}</div>
+        {desc ? <div className="mt-1 text-xs text-slate-600">{desc}</div> : null}
+      </div>
+      <div
+        className={[
+          "h-6 w-11 rounded-full border transition",
+          checked ? "bg-slate-900" : "bg-slate-200",
+        ].join(" ")}
+      >
+        <div
+          className={[
+            "mt-0.5 h-5 w-5 rounded-full bg-white shadow transition",
+            checked ? "translate-x-5" : "translate-x-0.5",
+          ].join(" ")}
+        />
+      </div>
+    </button>
+  );
+}
+
+export default function AccommodationsButton({ label = "Accommodations", compact = false }: Props) {
+  // Hydration-safe: start with defaults, then load after mount
+  const [open, setOpen] = useState(false);
+  const [acc, setAcc] = useState<Accommodations>(DEFAULT_ACC);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const a = loadAcc();
+    setAcc(a);
+    applyAccToDocument(a);
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    saveAcc(acc);
+    applyAccToDocument(acc);
+  }, [acc, hydrated]);
+
+  const buttonText = useMemo(() => {
+    if (!hydrated) return label;
+    const enabledCount =
+      (acc.largeText ? 1 : 0) +
+      (acc.highContrast ? 1 : 0) +
+      (acc.focusMode ? 1 : 0) +
+      (acc.reduceChoices === 2 ? 1 : 0) +
+      (acc.tts ? 1 : 0) +
+      (acc.lang === "es" ? 1 : 0);
+    return enabledCount ? `${label} (${enabledCount})` : label;
+  }, [acc, hydrated, label]);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={
+          compact
+            ? "rounded-full border bg-white px-3 py-2 text-sm font-semibold shadow-sm"
+            : "rounded-full border bg-white px-4 py-2 text-sm font-semibold shadow-sm"
+        }
+      >
+        {buttonText}
+      </button>
+
+      {open ? (
+        <div className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/40 p-4 sm:items-center">
+          <div className="w-full max-w-xl rounded-3xl border bg-white p-5 shadow-xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="text-base font-semibold text-slate-900">Accommodations</div>
+                <div className="mt-1 text-xs text-slate-600">
+                  These settings apply to the Student Dashboard and Practice.
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="rounded-full border bg-white px-3 py-1.5 text-sm font-semibold"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-4 grid gap-3">
+              <div className="rounded-2xl border bg-slate-50 p-4">
+                <div className="text-xs font-semibold text-slate-800">Language</div>
+                <div className="mt-2 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAcc((p) => ({ ...p, lang: "en" }))}
+                    className={[
+                      "rounded-full border px-3 py-1.5 text-sm font-semibold",
+                      acc.lang === "en" ? "bg-slate-900 text-white" : "bg-white text-slate-900",
+                    ].join(" ")}
+                  >
+                    English
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAcc((p) => ({ ...p, lang: "es" }))}
+                    className={[
+                      "rounded-full border px-3 py-1.5 text-sm font-semibold",
+                      acc.lang === "es" ? "bg-slate-900 text-white" : "bg-white text-slate-900",
+                    ].join(" ")}
+                  >
+                    Español
+                  </button>
+                </div>
+              </div>
+
+              <ToggleRow
+                title="Large text"
+                desc="Bigger font + spacing across the app."
+                checked={acc.largeText}
+                onChange={(v) => setAcc((p) => ({ ...p, largeText: v }))}
+              />
+              <ToggleRow
+                title="High contrast"
+                desc="Stronger contrast for readability."
+                checked={acc.highContrast}
+                onChange={(v) => setAcc((p) => ({ ...p, highContrast: v }))}
+              />
+              <ToggleRow
+                title="Focus mode"
+                desc="Reduce distractions (hides XP/streak/specimen flair where possible)."
+                checked={acc.focusMode}
+                onChange={(v) => setAcc((p) => ({ ...p, focusMode: v }))}
+              />
+
+              <div className="rounded-2xl border bg-white p-4 shadow-sm">
+                <div className="text-sm font-semibold text-slate-900">Answer supports</div>
+                <div className="mt-2 text-xs text-slate-600">
+                  These toggles are saved now; wiring into every item type can be done next.
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAcc((p) => ({ ...p, reduceChoices: 0 }))}
+                    className={[
+                      "rounded-full border px-3 py-1.5 text-sm font-semibold",
+                      acc.reduceChoices === 0 ? "bg-slate-900 text-white" : "bg-white text-slate-900",
+                    ].join(" ")}
+                  >
+                    Choices: Normal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAcc((p) => ({ ...p, reduceChoices: 2 }))}
+                    className={[
+                      "rounded-full border px-3 py-1.5 text-sm font-semibold",
+                      acc.reduceChoices === 2 ? "bg-slate-900 text-white" : "bg-white text-slate-900",
+                    ].join(" ")}
+                  >
+                    Choices: -2
+                  </button>
+                </div>
+
+                <div className="mt-3">
+                  <ToggleRow
+                    title="Read aloud (TTS)"
+                    desc="Enables read-aloud UI (best on Practice items)."
+                    checked={acc.tts}
+                    onChange={(v) => setAcc((p) => ({ ...p, tts: v }))}
+                  />
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setAcc(DEFAULT_ACC)}
+                className="rounded-2xl border bg-white px-4 py-3 text-sm font-semibold shadow-sm"
+              >
+                Reset accommodations
+              </button>
+            </div>
+
+            <div className="mt-4 text-xs text-slate-500">
+              Note: This is not an official IEP/504 manager; it’s student-facing supports you can toggle on/off.
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
+  );
+}

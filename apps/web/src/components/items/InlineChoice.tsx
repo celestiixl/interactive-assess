@@ -2,81 +2,120 @@
 
 import { useMemo, useState } from "react";
 
-type InlineChoiceItem = {
-  id: string;
-  type: "inline_choice";
-  prompt?: string;
-  clozeText: string;
-  clozeOptions: Record<string, string[]>;
+type InlineChoiceOpt = {
+  id?: string;
+  value?: string;
+  label?: string;
+  text?: string;
+};
+type InlineChoiceBlank = {
+  id?: string;
+  blankId?: string;
+  options?: InlineChoiceOpt[];
+  choices?: InlineChoiceOpt[];
 };
 
 export default function InlineChoice({
   item,
+  value,
   onChange,
   disabled,
 }: {
-  item: InlineChoiceItem;
-  onChange?: (response: Record<string, string>) => void;
+  item: any;
+  value?: Record<string, string>;
+  onChange?: (v: Record<string, string>) => void;
   disabled?: boolean;
 }) {
-  const [resp, setResp] = useState<Record<string, string>>({});
+  const text: string = String(
+    item?.clozeText ?? item?.prompt ?? item?.stem ?? "",
+  );
+  const blanks: InlineChoiceBlank[] = Array.isArray(item?.blanks)
+    ? item.blanks
+    : Array.isArray(item?.inlineChoices)
+      ? item.inlineChoices
+      : [];
+
+  const [resp, setResp] = useState<Record<string, string>>(() => value ?? {});
 
   const parts = useMemo(() => {
-    const text = item.clozeText || "";
     const re = /\[\[([^\]]+)\]\]/g;
     const out: Array<{ t: "text" | "blank"; v: string }> = [];
     let last = 0;
     let m: RegExpExecArray | null;
 
-    while ((m = re.exec(text)) !== null) {
+    while ((m = re.exec(text))) {
       const start = m.index;
       const end = re.lastIndex;
       if (start > last) out.push({ t: "text", v: text.slice(last, start) });
       out.push({ t: "blank", v: (m[1] || "").trim() });
       last = end;
     }
-    if (last < text.length) out.push({ t: "text", v: text.slice(last) });
-    return out;
-  }, [item.clozeText]);
 
-  function setBlank(blank: string, value: string) {
-    setResp((prev) => {
-      const next = { ...prev, [blank]: value };
+    if (last < text.length) out.push({ t: "text", v: text.slice(last) });
+    return out.length ? out : [{ t: "text", v: text }];
+  }, [text]);
+
+  const blankById = useMemo(() => {
+    const m = new Map<string, InlineChoiceBlank>();
+    blanks.forEach((b, i) => {
+      const id = String(b?.id ?? b?.blankId ?? i);
+      m.set(id, b);
+    });
+    return m;
+  }, [blanks]);
+
+  function optsFor(blankId: string): InlineChoiceOpt[] {
+    const b = blankById.get(blankId);
+    const opts = (b?.options ?? b?.choices ?? []) as InlineChoiceOpt[];
+    return Array.isArray(opts) ? opts : [];
+  }
+
+  function pick(blankId: string, optId: string) {
+    if (disabled) return;
+    setResp((p) => {
+      const next = { ...p, [blankId]: optId };
       onChange?.(next);
       return next;
     });
   }
 
   return (
-    <div className="rounded-2xl border bg-white p-4 shadow-sm">
-      {item.prompt ? <div className="mb-3 text-sm font-semibold text-slate-900">{item.prompt}</div> : null}
-
-      <div className="text-base text-slate-900 leading-relaxed whitespace-pre-wrap">
-        {parts.map((p, i) => {
-          if (p.t === "text") return <span key={i}>{p.v}</span>;
-
-          const list = (item.clozeOptions?.[p.v] || [p.v]).filter(Boolean);
-          const value = resp[p.v] || "";
-          return (
-            <span key={i} className="inline-flex items-center">
-              <select
-                className="mx-1 rounded-lg border bg-white px-2 py-1 text-sm shadow-sm disabled:opacity-60"
-                value={value}
-                disabled={!!disabled}
-                onChange={(e) => setBlank(p.v, e.target.value)}
-              >
-                <option value="" disabled>
-                  Select…
-                </option>
-                {list.map((o) => (
-                  <option key={o} value={o}>
-                    {o}
-                  </option>
-                ))}
-              </select>
+    <div className="space-y-3">
+      <div className="text-base leading-relaxed">
+        {parts.map((p, i) =>
+          p.t === "text" ? (
+            <span key={i}>{p.v}</span>
+          ) : (
+            <span
+              key={i}
+              className="mx-1 inline-flex flex-wrap gap-2 align-baseline"
+            >
+              {optsFor(p.v).map((o, j) => {
+                const id = String(o?.id ?? o?.value ?? j);
+                const label = String(o?.label ?? o?.text ?? o?.value ?? id);
+                const active = (resp[p.v] ?? "") === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    disabled={disabled}
+                    onClick={() => pick(p.v, id)}
+                    className={[
+                      "inline-flex items-center rounded-full border px-3 py-1 text-sm transition",
+                      disabled ? "opacity-60" : "hover:bg-muted",
+                      active
+                        ? "bg-foreground text-background border-foreground"
+                        : "bg-background",
+                    ].join(" ")}
+                    aria-pressed={active}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </span>
-          );
-        })}
+          ),
+        )}
       </div>
     </div>
   );

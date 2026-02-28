@@ -1,0 +1,111 @@
+"use client";
+
+import { useMemo } from "react";
+
+export default function ResultsDrawer({
+  open,
+  onClose,
+  correct,
+  score,
+  max,
+  timeSeconds,
+  attemptsLeft,
+  explanation,
+  onNext,
+  hasNext,
+}: {
+  open: boolean;
+  onClose: () => void;
+  correct: boolean;
+  score: number;
+  max: number;
+  timeSeconds: number;
+  attemptsLeft: number | null;
+  explanation?: string;
+  onNext?: () => void;
+  hasNext?: boolean;
+}) {
+  const summary = useMemo(() => {
+    if (max <= 0) return "Checked.";
+    if (score === max) return "Correct! Nice work.";
+    if (score === 0) return "Not yet. Try again.";
+    return "Partially correct. Keep going.";
+  }, [score, max]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50">
+      {/* Scrim */}
+      <button
+        aria-label="Close results"
+        className="absolute inset-0 bg-black/25"
+        onClick={onClose}
+      />
+
+      {/* Panel */}
+      <aside className="absolute right-0 top-0 h-full w-full max-w-[420px] bg-white shadow-2xl border-l flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b px-4 py-3">
+          <div className="font-semibold">Check</div>
+          <div className="flex items-center gap-2">
+            {hasNext && onNext ? (
+              <button
+                type="button"
+                onClick={onNext}
+                className="rounded-lg border px-3 py-1.5 text-sm font-medium hover:bg-slate-50"
+              >
+                Next →
+              </button>
+            ) : null}
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg border px-3 py-1.5 text-sm font-medium hover:bg-slate-50"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="p-4 space-y-4 overflow-auto">
+          {/* Student-friendly summary */}
+          <div className="rounded-2xl border p-4 space-y-2">
+            <div className="font-semibold">Student-friendly summary</div>
+            <div className="text-sm text-slate-700">{summary}</div>
+
+            <div className="text-xs text-slate-500">
+              Tip: if you can explain WHY it’s correct, you really know it.
+            </div>
+
+            <div className="text-xs text-slate-600">
+              Attempts left: {attemptsLeft == null ? "—" : String(attemptsLeft)}
+            </div>
+
+            <button
+              type="button"
+              className="mt-2 rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+            >
+              More details
+            </button>
+          </div>
+
+          {/* Explanation */}
+          <div className="rounded-2xl border p-4 space-y-2">
+            <div className="font-semibold">Explanation</div>
+            {explanation ? (
+              <div className="text-sm text-slate-700 whitespace-pre-wrap">
+                {explanation}
+              </div>
+            ) : (
+              <div className="text-sm text-slate-500">
+                Explanation is locked until you use your attempts.
+              </div>
+            )}
+          </div>
+        </div>
+      </aside>
+    </div>
+  );
+}

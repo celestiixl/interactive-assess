@@ -81,7 +81,7 @@ export default function ItemRenderer({ item, onAfterCheck, supports }: Props) {
             <summary className="cursor-pointer text-sm font-semibold">
               Debug item payload
             </summary>
-            <pre className="mt-2 overflow-auto rounded-lg bg-white/70 p-3 text-xs">
+            <pre className="mt-2 overflow-auto rounded-lg bg-white/0/70 p-3 text-xs">
               {JSON.stringify(
                 {
                   type: t,
@@ -110,7 +110,7 @@ export default function ItemRenderer({ item, onAfterCheck, supports }: Props) {
 
   // ✅ Fallback (unknown item type)
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-4 text-neutral-900">
+    <div className="rounded-xl border border-neutral-200 bg-white/0 p-4 text-neutral-900">
       <div className="font-semibold">Unknown item type</div>
       <div className="mt-1 text-sm text-neutral-600">
         I don’t know how to render:{" "}

@@ -115,8 +115,8 @@ export default function MCQ({
           const base =
             "group flex items-start gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-all duration-150 ease-out";
           const idle = checked
-            ? "border-neutral-900 bg-white"
-            : "border-neutral-300 bg-white hover:bg-neutral-100 hover:border-neutral-900 hover:shadow-sm hover:-translate-y-0.5";
+            ? "border-neutral-900 bg-white/0"
+            : "border-neutral-300 bg-white/0 hover:bg-neutral-100 hover:border-neutral-900 hover:shadow-sm hover:-translate-y-0.5";
           const focus =
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900";
           const result = showCorrectness
@@ -124,7 +124,7 @@ export default function MCQ({
               ? "border-green-600 bg-green-50"
               : checked
                 ? "border-red-600 bg-red-50"
-                : "border-neutral-300 bg-white opacity-90"
+                : "border-neutral-300 bg-white/0 opacity-90"
             : idle;
 
           return (

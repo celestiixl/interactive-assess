@@ -1,11 +1,19 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-export function ScratchNotes({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+export function ScratchNotes({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
   return (
     <div className="rounded-2xl border bg-muted/10 p-3">
-      <div className="mb-2 text-xs font-medium text-muted-foreground">Scratch Notes</div>
+      <div className="mb-2 text-xs font-medium text-muted-foreground">
+        Scratch Notes
+      </div>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -13,5 +21,5 @@ export function ScratchNotes({ value, onChange }: { value: string; onChange: (v:
         placeholder="Jot ideas, evidence, vocab..."
       />
     </div>
-  )
+  );
 }

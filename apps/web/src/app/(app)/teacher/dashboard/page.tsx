@@ -1,80 +1,82 @@
-import ReportingCategoryDonut from "@/components/analytics/ReportingCategoryDonut";
-import { REPORTING_CATEGORIES } from "@/lib/reportingCategories";
+"use client";
+
 import Link from "next/link";
-export default function TeacherDashboard() {
+
+// If these components exist in your repo, keep them.
+// If your import paths differ, the build will tell us and we can patch paths next.
+import HotQInsightsSlideOver from "@/components/teacher/HotQInsightsSlideOver";
+import Kpi from "@/components/teacher/Kpi";
+
+export default function TeacherDashboardPage() {
   return (
-    <main className="space-y-6 min-h-dvh">
-      
-      <div className="mb-6 flex flex-wrap items-center gap-3">
-        <Link
-          href="/student/assessment"
-          className="ia-btn text-sm"
-        >
-          Student Assessment Lab
-        </Link>
-      </div>
-<div className="mx-auto max-w-6xl px-6 py-8">
-        <div className="flex items-start justify-between gap-6">
+    <main className="mx-auto w-full max-w-6xl px-4 py-8">
+      <div className="flex flex-col gap-6">
+        {/* Header */}
+        <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-4xl font-semibold tracking-tight">Teacher Dashboard</h1>
-            <p className="mt-2 text-slate-600">
-              Manage classes, assessments, and view analytics.
+            <h1 className="text-3xl font-semibold tracking-tight">Teacher Dashboard</h1>
+            <p className="mt-1 text-slate-600">
+              Quick access to your item bank, builder, classes, and insights.
             </p>
           </div>
 
-          <a
-            href="/teacher/builder"
-            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-white font-semibold shadow-sm hover:bg-emerald-700"
-          >
-            <span className="text-xl leading-none">＋</span>
-            Create Assessment
-          </a>
-        </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/teacher/item-bank"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
+            >
+              Item Bank
+            </Link>
 
-        <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+            <Link
+              href="/teacher/builder"
+              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 font-semibold text-white shadow-sm hover:bg-emerald-700"
+            >
+              Builder
+            </Link>
+          </div>
+        </header>
+
+        {/* KPIs */}
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <Kpi title="Total Students" value="—" sub="+— from last week" />
           <Kpi title="Active Assessments" value="—" sub="— drafts pending" />
           <Kpi title="Class Average" value="—" sub="+— improvement" />
         </section>
 
-        <section className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-[1.6fr_1fr]">
+        {/* Main content */}
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="ia-card p-5">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Recent Assessments</h2>
-              <a className="text-emerald-700 font-semibold hover:underline" href="/teacher/builder">
-                View All
-              </a>
-            </div>
-
-            <div className="mt-4 rounded-2xl border border-slate-200 p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="text-lg font-semibold">Practice Mode</div>
-                  <div className="mt-1 text-slate-600">
-                    Jump into the practice runner and test interactive items.
-                  </div>
-
-                  <div className="mt-4 flex gap-5 text-sm text-slate-600">
-                    <div>Items: —</div>
-                    <div>Time: —</div>
-                  </div>
-                </div>
-
-                <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-800">
-                  published
-                </span>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-semibold">Recent Assessments</h2>
+                <p className="mt-1 text-slate-600">Your latest drafts and published assessments.</p>
               </div>
 
+              <Link
+                href="/teacher/assessments"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-900 hover:bg-slate-50"
+              >
+                View All
+              </Link>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-slate-200 p-4">
+              <div className="text-slate-600">No assessments yet.</div>
+
               <div className="mt-5 flex justify-end gap-3">
-                <a
+                <Link
                   href="/teacher/builder"
                   className="rounded-xl border border-slate-300 px-4 py-2 font-semibold hover:bg-slate-50"
                 >
                   Open
-                </a>
+                </Link>
+
                 <button
+                  type="button"
                   className="rounded-xl border border-slate-300 px-4 py-2 font-semibold opacity-60"
                   title="Hook this up later"
+                  disabled
                 >
                   Analytics
                 </button>
@@ -96,25 +98,22 @@ export default function TeacherDashboard() {
               <p className="mt-2 text-emerald-50">
                 You have <span className="font-semibold">—</span> constructed responses waiting for review.
               </p>
-              <button className="mt-5 w-full rounded-xl bg-white/90 px-4 py-3 font-semibold text-emerald-900 hover:bg-white">
-                Review Now
-              </button>
+              <div className="mt-4">
+                <button
+                  type="button"
+                  className="rounded-xl bg-white/15 px-4 py-2 font-semibold hover:bg-white/20"
+                  title="Hook this up later"
+                  disabled
+                >
+                  Open Queue
+                </button>
+              </div>
             </div>
           </div>
         </section>
       </div>
-    </main>);
-}
 
-function Kpi({ title, value, sub }: { title: string; value: string; sub: string }) {
-  return (
-    <div className="ia-card p-5">
-      <div className="flex items-center justify-between">
-        <div className="text-slate-700 font-semibold">{title}</div>
-        <div className="h-8 w-8 rounded-full bg-slate-100" />
-      </div>
-      <div className="mt-3 text-4xl font-semibold tracking-tight">{value}</div>
-      <div className="mt-2 text-slate-600">{sub}</div>
-    </div>
+      <HotQInsightsSlideOver />
+    </main>
   );
 }

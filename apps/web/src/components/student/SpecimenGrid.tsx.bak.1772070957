@@ -1,0 +1,113 @@
+export type Segment = {
+  key: string;
+  label: string;
+  value: number; // expected 0..1
+  group: string;
+};
+
+type Props = {
+  segments: Segment[];
+};
+
+const ORGANISMS = [
+  { match: "cell", name: "Amoeba", icon: "🦠" },
+  { match: "cycle", name: "Zebrafish", icon: "🐟" },
+  { match: "photosynthesis", name: "Elodea", icon: "🌿" },
+  { match: "genetic", name: "Fruit Fly", icon: "🪰" },
+  { match: "selection", name: "Finch", icon: "🐦" },
+  { match: "ecosystem", name: "Wolf", icon: "🐺" },
+  { match: "energy", name: "Mushroom", icon: "🍄" },
+];
+
+function normValue(v: number) {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return 0;
+  // if value looks like a percent (e.g., 51), convert to 0..1
+  return n > 1 ? n / 100 : n;
+}
+
+function getState(v01: number) {
+  if (v01 >= 0.75) return "unlocked";
+  if (v01 >= 0.40) return "growing";
+  return "locked";
+}
+
+function pickOrganism(label: string) {
+  const lower = (label || "").toLowerCase();
+  return ORGANISMS.find((o) => lower.includes(o.match)) ?? { name: "Unknown organism", icon: "❔" };
+}
+
+export default function SpecimenGrid({ segments }: Props) {
+  
+  const grouped = {};
+
+  segments.forEach(seg => {
+    const organism = pickOrganism(seg.label);
+    const key = organism.name;
+
+    const value = normValue(seg.value);
+
+    if (!grouped[key] || grouped[key].value < value) {
+      grouped[key] = {
+        organism,
+        value,
+        pct: Math.round(value * 100),
+        unlocked: value >= 0.75
+      };
+    }
+  });
+
+  const unlocked = Object.values(grouped);
+
+  return (
+    <div className="mt-6">
+      <div className="mb-2 text-sm font-semibold text-slate-900">Specimens</div>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+        {unlocked.map((s, i) => (
+          <div
+            key={s.key || i}
+            className={`rounded-2xl border p-4 text-center transition duration-300
+  ${
+    s.unlocked
+      ? "bg-gradient-to-br from-emerald-50 to-cyan-50 ring-2 ring-emerald-300 shadow-md"
+      : s.pct >= 40
+      ? "bg-white shadow-sm"
+      : "bg-slate-100 opacity-50"
+  }`}
+
+            
+          >
+            <div className={`mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border ${s.unlocked ? "bg-cyan-50" : s.pct >= 40 ? "bg-white" : "bg-slate-100"}`}>
+              <span className={`text-3xl transition-transform duration-300 ${
+  s.unlocked ? "scale-110" : ""
+}`}>{s.organism.icon}</span>
+            </div>
+            <div className="mt-2 text-sm font-semibold text-slate-900">{s.organism.name}</div>
+            <div className="mt-1 text-xs text-slate-500">{s.pct}%</div>
+
+            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${
+  s.unlocked
+    ? "bg-emerald-400"
+    : s.pct >= 40
+    ? "bg-blue-400"
+    : "bg-slate-400"
+}` }
+                style={{ width: `${Math.max(0, Math.min(100, s.pct))}%` }}
+              />
+            </div>
+
+            <div className={`mt-2 text-xs font-semibold ${s.unlocked ? "text-cyan-700" : s.pct >= 40 ? "text-slate-700" : "text-slate-500"}`}>
+              s.unlocked
+  ? "Discovered!"
+  : s.pct >= 40
+  ? "Researching"
+  : "Unknown"
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

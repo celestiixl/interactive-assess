@@ -13,15 +13,19 @@ export function Topbar({
   rightSecondaryLabel?: string;
 }) {
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/80 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/0/80 backdrop-blur">
       <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-4 px-6 py-4">
         <div className="flex items-center gap-3">
-          <div className="grid h-10 w-10 place-items-center rounded-2xl border border-slate-200 bg-white text-sm font-bold text-slate-900">
+          <div className="grid h-10 w-10 place-items-center rounded-2xl border border-slate-200 bg-white/0 text-sm font-bold text-slate-900">
             IA
           </div>
           <div>
-            <div className="text-sm font-semibold text-slate-900">interactive-assess</div>
-            <div className="text-xs text-slate-600">STAAR Biology • interactive items • practice + test</div>
+            <div className="text-sm font-semibold text-slate-900">
+              interactive-assess
+            </div>
+            <div className="text-xs text-slate-600">
+              STAAR Biology • interactive items • practice + test
+            </div>
           </div>
         </div>
 
@@ -34,13 +38,13 @@ export function Topbar({
         <div className="flex items-center gap-2">
           <Link
             href={rightPrimaryHref}
-            className="rounded-xl border border-slate-200 bg-white/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+            className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
           >
             {rightPrimaryLabel}
           </Link>
           <Link
             href={rightSecondaryHref}
-            className="rounded-xl border border-slate-200 bg-white/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+            className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
           >
             {rightSecondaryLabel}
           </Link>

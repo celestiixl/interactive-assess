@@ -1,0 +1,509 @@
+/* --- full-bleed reset (added by patch) --- */
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: #05070d;
+}
+/* --- end patch --- */
+
+/* --- app shell hard reset (added by patch) --- */
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: #05070d;
+}
+#__next,
+#root {
+  height: 100%;
+}
+/* --- end patch --- */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* WOS BIOSCIENCE TOKENS */
+@layer base {
+  :root {
+    /* backgrounds + text */
+    --bg-main: #fafaf8; /* soft off-white, slightly warm */
+    --bg-elev: #ffffff; /* card surface */
+    --text-main: #1f2933; /* charcoal */
+    --text-muted: #52616b; /* calm secondary */
+    --border-soft: #e6e8eb; /* quiet dividers */
+
+    /* accents (meaningful) */
+    --accent-growth: #2f7d5c; /* chlorophyll */
+    --accent-teal: #4f9da6; /* membranes / water */
+    --accent-amber: #d4a72c; /* revise / attention */
+    --accent-slate: #64748b; /* neutral data */
+
+    /* radii */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    /* subtle texture knobs */
+    --noise-opacity: 0.035;
+    --gradient-opacity: 0.12;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    color: var(--text-main);
+    background: var(--bg-main);
+    line-height: 1.55;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Subtle bioscience texture: faint gradient + gentle noise (barely noticeable) */
+@layer base {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: var(--gradient-opacity);
+    background:
+      radial-gradient(
+        60% 60% at 20% 15%,
+        rgba(79, 157, 166, 0.22) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        55% 55% at 85% 20%,
+        rgba(47, 125, 92, 0.2) 0%,
+        transparent 58%
+      ),
+      radial-gradient(
+        70% 70% at 65% 85%,
+        rgba(100, 116, 139, 0.16) 0%,
+        transparent 60%
+      );
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: var(--noise-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+    background-size: 320px 320px;
+    mix-blend-mode: multiply;
+  }
+}
+
+/* Components: microscope-slide cards + non-pill buttons */
+@layer components {
+  .card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  }
+
+  .card-soft {
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(230, 232, 235, 0.9);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(8px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-md); /* NOT pill */
+    border: 1px solid var(--border-soft);
+    background: var(--bg-elev);
+    color: var(--text-main);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  }
+  .btn:hover {
+    background: rgba(255, 255, 255, 0.92);
+  }
+  .btn:active {
+    transform: translateY(0.5px);
+  }
+
+  .btn-primary {
+    border-color: rgba(47, 125, 92, 0.35);
+    background: rgba(47, 125, 92, 0.1);
+    color: #145239;
+  }
+  .btn-primary:hover {
+    background: rgba(47, 125, 92, 0.14);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-soft);
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.2;
+  }
+}
+
+@import "tailwindcss";
+
+/* ---- Brand tokens (adjust anytime) ---- */
+:root {
+  --brand: #10b981; /* emerald-500 */
+  --brand-ink: #065f46; /* emerald-800 */
+  --brand-50: #ecfdf5;
+  --accent: #7c3aed; /* violet-600 */
+  --rose: #fb7185; /* rose-400 */
+  --muted: #6b7280;
+}
+
+/* ---- Background: soft pastel blend ---- */
+html,
+body {
+  min-height: 100%;
+  background:
+    radial-gradient(1200px 800px at -10% 0%, #ecfeff 0%, transparent 60%),
+    radial-gradient(1000px 700px at 120% -10%, #f5f3ff 0%, transparent 55%),
+    radial-gradient(900px 600px at 50% -20%, #ecfdf5 0%, transparent 55%),
+    #ffffff;
+  color: #111827;
+}
+
+/* ---- “Card” look ---- */
+.card {
+  @apply rounded-2xl border bg-white/90 backdrop-blur shadow-sm;
+  border-color: #e5e7eb;
+}
+
+/* ---- Buttons ---- */
+.btn {
+  @apply inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm transition;
+  border-color: #e5e7eb;
+}
+.btn:hover {
+  @apply bg-neutral-50 shadow-sm translate-y-[-1px];
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 6px var(--brand);
+}
+
+.btn-brand {
+  background: linear-gradient(180deg, var(--brand) 0%, #059669 100%);
+  color: white;
+  border-color: transparent;
+}
+.btn-brand:hover {
+  filter: brightness(0.98);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: white;
+}
+
+/* ---- Pills / chips ---- */
+.pill {
+  @apply inline-flex items-center rounded-full border px-2.5 py-1 text-xs;
+  border-color: #e5e7eb;
+  background: #fafafa;
+}
+.pill-brand {
+  background: var(--brand-50);
+  color: var(--brand-ink);
+  border-color: #a7f3d0;
+}
+.pill-rose {
+  background: #fff1f2;
+  color: #9f1239;
+  border-color: #fecdd3;
+}
+
+/* ---- Focus rings unify ---- */
+:where(button, a, input, select, textarea):focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 6px var(--brand);
+  border-radius: 12px;
+}
+
+/* ---------- Cute tooltip bubble ---------- */
+.has-tip {
+  position: relative;
+  display: inline-block;
+}
+.tip-card {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  bottom: calc(100% + 10px);
+  z-index: 50;
+  white-space: normal;
+  max-width: 30ch;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.1rem;
+  color: #064e3b; /* brand ink */
+  background: #ecfdf5; /* brand-50 */
+  border: 1px solid #a7f3d0; /* emerald-200 */
+  border-radius: 0.6rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    visibility 0s linear 0.18s;
+}
+
+.tip-card::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px 8px 0 8px;
+  border-style: solid;
+  border-color: #ecfdf5 transparent transparent transparent;
+}
+.tip-card::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 9px 9px 0 9px;
+  border-style: solid;
+  border-color: #a7f3d0 transparent transparent transparent; /* border */
+}
+
+/* Show tip only on mouse hover or keyboard focus */
+.has-tip:hover .tip-card,
+.has-tip:focus-within .tip-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-10px);
+  transition-delay: 0s;
+}
+
+.btn-primary {
+  @apply inline-flex items-center gap-2 px-3 py-2 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-50;
+}
+.card {
+  @apply rounded-md border p-3 bg-white;
+}
+.pill {
+  @apply px-2 py-0.5 rounded-full border text-[12px] bg-white;
+}
+
+/* UI base font bump */
+html {
+  font-size: 16px;
+} /* try 16; use 17 if still small */
+
+/* UI base font bump */
+html {
+  font-size: 16px;
+} /* try 16; use 17 if still small */
+
+/* ===========================
+   Interactive-Assess Theme
+   (light, airy, soft gradients)
+   =========================== */
+
+:root {
+  --ia-bg0: 248 250 252; /* slate-50 */
+  --ia-bg1: 255 255 255; /* white */
+  --ia-ink: 15 23 42; /* slate-900 */
+  --ia-muted: 71 85 105; /* slate-600 */
+
+  --ia-card: 255 255 255;
+  --ia-border: 226 232 240; /* slate-200 */
+  --ia-shadow: 2 6 23;
+
+  /* accents */
+  --ia-teal: 20 184 166;
+  --ia-emerald: 16 185 129;
+  --ia-amber: 245 158 11;
+  --ia-violet: 139 92 246;
+  --ia-slate: 100 116 139;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(
+      700px 340px at 12% 18%,
+      rgba(var(--ia-teal), 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      760px 360px at 82% 20%,
+      rgba(var(--ia-amber), 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 420px at 55% 80%,
+      rgba(var(--ia-violet), 0.06),
+      transparent 65%
+    ),
+    linear-gradient(to bottom, rgb(var(--ia-bg1)), rgb(var(--ia-bg0)));
+  color: rgb(var(--ia-ink));
+}
+
+/* Full-bleed app shell */
+.ia-app {
+  min-height: 100dvh;
+  width: 100%;
+}
+
+/* Default page container */
+.ia-container {
+  width: 100%;
+  max-width: 1100px; /* calm dashboard width */
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Card / surface */
+.ia-card {
+  background: rgb(var(--ia-card));
+  border: 1px solid rgb(var(--ia-border));
+  border-radius: 18px;
+  box-shadow:
+    0 1px 0 rgba(var(--ia-shadow), 0.04),
+    0 18px 50px rgba(var(--ia-shadow), 0.08);
+}
+
+/* Subtle inset surface */
+.ia-surface {
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgb(var(--ia-border));
+  border-radius: 18px;
+  box-shadow:
+    0 1px 0 rgba(var(--ia-shadow), 0.04),
+    0 14px 42px rgba(var(--ia-shadow), 0.07);
+  backdrop-filter: blur(10px);
+}
+
+/* Buttons */
+.ia-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 14px;
+  border: 1px solid rgb(var(--ia-border));
+  background: rgba(255, 255, 255, 0.7);
+  padding: 10px 14px;
+  font-weight: 600;
+  box-shadow: 0 1px 0 rgba(var(--ia-shadow), 0.04);
+}
+.ia-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Pills */
+.ia-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(255, 255, 255, 0.7);
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 1px 0 rgba(var(--ia-shadow), 0.04);
+}
+.ia-pill[data-tone="teal"] {
+  border-color: rgba(var(--ia-teal), 0.25);
+  background: rgba(var(--ia-teal), 0.1);
+  color: rgb(9, 78, 70);
+}
+.ia-pill[data-tone="emerald"] {
+  border-color: rgba(var(--ia-emerald), 0.25);
+  background: rgba(var(--ia-emerald), 0.1);
+  color: rgb(6, 95, 70);
+}
+.ia-pill[data-tone="amber"] {
+  border-color: rgba(var(--ia-amber), 0.28);
+  background: rgba(var(--ia-amber), 0.12);
+  color: rgb(120, 53, 15);
+}
+.ia-pill[data-tone="violet"] {
+  border-color: rgba(var(--ia-violet), 0.25);
+  background: rgba(var(--ia-violet), 0.1);
+  color: rgb(76, 29, 149);
+}
+.ia-pill[data-tone="slate"] {
+  border-color: rgba(var(--ia-slate), 0.25);
+  background: rgba(var(--ia-slate), 0.1);
+  color: rgb(30, 41, 59);
+}
+
+.ia-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+  box-shadow: 0 2px 10px rgba(2, 6, 23, 0.12);
+}
+.ia-dot[data-tone="teal"] {
+  background: rgb(var(--ia-teal));
+}
+.ia-dot[data-tone="emerald"] {
+  background: rgb(var(--ia-emerald));
+}
+.ia-dot[data-tone="amber"] {
+  background: rgb(var(--ia-amber));
+}
+.ia-dot[data-tone="violet"] {
+  background: rgb(var(--ia-violet));
+}
+.ia-dot[data-tone="slate"] {
+  background: rgb(var(--ia-slate));
+}
+
+/* Kill accidental outer whitespace from default browser styles */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}

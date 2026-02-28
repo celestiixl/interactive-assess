@@ -1,0 +1,13 @@
+# Build output
+.next/
+dist/
+out/
+
+# Backups / disabled folders created during experiments
+.bak_*/
+app__DISABLED_*/
+**/.bak_*/
+**/app__DISABLED_*/
+
+# Generic backups
+*.bak.*

@@ -37,7 +37,9 @@ export function useSupports() {
 
   // load
   useEffect(() => {
-    const v = safeParse(typeof window !== "undefined" ? localStorage.getItem(KEY) : null);
+    const v = safeParse(
+      typeof window !== "undefined" ? localStorage.getItem(KEY) : null,
+    );
     if (v) setState(v);
   }, []);
 
@@ -50,8 +52,10 @@ export function useSupports() {
   const api = useMemo(() => {
     return {
       state,
-      setShowSupport: (v: boolean) => setState((s) => ({ ...s, showSupport: v })),
-      setSupportLanguage: (v: SupportLanguage) => setState((s) => ({ ...s, supportLanguage: v })),
+      setShowSupport: (v: boolean) =>
+        setState((s) => ({ ...s, showSupport: v })),
+      setSupportLanguage: (v: SupportLanguage) =>
+        setState((s) => ({ ...s, supportLanguage: v })),
     };
   }, [state]);
 

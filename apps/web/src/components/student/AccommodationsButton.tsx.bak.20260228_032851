@@ -1,0 +1,173 @@
+"use client";
+
+
+import React, { useEffect, useMemo, useState } from "react";
+import { applyAccToDocument, DEFAULT_ACC, loadAcc, saveAcc, type Supports } from "@/lib/accommodations";
+
+type Props = {
+  label?: string;
+  compact?: boolean;
+  className?: string;
+};
+
+function ToggleRow({
+  title,
+  desc,
+  checked,
+  onChange,
+}: {
+  title: string;
+  desc?: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className="flex w-full items-start justify-between gap-4 ia-card-soft px-4 py-3 text-left"
+    >
+      <div>
+        <div className="text-sm font-semibold text-slate-900">{title}</div>
+        {desc ? <div className="mt-1 text-xs text-slate-600">{desc}</div> : null}
+      </div>
+      <div
+        className={[
+          "h-6 w-11 rounded-full border transition",
+          checked ? "bg-slate-900" : "bg-slate-200",
+        ].join(" ")}
+      >
+        <div
+          className={[
+            "mt-0.5 h-5 w-5 rounded-full bg-white shadow transition",
+            checked ? "translate-x-5" : "translate-x-0.5",
+          ].join(" ")}
+        />
+      </div>
+    </button>
+  );
+}
+
+export default function SupportsButton({ label = "Supports", compact = false, className }: Props) {
+  // Hydration-safe: start with defaults, then load after mount
+  const [open, setOpen] = useState(false);
+  const [acc, setAcc] = useState<Supports>(DEFAULT_ACC);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const a = loadAcc();
+    setAcc(a);
+    applyAccToDocument(a);
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    saveAcc(acc);
+    applyAccToDocument(acc);
+  }, [acc, hydrated]);
+
+  const buttonText = useMemo(() => {
+    if (!hydrated) return label;
+    const enabledCount =
+      (acc.largeText ? 1 : 0) +
+      (acc.highContrast ? 1 : 0) +
+      (acc.focusMode ? 1 : 0) +
+      (acc.reduceChoices === 2 ? 1 : 0) +
+      (acc.tts ? 1 : 0) +
+      (acc.lang === "es" ? 1 : 0);
+    return enabledCount ? `${label} (${enabledCount})` : label;
+  }, [acc, hydrated, label]);
+
+  return (
+    <>
+      <button type="button" onClick={() => setOpen(true)} className={["ia-pill", className || ""].join(" ")}>
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 text-slate-700">
+          <path fill="currentColor" d="M7 3h2v18H7V3Zm8 0h2v18h-2V3ZM3 7h4v2H3V7Zm14 0h4v2h-4V7ZM3 15h4v2H3v-2Zm14 0h4v2h-4v-2ZM9 11h6v2H9v-2Z"/>
+        </svg>
+        <span>{buttonText}</span>
+      </button>
+
+      {open ? (
+        <div className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/30 p-4 sm:items-center">
+          <div className="w-full max-w-xl ia-card p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="text-base font-semibold text-slate-900">Supports</div>
+                <div className="mt-1 text-xs text-slate-600">
+                  These are optional supports you can turn on for yourself.
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="rounded-full border bg-white px-3 py-1.5 text-sm font-semibold"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-4 grid gap-3">
+              <div className="ia-card-soft bg-slate-50 p-4">
+                <div className="text-xs font-semibold text-slate-800">Language</div>
+                <div className="mt-2 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAcc((p) => ({ ...p, lang: "en" }))}
+                    className={[
+                      "rounded-full border px-3 py-1.5 text-sm font-semibold",
+                      acc.lang === "en" ? "bg-slate-900 text-white" : "bg-white text-slate-900",
+                    ].join(" ")}
+                  >
+                    English
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAcc((p) => ({ ...p, lang: "es" }))}
+                    className={[
+                      "rounded-full border px-3 py-1.5 text-sm font-semibold",
+                      acc.lang === "es" ? "bg-slate-900 text-white" : "bg-white text-slate-900",
+                    ].join(" ")}
+                  >
+                    Español
+                  </button>
+                </div>
+              </div>
+
+              <ToggleRow
+                title="Large text"
+                desc="Bigger font + spacing across the app."
+                checked={acc.largeText}
+                onChange={(v) => setAcc((p) => ({ ...p, largeText: v }))}
+              />
+              <ToggleRow
+                title="High contrast"
+                desc="Stronger contrast for readability."
+                checked={acc.highContrast}
+                onChange={(v) => setAcc((p) => ({ ...p, highContrast: v }))}
+              />
+              <ToggleRow
+                title="Focus mode"
+                desc="Reduce distractions (hides XP/streak/specimen flair where possible)."
+                checked={acc.focusMode}
+                onChange={(v) => setAcc((p) => ({ ...p, focusMode: v }))}
+              />
+
+              <button
+                type="button"
+                onClick={() => setAcc(DEFAULT_ACC)}
+                className="ia-card-soft bg-white px-4 py-3 text-sm font-semibold"
+              >
+                Reset accommodations
+              </button>
+            </div>
+
+            <div className="mt-4 text-xs text-slate-500">
+              Note: This is not an official IEP/504 manager; it’s student-facing supports you can toggle on/off.
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
+  );
+}

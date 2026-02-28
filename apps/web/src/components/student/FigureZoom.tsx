@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 export function FigureZoom({ src, alt }: { src: string; alt?: string }) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
 
   return (
     <>
@@ -17,14 +17,20 @@ export function FigureZoom({ src, alt }: { src: string; alt?: string }) {
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-50 bg-black/60 p-4" onClick={() => setOpen(false)}>
+        <div
+          className="fixed inset-0 z-50 bg-black/60 p-4"
+          onClick={() => setOpen(false)}
+        >
           <div
             className="mx-auto h-full max-w-6xl overflow-auto rounded-2xl bg-background p-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-3 flex items-center justify-between">
               <div className="text-sm font-medium">Figure</div>
-              <button className="rounded-xl border px-3 py-2 text-sm" onClick={() => setOpen(false)}>
+              <button
+                className="rounded-xl border px-3 py-2 text-sm"
+                onClick={() => setOpen(false)}
+              >
                 Close
               </button>
             </div>
@@ -34,5 +40,5 @@ export function FigureZoom({ src, alt }: { src: string; alt?: string }) {
         </div>
       ) : null}
     </>
-  )
+  );
 }

@@ -14,52 +14,32 @@ export default function ItemRenderer({
   onChecked: (r: { score: number; max: number }) => void;
 }) {
   if (!item) {
-
     return (
-
       <div className="rounded-2xl border bg-card p-4">
-
         <div className="text-sm font-medium">No item loaded</div>
 
         <div className="mt-1 text-xs text-muted-foreground">
-
           The practice page tried to render an item, but it was undefined.
-
         </div>
-
       </div>
-
     );
-
   }
 
-
   if (!item.kind) {
-
     return (
-
       <div className="rounded-2xl border bg-card p-4">
-
         <div className="text-sm font-medium">Invalid item</div>
 
         <div className="mt-1 text-xs text-muted-foreground">
-
           Missing <code className="rounded bg-muted px-1">kind</code> field.
-
         </div>
 
         <pre className="mt-3 overflow-auto rounded-xl bg-muted p-3 text-xs">
-
           {JSON.stringify(item, null, 2)}
-
         </pre>
-
       </div>
-
     );
-
   }
-
 
   switch (item.kind) {
     case "mcq":

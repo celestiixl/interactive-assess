@@ -19,8 +19,8 @@ export function NavItem({
       className={
         "flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm font-semibold transition " +
         (active
-          ? "border-slate-200 bg-slate-50"
-          : "border-slate-200 bg-white/70 hover:bg-white")
+          ? "border-slate-200 "
+          : "border-slate-200 bg-white/0/70 hover:bg-white")
       }
     >
       <span className="truncate text-slate-900">{label}</span>
@@ -38,11 +38,18 @@ export function Sidebar({
     <Surface className="p-4">
       <div className="mb-4">
         <div className="text-sm font-semibold text-slate-900">Navigation</div>
-        <div className="mt-1 text-xs text-slate-600">Jump between roles and test screens.</div>
+        <div className="mt-1 text-xs text-slate-600">
+          Jump between roles and test screens.
+        </div>
       </div>
 
       <div className="grid gap-2">
-        <NavItem href="/assessment" label="Assessment Home" tone="slate" active={activeKey === "assessment"} />
+        <NavItem
+          href="/assessment"
+          label="Assessment Home"
+          tone="slate"
+          active={activeKey === "assessment"}
+        />
         <NavItem
           href="/student/assessment"
           label="Student Assessment Lab"
@@ -55,17 +62,28 @@ export function Sidebar({
           tone="emerald"
           active={activeKey === "items"}
         />
-        <NavItem href="/practice" label="Practice Runner" tone="amber" active={activeKey === "practice"} />
-        <NavItem href="/teacher/dashboard" label="Teacher Dashboard" tone="slate" active={activeKey === "teacher"} />
+        <NavItem
+          href="/practice"
+          label="Practice Runner"
+          tone="amber"
+          active={activeKey === "practice"}
+        />
+        <NavItem
+          href="/teacher/dashboard"
+          label="Teacher Dashboard"
+          tone="slate"
+          active={activeKey === "teacher"}
+        />
       </div>
 
-      <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="mt-5 rounded-2xl border border-slate-200  p-4">
         <div className="text-xs font-semibold text-slate-700">Status</div>
         <div className="mt-2 text-sm text-slate-900">
           <span className="font-semibold">Mode:</span> prototype
         </div>
         <div className="mt-1 text-sm text-slate-900">
-          <span className="font-semibold">Next build:</span> Inline Choice first-class
+          <span className="font-semibold">Next build:</span> Inline Choice
+          first-class
         </div>
       </div>
     </Surface>

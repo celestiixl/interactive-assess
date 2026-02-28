@@ -20,10 +20,26 @@
           { "id": "bank", "label": "Word Bank" }
         ],
         "cards": [
-          { "id": "c1", "label": "RNA polymerase uses DNA as a template to build mRNA", "correctColId": "transcription" },
-          { "id": "c2", "label": "mRNA moves to a ribosome in the cytoplasm", "correctColId": "translation" },
-          { "id": "c3", "label": "tRNA matches anticodons to mRNA codons", "correctColId": "translation" },
-          { "id": "c4", "label": "A chain of amino acids forms a protein", "correctColId": "translation" }
+          {
+            "id": "c1",
+            "label": "RNA polymerase uses DNA as a template to build mRNA",
+            "correctColId": "transcription"
+          },
+          {
+            "id": "c2",
+            "label": "mRNA moves to a ribosome in the cytoplasm",
+            "correctColId": "translation"
+          },
+          {
+            "id": "c3",
+            "label": "tRNA matches anticodons to mRNA codons",
+            "correctColId": "translation"
+          },
+          {
+            "id": "c4",
+            "label": "A chain of amino acids forms a protein",
+            "correctColId": "translation"
+          }
         ]
       },
       "misconceptionTags": ["location_confusion", "molecule_role_confusion"]
@@ -37,7 +53,10 @@
       "difficulty": "easy",
       "staarStyle": true,
       "itemType": "diagram_label",
-      "stimulus": { "kind": "text", "text": "Complete the model of how genetic information becomes a trait." },
+      "stimulus": {
+        "kind": "text",
+        "text": "Complete the model of how genetic information becomes a trait."
+      },
       "prompt": "Select the correct answer for each box.",
       "answer": {
         "kind": "diagram_label",
@@ -66,11 +85,17 @@
       "difficulty": "easy",
       "staarStyle": true,
       "itemType": "multiple_choice",
-      "stimulus": { "kind": "text", "text": "A student observes a cell with an electron microscope." },
+      "stimulus": {
+        "kind": "text",
+        "text": "A student observes a cell with an electron microscope."
+      },
       "prompt": "Which feature most strongly indicates the cell is prokaryotic?",
       "choices": [
         { "id": "A", "label": "A nucleus surrounded by a membrane" },
-        { "id": "B", "label": "DNA located in the cytoplasm without a nucleus" },
+        {
+          "id": "B",
+          "label": "DNA located in the cytoplasm without a nucleus"
+        },
         { "id": "C", "label": "Chloroplasts that capture light energy" },
         { "id": "D", "label": "Mitochondria that produce ATP" }
       ],

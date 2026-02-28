@@ -61,7 +61,8 @@ export default function ItemBankPage() {
         if (!alive) return;
         setItems(data.items ?? []);
         setSelected((prev) => {
-          if (prev && (data.items ?? []).some((x: Item) => x.id === prev.id)) return prev;
+          if (prev && (data.items ?? []).some((x: Item) => x.id === prev.id))
+            return prev;
           return (data.items ?? [])[0] ?? null;
         });
       } finally {
@@ -87,16 +88,51 @@ export default function ItemBankPage() {
   };
 
   return (
-    <div style={{ padding: 24, display: "grid", gridTemplateColumns: "380px 1fr", gap: 16 }}>
-      <div style={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: 14, padding: 14, background: "white" }}>
-        <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 10 }}>Item Bank</div>
+    <div
+      style={{
+        padding: 24,
+        display: "grid",
+        gridTemplateColumns: "380px 1fr",
+        gap: 16,
+      }}
+    >
+      <div
+        style={{
+          border: "1px solid rgba(0,0,0,0.12)",
+          borderRadius: 14,
+          padding: 14,
+          background: "white",
+        }}
+      >
+        <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 10 }}>
+          Item Bank
+        </div>
 
         <div style={{ display: "grid", gap: 10 }}>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search (keywords, misconceptions, etc.)" style={inp} />
-          <input value={teks} onChange={(e) => setTeks(e.target.value)} placeholder="TEKS (ex: BIO.7B)" style={inp} />
-          <input value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="Topic (ex: Gene Expression)" style={inp} />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search (keywords, misconceptions, etc.)"
+            style={inp}
+          />
+          <input
+            value={teks}
+            onChange={(e) => setTeks(e.target.value)}
+            placeholder="TEKS (ex: BIO.7B)"
+            style={inp}
+          />
+          <input
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            placeholder="Topic (ex: Gene Expression)"
+            style={inp}
+          />
 
-          <select value={type} onChange={(e) => setType(e.target.value)} style={inp}>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            style={inp}
+          >
             <option value="">All item types</option>
             <option value="multiple_choice">Multiple Choice</option>
             <option value="multi_select">Multi Select</option>
@@ -106,14 +142,22 @@ export default function ItemBankPage() {
             <option value="numeric_response">Numeric Response</option>
           </select>
 
-          <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} style={inp}>
+          <select
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+            style={inp}
+          >
             <option value="">All difficulties</option>
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
           </select>
 
-          <select value={staarStyle} onChange={(e) => setStaarStyle(e.target.value)} style={inp}>
+          <select
+            value={staarStyle}
+            onChange={(e) => setStaarStyle(e.target.value)}
+            style={inp}
+          >
             <option value="true">STAAR style only</option>
             <option value="false">Non-STAAR style</option>
             <option value="">All</option>
@@ -124,7 +168,16 @@ export default function ItemBankPage() {
           {loading ? "Loading…" : `${items.length} item(s)`}
         </div>
 
-        <div style={{ marginTop: 12, display: "grid", gap: 10, maxHeight: "62vh", overflow: "auto", paddingRight: 6 }}>
+        <div
+          style={{
+            marginTop: 12,
+            display: "grid",
+            gap: 10,
+            maxHeight: "62vh",
+            overflow: "auto",
+            paddingRight: 6,
+          }}
+        >
           {items.map((it) => (
             <button
               key={it.id}
@@ -134,35 +187,58 @@ export default function ItemBankPage() {
                 border: "1px solid rgba(0,0,0,0.12)",
                 borderRadius: 12,
                 padding: 10,
-                background: selected?.id === it.id ? "rgba(0,0,0,0.04)" : "white",
-                cursor: "pointer"
+                background:
+                  selected?.id === it.id ? "rgba(0,0,0,0.04)" : "white",
+                cursor: "pointer",
               }}
             >
               <div style={{ fontWeight: 650 }}>{it.title}</div>
               <div style={{ fontSize: 12, opacity: 0.75 }}>
-                {it.itemType} • {it.difficulty} • {it.topic} • {it.teks.join(", ")}
+                {it.itemType} • {it.difficulty} • {it.topic} •{" "}
+                {it.teks.join(", ")}
               </div>
             </button>
           ))}
         </div>
       </div>
 
-      <div style={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: 14, padding: 16, background: "white" }}>
+      <div
+        style={{
+          border: "1px solid rgba(0,0,0,0.12)",
+          borderRadius: 14,
+          padding: 16,
+          background: "white",
+        }}
+      >
         {!selected ? (
           <div style={{ opacity: 0.7 }}>Select an item to preview.</div>
         ) : (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 10,
+                alignItems: "center",
+              }}
+            >
               <div>
-                <div style={{ fontSize: 20, fontWeight: 750 }}>{selected.title}</div>
+                <div style={{ fontSize: 20, fontWeight: 750 }}>
+                  {selected.title}
+                </div>
                 <div style={{ fontSize: 13, opacity: 0.75 }}>
-                  {selected.itemType} • {selected.difficulty} • {selected.topic} • {selected.teks.join(", ")}
+                  {selected.itemType} • {selected.difficulty} • {selected.topic}{" "}
+                  • {selected.teks.join(", ")}
                 </div>
               </div>
 
               <div style={{ display: "flex", gap: 10 }}>
-                <button onClick={copyItem} style={btn}>Copy JSON</button>
-                <button onClick={addToAssignment} style={btnStrong}>Add to assignment</button>
+                <button onClick={copyItem} style={btn}>
+                  Copy JSON
+                </button>
+                <button onClick={addToAssignment} style={btnStrong}>
+                  Add to assignment
+                </button>
               </div>
             </div>
 
@@ -172,7 +248,14 @@ export default function ItemBankPage() {
             </div>
 
             {selected.stimulus?.kind === "text" ? (
-              <div style={{ marginTop: 14, padding: 12, borderRadius: 12, background: "rgba(0,0,0,0.03)" }}>
+              <div
+                style={{
+                  marginTop: 14,
+                  padding: 12,
+                  borderRadius: 12,
+                  background: "rgba(0,0,0,0.03)",
+                }}
+              >
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>Stimulus</div>
                 <div style={{ lineHeight: 1.4 }}>{selected.stimulus.text}</div>
               </div>
@@ -183,8 +266,17 @@ export default function ItemBankPage() {
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>Choices</div>
                 <div style={{ display: "grid", gap: 8 }}>
                   {selected.choices.map((c) => (
-                    <div key={c.id} style={{ border: "1px solid rgba(0,0,0,0.10)", borderRadius: 10, padding: 10 }}>
-                      <span style={{ fontWeight: 800, marginRight: 8 }}>{c.id}</span>
+                    <div
+                      key={c.id}
+                      style={{
+                        border: "1px solid rgba(0,0,0,0.10)",
+                        borderRadius: 10,
+                        padding: 10,
+                      }}
+                    >
+                      <span style={{ fontWeight: 800, marginRight: 8 }}>
+                        {c.id}
+                      </span>
                       {c.label}
                     </div>
                   ))}
@@ -194,7 +286,9 @@ export default function ItemBankPage() {
 
             {selected.misconceptionTags?.length ? (
               <div style={{ marginTop: 14 }}>
-                <div style={{ fontWeight: 700, marginBottom: 6 }}>Misconception tags</div>
+                <div style={{ fontWeight: 700, marginBottom: 6 }}>
+                  Misconception tags
+                </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {selected.misconceptionTags.map((t) => (
                     <span
@@ -204,7 +298,7 @@ export default function ItemBankPage() {
                         borderRadius: 999,
                         padding: "6px 10px",
                         fontSize: 12,
-                        opacity: 0.85
+                        opacity: 0.85,
                       }}
                     >
                       {t}
@@ -225,7 +319,7 @@ const inp: React.CSSProperties = {
   padding: "10px 12px",
   borderRadius: 12,
   border: "1px solid rgba(0,0,0,0.16)",
-  outline: "none"
+  outline: "none",
 };
 
 const btn: React.CSSProperties = {
@@ -234,11 +328,11 @@ const btn: React.CSSProperties = {
   border: "1px solid rgba(0,0,0,0.18)",
   background: "white",
   cursor: "pointer",
-  fontWeight: 650
+  fontWeight: 650,
 };
 
 const btnStrong: React.CSSProperties = {
   ...btn,
   border: "1px solid rgba(0,0,0,0.28)",
-  fontWeight: 800
+  fontWeight: 800,
 };

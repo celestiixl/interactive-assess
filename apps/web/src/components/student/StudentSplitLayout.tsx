@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 export function StudentSplitLayout({
   leftTitle = "Question",
@@ -9,40 +9,54 @@ export function StudentSplitLayout({
   right,
   footer,
 }: {
-  leftTitle?: string
-  rightTitle?: string
-  left: React.ReactNode
-  right: React.ReactNode
-  footer?: React.ReactNode
+  leftTitle?: string;
+  rightTitle?: string;
+  left: React.ReactNode;
+  right: React.ReactNode;
+  footer?: React.ReactNode;
 }) {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       {/* LEFT */}
-      <section className="min-h-0 rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <section className="min-h-0 border -slate-200 /0 ia-card-soft ">
         <div className="flex h-[calc(100vh-170px)] flex-col">
           <header className="shrink-0 border-b border-slate-200 px-4 py-3">
-            <div className="text-sm font-semibold text-slate-900">{leftTitle}</div>
-            <div className="text-xs text-slate-500">Read, zoom, annotate, reference</div>
+            <div className="text-sm font-semibold text-slate-900">
+              {leftTitle}
+            </div>
+            <div className="text-xs text-slate-500">
+              Read, zoom, annotate, reference
+            </div>
           </header>
-          <div className="min-h-0  overflow-y-auto p-4 overflow-visible pr-4 pb-6">{left}</div>
+          <div className="min-h-0   p-4 overflow-visible pr-4 pb-6">
+            {left}
+          </div>
         </div>
       </section>
 
       {/* RIGHT */}
-      <section className="min-h-0 rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <section className="min-h-0 border -slate-200 /0 ia-card-soft ">
         <div className="flex h-[calc(100vh-170px)] flex-col">
           <header className="shrink-0 border-b border-slate-200 px-4 py-3">
-            <div className="text-sm font-semibold text-slate-900">{rightTitle}</div>
-            <div className="text-xs text-slate-500">Answer, sort, draft, submit</div>
+            <div className="text-sm font-semibold text-slate-900">
+              {rightTitle}
+            </div>
+            <div className="text-xs text-slate-500">
+              Answer, sort, draft, submit
+            </div>
           </header>
 
-          <div className="min-h-0 flex-1 overflow-y-auto p-4 pr-4 pb-6">{right}</div>
+          <div className="min-h-0 flex-1  p-4 pr-4 pb-6">
+            {right}
+          </div>
 
           {footer ? (
-            <footer className="shrink-0 border-t border-slate-200 px-4 py-3">{footer}</footer>
+            <footer className="shrink-0 border-t border-slate-200 px-4 py-3">
+              {footer}
+            </footer>
           ) : null}
         </div>
       </section>
     </div>
-  )
+  );
 }

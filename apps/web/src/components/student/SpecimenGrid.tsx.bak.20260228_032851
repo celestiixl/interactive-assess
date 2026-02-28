@@ -1,0 +1,425 @@
+"use client";
+
+import type { Segment } from "@/types/segment";
+
+import { useEffect, useMemo, useState } from "react";
+
+
+type Props = {
+  segments: Segment[];
+};
+
+const ORGANISMS = [
+  { match: "cell", name: "Amoeba", icon: "🦠" },
+  { match: "cycle", name: "Zebrafish", icon: "🐟" },
+  { match: "photosynthesis", name: "Elodea", icon: "🌿" },
+  { match: "genetic", name: "Fruit Fly", icon: "🪰" },
+  { match: "selection", name: "Finch", icon: "🐦" },
+  { match: "ecosystem", name: "Wolf", icon: "🐺" },
+  { match: "energy", name: "Mushroom", icon: "🍄" },
+];
+
+const CONFETTI_VECTORS: Array<[string, string, string]> = [
+  ["-84px", "-34px", "hsl(140,85%,55%)"],
+  ["-60px", "-70px", "hsl(200,85%,55%)"],
+  ["-20px", "-86px", "hsl(260,85%,60%)"],
+  ["20px", "-86px", "hsl(310,85%,60%)"],
+  ["60px", "-70px", "hsl(35,90%,55%)"],
+  ["84px", "-34px", "hsl(210,85%,55%)"],
+  ["92px", "10px", "hsl(155,85%,55%)"],
+  ["70px", "54px", "hsl(190,85%,55%)"],
+  ["26px", "82px", "hsl(280,85%,60%)"],
+  ["-26px", "82px", "hsl(320,85%,60%)"],
+  ["-70px", "54px", "hsl(45,90%,55%)"],
+  ["-92px", "10px", "hsl(225,85%,55%)"],
+];
+
+function normValue(v: number) {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return 0;
+  return n > 1 ? n / 100 : n;
+}
+
+function pickOrganism(label: string) {
+  const lower = (label || "").toLowerCase();
+  return (
+    ORGANISMS.find((o) => lower.includes(o.match)) ?? {
+      name: "Unknown organism",
+      icon: "❔",
+    }
+  );
+}
+
+export default function SpecimenGrid({ segments }: Props) {
+  const [justUnlocked, setJustUnlocked] = useState<string | null>(null);
+
+  const specimens = useMemo(() => {
+    const grouped: Record<
+      string,
+      {
+        organism: { name: string; icon: string };
+        value: number;
+        pct: number;
+        unlocked: boolean;
+      }
+    > = {};
+
+    for (const seg of segments) {
+      const organism = pickOrganism(seg.label);
+      const key = organism.name;
+
+      const v01 = normValue(seg.value);
+      const pct = Math.round(v01 * 100);
+
+      // IMPORTANT: Unknown should never "unlock"
+      const unlocked = organism.name !== "Unknown organism" && v01 >= 0.75;
+
+      // keep highest mastery for that organism
+      if (!grouped[key] || grouped[key].value < v01) {
+        grouped[key] = { organism, value: v01, pct, unlocked };
+      }
+    }
+
+    const arr = Object.values(grouped).sort((a, b) => {
+      if (
+        a.organism.name === "Unknown organism" &&
+        b.organism.name !== "Unknown organism"
+      )
+        return -1;
+      if (
+        b.organism.name === "Unknown organism" &&
+        a.organism.name !== "Unknown organism"
+      )
+        return 1;
+      return a.organism.name.localeCompare(b.organism.name);
+    });
+
+    return arr;
+  }, [segments]);
+
+  useEffect(() => {
+    // fire once per organism per browser session
+    try {
+      for (const s of specimens) {
+        if (!s.unlocked) continue;
+        const key = `specimen_unlocked_${s.organism.name}`;
+        if (!sessionStorage.getItem(key)) {
+          sessionStorage.setItem(key, "1");
+          setJustUnlocked(s.organism.name);
+          const t = setTimeout(() => setJustUnlocked(null), 2200);
+          return () => clearTimeout(t);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, [specimens]);
+
+  return (
+    <div className="mt-6">
+      {/* TOAST */}
+      {justUnlocked ? (
+        <div className="specimen-toast">
+          <div className="specimen-toast-inner">
+            <div className="specimen-toast-badge">NEW</div>
+            <div>
+              <div className="specimen-toast-title">Organism discovered!</div>
+              <div className="specimen-toast-sub">{justUnlocked}</div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <div className="mb-2 text-sm font-semibold text-slate-900">Specimens</div>
+
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+        {specimens.map((s, i) => {
+          const state = s.unlocked
+            ? "unlocked"
+            : s.pct >= 40
+              ? "growing"
+              : "locked";
+          const animate = justUnlocked === s.organism.name;
+
+          const cardClass =
+            state === "unlocked"
+              ? "bg-gradient-to-br from-emerald-50 to-cyan-50 ring-2 ring-emerald-300 shadow-md"
+              : state === "growing"
+                ? "bg-white shadow-sm"
+                : "bg-slate-100 opacity-50";
+
+          const barColor =
+            state === "unlocked"
+              ? "bg-emerald-400"
+              : state === "growing"
+                ? "bg-blue-400"
+                : "bg-slate-400";
+
+          const statusText =
+            state === "unlocked"
+              ? "Discovered!"
+              : state === "growing"
+                ? "Researching"
+                : "Unknown";
+          const statusColor =
+            state === "unlocked"
+              ? "text-emerald-700"
+              : state === "growing"
+                ? "text-slate-700"
+                : "text-slate-500";
+
+          return (
+            <div
+              key={`${s.organism.name}-${i}`}
+              className={[
+                "rounded-2xl border p-4 text-center transition duration-300 hover:shadow-md relative overflow-hidden",
+                cardClass,
+                animate ? "specimen-pop specimen-glow" : "",
+              ].join(" ")}
+            >
+              {/* CONFETTI (only during unlock animation window) */}
+              {animate ? (
+                <div className="confetti">
+                  {CONFETTI_VECTORS.map(([dx, dy, c], idx) => {
+                    const size = 6 + Math.random() * 8; // 6–14px
+                    const rot = Math.random() * 360;
+                    return (
+                      <span
+                        key={idx}
+                        style={
+                          {
+                            ["--dx" as any]: dx,
+                            ["--dy" as any]: dy,
+                            ["--c" as any]: c,
+                            ["--size" as any]: size + "px",
+                            ["--rot" as any]: rot + "deg",
+                          } as any
+                        }
+                      />
+                    );
+                  })}
+                </div>
+              ) : null}
+
+              <div
+                className={[
+                  "mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border bg-white",
+                  animate ? "specimen-bounce" : "",
+                ].join(" ")}
+              >
+                <span className="text-3xl">{s.organism.icon}</span>
+              </div>
+
+              <div className="mt-2 text-sm font-semibold text-slate-900">
+                {s.organism.name}
+              </div>
+              <div className="mt-1 text-xs text-slate-500">{s.pct}%</div>
+
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${barColor}`}
+                  style={{
+                    width: `${Math.max(0, Math.min(100, s.pct))}` + "%",
+                  }}
+                />
+              </div>
+
+              <div className={`mt-2 text-xs font-semibold ${statusColor}`}>
+                {statusText}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <style jsx global>{`
+        /* Unlock animations */
+        @keyframes specimenPop {
+          0% {
+            transform: scale(1);
+          }
+          45% {
+            transform: scale(1.08);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+        @keyframes specimenGlow {
+          0% {
+            box-shadow: 0 0 0 rgba(16, 185, 129, 0);
+          }
+          55% {
+            box-shadow: 0 0 26px rgba(16, 185, 129, 0.55);
+          }
+          100% {
+            box-shadow: 0 0 0 rgba(16, 185, 129, 0);
+          }
+        }
+        @keyframes specimenBounce {
+          0% {
+            transform: translateY(0);
+          }
+          35% {
+            transform: translateY(-4px);
+          }
+          100% {
+            transform: translateY(0);
+          }
+        }
+        .specimen-pop {
+          animation: specimenPop 0.55s ease;
+        }
+        .specimen-glow {
+          animation: specimenGlow 0.9s ease;
+        }
+        .specimen-bounce {
+          animation: specimenBounce 0.55s ease;
+        }
+
+        /* Confetti (no trig; fixed vectors) */
+        .confetti {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+        }
+
+        .confetti span {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: var(--size, 10px);
+          height: var(--size, 10px);
+          background: var(--c, #22c55e);
+          transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(0.6);
+          opacity: 0;
+          animation: confettiBurst 0.75s ease-out forwards;
+          clip-path: polygon(
+            50% 0%,
+            61% 35%,
+            98% 35%,
+            68% 57%,
+            79% 91%,
+            50% 70%,
+            21% 91%,
+            32% 57%,
+            2% 35%,
+            39% 35%
+          );
+        }
+
+        .confetti span.conf-sm {
+          width: 6px;
+          height: 6px;
+        }
+        .confetti span.conf-md {
+          width: 10px;
+          height: 10px;
+        }
+        .confetti span.conf-lg {
+          width: 14px;
+          height: 14px;
+        }
+
+        .confetti span {
+          transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(0.6);
+        }
+
+        .confetti span.star-sm {
+          width: 6px;
+          height: 6px;
+        }
+        .confetti span.star-md {
+          width: 10px;
+          height: 10px;
+        }
+        .confetti span.star-lg {
+          width: 15px;
+          height: 15px;
+        }
+
+        .confetti span.star-gold {
+          background: linear-gradient(135deg, #fde047, #f59e0b);
+        }
+
+        .confetti span {
+          transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(0.7);
+        }
+
+        @keyframes confettiBurst {
+          0% {
+            transform: translate(-50%, -50%) scale(0.6);
+            opacity: 1;
+          }
+          100% {
+            transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)))
+              scale(1);
+            opacity: 0;
+          }
+        }
+
+        /* Toast */
+        @keyframes specimenToastInOut {
+          0% {
+            transform: translateY(-10px);
+            opacity: 0;
+          }
+          12% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          88% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-10px);
+            opacity: 0;
+          }
+        }
+        .specimen-toast {
+          position: fixed;
+          top: 16px;
+          right: 16px;
+          z-index: 9999;
+          animation: specimenToastInOut 2.2s ease forwards;
+          pointer-events: none;
+        }
+        .specimen-toast-inner {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 14px;
+          border-radius: 16px;
+          border: 1px solid rgba(15, 23, 42, 0.12);
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(8px);
+          box-shadow: 0 10px 30px rgba(2, 6, 23, 0.12);
+          min-width: 260px;
+        }
+        .specimen-toast-badge {
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          padding: 6px 8px;
+          border-radius: 999px;
+          color: rgb(6, 95, 70);
+          background: rgba(16, 185, 129, 0.18);
+          border: 1px solid rgba(16, 185, 129, 0.35);
+        }
+        .specimen-toast-title {
+          font-size: 12px;
+          font-weight: 800;
+          color: rgb(15, 23, 42);
+          line-height: 1.1;
+        }
+        .specimen-toast-sub {
+          margin-top: 2px;
+          font-size: 12px;
+          color: rgb(71, 85, 105);
+          line-height: 1.1;
+        }
+      `}</style>
+    </div>
+  );
+}

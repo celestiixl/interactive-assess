@@ -1,6 +1,11 @@
 export * from "./catalog";
 
-import { RC_LABELS, TEKS_CATALOG, type ReportingCategory, type TeksEntry } from "./catalog";
+import {
+  RC_LABELS,
+  TEKS_CATALOG,
+  type ReportingCategory,
+  type TeksEntry,
+} from "./catalog";
 
 export function normalizeTeksId(id: string): string {
   return (id || "").trim().toUpperCase().replace(/\s+/g, "");
@@ -21,14 +26,21 @@ export function reportingCategoryLabel(rc: ReportingCategory): string {
 }
 
 // Default RC inference (tweak later if your district mapping differs)
-export function inferReportingCategoryFromTeks(teksId: string): ReportingCategory {
+export function inferReportingCategoryFromTeks(
+  teksId: string,
+): ReportingCategory {
   const id = normalizeTeksId(teksId);
 
   // RC2: genetics cluster
   if (id.startsWith("BIO.7") || id.startsWith("BIO.8")) return "RC2";
 
   // RC3: evolution cluster
-  if (id.startsWith("BIO.9") || id.startsWith("BIO.10") || id.startsWith("BIO.11")) return "RC3";
+  if (
+    id.startsWith("BIO.9") ||
+    id.startsWith("BIO.10") ||
+    id.startsWith("BIO.11")
+  )
+    return "RC3";
 
   // RC4: systems + ecology
   if (id.startsWith("BIO.12") || id.startsWith("BIO.13")) return "RC4";

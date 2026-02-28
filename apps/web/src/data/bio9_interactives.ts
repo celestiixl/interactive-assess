@@ -11,15 +11,15 @@ export const bioInteractives: Item[] = [
   {
     kind: "dragDrop",
     id: "bio5a-dd1",
-      attempts: 2,
+    attempts: 2,
     teks: ["BIO.5.A"],
     stem: "Drag each biomolecule to its primary function.",
-  zones: [
+    zones: [
       { id: "energy", label: "Energy" },
       { id: "enz", label: "Enzymes/Structure" },
       { id: "info", label: "Genetic Info" },
     ],
-  cards: [
+    cards: [
       { id: "glucose", text: "Glucose" },
       { id: "cellulose", text: "Cellulose" },
       { id: "hemoglobin", text: "Hemoglobin" },
@@ -39,7 +39,7 @@ export const bioInteractives: Item[] = [
   {
     kind: "cardSort",
     id: "bio7b-cs1",
-      attempts: 2,
+    attempts: 2,
     teks: ["BIO.7.B"],
     stem: "Sort each step into Transcription vs Translation.",
     columns: [
@@ -59,7 +59,7 @@ export const bioInteractives: Item[] = [
   {
     kind: "hotspot",
     id: "bio5b-hs1",
-      attempts: "unlimited",
+    attempts: "unlimited",
     teks: ["BIO.5.B"],
     stem: "Click the organelle where cellular respiration mainly occurs.",
     image:

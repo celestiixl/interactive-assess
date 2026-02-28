@@ -41,7 +41,14 @@ function polar(cx: number, cy: number, r: number, a: number) {
   return { x, y };
 }
 
-function arcPath(cx: number, cy: number, rOuter: number, rInner: number, a0: number, a1: number) {
+function arcPath(
+  cx: number,
+  cy: number,
+  rOuter: number,
+  rInner: number,
+  a0: number,
+  a1: number,
+) {
   const p0 = polar(cx, cy, rOuter, a0);
   const p1 = polar(cx, cy, rOuter, a1);
   const p2 = polar(cx, cy, rInner, a1);
@@ -84,9 +91,9 @@ export default function SegmentedDonut({ segments, size = 320, label }: Props) {
 
       const progressRaw = Number.isFinite(Number(s.progress))
         ? Number(s.progress)
-        : (Number.isFinite(Number(s.total)) && Number(s.total) > 0)
-        ? 0
-        : 0;
+        : Number.isFinite(Number(s.total)) && Number(s.total) > 0
+          ? 0
+          : 0;
 
       // TS version below (we replace placeholders right after writing)
       return {
@@ -138,15 +145,25 @@ export default function SegmentedDonut({ segments, size = 320, label }: Props) {
 
   const overallPct = React.useMemo(() => {
     // if totals exist, compute weighted mastery; otherwise average progress
-    const hasTotals = safe.some((s) => Number.isFinite(Number(s.total)) && Number(s.total) > 0);
-    if (hasTotals) { /* computed below */ }
+    const hasTotals = safe.some(
+      (s) => Number.isFinite(Number(s.total)) && Number(s.total) > 0,
+    );
+    if (hasTotals) {
+      /* computed below */
+    }
     return 0;
   }, [safe]);
 
   const overallPct2 = React.useMemo(() => {
-    const hasTotals = safe.some((s) => Number.isFinite(Number(s.total)) && Number(s.total) > 0);
+    const hasTotals = safe.some(
+      (s) => Number.isFinite(Number(s.total)) && Number(s.total) > 0,
+    );
     if (hasTotals) {
-      const total = safe.reduce((acc, s) => acc + (Number.isFinite(Number(s.total)) ? Number(s.total) : 0), 0);
+      const total = safe.reduce(
+        (acc, s) =>
+          acc + (Number.isFinite(Number(s.total)) ? Number(s.total) : 0),
+        0,
+      );
       const mastered = safe.reduce((acc, s) => {
         const denom = Number.isFinite(Number(s.total)) ? Number(s.total) : 0;
         if (denom <= 0) return acc;
@@ -160,14 +177,21 @@ export default function SegmentedDonut({ segments, size = 320, label }: Props) {
       return total > 0 ? Math.round((mastered / total) * 100) : 0;
     }
     if (segmentsWithProgress.length === 0) return 0;
-    const avg = segmentsWithProgress.reduce((a, s) => a + s.progress, 0) / segmentsWithProgress.length;
+    const avg =
+      segmentsWithProgress.reduce((a, s) => a + s.progress, 0) /
+      segmentsWithProgress.length;
     return Math.round(avg * 100);
   }, [safe, segmentsWithProgress]);
 
   // Replace placeholders with TS-safe values (we'll rewrite this block correctly below)
   const overall = overallPct2;
 
-  const [tip, setTip] = React.useState<{ show: boolean; x: number; y: number; text: string }>({
+  const [tip, setTip] = React.useState<{
+    show: boolean;
+    x: number;
+    y: number;
+    text: string;
+  }>({
     show: false,
     x: 0,
     y: 0,
@@ -210,9 +234,21 @@ export default function SegmentedDonut({ segments, size = 320, label }: Props) {
 
   return (
     <div ref={wrapRef} className="relative inline-block select-none">
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-label={label ?? "donut"}>
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        aria-label={label ?? "donut"}
+      >
         {/* soft base ring */}
-        <circle cx={cx} cy={cy} r={(rOuter + rInner) / 2} fill="none" stroke="#e5e7eb" strokeWidth={rOuter - rInner} />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={(rOuter + rInner) / 2}
+          fill="none"
+          stroke="#e5e7eb"
+          strokeWidth={rOuter - rInner}
+        />
 
         {/* wedges (assessed volume) */}
         {segmentsWithProgress.map((s) => (
@@ -251,10 +287,23 @@ export default function SegmentedDonut({ segments, size = 320, label }: Props) {
         <circle cx={cx} cy={cy} r={size * 0.24} fill="#ffffff" />
 
         {/* center text: ALWAYS overall percent */}
-        <text x={cx} y={cy - 6} textAnchor="middle" fontSize={Math.round(size * 0.11)} fontWeight="700" fill="#0b0f17">
+        <text
+          x={cx}
+          y={cy - 6}
+          textAnchor="middle"
+          fontSize={Math.round(size * 0.11)}
+          fontWeight="700"
+          fill="#0b0f17"
+        >
           {overall}%
         </text>
-        <text x={cx} y={cy + 20} textAnchor="middle" fontSize={Math.round(size * 0.045)} fill="#475569">
+        <text
+          x={cx}
+          y={cy + 20}
+          textAnchor="middle"
+          fontSize={Math.round(size * 0.045)}
+          fill="#475569"
+        >
           overall
         </text>
       </svg>
