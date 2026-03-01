@@ -1,6 +1,29 @@
 export async function POST(req: Request) {
   const base = process.env.API_INTERNAL_URL || "http://localhost:3011";
   const body = await req.json().catch(() => ({}));
+  const item = body?.item;
+
+  if (item?.type === "inline_choice") {
+    const correctByBlank: Record<string, string> = item.correctByBlank || {};
+    const response: Record<string, string> = body?.response || body?.answer || {};
+
+    const blanks = Object.keys(correctByBlank);
+    const max = blanks.length || 0;
+    let score = 0;
+
+    for (const b of blanks) {
+      const want = (correctByBlank[b] ?? b).toString().trim();
+      const got = (response?.[b] ?? "").toString().trim();
+      if (got && want && got === want) score += 1;
+    }
+
+    return Response.json({
+      correct: score === max && max > 0,
+      score,
+      max,
+      detail: { blanks, correctByBlank, response },
+    });
+  }
 
   try {
     const upstream = await fetch(`${base}/responses`, {
@@ -26,26 +49,4 @@ export async function POST(req: Request) {
       { status: 502 },
     );
   }
-}
-
-if (item?.type === "inline_choice") {
-  const correctByBlank: Record<string, string> = item.correctByBlank || {};
-  const response: Record<string, string> = body?.response || body?.answer || {};
-
-  const blanks = Object.keys(correctByBlank);
-  const max = blanks.length || 0;
-  let score = 0;
-
-  for (const b of blanks) {
-    const want = (correctByBlank[b] ?? b).toString().trim();
-    const got = (response?.[b] ?? "").toString().trim();
-    if (got && want && got === want) score += 1;
-  }
-
-  return Response.json({
-    correct: score === max && max > 0,
-    score,
-    max,
-    detail: { blanks, correctByBlank, response },
-  });
 }

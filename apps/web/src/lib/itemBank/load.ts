@@ -4,7 +4,7 @@ import type { ItemBank } from "./schema";
 
 const BANK_PATH = path.join(
   process.cwd(),
-  "apps/web/src/lib/itemBank/bank.example.json",
+  "src/lib/itemBank/bank.example.json",
 );
 
 export function loadBank(): ItemBank {

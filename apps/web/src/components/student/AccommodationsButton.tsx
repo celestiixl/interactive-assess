@@ -39,7 +39,7 @@ function ToggleRow({
       >
         <div
           className={[
-            "mt-0.5 h-5 w-5 rounded-full bg-white/0 shadow transition",
+            "mt-0.5 h-5 w-5 rounded-full bg-transparent shadow transition",
             checked ? "translate-x-5" : "translate-x-0.5",
           ].join(" ")}
         />
@@ -89,7 +89,7 @@ export default function SupportsButton({ label = "Supports", compact = false, cl
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/30 p-4 sm:items-center">
+        <div className="fixed inset-0 z-9999 flex items-end justify-center bg-black/30 p-4 sm:items-center">
           <div className="w-full max-w-xl ia-card p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -101,7 +101,7 @@ export default function SupportsButton({ label = "Supports", compact = false, cl
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-full border bg-white/0 px-3 py-1.5 text-sm font-semibold"
+                className="rounded-full border bg-transparent px-3 py-1.5 text-sm font-semibold"
               >
                 Close
               </button>

@@ -19,9 +19,10 @@ export type ItemMCQ = ItemBase & {
 export type ItemDragDrop = ItemBase & {
   kind: "dragDrop";
   prompt?: string;
-  buckets: { id: string; label: string }[];
-  tokens: { id: string; text: string; bucketId?: string }[]; // current placement on client
-  correct?: Record<string, string>; // tokenId -> bucketId (optional if pre-placed)
+  attempts?: number;
+  zones: { id: string; label: string; accepts?: string[] }[];
+  cards: { id: string; text: string }[];
+  correct?: Record<string, string>; // cardId -> zoneId
 };
 
 export type ItemCardSort = ItemBase & {

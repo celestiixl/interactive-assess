@@ -52,10 +52,10 @@ function ActionCard({
     <Link href={href} className="group block">
       <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/0/90 p-6 shadow-[0_16px_45px_rgba(2,6,23,0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_55px_rgba(2,6,23,0.08)]">
         <div
-          className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b ${accentWash} to-transparent`}
+          className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b ${accentWash} to-transparent`}
         />
         <div
-          className={`pointer-events-none absolute left-0 top-0 h-full w-[6px] ${accentBar}`}
+          className={`pointer-events-none absolute left-0 top-0 h-full w-1.5 ${accentBar}`}
         />
 
         <div className="flex items-start justify-between gap-6">

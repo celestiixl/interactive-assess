@@ -6,7 +6,8 @@ export type Tone =
   | "emerald"
   | "amber"
   | "violet"
-  | "slate";
+  | "slate"
+  | "white";
 
 export function Pill({
   children,
@@ -34,6 +35,7 @@ export function Pill({
       "border-violet-200 bg-violet-50 text-violet-900 shadow-[0_0_0_1px_rgba(139,92,246,0.10)]",
     slate:
       "border-slate-200  text-slate-900 shadow-[0_0_0_1px_rgba(148,163,184,0.10)]",
+    white: "border-white/30 bg-white/20 text-white",
   };
 
   return (
@@ -57,6 +59,7 @@ export function IconPill({
     amber: "bg-amber-500",
     violet: "bg-violet-500",
     slate: "bg-slate-500",
+    white: "bg-white",
   };
 
   return (

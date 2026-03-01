@@ -63,7 +63,7 @@ const [q, setQ] = React.useState<any>(null);
           <button
             className="rounded-xl border px-3 py-1 text-xs"
             onClick={() => {
-              setQ((prev) => pickRandomDifferent(prev?.id));
+              setQ((prev: any) => pickRandomDifferent(prev?.id));
               setShowCorrect(false);
             }}
             type="button"
@@ -98,7 +98,7 @@ const [q, setQ] = React.useState<any>(null);
       ) : null}
 
       <div className="mt-3 space-y-2">
-        {q.choices.map((c, i) => {
+        {q.choices.map((c: string, i: number) => {
           const count = stats.counts[i] ?? 0;
           const p = pct(count);
 

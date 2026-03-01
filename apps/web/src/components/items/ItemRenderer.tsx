@@ -42,7 +42,7 @@ export default function ItemRenderer({ item, onAfterCheck, supports }: Props) {
   // ✅ MCQ
   if (t === "mcq" || t === "multiple_choice" || t === "multiplechoice") {
     return (
-      <MCQ item={item} onAfterCheck={onAfterCheck} supports={supports as any} />
+      <MCQ item={item} onAfterCheck={onAfterCheck} />
     );
   }
 
@@ -56,8 +56,7 @@ export default function ItemRenderer({ item, onAfterCheck, supports }: Props) {
     return (
       <ShortResponse
         item={item}
-        onAfterCheck={onAfterCheck}
-        supports={supports as any}
+        onChecked={(_r) => onAfterCheck?.()}
       />
     );
   }
@@ -102,8 +101,7 @@ export default function ItemRenderer({ item, onAfterCheck, supports }: Props) {
     return (
       <DragDrop
         item={item}
-        onAfterCheck={onAfterCheck}
-        supports={supports as any}
+        onChecked={(_r) => onAfterCheck?.()}
       />
     );
   }

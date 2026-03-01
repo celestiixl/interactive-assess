@@ -14,6 +14,8 @@ export type Accommodations = {
   tts: boolean;
 };
 
+export type Supports = Accommodations;
+
 export const ACC_KEY = "acc.v1";
 
 export const DEFAULT_ACC: Accommodations = {

@@ -172,7 +172,7 @@ export default function PracticeByCategory() {
     <AppShell activeKey="practice">
       <div className="ia-container py-6 space-y-6 text-[15px] leading-normal">
         <div className="sticky top-0 z-50 /90 backdrop-blur border-b border-slate-200">
-          <div className="sticky top-0 z-50 /90 backdrop-blur border-b border-slate-200" flex items-center justify-between>
+          <div className="sticky top-0 z-50 /90 backdrop-blur border-b border-slate-200 flex items-center justify-between">
             <ExamBar
               title={`Practice • ${rcParam || rcLabels[0]}`}
               metaLeft={`Item ${safeIndex + 1} of ${mergedItems.length || 0}`}

@@ -8,6 +8,7 @@ export type MCQItem = {
   correctIds: string[];
   retryLimit?: number;
   rationale?: string;
+  tags?: string[];
 };
 
 export default function MCQ({

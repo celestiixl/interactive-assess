@@ -4,6 +4,17 @@ import { useEffect, useMemo, useState } from "react";
 
 type Card = { id: string; text: string };
 type Zone = { id: string; label: string };
+
+export type DragDropItem = {
+  id: string;
+  type?: string;
+  stem?: string;
+  teks?: string[];
+  cards: Card[];
+  zones: (Zone & { accepts?: string[] })[];
+  correct?: Record<string, string>;
+  rationale?: string;
+};
 type Placement = Record<string, string[]>;
 
 type Normalized = {
@@ -214,11 +225,11 @@ export default function DragDrop({
           Categories
         </div>
 
-        <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">
+        <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
           {safe.zones.map((z) => (
             <div
               key={z.id}
-              className="/0 overflow-hidden min-h-[190px] ia-card-soft "
+              className="overflow-hidden min-h-47.5 ia-card-soft"
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => {
                 e.preventDefault();
@@ -240,7 +251,7 @@ export default function DragDrop({
               </div>
 
               <div className="p-3">
-                <div className="min-h-[120px] rounded-xl border border-dashed border-slate-300  p-3">
+                <div className="min-h-30 rounded-xl border border-dashed border-slate-300 p-3">
                   {(placement[z.id] ?? []).length === 0 ? (
                     <div className="text-sm text-slate-500">
                       Drop cards here.

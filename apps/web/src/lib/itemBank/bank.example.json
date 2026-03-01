@@ -16,30 +16,13 @@
         "kind": "card_sort",
         "columns": [
           { "id": "transcription", "label": "Transcription" },
-          { "id": "translation", "label": "Translation" },
-          { "id": "bank", "label": "Word Bank" }
+          { "id": "translation", "label": "Translation" }
         ],
         "cards": [
-          {
-            "id": "c1",
-            "label": "RNA polymerase uses DNA as a template to build mRNA",
-            "correctColId": "transcription"
-          },
-          {
-            "id": "c2",
-            "label": "mRNA moves to a ribosome in the cytoplasm",
-            "correctColId": "translation"
-          },
-          {
-            "id": "c3",
-            "label": "tRNA matches anticodons to mRNA codons",
-            "correctColId": "translation"
-          },
-          {
-            "id": "c4",
-            "label": "A chain of amino acids forms a protein",
-            "correctColId": "translation"
-          }
+          { "id": "c1", "label": "RNA polymerase uses DNA as a template to build mRNA", "correctColId": "transcription" },
+          { "id": "c2", "label": "mRNA moves to a ribosome in the cytoplasm", "correctColId": "translation" },
+          { "id": "c3", "label": "tRNA matches anticodons to mRNA codons", "correctColId": "translation" },
+          { "id": "c4", "label": "A chain of amino acids forms a protein", "correctColId": "translation" }
         ]
       },
       "misconceptionTags": ["location_confusion", "molecule_role_confusion"]
@@ -57,7 +40,7 @@
         "kind": "text",
         "text": "Complete the model of how genetic information becomes a trait."
       },
-      "prompt": "Select the correct answer for each box.",
+      "prompt": "Select the correct answer for each box in the flow diagram.",
       "answer": {
         "kind": "diagram_label",
         "options": [
@@ -92,15 +75,192 @@
       "prompt": "Which feature most strongly indicates the cell is prokaryotic?",
       "choices": [
         { "id": "A", "label": "A nucleus surrounded by a membrane" },
-        {
-          "id": "B",
-          "label": "DNA located in the cytoplasm without a nucleus"
-        },
+        { "id": "B", "label": "DNA located in the cytoplasm without a nucleus" },
         { "id": "C", "label": "Chloroplasts that capture light energy" },
         { "id": "D", "label": "Mitochondria that produce ATP" }
       ],
       "answer": { "kind": "single", "choiceId": "B" },
       "misconceptionTags": ["organelle_presence"]
+    },
+    {
+      "id": "bank_photo_mc_001",
+      "title": "Photosynthesis Reactants",
+      "teks": ["BIO.4B"],
+      "topic": "Photosynthesis",
+      "gradeBand": "HS",
+      "difficulty": "easy",
+      "staarStyle": true,
+      "itemType": "multiple_choice",
+      "stimulus": { "kind": "none" },
+      "prompt": "Which substances are required as reactants for photosynthesis to occur?",
+      "choices": [
+        { "id": "A", "label": "Carbon dioxide (CO₂) and water (H₂O)" },
+        { "id": "B", "label": "Glucose and oxygen (O₂)" },
+        { "id": "C", "label": "ATP and NADPH" },
+        { "id": "D", "label": "DNA and ribosomes" }
+      ],
+      "answer": { "kind": "single", "choiceId": "A" },
+      "misconceptionTags": ["product_reactant_confusion"]
+    },
+    {
+      "id": "bank_photo_cardsort_001",
+      "title": "Photosynthesis vs. Cellular Respiration",
+      "teks": ["BIO.4B"],
+      "topic": "Photosynthesis",
+      "gradeBand": "HS",
+      "difficulty": "medium",
+      "staarStyle": true,
+      "itemType": "card_sort",
+      "stimulus": { "kind": "none" },
+      "prompt": "Sort each statement into the correct biological process.",
+      "answer": {
+        "kind": "card_sort",
+        "columns": [
+          { "id": "photo", "label": "Photosynthesis" },
+          { "id": "resp", "label": "Cellular Respiration" }
+        ],
+        "cards": [
+          { "id": "c1", "label": "Occurs in the chloroplast", "correctColId": "photo" },
+          { "id": "c2", "label": "Produces glucose as a product", "correctColId": "photo" },
+          { "id": "c3", "label": "Requires CO₂ and H₂O as reactants", "correctColId": "photo" },
+          { "id": "c4", "label": "Occurs in the mitochondria", "correctColId": "resp" },
+          { "id": "c5", "label": "Releases CO₂ as a byproduct", "correctColId": "resp" },
+          { "id": "c6", "label": "Produces ATP for direct cell use", "correctColId": "resp" }
+        ]
+      },
+      "misconceptionTags": ["organelle_location_confusion", "product_reactant_confusion"]
+    },
+    {
+      "id": "bank_biomol_ms_001",
+      "title": "Biomolecule Monomers",
+      "teks": ["BIO.5A"],
+      "topic": "Biochemistry",
+      "gradeBand": "HS",
+      "difficulty": "medium",
+      "staarStyle": true,
+      "itemType": "multi_select",
+      "stimulus": {
+        "kind": "text",
+        "text": "Large biological molecules (macromolecules) are assembled from smaller repeating subunits called monomers."
+      },
+      "prompt": "Which of the following are monomers that make up larger biological macromolecules? Select ALL that apply.",
+      "choices": [
+        { "id": "A", "label": "Amino acid" },
+        { "id": "B", "label": "Starch" },
+        { "id": "C", "label": "Glucose" },
+        { "id": "D", "label": "Nucleotide" }
+      ],
+      "answer": { "kind": "multi", "choiceIds": ["A", "C", "D"] },
+      "misconceptionTags": ["monomer_polymer_confusion"]
+    },
+    {
+      "id": "bank_scimethod_mc_001",
+      "title": "Control Group Identification",
+      "teks": ["BIO.3A"],
+      "topic": "Scientific Methods",
+      "gradeBand": "HS",
+      "difficulty": "easy",
+      "staarStyle": true,
+      "itemType": "multiple_choice",
+      "stimulus": {
+        "kind": "text",
+        "text": "A student tests whether fertilizer increases plant height. She grows 10 plants with fertilizer and 10 plants with only water, keeping all other conditions identical."
+      },
+      "prompt": "Which group of plants is the control group?",
+      "choices": [
+        { "id": "A", "label": "The 10 plants grown with fertilizer" },
+        { "id": "B", "label": "The 10 plants grown with only water" },
+        { "id": "C", "label": "Both groups together form the control" },
+        { "id": "D", "label": "The student herself is the control" }
+      ],
+      "answer": { "kind": "single", "choiceId": "B" },
+      "misconceptionTags": ["control_vs_experimental_confusion"]
+    },
+    {
+      "id": "bank_ecology_mc_001",
+      "title": "Energy Loss in Food Chains",
+      "teks": ["BIO.11A"],
+      "topic": "Ecology",
+      "gradeBand": "HS",
+      "difficulty": "medium",
+      "staarStyle": true,
+      "itemType": "multiple_choice",
+      "stimulus": { "kind": "none" },
+      "prompt": "Why does the amount of available energy decrease at each higher trophic level in a food chain?",
+      "choices": [
+        { "id": "A", "label": "Organisms at higher trophic levels eat less food" },
+        { "id": "B", "label": "Energy is lost as heat during metabolic processes" },
+        { "id": "C", "label": "Higher-level organisms are always smaller in size" },
+        { "id": "D", "label": "Sunlight cannot reach higher trophic levels" }
+      ],
+      "answer": { "kind": "single", "choiceId": "B" },
+      "misconceptionTags": ["energy_conservation_confusion"]
+    },
+    {
+      "id": "bank_evolution_mc_001",
+      "title": "Natural Selection in a Population",
+      "teks": ["BIO.9A"],
+      "topic": "Evolution",
+      "gradeBand": "HS",
+      "difficulty": "medium",
+      "staarStyle": true,
+      "itemType": "multiple_choice",
+      "stimulus": {
+        "kind": "text",
+        "text": "A population of beetles lives on dark tree bark. Green beetles are easily spotted and eaten by birds, while dark-brown beetles blend in and survive to reproduce."
+      },
+      "prompt": "Which outcome best describes what will happen to this beetle population over many generations?",
+      "choices": [
+        { "id": "A", "label": "All beetles will eventually learn to avoid predators" },
+        { "id": "B", "label": "The proportion of dark-brown beetles will increase over time" },
+        { "id": "C", "label": "Green beetles will mutate to become dark-brown within one generation" },
+        { "id": "D", "label": "The total population size will remain unchanged" }
+      ],
+      "answer": { "kind": "single", "choiceId": "B" },
+      "misconceptionTags": ["intentional_evolution_confusion", "single_generation_mutation"]
+    },
+    {
+      "id": "bank_genetics_num_001",
+      "title": "Tt × Tt Cross: Dominant Phenotype %",
+      "teks": ["BIO.8A"],
+      "topic": "Genetics",
+      "gradeBand": "HS",
+      "difficulty": "medium",
+      "staarStyle": true,
+      "itemType": "numeric_response",
+      "stimulus": {
+        "kind": "text",
+        "text": "Tall (T) is dominant over short (t) in pea plants. Two heterozygous tall plants (Tt) are crossed."
+      },
+      "prompt": "What percentage of the offspring are expected to show the TALL phenotype? Enter a whole number.",
+      "answer": { "kind": "numeric", "value": 75 }
+    },
+    {
+      "id": "bank_photo_evpair_001",
+      "title": "Photosynthesis Evidence Pair",
+      "teks": ["BIO.4B"],
+      "topic": "Photosynthesis",
+      "gradeBand": "HS",
+      "difficulty": "hard",
+      "staarStyle": true,
+      "itemType": "evidence_pair",
+      "stimulus": {
+        "kind": "text",
+        "text": "A scientist places a plant in a sealed container with elevated CO₂. After 24 hours in sunlight, the CO₂ level drops and the plant's mass increases."
+      },
+      "prompt": "Part A: Which process most directly explains the decrease in CO₂ inside the container?\nPart B: Which molecule is the primary organic product of that process in the plant?",
+      "choices": [
+        { "id": "A", "label": "Photosynthesis" },
+        { "id": "B", "label": "Cellular Respiration" },
+        { "id": "C", "label": "Glucose" },
+        { "id": "D", "label": "Carbon Dioxide" },
+        { "id": "E", "label": "Oxygen" }
+      ],
+      "answer": {
+        "kind": "evidence_pair",
+        "partA": { "correctChoiceId": "A" },
+        "partB": { "correctChoiceId": "C" }
+      }
     }
   ]
 }

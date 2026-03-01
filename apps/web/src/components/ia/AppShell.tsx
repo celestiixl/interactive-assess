@@ -12,7 +12,7 @@ export function AppShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="ia-bg ia-grid min-h-dvh min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+    <div className="ia-bg ia-grid min-h-dvh bg-linear-to-b from-slate-50 via-white to-slate-50">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[42vh] bg-[radial-gradient(520px_260px_at_18%_18%,rgba(20,184,166,0.06),transparent),radial-gradient(520px_260px_at_78%_22%,rgba(245,158,11,0.05),transparent),radial-gradient(640px_320px_at_52%_80%,rgba(139,92,246,0.04),transparent)]" />
       <div className="ia-header w-full">
         <div className="mx-auto max-w-screen-2xl px-6 py-5 flex items-center">
@@ -23,7 +23,7 @@ export function AppShell({
         <aside>
           <Sidebar activeKey={activeKey} />
         </aside>
-        <main className="space-y-6"><div className="min-h-dvh ia-bg relative ia-grid"><div className="relative z-10 px-6 pt-8 pb-16"><div className="mx-auto max-w-[1400px]">{children}</div></div></div></main>
+        <main className="space-y-6"><div className="min-h-dvh ia-bg relative ia-grid"><div className="relative z-10 px-6 pt-8 pb-16"><div className="mx-auto max-w-350">{children}</div></div></div></main>
       </div>
     </div>
   );
