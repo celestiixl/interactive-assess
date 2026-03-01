@@ -54,7 +54,7 @@ function subscribe(cb: () => void) {
 }
 
 export function useLang(): { lang: UILang; setLang: (l: UILang) => void; toggleLang: () => void } {
-  const lang = useSyncExternalStore(subscribe, readLang, () => "en");
+  const lang = useSyncExternalStore<UILang>(subscribe, readLang, () => "en");
 
   // On first mount, ensure html dataset matches persisted lang
   useEffect(() => {

@@ -91,12 +91,10 @@ async function fetchAssignmentResponses(
   return MOCK_RESPONSES[assignmentId] || [];
 }
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { assignmentId: string } },
-) {
+export async function GET(req: NextRequest, context: any) {
   try {
-    const { assignmentId } = await context.params;
+    const params = await context?.params;
+    const { assignmentId } = params || {};
     if (!assignmentId) {
       return NextResponse.json(
         { error: "Missing assignmentId" },

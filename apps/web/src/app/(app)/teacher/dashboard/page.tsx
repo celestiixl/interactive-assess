@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { PageContent, Card } from "@/components/ui";
 
 // If these components exist in your repo, keep them.
 // If your import paths differ, the build will tell us and we can patch paths next.
 
 export default function TeacherDashboardPage() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8">
-      <div className="flex flex-col gap-6">
+    <main>
+      <PageContent className="py-8">
+        <div className="flex flex-col gap-6">
         {/* Header */}
         <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
@@ -41,7 +43,7 @@ export default function TeacherDashboardPage() {
 
         {/* Main content */}
         <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="ia-card p-5">
+          <Card className="p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 className="text-xl font-semibold">Recent Assessments</h2>
@@ -77,16 +79,16 @@ export default function TeacherDashboardPage() {
                 </button>
               </div>
             </div>
-          </div>
+          </Card>
 
           <div className="grid gap-6">
-            <div className="ia-card p-5">
+            <Card className="p-5">
               <h2 className="text-xl font-semibold">My Classes</h2>
               <div className="mt-4 rounded-2xl border border-slate-200 p-4">
                 <div className="text-lg font-semibold">Biology Period —</div>
                 <div className="text-slate-600">Code: BIO-—</div>
               </div>
-            </div>
+            </Card>
 
             <div className="rounded-2xl bg-emerald-700 p-5 text-white shadow-sm">
               <h2 className="text-xl font-semibold">AI Grading Assistant</h2>
@@ -107,6 +109,7 @@ export default function TeacherDashboardPage() {
           </div>
         </section>
       </div>
+      </PageContent>
 
     </main>
   );

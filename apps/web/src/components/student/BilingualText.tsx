@@ -40,3 +40,5 @@ export function BilingualText(props: {
     </div>
   );
 }
+
+export default BilingualText;

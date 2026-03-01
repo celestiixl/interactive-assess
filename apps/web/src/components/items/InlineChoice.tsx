@@ -39,6 +39,7 @@ export default function InlineChoice({
       : [];
 
   const [resp, setResp] = useState<Record<string, string>>(() => value ?? {});
+  const { lang } = useLang();
 
   const parts = useMemo(() => {
     const re = /\[\[([^\]]+)\]\]/g;

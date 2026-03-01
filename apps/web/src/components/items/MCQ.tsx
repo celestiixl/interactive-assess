@@ -40,6 +40,8 @@ export default function MCQ({
     setUserId(id);
   }, []);
 
+  const { lang } = useLang();
+
   const isMulti = useMemo(() => item.correctIds.length > 1, [item.correctIds]);
 
   function toggle(id: string) {

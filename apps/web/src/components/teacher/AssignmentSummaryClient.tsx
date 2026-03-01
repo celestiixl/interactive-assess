@@ -98,7 +98,17 @@ export default function AssignmentSummaryClient({
             Items: {overallStats.totalItems} • Students:{" "}
             {overallStats.totalStudents}
             {overallStats.dateRange?.startDate && (
-              <><span className="mx-1">•</span>{new Date(overallStats.dateRange.startDate).toLocaleDateString()} - {new Date(overallStats.dateRange.endDate||overallStats.dateRange.startDate).toLocaleDateString()}</>
+              <>
+                <span className="mx-1">•</span>
+                {new Date(
+                  overallStats.dateRange.startDate,
+                ).toLocaleDateString()}{" "}
+                -{" "}
+                {new Date(
+                  overallStats.dateRange.endDate ||
+                    overallStats.dateRange.startDate,
+                ).toLocaleDateString()}
+              </>
             )}
           </div>
         </div>

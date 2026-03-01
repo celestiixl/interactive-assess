@@ -1,6 +1,5 @@
 "use client";
 
-
 import * as React from "react";
 import { pickDailyQuestion } from "@/lib/hotqDaily";
 import TeksTooltip from "@/components/common/TeksTooltip";
@@ -18,14 +17,15 @@ function pickRandomDifferent(currentId?: string) {
 }
 
 export default function HotQuestionTeacherInsights() {
-  
   const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => { setMounted(true); }, []);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   React.useEffect(() => {
     setQ(pickDailyQuestion());
   }, []);
-const [q, setQ] = React.useState<any>(null);
+  const [q, setQ] = React.useState<any>(null);
   const [showCorrect, setShowCorrect] = React.useState(false);
   const [, forceTick] = React.useState(0);
 
@@ -51,7 +51,13 @@ const [q, setQ] = React.useState<any>(null);
         <div className="min-w-0">
           <div className="text-sm font-semibold text-slate-900">
             Hot Question Insights{" "}
-            <span className="ml-2 text-xs font-normal text-slate-500">(<span suppressHydrationWarning>{mounted ? formatUSDate(dateLabel) : ""}</span>)</span>
+            <span className="ml-2 text-xs font-normal text-slate-500">
+              (
+              <span suppressHydrationWarning>
+                {mounted ? formatUSDate(dateLabel) : ""}
+              </span>
+              )
+            </span>
           </div>
           <div className="mt-1 text-xs text-slate-500">
             Responses (local demo): {stats.total}
@@ -62,7 +68,9 @@ const [q, setQ] = React.useState<any>(null);
               </span>
             ) : null}
           </div>
-          <div className="mt-2 text-sm text-slate-900">{mounted && q ? q.prompt : ""}</div>
+          <div className="mt-2 text-sm text-slate-900">
+            {mounted && q ? q.prompt : ""}
+          </div>
         </div>
 
         <div className="flex gap-2 shrink-0">

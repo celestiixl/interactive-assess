@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import type { Segment } from "@/types/segment";
 import AccommodationsButton from "@/components/student/AccommodationsButton";
 
@@ -9,6 +9,7 @@ import { useMemo, useState, useEffect } from "react";
 
 import MasteryDonut from "@/components/student/MasteryDonut";
 import SpecimenGrid from "@/components/student/SpecimenGrid";
+import { PageContent, Card, Section } from "@/components/ui";
 
 
 function clamp01(n: number) {
@@ -64,9 +65,8 @@ function getBiomeHealth(segments: Segment[]) {
 export default function StudentDashboard() {
   const router = useRouter();
   const pathname = usePathname();
-  const sp = useSearchParams();
 
-  const tabParam = (sp.get("tab") || "").toLowerCase();
+  const tabParam = typeof window !== "undefined" ? (new URLSearchParams(window.location.search).get("tab") || "").toLowerCase() : "";
   const initialTab = tabParam === "specimens" ? "specimens" : "overview";
 
   const [tab, setTab] = useState<"overview" | "specimens">("overview");
@@ -177,8 +177,8 @@ export default function StudentDashboard() {
       </div>
 
       {/* MAIN CONTENT SURFACE */}
-      <div className="mx-auto -mt-5 max-w-6xl px-6 pb-10">
-        <div className="rounded-[28px] border bg-white/95 p-6 shadow-sm">
+      <PageContent className="-mt-5 pb-10">
+        <Card>
           {/* Biome banner */}
           <div className={`mb-5 flex flex-wrap items-start justify-between gap-3 rounded-2xl border p-5 ${biome.banner}`}>
             <div>
@@ -228,7 +228,7 @@ export default function StudentDashboard() {
           </div>
 
           {/* Main panel */}
-          <section className="/0 p-6 ia-card-soft ">
+          <Section className="/0 p-6 ia-card-soft ">
             {tab === "overview" ? (
               <>
                 <MasteryDonut segments={segments } />
@@ -244,39 +244,33 @@ export default function StudentDashboard() {
                 <SpecimenGrid segments={segments} />
               </>
             )}
-          </section>
+            </Section>
 
           {/* Bottom cards */}
           <section className="mt-5 grid gap-4 md:grid-cols-3">
-            <div className="/0 p-5 ia-card-soft ">
+            <Card variant="sm">
               <div className="text-sm font-semibold text-slate-800">Next best step</div>
-              <div className="mt-2 text-sm text-slate-600">
-                Focus on RC4 practice sets (lowest mastery).
-              </div>
+              <div className="mt-2 text-sm text-slate-600">Focus on RC4 practice sets (lowest mastery).</div>
               <div className="mt-4 flex gap-2">
-                <Link className="ia-btn-primary text-sm" href="/practice?rc=RC4%20%E2%80%A2%20Biological%20Processes%20%26%20Systems">
-                  Practice RC4
-                </Link>
-                <Link className="ia-btn text-sm" href="/practice?rc=RC1%20%E2%80%A2%20Cell%20Structure%20%26%20Function">
-                  Practice RC1
-                </Link>
+                <Link className="ia-btn-primary text-sm" href="/practice?rc=RC4%20%E2%80%A2%20Biological%20Processes%20%26%20Systems">Practice RC4</Link>
+                <Link className="ia-btn text-sm" href="/practice?rc=RC1%20%E2%80%A2%20Cell%20Structure%20%26%20Function">Practice RC1</Link>
               </div>
-            </div>
+            </Card>
 
-            <div className="/0 p-5 ia-card-soft ">
+            <Card variant="sm">
               <div className="text-sm font-semibold text-slate-800" data-focus-hide="1">Streak</div>
               <div className="mt-2 text-2xl font-semibold">3 days</div>
               <div className="mt-1 text-sm text-slate-600">Keep going.</div>
-            </div>
+            </Card>
 
-            <div className="/0 p-5 ia-card-soft ">
+            <Card variant="sm">
               <div className="text-sm font-semibold text-slate-800" data-focus-hide="1">Accuracy</div>
               <div className="mt-2 text-2xl font-semibold">74%</div>
               <div className="mt-1 text-sm text-slate-600">Last 20 checks (demo).</div>
-            </div>
+            </Card>
           </section>
-        </div>
-      </div>
+        </Card>
+      </PageContent>
     </main>
   );
 }

@@ -21,6 +21,7 @@ export default function Hotspot({
     w: 640,
     h: 400,
   });
+  const { lang } = useLang();
 
   useEffect(() => {
     const el = imgRef.current;

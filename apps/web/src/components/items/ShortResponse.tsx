@@ -19,6 +19,8 @@ export default function ShortResponse({
     reasons?: string[];
   } | null>(null);
 
+  const { lang } = useLang();
+
   async function check() {
     const r = await fetch("/api/score/short", {
       method: "POST",

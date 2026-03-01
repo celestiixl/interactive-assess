@@ -5,7 +5,7 @@ import AccommodationsButton from "@/components/student/AccommodationsButton";
 
 import InlineChoice from "@/components/items/InlineChoice";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import ItemRenderer from "@/components/ItemRenderer";
 import AssignmentNav from "@/components/AssignmentNav";
@@ -21,6 +21,8 @@ import { bioInteractives } from "@/data/bio9_interactives";
 import { bio9Items } from "@/data/biology9";
 import { STAAR_BIO } from "@/data/staar_bio";
 
+export const dynamic = "force-dynamic";
+
 type Status = "unseen" | "correct" | "wrong";
 
 export default function PracticeByCategory() {
@@ -29,8 +31,13 @@ export default function PracticeByCategory() {
 
   const supports = useSupports();
   const router = useRouter();
-  const sp = useSearchParams();
-  const rcParam = sp.get("rc") || "";
+  const [rcParam, setRcParam] = useState("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    setRcParam(params.get("rc") || "");
+  }, []);
 
   const questionStartRef = useRef<number>(0);
 
@@ -244,9 +251,7 @@ export default function PracticeByCategory() {
 
           {/* Nav + Item */}
           {mergedItems.length === 0 ? (
-            <div className="p-4 border rounded bg-neutral-50">
-              No items for this category yet.
-            </div>
+            <div className="p-4 border rounded bg-neutral-50">No items for this category yet.</div>
           ) : (
             <StudentSplitLayout
               leftTitle="Question"
@@ -260,10 +265,8 @@ export default function PracticeByCategory() {
                       : "—"}
                   </div>
 
-                  <div className="rounded-2xl border border-slate-200  p-4">
-                    <div className="text-sm font-semibold text-slate-900">
-                      Prompt
-                    </div>
+                  <div className="rounded-2xl border border-slate-200 p-4">
+                    <div className="text-sm font-semibold text-slate-900">Prompt</div>
                     <BilingualText
                       text={
                         (safeItem as any)?.prompt ??

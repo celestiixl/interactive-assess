@@ -32,7 +32,9 @@ export default function TeksTooltip({ code }: { code: string }) {
             <div className="mt-1 text-xs text-slate-500">{entry.strand}</div>
           )}
           {entry?.description && (
-            <div className="mt-2 text-xs text-slate-700">{entry.description}</div>
+            <div className="mt-2 text-xs text-slate-700">
+              {entry.description}
+            </div>
           )}
         </div>
       )}

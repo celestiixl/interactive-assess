@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MOCK_RESPONSES } from "@/lib/mockAssignments";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { assignmentId: string } },
-) {
+export async function GET(req: NextRequest, context: any) {
   const base = process.env.API_INTERNAL_URL || "http://127.0.0.1:3011";
-  const assignmentId = params.assignmentId;
+  const assignmentId = context?.params?.assignmentId;
 
   try {
     const r = await fetch(
