@@ -13,38 +13,38 @@ export function Topbar({
   rightSecondaryLabel?: string;
 }) {
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/0/80 backdrop-blur">
+    <header className="w-full">
       <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-4 px-6 py-4">
         <div className="flex items-center gap-3">
-          <div className="grid h-10 w-10 place-items-center rounded-2xl border border-slate-200 bg-white/0 text-sm font-bold text-slate-900">
-            IA
+          <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/30 bg-white/20 text-sm font-bold text-white">
+            BS
           </div>
           <div>
-            <div className="text-sm font-semibold text-slate-900">
-              interactive-assess
+            <div className="text-sm font-semibold text-white">
+              BioSpark
             </div>
-            <div className="text-xs text-slate-600">
-              STAAR Biology • interactive items • practice + test
+            <div className="text-xs text-white/70">
+              STAAR Biology • Practice & Mastery
             </div>
           </div>
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
-          <Pill tone="violet">STAAR aligned</Pill>
-          <Pill tone="teal">Interactive</Pill>
-          <Pill tone="amber">Practice/Test</Pill>
+          <Pill tone="white">STAAR aligned</Pill>
+          <Pill tone="white">Interactive</Pill>
+          <Pill tone="white">Practice/Test</Pill>
         </div>
 
         <div className="flex items-center gap-2">
           <Link
             href={rightPrimaryHref}
-            className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+            className="rounded-xl border border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/30"
           >
             {rightPrimaryLabel}
           </Link>
           <Link
             href={rightSecondaryHref}
-            className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+            className="rounded-xl border border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/30"
           >
             {rightSecondaryLabel}
           </Link>

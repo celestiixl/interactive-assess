@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { loadItemBank } from "@/lib/itemBank/load";
+import { loadBank } from "@/lib/itemBank/load";
 
 export const dynamic = "force-dynamic";
 
 export default async function TeacherItemBankPage() {
-  const bank = await loadItemBank();
+  const bank = await loadBank();
   const items = bank?.items ?? [];
 
   return (

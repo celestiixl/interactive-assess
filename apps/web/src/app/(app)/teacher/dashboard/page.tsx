@@ -4,8 +4,6 @@ import Link from "next/link";
 
 // If these components exist in your repo, keep them.
 // If your import paths differ, the build will tell us and we can patch paths next.
-import HotQInsightsSlideOver from "@/components/teacher/HotQInsightsSlideOver";
-import Kpi from "@/components/teacher/Kpi";
 
 export default function TeacherDashboardPage() {
   return (
@@ -39,9 +37,6 @@ export default function TeacherDashboardPage() {
 
         {/* KPIs */}
         <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <Kpi title="Total Students" value="—" sub="+— from last week" />
-          <Kpi title="Active Assessments" value="—" sub="— drafts pending" />
-          <Kpi title="Class Average" value="—" sub="+— improvement" />
         </section>
 
         {/* Main content */}
@@ -113,7 +108,6 @@ export default function TeacherDashboardPage() {
         </section>
       </div>
 
-      <HotQInsightsSlideOver />
     </main>
   );
 }
