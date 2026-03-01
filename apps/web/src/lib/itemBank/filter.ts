@@ -1,4 +1,5 @@
 import type { Item } from "./schema";
+import { getEnglishText } from "@/lib/i18n/bilingual";
 
 export type BankQuery = {
   teks?: string;

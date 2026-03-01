@@ -1,6 +1,9 @@
 "use client";
 
+import BilingualText from "@/components/student/BilingualText";
+
 import { useMemo, useState } from "react";
+import { useLang } from "@/lib/useLang";
 
 type AnyFn = (...args: any[]) => any;
 
@@ -13,6 +16,7 @@ export default function InlineChoicePills({
   mode?: "learn" | "test";
   onAnswer?: AnyFn;
 }) {
+  const { lang } = useLang();
   // Always declare hooks at top-level (prevents hook-order errors)
   const prompt: string = String(item?.prompt ?? item?.stem ?? item?.text ?? "");
   const blanks: any[] = Array.isArray(item?.blanks)
@@ -99,7 +103,7 @@ export default function InlineChoicePills({
               ].join(" ")}
               aria-pressed={active}
             >
-              {label}
+              {<BilingualText text={label as any} showSupport={lang === "es"} />}
             </button>
           );
         })}

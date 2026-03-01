@@ -1,6 +1,9 @@
 "use client";
 
+import BilingualText from "@/components/student/BilingualText";
+
 import { useMemo, useState } from "react";
+import { useLang } from "@/lib/useLang";
 
 type InlineChoiceOpt = {
   id?: string;
@@ -109,7 +112,7 @@ export default function InlineChoice({
                     ].join(" ")}
                     aria-pressed={active}
                   >
-                    {label}
+                    {<BilingualText text={label as any} showSupport={lang === "es"} />}
                   </button>
                 );
               })}

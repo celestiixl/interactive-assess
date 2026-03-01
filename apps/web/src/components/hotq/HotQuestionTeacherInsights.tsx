@@ -3,6 +3,7 @@
 
 import * as React from "react";
 import { pickDailyQuestion } from "@/lib/hotqDaily";
+import TeksTooltip from "@/components/common/TeksTooltip";
 import { HOT_QUESTIONS } from "@/lib/hotQuestions";
 import { getCounts, resetCounts, getTodayKeyForUI } from "@/lib/hotqStorage";
 import { formatUSDate } from "@/lib/dateFormat";
@@ -54,7 +55,12 @@ const [q, setQ] = React.useState<any>(null);
           </div>
           <div className="mt-1 text-xs text-slate-500">
             Responses (local demo): {stats.total}
-            {q.teks ? ` • TEKS: ${mounted && q ? q.teks : ""}` : ""}
+            {q.teks ? (
+              <span>
+                {" \u2022 "}
+                TEKS: {mounted && q ? <TeksTooltip code={q.teks} /> : ""}
+              </span>
+            ) : null}
           </div>
           <div className="mt-2 text-sm text-slate-900">{mounted && q ? q.prompt : ""}</div>
         </div>

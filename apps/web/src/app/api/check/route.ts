@@ -5,7 +5,8 @@ export async function POST(req: Request) {
 
   if (item?.type === "inline_choice") {
     const correctByBlank: Record<string, string> = item.correctByBlank || {};
-    const response: Record<string, string> = body?.response || body?.answer || {};
+    const response: Record<string, string> =
+      body?.response || body?.answer || {};
 
     const blanks = Object.keys(correctByBlank);
     const max = blanks.length || 0;
@@ -22,6 +23,45 @@ export async function POST(req: Request) {
       score,
       max,
       detail: { blanks, correctByBlank, response },
+    });
+  }
+
+  if (item?.kind === "cer") {
+    const response = body?.response;
+    const correctEvidenceIds = item.correctEvidenceIds;
+
+    // Auto-score evidence selection if correctEvidenceIds is defined
+    let score = 0;
+    let max = item.rubric?.evidencePoints ?? 2;
+    const feedback: string[] = [];
+
+    if (correctEvidenceIds && Array.isArray(correctEvidenceIds)) {
+      const correctCount = (response?.selectedEvidenceIds || []).filter(
+        (id: string) => correctEvidenceIds.includes(id),
+      ).length;
+      score = Math.min(correctCount, max);
+
+      const missed = correctEvidenceIds.length - correctCount;
+      if (missed > 0) {
+        feedback.push(`You missed ${missed} piece(s) of supporting evidence.`);
+      }
+
+      const incorrect = (response?.selectedEvidenceIds || []).filter(
+        (id: string) => !correctEvidenceIds.includes(id),
+      ).length;
+      if (incorrect > 0) {
+        feedback.push(
+          `You selected ${incorrect} piece(s) that may not support the claim.`,
+        );
+      }
+    }
+
+    return Response.json({
+      correct: score === max,
+      score,
+      max,
+      feedback: feedback.length ? feedback : undefined,
+      detail: { response },
     });
   }
 

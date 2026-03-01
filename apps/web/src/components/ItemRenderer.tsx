@@ -4,6 +4,7 @@ import DragDrop from "@/components/items/DragDrop";
 import CardSort from "@/components/items/CardSort";
 import Hotspot from "@/components/items/Hotspot";
 import ShortResponse from "@/components/items/ShortResponse";
+import CER from "@/components/items/CER";
 import type { Item } from "@/types/item";
 
 export default function ItemRenderer({
@@ -67,6 +68,7 @@ export default function ItemRenderer({
           checkSignal={checkSignal}
         />
       );
+    case "hotspot":
       return (
         <Hotspot
           item={item as any}
@@ -74,7 +76,10 @@ export default function ItemRenderer({
           checkSignal={checkSignal}
         />
       );
+    case "short":
       return <ShortResponse item={item as any} onChecked={onChecked} />;
+    case "cer":
+      return <CER item={item as any} onChecked={onChecked} />;
     default:
       return null;
   }

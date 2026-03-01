@@ -1,6 +1,9 @@
 "use client";
+
+import BilingualText from "@/components/student/BilingualText";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useLang } from "@/lib/useLang";
 import type { ItemHotspot } from "@/types/item";
 
 export default function Hotspot({
@@ -71,7 +74,7 @@ export default function Hotspot({
 
   return (
     <div className="space-y-3">
-      <div className="text-lg font-semibold">{item.stem}</div>
+      <div className="text-lg font-semibold">{<BilingualText text={item.stem} showSupport={lang === "es"} />}</div>
 
       <div className="relative w-full max-w-[720px]">
         {/* plain img to measure, SVG overlay for regions */}
@@ -158,7 +161,7 @@ export default function Hotspot({
           Check
         </button>
         {item.rationale && (
-          <div className="text-sm text-neutral-700">Hint: {item.rationale}</div>
+          <div className="text-sm text-neutral-700">{lang === "es" ? "Pista:" : "Hint:"} {item.rationale}</div>
         )}
       </div>
     </div>

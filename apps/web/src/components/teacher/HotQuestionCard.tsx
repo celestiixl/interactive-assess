@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { HOT_QUESTIONS } from "@/lib/hotQuestions";
+import TeksTooltip from "@/components/common/TeksTooltip";
 
 function pickRandom(excludeId?: string) {
   if (HOT_QUESTIONS.length === 0) return null;
@@ -27,7 +28,9 @@ export default function HotQuestionCard() {
         <div>
           <div className="font-semibold text-sm">Hot Question of the Day</div>
           {q.teks && (
-            <div className="text-xs text-slate-500">TEKS: {q.teks}</div>
+            <div className="text-xs text-slate-500">
+              TEKS: <TeksTooltip code={q.teks} />
+            </div>
           )}
         </div>
         <button

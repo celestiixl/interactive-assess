@@ -1,6 +1,9 @@
 "use client";
 
+import BilingualText from "@/components/student/BilingualText";
+
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useLang } from "@/lib/useLang";
 import confetti from "canvas-confetti";
 import type { ItemCardSort } from "@/types/item";
 

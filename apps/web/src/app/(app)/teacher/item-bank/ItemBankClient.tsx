@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import TeksTooltip from "@/components/common/TeksTooltip";
 import Link from "next/link";
 import type { Item } from "@/lib/itemBank/schema";
 import { filterItems } from "@/lib/itemBank/filter";
@@ -24,7 +25,7 @@ const DIFF_META: Record<string, { label: string; color: string; bar: string }> =
 
 // ── Reusable primitives ────────────────────────────────────────────────────────
 
-function Badge({ label, className = "" }: { label: string; className?: string }) {
+function Badge({ label, className = "" }: { label: React.ReactNode; className?: string }) {
   return (
     <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold leading-none ${className}`}>
       {label}
@@ -225,8 +226,12 @@ function ItemCard({ item, inDraft, onToggleDraft }: {
 
             {/* TEKS + topic */}
             <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
-              {item.teks.map(t => (
-                <Badge key={t} label={t} className="border-slate-200 bg-slate-100 text-slate-600" />
+              {item.teks.map((t) => (
+                <Badge
+                  key={t}
+                  label={<TeksTooltip code={t} />}
+                  className="border-slate-200 bg-slate-100 text-slate-600"
+                />
               ))}
               <span className="text-xs text-slate-500">{item.topic} · {item.gradeBand}</span>
             </div>

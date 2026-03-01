@@ -8,6 +8,7 @@ import {
   setAnsweredToday,
   getTodayKeyForUI,
 } from "@/lib/hotqStorage";
+import TeksTooltip from "@/components/common/TeksTooltip";
 
 export default function HotQuestionStudentCard() {
   const [q, setQ] = React.useState(() => pickDailyQuestion());
@@ -51,7 +52,12 @@ export default function HotQuestionStudentCard() {
           </div>
           <div className="text-xs text-slate-500">
             {dateLabel}
-            {q.teks ? ` • TEKS: ${q.teks}` : ""}
+            {q.teks ? (
+              <span>
+                {" \u2022 "}
+                TEKS: <TeksTooltip code={q.teks} />
+              </span>
+            ) : null}
           </div>
         </div>
       </div>

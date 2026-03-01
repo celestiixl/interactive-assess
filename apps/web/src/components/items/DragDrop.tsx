@@ -1,6 +1,9 @@
 "use client";
 
+import BilingualText from "@/components/student/BilingualText";
+
 import { useEffect, useMemo, useState } from "react";
+import { useLang } from "@/lib/useLang";
 
 type Card = { id: string; text: string };
 type Zone = { id: string; label: string };
@@ -210,7 +213,7 @@ export default function DragDrop({
                       dragId === id ? "ring-2 ring-emerald-300" : "",
                     ].join(" ")}
                   >
-                    {c.text}
+                    {<BilingualText text={c.text} showSupport={lang === "es"} />}
                   </div>
                 );
               })}
@@ -276,7 +279,7 @@ export default function DragDrop({
                               dragId === id ? "ring-2 ring-emerald-300" : "",
                             ].join(" ")}
                           >
-                            {c.text}
+                            {<BilingualText text={c.text} showSupport={lang === "es"} />}
                           </div>
                         );
                       })}
@@ -295,7 +298,7 @@ export default function DragDrop({
           Check
         </button>
         {safe.rationale ? (
-          <div className="text-sm text-neutral-700">Hint: {safe.rationale}</div>
+          <div className="text-sm text-neutral-700">{lang === "es" ? "Pista:" : "Hint:"} {safe.rationale}</div>
         ) : null}
       </div>
     </div>

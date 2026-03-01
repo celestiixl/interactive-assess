@@ -1,5 +1,8 @@
 "use client";
+
+import BilingualText from "@/components/student/BilingualText";
 import { useEffect, useMemo, useState } from "react";
+import { useLang } from "@/lib/useLang";
 
 export type MCQItem = {
   id: string;
@@ -104,7 +107,7 @@ export default function MCQ({
 
   return (
     <div className="space-y-4">
-      <div className="text-lg font-semibold">{item.stem}</div>
+      <div className="text-lg font-semibold">{<BilingualText text={item.stem} showSupport={lang === "es"} />}</div>
 
       <fieldset className="space-y-2">
         <legend className="sr-only">Answer choices</legend>
@@ -149,7 +152,7 @@ export default function MCQ({
                 className="mt-1 h-4 w-4 rounded border-neutral-300 text-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:outline-none"
                 disabled={done}
               />
-              <span className="leading-6">{c.text}</span>
+              <span className="leading-6">{<BilingualText text={c.text} showSupport={lang === "es"} />}</span>
               {!done && (
                 <span className="ml-auto opacity-0 transition-opacity group-hover:opacity-60">
                   →

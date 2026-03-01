@@ -1,5 +1,8 @@
 "use client";
+
+import BilingualText from "@/components/student/BilingualText";
 import { useState } from "react";
+import { useLang } from "@/lib/useLang";
 import type { ItemShort } from "@/types/item";
 
 export default function ShortResponse({
@@ -34,7 +37,7 @@ export default function ShortResponse({
 
   return (
     <div className="space-y-3">
-      <div className="text-lg font-semibold">{item.stem}</div>
+      <div className="text-lg font-semibold">{<BilingualText text={item.stem} showSupport={lang === "es"} />}</div>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -59,7 +62,7 @@ export default function ShortResponse({
         </div>
       )}
       {item.rationale && (
-        <div className="text-sm text-neutral-700">Hint: {item.rationale}</div>
+        <div className="text-sm text-neutral-700">{lang === "es" ? "Pista:" : "Hint:"} {item.rationale}</div>
       )}
     </div>
   );
