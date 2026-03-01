@@ -214,7 +214,12 @@ export default function DragDrop({
                       dragId === id ? "ring-2 ring-emerald-300" : "",
                     ].join(" ")}
                   >
-                    {<BilingualText text={c.text} showSupport={lang === "es"} />}
+                    {
+                      <BilingualText
+                        text={c.text}
+                        showSupport={lang === "es"}
+                      />
+                    }
                   </div>
                 );
               })}
@@ -280,7 +285,12 @@ export default function DragDrop({
                               dragId === id ? "ring-2 ring-emerald-300" : "",
                             ].join(" ")}
                           >
-                            {<BilingualText text={c.text} showSupport={lang === "es"} />}
+                            {
+                              <BilingualText
+                                text={c.text}
+                                showSupport={lang === "es"}
+                              />
+                            }
                           </div>
                         );
                       })}
@@ -299,7 +309,9 @@ export default function DragDrop({
           Check
         </button>
         {safe.rationale ? (
-          <div className="text-sm text-neutral-700">{lang === "es" ? "Pista:" : "Hint:"} {safe.rationale}</div>
+          <div className="text-sm text-neutral-700">
+            {lang === "es" ? "Pista:" : "Hint:"} {safe.rationale}
+          </div>
         ) : null}
       </div>
     </div>

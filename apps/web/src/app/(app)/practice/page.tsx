@@ -251,7 +251,9 @@ export default function PracticeByCategory() {
 
           {/* Nav + Item */}
           {mergedItems.length === 0 ? (
-            <div className="p-4 border rounded bg-neutral-50">No items for this category yet.</div>
+            <div className="p-4 border rounded bg-neutral-50">
+              No items for this category yet.
+            </div>
           ) : (
             <StudentSplitLayout
               leftTitle="Question"
@@ -266,7 +268,9 @@ export default function PracticeByCategory() {
                   </div>
 
                   <div className="rounded-2xl border border-slate-200 p-4">
-                    <div className="text-sm font-semibold text-slate-900">Prompt</div>
+                    <div className="text-sm font-semibold text-slate-900">
+                      Prompt
+                    </div>
                     <BilingualText
                       text={
                         (safeItem as any)?.prompt ??

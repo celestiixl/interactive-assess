@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { loadBank } from "@/lib/itemBank/load";
 import ItemBankClient from "./ItemBankClient";
+import { PageContent } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,8 @@ export default async function TeacherItemBankPage() {
   const items = bank?.items ?? [];
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8">
+    <main>
+      <PageContent className="py-8">
       {/* Header */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -36,7 +38,8 @@ export default async function TeacherItemBankPage() {
         </div>
       </div>
 
-      <ItemBankClient items={items} />
+        <ItemBankClient items={items} />
+      </PageContent>
     </main>
   );
 }

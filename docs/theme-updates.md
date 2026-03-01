@@ -18,6 +18,7 @@ Files added (primitives):
 - `apps/web/src/components/ui/index.ts`
 
 Notes / next steps
+
 - Convert remaining pages to use `PageContent` and `Card` incrementally.
 - Replace ad-hoc `rounded-*/border/bg` blocks with `Card` or `.ia-card-soft` where appropriate.
 - Run full typecheck/build and verify visual parity.

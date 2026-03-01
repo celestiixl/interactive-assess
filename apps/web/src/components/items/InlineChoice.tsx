@@ -113,7 +113,12 @@ export default function InlineChoice({
                     ].join(" ")}
                     aria-pressed={active}
                   >
-                    {<BilingualText text={label as any} showSupport={lang === "es"} />}
+                    {
+                      <BilingualText
+                        text={label as any}
+                        showSupport={lang === "es"}
+                      />
+                    }
                   </button>
                 );
               })}

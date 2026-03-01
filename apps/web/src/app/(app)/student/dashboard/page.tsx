@@ -11,14 +11,16 @@ import MasteryDonut from "@/components/student/MasteryDonut";
 import SpecimenGrid from "@/components/student/SpecimenGrid";
 import { PageContent, Card, Section } from "@/components/ui";
 
-
 function clamp01(n: number) {
   if (!Number.isFinite(n)) return 0;
   return Math.max(0, Math.min(1, n));
 }
 
 function getBiomeHealth(segments: Segment[]) {
-  const total = segments.reduce((acc, seg) => acc + (Number(seg.value) || 0), 0);
+  const total = segments.reduce(
+    (acc, seg) => acc + (Number(seg.value) || 0),
+    0,
+  );
   const avg = segments.length ? total / segments.length : 0;
   const p = clamp01(avg);
 
@@ -66,7 +68,12 @@ export default function StudentDashboard() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const tabParam = typeof window !== "undefined" ? (new URLSearchParams(window.location.search).get("tab") || "").toLowerCase() : "";
+  const tabParam =
+    typeof window !== "undefined"
+      ? (
+          new URLSearchParams(window.location.search).get("tab") || ""
+        ).toLowerCase()
+      : "";
   const initialTab = tabParam === "specimens" ? "specimens" : "overview";
 
   const [tab, setTab] = useState<"overview" | "specimens">("overview");
@@ -79,55 +86,161 @@ export default function StudentDashboard() {
     } catch {}
   }, []);
 
-
   useEffect(() => {
     if (typeof window === "undefined") return;
-    window.localStorage.setItem("studentDashboard.activeTab", tab === "specimens" ? "specimens" : "overview");
+    window.localStorage.setItem(
+      "studentDashboard.activeTab",
+      tab === "specimens" ? "specimens" : "overview",
+    );
   }, [tab]);
-
 
   // Demo segments (0..1). Replace later with real stats.
   const SEGMENTS: Segment[] = [
-    { key: "BIO.1", label: "BIO.1 • Ask questions & investigate safely", value: 0.8, group: "BIO.1" },
-    { key: "BIO.2", label: "BIO.2 • Analyze & interpret data", value: 0.52, group: "BIO.2" },
-    { key: "BIO.3", label: "BIO.3 • Communicate findings", value: 0.57, group: "BIO.3" },
-    { key: "BIO.4", label: "BIO.4 • Science & society", value: 0.48, group: "BIO.4" },
+    {
+      key: "BIO.1",
+      label: "BIO.1 • Ask questions & investigate safely",
+      value: 0.8,
+      group: "BIO.1",
+    },
+    {
+      key: "BIO.2",
+      label: "BIO.2 • Analyze & interpret data",
+      value: 0.52,
+      group: "BIO.2",
+    },
+    {
+      key: "BIO.3",
+      label: "BIO.3 • Communicate findings",
+      value: 0.57,
+      group: "BIO.3",
+    },
+    {
+      key: "BIO.4",
+      label: "BIO.4 • Science & society",
+      value: 0.48,
+      group: "BIO.4",
+    },
 
     { key: "BIO.5A", label: "Biomolecules", value: 0.8, group: "BIO.5" },
-    { key: "BIO.5B", label: "Prokaryote vs eukaryote", value: 0.54, group: "BIO.5" },
-    { key: "BIO.5C", label: "Transport & homeostasis", value: 0.49, group: "BIO.5" },
+    {
+      key: "BIO.5B",
+      label: "Prokaryote vs eukaryote",
+      value: 0.54,
+      group: "BIO.5",
+    },
+    {
+      key: "BIO.5C",
+      label: "Transport & homeostasis",
+      value: 0.49,
+      group: "BIO.5",
+    },
     { key: "BIO.5D", label: "Viruses vs cells", value: 0.46, group: "BIO.5" },
 
-    { key: "BIO.6A", label: "Cell cycle & DNA replication", value: 0.55, group: "BIO.6" },
-    { key: "BIO.6B", label: "Cell differentiation", value: 0.51, group: "BIO.6" },
-    { key: "BIO.6C", label: "Cell cycle disruption & cancer", value: 0.44, group: "BIO.6" },
+    {
+      key: "BIO.6A",
+      label: "Cell cycle & DNA replication",
+      value: 0.55,
+      group: "BIO.6",
+    },
+    {
+      key: "BIO.6B",
+      label: "Cell differentiation",
+      value: 0.51,
+      group: "BIO.6",
+    },
+    {
+      key: "BIO.6C",
+      label: "Cell cycle disruption & cancer",
+      value: 0.44,
+      group: "BIO.6",
+    },
 
-    { key: "BIO.7A", label: "DNA structure & traits", value: 0.56, group: "BIO.7" },
+    {
+      key: "BIO.7A",
+      label: "DNA structure & traits",
+      value: 0.56,
+      group: "BIO.7",
+    },
     { key: "BIO.7B", label: "Protein synthesis", value: 0.5, group: "BIO.7" },
     { key: "BIO.7C", label: "Mutations", value: 0.47, group: "BIO.7" },
-    { key: "BIO.7D", label: "Molecular technologies", value: 0.52, group: "BIO.7" },
+    {
+      key: "BIO.7D",
+      label: "Molecular technologies",
+      value: 0.52,
+      group: "BIO.7",
+    },
 
-    { key: "BIO.8A", label: "Meiosis & diversity", value: 0.53, group: "BIO.8" },
+    {
+      key: "BIO.8A",
+      label: "Meiosis & diversity",
+      value: 0.53,
+      group: "BIO.8",
+    },
     { key: "BIO.8B", label: "Genetic crosses", value: 0.48, group: "BIO.8" },
 
-    { key: "BIO.9A", label: "Evidence of evolution", value: 0.6, group: "BIO.9" },
-    { key: "BIO.9B", label: "Rates of evolutionary change", value: 0.52, group: "BIO.9" },
+    {
+      key: "BIO.9A",
+      label: "Evidence of evolution",
+      value: 0.6,
+      group: "BIO.9",
+    },
+    {
+      key: "BIO.9B",
+      label: "Rates of evolutionary change",
+      value: 0.52,
+      group: "BIO.9",
+    },
 
-    { key: "BIO.10A", label: "Natural selection", value: 0.57, group: "BIO.10" },
-    { key: "BIO.10B", label: "Elements of natural selection", value: 0.5, group: "BIO.10" },
+    {
+      key: "BIO.10A",
+      label: "Natural selection",
+      value: 0.57,
+      group: "BIO.10",
+    },
+    {
+      key: "BIO.10B",
+      label: "Elements of natural selection",
+      value: 0.5,
+      group: "BIO.10",
+    },
     { key: "BIO.10C", label: "Speciation", value: 0.44, group: "BIO.10" },
     { key: "BIO.10D", label: "Other mechanisms", value: 0.46, group: "BIO.10" },
 
-    { key: "BIO.11A", label: "Photosynthesis & respiration", value: 0.55, group: "BIO.11" },
+    {
+      key: "BIO.11A",
+      label: "Photosynthesis & respiration",
+      value: 0.55,
+      group: "BIO.11",
+    },
     { key: "BIO.11B", label: "Enzymes", value: 0.51, group: "BIO.11" },
 
     { key: "BIO.12A", label: "Animal systems", value: 0.49, group: "BIO.12" },
     { key: "BIO.12B", label: "Plant systems", value: 0.47, group: "BIO.12" },
 
-    { key: "BIO.13A", label: "Ecological relationships", value: 0.58, group: "BIO.13" },
-    { key: "BIO.13B", label: "Energy/matter disruption", value: 0.5, group: "BIO.13" },
-    { key: "BIO.13C", label: "Carbon & nitrogen cycles", value: 0.46, group: "BIO.13" },
-    { key: "BIO.13D", label: "Biodiversity change", value: 0.44, group: "BIO.13" },
+    {
+      key: "BIO.13A",
+      label: "Ecological relationships",
+      value: 0.58,
+      group: "BIO.13",
+    },
+    {
+      key: "BIO.13B",
+      label: "Energy/matter disruption",
+      value: 0.5,
+      group: "BIO.13",
+    },
+    {
+      key: "BIO.13C",
+      label: "Carbon & nitrogen cycles",
+      value: 0.46,
+      group: "BIO.13",
+    },
+    {
+      key: "BIO.13D",
+      label: "Biodiversity change",
+      value: 0.44,
+      group: "BIO.13",
+    },
   ];
 
   const segments = SEGMENTS;
@@ -155,7 +268,8 @@ export default function StudentDashboard() {
                   type="button"
                   onClick={() => {
                     Object.keys(sessionStorage).forEach((k) => {
-                      if (k.startsWith("specimen_unlocked_")) sessionStorage.removeItem(k);
+                      if (k.startsWith("specimen_unlocked_"))
+                        sessionStorage.removeItem(k);
                     });
                     location.reload();
                   }}
@@ -180,27 +294,39 @@ export default function StudentDashboard() {
       <PageContent className="-mt-5 pb-10">
         <Card>
           {/* Biome banner */}
-          <div className={`mb-5 flex flex-wrap items-start justify-between gap-3 rounded-2xl border p-5 ${biome.banner}`}>
+          <div
+            className={`mb-5 flex flex-wrap items-start justify-between gap-3 rounded-2xl border p-5 ${biome.banner}`}
+          >
             <div>
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 Biome Health
               </div>
               <div className="mt-1 text-lg font-semibold text-slate-900">
                 {biome.level} • {biome.biome}{" "}
-                <span className="ml-2 text-sm font-semibold text-slate-600">({biome.pct}%)</span>
+                <span className="ml-2 text-sm font-semibold text-slate-600">
+                  ({biome.pct}%)
+                </span>
               </div>
               <div className="mt-1 text-sm text-slate-600">{biome.desc}</div>
-              <div className={`mt-3 inline-flex items-center rounded-full border bg-white/95 px-3 py-1 text-xs font-semibold ${biome.badge}`}>
+              <div
+                className={`mt-3 inline-flex items-center rounded-full border bg-white/95 px-3 py-1 text-xs font-semibold ${biome.badge}`}
+              >
                 segments passed: {segments.length}
               </div>
             </div>
 
             <div className="flex items-center">
               <Link
-                href={nextSegment ? `/practice?focus=${encodeURIComponent(nextSegment.key)}` : "/practice"}
+                href={
+                  nextSegment
+                    ? `/practice?focus=${encodeURIComponent(nextSegment.key)}`
+                    : "/practice"
+                }
                 className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
               >
-                {nextSegment ? `Next: practice ${nextSegment.label}` : "Start practice"}
+                {nextSegment
+                  ? `Next: practice ${nextSegment.label}`
+                  : "Start practice"}
               </Link>
             </div>
           </div>
@@ -209,18 +335,46 @@ export default function StudentDashboard() {
           <div className="mb-4 flex items-center gap-2">
             <button
               type="button"
-              onClick={() => { setTab("overview"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "overview"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "overview"); } }
+              onClick={() => {
+                setTab("overview");
+                if (typeof window !== "undefined")
+                  window.localStorage.setItem(
+                    "studentDashboard.activeTab",
+                    "overview",
+                  );
+                if (typeof window !== "undefined")
+                  window.localStorage.setItem(
+                    "studentDashboard.activeTab",
+                    "overview",
+                  );
+              }}
               className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                tab === "overview" ? "bg-slate-900 text-white" : "bg-white text-slate-900 hover:bg-slate-50"
+                tab === "overview"
+                  ? "bg-slate-900 text-white"
+                  : "bg-white text-slate-900 hover:bg-slate-50"
               }`}
             >
               Overview
             </button>
             <button
               type="button"
-              onClick={() => { setTab("specimens"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "specimens"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "specimens"); } }
+              onClick={() => {
+                setTab("specimens");
+                if (typeof window !== "undefined")
+                  window.localStorage.setItem(
+                    "studentDashboard.activeTab",
+                    "specimens",
+                  );
+                if (typeof window !== "undefined")
+                  window.localStorage.setItem(
+                    "studentDashboard.activeTab",
+                    "specimens",
+                  );
+              }}
               className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                tab === "specimens" ? "bg-slate-900 text-white" : "bg-white text-slate-900 hover:bg-slate-50"
+                tab === "specimens"
+                  ? "bg-slate-900 text-white"
+                  : "bg-white text-slate-900 hover:bg-slate-50"
               }`}
             >
               Specimens
@@ -231,7 +385,7 @@ export default function StudentDashboard() {
           <Section className="/0 p-6 ia-card-soft ">
             {tab === "overview" ? (
               <>
-                <MasteryDonut segments={segments } />
+                <MasteryDonut segments={segments} />
                 <div className="mt-4 text-center text-sm text-slate-500">
                   Hover a slice to see the TEKS.
                 </div>
@@ -244,29 +398,55 @@ export default function StudentDashboard() {
                 <SpecimenGrid segments={segments} />
               </>
             )}
-            </Section>
+          </Section>
 
           {/* Bottom cards */}
           <section className="mt-5 grid gap-4 md:grid-cols-3">
             <Card variant="sm">
-              <div className="text-sm font-semibold text-slate-800">Next best step</div>
-              <div className="mt-2 text-sm text-slate-600">Focus on RC4 practice sets (lowest mastery).</div>
+              <div className="text-sm font-semibold text-slate-800">
+                Next best step
+              </div>
+              <div className="mt-2 text-sm text-slate-600">
+                Focus on RC4 practice sets (lowest mastery).
+              </div>
               <div className="mt-4 flex gap-2">
-                <Link className="ia-btn-primary text-sm" href="/practice?rc=RC4%20%E2%80%A2%20Biological%20Processes%20%26%20Systems">Practice RC4</Link>
-                <Link className="ia-btn text-sm" href="/practice?rc=RC1%20%E2%80%A2%20Cell%20Structure%20%26%20Function">Practice RC1</Link>
+                <Link
+                  className="ia-btn-primary text-sm"
+                  href="/practice?rc=RC4%20%E2%80%A2%20Biological%20Processes%20%26%20Systems"
+                >
+                  Practice RC4
+                </Link>
+                <Link
+                  className="ia-btn text-sm"
+                  href="/practice?rc=RC1%20%E2%80%A2%20Cell%20Structure%20%26%20Function"
+                >
+                  Practice RC1
+                </Link>
               </div>
             </Card>
 
             <Card variant="sm">
-              <div className="text-sm font-semibold text-slate-800" data-focus-hide="1">Streak</div>
+              <div
+                className="text-sm font-semibold text-slate-800"
+                data-focus-hide="1"
+              >
+                Streak
+              </div>
               <div className="mt-2 text-2xl font-semibold">3 days</div>
               <div className="mt-1 text-sm text-slate-600">Keep going.</div>
             </Card>
 
             <Card variant="sm">
-              <div className="text-sm font-semibold text-slate-800" data-focus-hide="1">Accuracy</div>
+              <div
+                className="text-sm font-semibold text-slate-800"
+                data-focus-hide="1"
+              >
+                Accuracy
+              </div>
               <div className="mt-2 text-2xl font-semibold">74%</div>
-              <div className="mt-1 text-sm text-slate-600">Last 20 checks (demo).</div>
+              <div className="mt-1 text-sm text-slate-600">
+                Last 20 checks (demo).
+              </div>
             </Card>
           </section>
         </Card>

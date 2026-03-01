@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { PageContent } from "@/components/ui";
 
-function Card({
+function LinkCard({
   title,
   desc,
   href,
@@ -49,8 +50,8 @@ function Card({
 
 export default function StudentAssessmentLabPage() {
   return (
-    <main className="min-h-dvh  text-slate-900">
-      <div className="mx-auto max-w-6xl px-6 py-10">
+    <main className="text-slate-900">
+      <PageContent className="py-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-xl">
             <h1 className="text-3xl font-semibold tracking-tight">
@@ -61,30 +62,30 @@ export default function StudentAssessmentLabPage() {
               item testing.
             </p>
 
-            <div className="mt-6  /0 p-5 ia-card-soft ">
+            <div className="mt-6 rounded-2xl border bg-white/95 p-5 shadow-sm">
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 Quick links
               </div>
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <Card
+                <LinkCard
                   title="Open Student Dashboard"
                   desc="Mastery donut + specimens + goals."
                   href="/student/dashboard"
                   tone="teal"
                 />
-                <Card
+                <LinkCard
                   title="Practice Runner"
                   desc="Run a practice set (demo)."
                   href="/practice"
                   tone="green"
                 />
-                <Card
+                <LinkCard
                   title="Items Test Screen"
                   desc="Render items & verify checks."
                   href="/student/assessment/items"
                   tone="purple"
                 />
-                <Card
+                <LinkCard
                   title="Hot Question"
                   desc="Bellringer question (if enabled)."
                   href="/student/hotq"
@@ -151,7 +152,7 @@ export default function StudentAssessmentLabPage() {
             </div>
           </div>
         </div>
-      </div>
+      </PageContent>
     </main>
   );
 }
