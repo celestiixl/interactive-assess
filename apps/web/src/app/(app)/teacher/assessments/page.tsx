@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { PageContent, Card } from "@/components/ui";
+import { PageContent, PageBanner, Card } from "@/components/ui";
 
 type Assignment = {
   id: string;
@@ -34,15 +34,13 @@ export default function TeacherAssessmentsPage() {
 
   return (
     <main>
+      <PageBanner
+        title="Assessments"
+        subtitle="A list of your assignments will appear here."
+      />
       <PageContent className="py-6">
-        <div className="space-y-4">
-          <h1 className="text-2xl font-semibold">Assessments</h1>
-          <p className="text-slate-600">
-            A list of your assignments will appear here.
-          </p>
-
-          <Card className="p-4">
-            {loading ? (
+        <Card className="p-4">
+          {loading ? (
             <div>Loading…</div>
           ) : assignments && assignments.length > 0 ? (
             <div className="space-y-3">
@@ -87,17 +85,16 @@ export default function TeacherAssessmentsPage() {
                 </Link>
               </div>
             </div>
-            )}
-          </Card>
+          )}
+        </Card>
 
-          <div>
-            <Link
-              href="/teacher/dashboard"
-              className="text-sm text-slate-500 underline"
-            >
-              Back to dashboard
-            </Link>
-          </div>
+        <div>
+          <Link
+            href="/teacher/dashboard"
+            className="text-sm text-slate-500 underline"
+          >
+            Back to dashboard
+          </Link>
         </div>
       </PageContent>
     </main>

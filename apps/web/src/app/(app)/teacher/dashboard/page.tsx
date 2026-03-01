@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { PageContent, Card } from "@/components/ui";
+import { PageContent, PageBanner, Card } from "@/components/ui";
 
 // If these components exist in your repo, keep them.
 // If your import paths differ, the build will tell us and we can patch paths next.
@@ -9,38 +9,28 @@ import { PageContent, Card } from "@/components/ui";
 export default function TeacherDashboardPage() {
   return (
     <main>
+      <PageBanner
+        title="Teacher Dashboard"
+        subtitle="Quick access to your item bank, builder, classes, and insights."
+      >
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="/teacher/item-bank"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
+          >
+            Item Bank
+          </Link>
+
+          <Link
+            href="/teacher/builder"
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 font-semibold text-white shadow-sm hover:bg-emerald-700"
+          >
+            Builder
+          </Link>
+        </div>
+      </PageBanner>
       <PageContent className="py-8">
         <div className="flex flex-col gap-6">
-          {/* Header */}
-          <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-3xl font-semibold tracking-tight">
-                Teacher Dashboard
-              </h1>
-              <p className="mt-1 text-slate-600">
-                Quick access to your item bank, builder, classes, and insights.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/teacher/item-bank"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
-              >
-                Item Bank
-              </Link>
-
-              <Link
-                href="/teacher/builder"
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 font-semibold text-white shadow-sm hover:bg-emerald-700"
-              >
-                Builder
-              </Link>
-            </div>
-          </header>
-
-          {/* KPIs */}
-          <section className="grid grid-cols-1 gap-4 md:grid-cols-3"></section>
 
           {/* Main content */}
           <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">

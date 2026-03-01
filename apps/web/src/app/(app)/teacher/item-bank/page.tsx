@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { loadBank } from "@/lib/itemBank/load";
 import ItemBankClient from "./ItemBankClient";
-import { PageContent } from "@/components/ui";
+import { PageContent, PageBanner } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -11,17 +11,10 @@ export default async function TeacherItemBankPage() {
 
   return (
     <main>
-      <PageContent className="py-8">
-      {/* Header */}
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Item Bank</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            {items.length} TEKS-aligned questions ready to add to assessments.
-            Select items below, then copy or send to Builder.
-          </p>
-        </div>
-
+      <PageBanner
+        title="Item Bank"
+        subtitle={`${items.length} TEKS-aligned questions ready to add to assessments.`}
+      >
         <div className="flex shrink-0 items-center gap-2">
           <Link
             href="/teacher/builder"
@@ -36,10 +29,11 @@ export default async function TeacherItemBankPage() {
             Dashboard
           </Link>
         </div>
-      </div>
-
+      </PageBanner>
+      <PageContent className="py-8">
         <ItemBankClient items={items} />
       </PageContent>
     </main>
   );
 }
+

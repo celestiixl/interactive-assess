@@ -9,7 +9,7 @@ import { useMemo, useState, useEffect } from "react";
 
 import MasteryDonut from "@/components/student/MasteryDonut";
 import SpecimenGrid from "@/components/student/SpecimenGrid";
-import { PageContent, Card, Section } from "@/components/ui";
+import { PageContent, PageBanner, Card, Section } from "@/components/ui";
 
 function clamp01(n: number) {
   if (!Number.isFinite(n)) return 0;
@@ -253,45 +253,35 @@ export default function StudentDashboard() {
   }, [segments]);
 
   return (
-    <main className="min-h-dvh  text-slate-900">
-      {/* FULL-WIDTH HEADER BAND */}
-      <div className="bg-linear-to-r from-sky-500 via-blue-600 to-indigo-600">
-        <div className="mx-auto max-w-6xl px-6 py-8">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h1 className="text-4xl font-semibold tracking-tight text-white">
-                Student Dashboard
-              </h1>
-              <div className="mt-2 flex flex-wrap items-center gap-3 text-white/90">
-                <span>Your personal mastery tracker.</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    Object.keys(sessionStorage).forEach((k) => {
-                      if (k.startsWith("specimen_unlocked_"))
-                        sessionStorage.removeItem(k);
-                    });
-                    location.reload();
-                  }}
-                  className="rounded-full bg-white/20 px-4 py-2 text-xs font-semibold text-white hover:bg-white/25"
-                >
-                  Reset Specimen Unlocks
-                </button>
-              </div>
-            </div>
-
-            <Link
-              href="/student/assessment"
-              className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
-            >
-              Back to Assessment Lab
-            </Link>
-          </div>
+    <main className="text-slate-900">
+      <PageBanner
+        title="Student Dashboard"
+        subtitle="Your personal mastery tracker."
+      >
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              Object.keys(sessionStorage).forEach((k) => {
+                if (k.startsWith("specimen_unlocked_"))
+                  sessionStorage.removeItem(k);
+              });
+              location.reload();
+            }}
+            className="rounded-full bg-white/20 px-4 py-2 text-xs font-semibold text-white hover:bg-white/25"
+          >
+            Reset Specimen Unlocks
+          </button>
+          <Link
+            href="/student/assessment"
+            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+          >
+            Back to Assessment Lab
+          </Link>
         </div>
-      </div>
-
-      {/* MAIN CONTENT SURFACE */}
-      <PageContent className="-mt-5 pb-10">
+      </PageBanner>
+      <PageContent className="py-8">
+        {/* MAIN CONTENT SURFACE */}
         <Card>
           {/* Biome banner */}
           <div
