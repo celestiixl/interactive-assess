@@ -93,6 +93,7 @@ export default function DragDrop({
   const [bank, setBank] = useState<string[]>([]);
   const [placement, setPlacement] = useState<Placement>({});
   const [dragId, setDragId] = useState<string | null>(null);
+  const { lang } = useLang();
 
   // Reset whenever item changes
   useEffect(() => {

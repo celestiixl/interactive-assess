@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { PageContent } from "@/components/ui";
 import {
   TEKS_CATALOG,
   inferReportingCategoryFromTeks,
@@ -285,7 +286,8 @@ export default function TeacherBuilderPage() {
   }
 
   return (
-    <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8 py-6">
+    <PageContent className="py-6">
+      <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">
@@ -1033,6 +1035,7 @@ export default function TeacherBuilderPage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </PageContent>
   );
 }
