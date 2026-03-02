@@ -39,7 +39,7 @@ export default function PracticeXPHeader() {
   const meta = useMemo(() => levelFromXP(xp), [xp]);
 
   return (
-    <div className="mb-4  /0 p-4 ia-card-soft ">
+    <div className="mb-4 p-4 ia-card-soft">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -70,7 +70,7 @@ export default function PracticeXPHeader() {
               setToast("Reset");
               window.setTimeout(() => setToast(null), 900);
             }}
-            className="rounded-full border bg-white/0 px-3 py-1 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+            className="rounded-full border bg-white/80 px-3 py-1 text-sm font-semibold text-slate-900 hover:bg-slate-50"
           >
             Reset XP
           </button>

@@ -18,7 +18,7 @@ export function StudentSplitLayout({
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       {/* LEFT */}
-      <section className="min-h-0 border -slate-200 /0 ia-card-soft ">
+      <section className="min-h-0 border border-slate-200 ia-card-soft">
         <div className="flex h-[calc(100vh-170px)] flex-col">
           <header className="shrink-0 border-b border-slate-200 px-4 py-3">
             <div className="text-sm font-semibold text-slate-900">
@@ -35,7 +35,7 @@ export function StudentSplitLayout({
       </section>
 
       {/* RIGHT */}
-      <section className="min-h-0 border -slate-200 /0 ia-card-soft ">
+      <section className="min-h-0 border border-slate-200 ia-card-soft">
         <div className="flex h-[calc(100vh-170px)] flex-col">
           <header className="shrink-0 border-b border-slate-200 px-4 py-3">
             <div className="text-sm font-semibold text-slate-900">

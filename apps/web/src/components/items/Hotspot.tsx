@@ -76,7 +76,13 @@ export default function Hotspot({
   return (
     <div className="space-y-3">
       <div className="text-lg font-semibold">
-        {<BilingualText text={item.stem} showSupport={lang === "es"} />}
+        {
+          <BilingualText
+            text={item.stem}
+            showSupport={lang === "es"}
+            glossary={item.glossary ?? []}
+          />
+        }
       </div>
 
       <div className="relative w-full max-w-[720px]">

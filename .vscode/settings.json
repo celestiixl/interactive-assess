@@ -7,5 +7,8 @@
     "javascriptreact",
     "typescriptreact"
   ],
-  "cSpell.words": ["Biomolecules", "dragdrop", "hotq", "TEKS"]
+  "cSpell.words": ["Biomolecules", "dragdrop", "hotq", "TEKS"],
+  "chat.tools.terminal.autoApprove": {
+    "pnpm": true
+  }
 }

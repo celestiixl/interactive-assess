@@ -23,7 +23,7 @@ export default function HotQuestionCard() {
   const answer = String.fromCharCode(65 + q.answerIndex);
 
   return (
-    <div className="/0 p-5 ia-card-soft ">
+    <div className="p-5 ia-card-soft">
       <div className="flex justify-between mb-3">
         <div>
           <div className="font-semibold text-sm">Hot Question of the Day</div>

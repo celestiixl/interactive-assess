@@ -2,7 +2,9 @@
 
 import React, { useState, useMemo } from "react";
 import TeksTooltip from "@/components/common/TeksTooltip";
+import GlossaryText from "@/components/GlossaryText";
 import Link from "next/link";
+import { useSupports } from "@/components/student/supportsStore";
 import type { Item } from "@/lib/itemBank/schema";
 import { filterItems } from "@/lib/itemBank/filter";
 
@@ -267,10 +269,12 @@ function ItemCard({
   item,
   inDraft,
   onToggleDraft,
+  glossarySupportOn,
 }: {
   item: Item;
   inDraft: boolean;
   onToggleDraft: (id: string) => void;
+  glossarySupportOn: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -360,7 +364,16 @@ function ItemCard({
 
             {/* Prompt preview */}
             <p className="mt-2 text-sm text-slate-700 line-clamp-2">
-              {item.prompt}
+              {item.glossary?.length ? (
+                <GlossaryText
+                  text={item.prompt}
+                  glossary={item.glossary}
+                  defaultLang={glossarySupportOn ? "es" : "en"}
+                  showSupport={glossarySupportOn}
+                />
+              ) : (
+                item.prompt
+              )}
             </p>
 
             {/* Bottom row */}
@@ -410,7 +423,16 @@ function ItemCard({
                 </div>
               )}
               <p className="text-sm font-medium leading-relaxed text-slate-900 whitespace-pre-line">
-                {item.prompt}
+                {item.glossary?.length ? (
+                  <GlossaryText
+                    text={item.prompt}
+                    glossary={item.glossary}
+                    defaultLang={glossarySupportOn ? "es" : "en"}
+                    showSupport={glossarySupportOn}
+                  />
+                ) : (
+                  item.prompt
+                )}
               </p>
             </div>
 
@@ -491,6 +513,9 @@ function StatTile({
 // ── Main export ────────────────────────────────────────────────────────────────
 
 export default function ItemBankClient({ items }: { items: Item[] }) {
+  const supports = useSupports();
+  const glossarySupportOn =
+    supports.state.showSupport && supports.state.supportLanguage === "es";
   const [q, setQ] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [diffFilter, setDiffFilter] = useState("");
@@ -700,6 +725,26 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
             onChange={setTopicFilter}
             options={topicOptions}
           />
+          <button
+            type="button"
+            onClick={() => supports.setShowSupport(!supports.state.showSupport)}
+            className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ${supports.state.showSupport ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}
+            title="Toggle bilingual glossary support"
+          >
+            Support: {supports.state.showSupport ? "On" : "Off"}
+          </button>
+          <select
+            value={supports.state.supportLanguage}
+            onChange={(e) => supports.setSupportLanguage(e.target.value as any)}
+            className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            title="Support language"
+          >
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+          </select>
+          <span className="text-xs text-slate-400">
+            Glossary: {glossarySupportOn ? "Spanish definitions" : "English definitions"}
+          </span>
           {hasFilter && (
             <button
               type="button"
@@ -748,6 +793,7 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
               item={item}
               inDraft={draft.includes(item.id)}
               onToggleDraft={toggleDraft}
+              glossarySupportOn={glossarySupportOn}
             />
           ))}
         </div>

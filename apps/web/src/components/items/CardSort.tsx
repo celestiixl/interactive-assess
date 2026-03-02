@@ -1,6 +1,7 @@
 "use client";
 
 import BilingualText from "@/components/student/BilingualText";
+import GlossaryText from "@/components/GlossaryText";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLang } from "@/lib/useLang";
@@ -44,6 +45,7 @@ export default function CardSort({
   const [lastScore, setLastScore] = useState<number>(0);
   const [lastMax, setLastMax] = useState<number>(item.cards.length);
   const [checkedOnce, setCheckedOnce] = useState<boolean>(false);
+  const { lang } = useLang();
 
   const didConfettiRef = useRef(false);
 
@@ -222,7 +224,16 @@ export default function CardSort({
           userSelect: "none",
         }}
       >
-        {getCardLabel(c)}
+        {item?.glossary && item.glossary.length ? (
+          <GlossaryText
+            text={String(getCardLabel(c))}
+            glossary={item.glossary}
+            defaultLang={lang === "es" ? "es" : "en"}
+            showSupport={lang === "es"}
+          />
+        ) : (
+          getCardLabel(c)
+        )}
       </div>
     );
   };

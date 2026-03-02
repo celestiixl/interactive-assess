@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/ia/AppShell";
 import { Pill } from "@/components/ia/Pill";
 import { Surface } from "@/components/ia/Surface";
+import { Card, Button } from "@/components/ui";
 
 function ActionCard({
   href,
@@ -50,7 +52,22 @@ function ActionCard({
 
   return (
     <Link href={href} className="group block">
-      <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/0/90 p-6 shadow-[0_16px_45px_rgba(2,6,23,0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_55px_rgba(2,6,23,0.08)]">
+      <Card
+        variant="accent"
+        animate
+        className="relative overflow-hidden border-slate-200/80 p-6"
+        accentColor={
+          accent === "teal"
+            ? "teal"
+            : accent === "amber"
+              ? "orange"
+              : accent === "violet"
+                ? "purple"
+                : accent === "emerald"
+                  ? "green"
+                  : "blue"
+        }
+      >
         <div
           className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b ${accentWash} to-transparent`}
         />
@@ -65,7 +82,7 @@ function ActionCard({
             </h2>
             <p className="mt-2 text-sm text-slate-700">{desc}</p>
           </div>
-          <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white/0/70 text-lg text-slate-900 transition group-hover:bg-white">
+          <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white/70 text-lg text-slate-900 transition group-hover:bg-white">
             →
           </div>
         </div>
@@ -77,12 +94,14 @@ function ActionCard({
             </Pill>
           ))}
         </div>
-      </div>
+      </Card>
     </Link>
   );
 }
 
 export default function AssessmentDashboardEntry() {
+  const router = useRouter();
+
   return (
     <AppShell activeKey="assessment">
       <div>
@@ -127,24 +146,27 @@ export default function AssessmentDashboardEntry() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link
-              href="/practice"
-              className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => router.push("/practice")}
             >
               Practice Runner
-            </Link>
-            <Link
-              href="/student/assessment/items"
-              className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => router.push("/student/assessment/items")}
             >
               Items Test Screen
-            </Link>
-            <Link
-              href="/student/assessment"
-              className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => router.push("/student/assessment")}
             >
               Student Lab
-            </Link>
+            </Button>
           </div>
         </Surface>
 

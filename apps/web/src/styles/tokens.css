@@ -1,0 +1,84 @@
+:root {
+  color-scheme: light;
+
+  --color-brand-purple: 124 58 237;
+  --color-brand-orange: 245 158 11;
+
+  --color-bg: 248 250 252;
+  --color-surface-1: 255 255 255;
+  --color-surface-2: 248 250 252;
+  --color-surface-3: 241 245 249;
+  --color-border: 203 213 225;
+  --color-text: 15 23 42;
+  --color-text-muted: 71 85 105;
+
+  --color-success: 22 163 74;
+  --color-warning: 245 158 11;
+  --color-error: 220 38 38;
+  --color-info: 37 99 235;
+
+  --teks-rc1: 20 184 166;
+  --teks-rc2: 59 130 246;
+  --teks-rc3: 147 51 234;
+  --teks-rc4: 249 115 22;
+  --teks-rc5: 34 197 94;
+  --teks-rc6: 236 72 153;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+
+  --shadow-sm: 0 1px 2px rgb(2 6 23 / 0.08);
+  --shadow-md: 0 8px 24px rgb(15 23 42 / 0.08);
+  --shadow-lg: 0 18px 42px rgb(15 23 42 / 0.12);
+
+  --font-display: "Syne", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+
+  --text-xs-size: 0.75rem;
+  --text-xs-line: 1rem;
+  --text-sm-size: 0.875rem;
+  --text-sm-line: 1.25rem;
+  --text-base-size: 1rem;
+  --text-base-line: 1.5rem;
+  --text-lg-size: 1.125rem;
+  --text-lg-line: 1.75rem;
+  --text-xl-size: 1.25rem;
+  --text-xl-line: 1.75rem;
+  --text-2xl-size: 1.5rem;
+  --text-2xl-line: 2rem;
+  --text-3xl-size: 1.875rem;
+  --text-3xl-line: 2.25rem;
+  --text-4xl-size: 2.25rem;
+  --text-4xl-line: 2.5rem;
+}
+
+.dark,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: 2 8 23;
+  --color-surface-1: 15 23 42;
+  --color-surface-2: 30 41 59;
+  --color-surface-3: 51 65 85;
+  --color-border: 100 116 139;
+  --color-text: 241 245 249;
+  --color-text-muted: 203 213 225;
+
+  --color-success: 74 222 128;
+  --color-warning: 251 191 36;
+  --color-error: 248 113 113;
+  --color-info: 96 165 250;
+
+  --teks-rc1: 45 212 191;
+  --teks-rc2: 96 165 250;
+  --teks-rc3: 196 181 253;
+  --teks-rc4: 251 146 60;
+  --teks-rc5: 74 222 128;
+  --teks-rc6: 244 114 182;
+
+  --shadow-sm: 0 1px 2px rgb(2 8 20 / 0.3);
+  --shadow-md: 0 10px 30px rgb(2 8 20 / 0.35);
+  --shadow-lg: 0 20px 50px rgb(2 8 20 / 0.45);
+}

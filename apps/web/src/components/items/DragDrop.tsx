@@ -1,6 +1,7 @@
 "use client";
 
 import BilingualText from "@/components/student/BilingualText";
+import GlossaryText from "@/components/GlossaryText";
 
 import { useEffect, useMemo, useState } from "react";
 import { useLang } from "@/lib/useLang";
@@ -158,8 +159,8 @@ export default function DragDrop({
         <div className="font-semibold">Drag & Drop item is missing data</div>
         <div className="mt-1 text-sm">
           Expected either{" "}
-          <code className="rounded bg-white/0/60 px-1">tokens/buckets</code> or{" "}
-          <code className="rounded bg-white/0/60 px-1">cards/zones</code>.
+          <code className="rounded bg-white/60 px-1">tokens/buckets</code> or{" "}
+          <code className="rounded bg-white/60 px-1">cards/zones</code>.
         </div>
       </div>
     );
@@ -167,11 +168,22 @@ export default function DragDrop({
 
   return (
     <div className="space-y-4">
-      <div className="text-2xl font-semibold">{safe.prompt}</div>
+      <div className="text-2xl font-semibold">
+        {item?.glossary && item.glossary.length ? (
+          <GlossaryText
+            text={safe.prompt}
+            glossary={item.glossary}
+            defaultLang={lang === "es" ? "es" : "en"}
+            showSupport={lang === "es"}
+          />
+        ) : (
+          safe.prompt
+        )}
+      </div>
 
       {/* Word Bank */}
       <div
-        className="/0 overflow-hidden sticky top-2 z-10 sm:static ia-card-soft "
+        className="overflow-hidden sticky top-2 z-10 sm:static ia-card-soft"
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -209,7 +221,7 @@ export default function DragDrop({
                       e.dataTransfer.effectAllowed = "move";
                     }}
                     className={[
-                      "cursor-grab select-none w-full rounded-xl border bg-white/0 px-3 py-2 text-sm shadow-sm",
+                      "cursor-grab select-none w-full rounded-xl border bg-white/70 px-3 py-2 text-sm shadow-sm",
                       "hover:bg-slate-50 active:cursor-grabbing",
                       dragId === id ? "ring-2 ring-emerald-300" : "",
                     ].join(" ")}
@@ -218,6 +230,7 @@ export default function DragDrop({
                       <BilingualText
                         text={c.text}
                         showSupport={lang === "es"}
+                        glossary={item?.glossary ?? []}
                       />
                     }
                   </div>
@@ -280,7 +293,7 @@ export default function DragDrop({
                               e.dataTransfer.effectAllowed = "move";
                             }}
                             className={[
-                              "cursor-grab select-none w-full rounded-xl border bg-white/0 px-3 py-2 text-sm shadow-sm",
+                              "cursor-grab select-none w-full rounded-xl border bg-white/70 px-3 py-2 text-sm shadow-sm",
                               "hover:bg-slate-50 active:cursor-grabbing",
                               dragId === id ? "ring-2 ring-emerald-300" : "",
                             ].join(" ")}
@@ -289,6 +302,7 @@ export default function DragDrop({
                               <BilingualText
                                 text={c.text}
                                 showSupport={lang === "es"}
+                                glossary={item?.glossary ?? []}
                               />
                             }
                           </div>

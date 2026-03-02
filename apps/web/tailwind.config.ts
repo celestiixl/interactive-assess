@@ -1,0 +1,63 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  darkMode: ["class", '[data-theme="dark"]'],
+  theme: {
+    extend: {
+      colors: {
+        bg: "rgb(var(--color-bg) / <alpha-value>)",
+        text: "rgb(var(--color-text) / <alpha-value>)",
+        "text-muted": "rgb(var(--color-text-muted) / <alpha-value>)",
+        border: "rgb(var(--color-border) / <alpha-value>)",
+        "surface-1": "rgb(var(--color-surface-1) / <alpha-value>)",
+        "surface-2": "rgb(var(--color-surface-2) / <alpha-value>)",
+        "surface-3": "rgb(var(--color-surface-3) / <alpha-value>)",
+        "brand-purple": "rgb(var(--color-brand-purple) / <alpha-value>)",
+        "brand-orange": "rgb(var(--color-brand-orange) / <alpha-value>)",
+        success: "rgb(var(--color-success) / <alpha-value>)",
+        warning: "rgb(var(--color-warning) / <alpha-value>)",
+        error: "rgb(var(--color-error) / <alpha-value>)",
+        info: "rgb(var(--color-info) / <alpha-value>)",
+        "teks-rc1": "rgb(var(--teks-rc1) / <alpha-value>)",
+        "teks-rc2": "rgb(var(--teks-rc2) / <alpha-value>)",
+        "teks-rc3": "rgb(var(--teks-rc3) / <alpha-value>)",
+        "teks-rc4": "rgb(var(--teks-rc4) / <alpha-value>)",
+        "teks-rc5": "rgb(var(--teks-rc5) / <alpha-value>)",
+        "teks-rc6": "rgb(var(--teks-rc6) / <alpha-value>)",
+      },
+      spacing: {
+        18: "4.5rem",
+      },
+      borderRadius: {
+        xs: "0.375rem",
+        sm: "var(--radius-sm)",
+        md: "var(--radius-md)",
+        lg: "var(--radius-lg)",
+        xl: "var(--radius-xl)",
+      },
+      boxShadow: {
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
+      },
+      fontFamily: {
+        sans: ["var(--font-body)", "sans-serif"],
+        display: ["var(--font-display)", "sans-serif"],
+      },
+      fontSize: {
+        xs: ["var(--text-xs-size)", { lineHeight: "var(--text-xs-line)", letterSpacing: "0em" }],
+        sm: ["var(--text-sm-size)", { lineHeight: "var(--text-sm-line)", letterSpacing: "0em" }],
+        base: ["var(--text-base-size)", { lineHeight: "var(--text-base-line)", letterSpacing: "0em" }],
+        lg: ["var(--text-lg-size)", { lineHeight: "var(--text-lg-line)", letterSpacing: "-0.005em" }],
+        xl: ["var(--text-xl-size)", { lineHeight: "var(--text-xl-line)", letterSpacing: "-0.01em" }],
+        "2xl": ["var(--text-2xl-size)", { lineHeight: "var(--text-2xl-line)", letterSpacing: "-0.012em" }],
+        "3xl": ["var(--text-3xl-size)", { lineHeight: "var(--text-3xl-line)", letterSpacing: "-0.015em" }],
+        "4xl": ["var(--text-4xl-size)", { lineHeight: "var(--text-4xl-line)", letterSpacing: "-0.02em" }],
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;

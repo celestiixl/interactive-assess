@@ -1,3 +1,12 @@
+export type GlossaryEntry = {
+  key: string; // stable identifier used in markup
+  surface: string; // text that appears in the passage
+  esSurface?: string; // optional Spanish term shown when language support is on
+  es: string; // Spanish translation/definition
+  en: string; // English translation/definition
+  partOfSpeech?: string;
+};
+
 export type ItemBase = {
   id: string;
   stem: string;
@@ -9,13 +18,7 @@ export type ItemBase = {
   rationale?: string;
   lang?: "en" | "es";
   metadata?: Record<string, unknown>;
-  glossary?: Array<{
-    key: string;
-    surface: string;
-    es: string;
-    en: string;
-    partOfSpeech?: string;
-  }>;
+  glossary?: GlossaryEntry[];
 };
 
 export type ItemMCQ = ItemBase & {

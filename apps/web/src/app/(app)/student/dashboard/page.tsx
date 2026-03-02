@@ -7,9 +7,8 @@ import AccommodationsButton from "@/components/student/AccommodationsButton";
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
 
-import MasteryDonut from "@/components/student/MasteryDonut";
 import SpecimenGrid from "@/components/student/SpecimenGrid";
-import { PageContent, PageBanner, Card, Section } from "@/components/ui";
+import { PageContent, PageBanner, Card, Section, MasteryRing } from "@/components/ui";
 
 function clamp01(n: number) {
   if (!Number.isFinite(n)) return 0;
@@ -30,7 +29,6 @@ function getBiomeHealth(segments: Segment[]) {
       biome: "Polluted Waters",
       desc: "Food web is unstable.",
       pct: Math.round(p * 100),
-      banner: "bg-neutral-50",
       badge: "border-neutral-200 text-neutral-800",
     };
   }
@@ -40,7 +38,6 @@ function getBiomeHealth(segments: Segment[]) {
       biome: "Sparse Grassland",
       desc: "Some stability, gaps remain.",
       pct: Math.round(p * 100),
-      banner: "bg-amber-50",
       badge: "border-amber-200 text-amber-900",
     };
   }
@@ -50,7 +47,6 @@ function getBiomeHealth(segments: Segment[]) {
       biome: "Balanced Forest",
       desc: "Most relationships are solid.",
       pct: Math.round(p * 100),
-      banner: "bg-green-50",
       badge: "border-green-200 text-green-900",
     };
   }
@@ -59,7 +55,6 @@ function getBiomeHealth(segments: Segment[]) {
     biome: "Thriving Reef",
     desc: "Ecosystem is strong and resilient.",
     pct: Math.round(p * 100),
-    banner: "bg-cyan-50",
     badge: "border-cyan-200 text-cyan-900",
   };
 }
@@ -285,21 +280,21 @@ export default function StudentDashboard() {
         <Card>
           {/* Biome banner */}
           <div
-            className={`mb-5 flex flex-wrap items-start justify-between gap-3 rounded-2xl border p-5 ${biome.banner}`}
+            className="mb-5 flex flex-wrap items-start justify-between gap-3 rounded-2xl border border-white/20 bg-linear-to-r from-violet-500 via-purple-400 to-amber-400 p-5"
           >
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="text-xs font-semibold uppercase tracking-wide text-white/85">
                 Biome Health
               </div>
-              <div className="mt-1 text-lg font-semibold text-slate-900">
+              <div className="mt-1 text-lg font-semibold text-white">
                 {biome.level} • {biome.biome}{" "}
-                <span className="ml-2 text-sm font-semibold text-slate-600">
+                <span className="ml-2 text-sm font-semibold text-white/90">
                   ({biome.pct}%)
                 </span>
               </div>
-              <div className="mt-1 text-sm text-slate-600">{biome.desc}</div>
+              <div className="mt-1 text-sm text-white/90">{biome.desc}</div>
               <div
-                className={`mt-3 inline-flex items-center rounded-full border bg-white/95 px-3 py-1 text-xs font-semibold ${biome.badge}`}
+                className="mt-3 inline-flex items-center rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-semibold text-white"
               >
                 segments passed: {segments.length}
               </div>
@@ -372,13 +367,10 @@ export default function StudentDashboard() {
           </div>
 
           {/* Main panel */}
-          <Section className="/0 p-6 ia-card-soft ">
+          <Section className="p-6 ia-card-soft">
             {tab === "overview" ? (
               <>
-                <MasteryDonut segments={segments} />
-                <div className="mt-4 text-center text-sm text-slate-500">
-                  Hover a slice to see the TEKS.
-                </div>
+                <MasteryRing segments={segments} />
               </>
             ) : (
               <>

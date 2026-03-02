@@ -66,7 +66,7 @@ export default function ReportingCategoryDonut({
   }
 
   return (
-    <div className="border -slate-200 /0 p-5 ia-card-soft ">
+    <div className="border border-slate-200 p-5 ia-card-soft">
       <div className="text-lg font-semibold text-slate-900">
         Mastery by Reporting Category
       </div>
@@ -126,7 +126,7 @@ export default function ReportingCategoryDonut({
           </svg>
 
           {hovered ? (
-            <div className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 rounded-xl border border-slate-200 bg-white/0 px-3 py-2 text-sm shadow-md">
+            <div className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-sm shadow-md">
               <div className="font-semibold text-slate-900">
                 {hovered.id} • {hovered.name}
               </div>

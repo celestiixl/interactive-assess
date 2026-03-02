@@ -23,6 +23,15 @@ export type Choice = {
   label: string;
 };
 
+export type GlossaryEntry = {
+  key: string;
+  surface: string;
+  esSurface?: string;
+  es: string;
+  en: string;
+  partOfSpeech?: string;
+};
+
 export type AnswerLogic =
   | { kind: "single"; choiceId: string }
   | { kind: "multi"; choiceIds: string[] }
@@ -55,6 +64,7 @@ export type Item = {
 
   stimulus: Stimulus;
   prompt: string;
+  glossary?: GlossaryEntry[];
 
   choices?: Choice[]; // MC, MS, 2-part
   answer: AnswerLogic;

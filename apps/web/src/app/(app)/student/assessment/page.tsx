@@ -101,7 +101,7 @@ export default function StudentAssessmentLabPage() {
           </div>
 
           <div className="w-full max-w-xl">
-            <div className="/0 p-6 ia-card-soft ">
+            <div className="p-6 ia-card-soft">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="text-sm font-semibold text-slate-900">
@@ -134,7 +134,7 @@ export default function StudentAssessmentLabPage() {
               </div>
             </div>
 
-            <div className="mt-6  /0 p-6 ia-card-soft ">
+            <div className="mt-6 p-6 ia-card-soft">
               <div className="text-sm font-semibold text-slate-900">
                 What this page is for
               </div>

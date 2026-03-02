@@ -1,36 +1,8 @@
-import Link from "next/link";
-import { IconPill, Tone } from "./Pill";
 import { Surface } from "./Surface";
-
-export function NavItem({
-  href,
-  label,
-  active,
-  tone = "slate",
-}: {
-  href: string;
-  label: string;
-  active?: boolean;
-  tone?: Tone;
-}) {
-  return (
-    <Link
-      href={href}
-      className={
-        "flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm font-semibold transition " +
-        (active
-          ? "border-slate-200 "
-          : "border-slate-200 bg-white/0/70 hover:bg-white")
-      }
-    >
-      <span className="truncate text-slate-900">{label}</span>
-      <IconPill tone={tone} title={label} />
-    </Link>
-  );
-}
+import { NavigationSidebar } from "@/components/ui";
 
 export function Sidebar({
-  activeKey,
+  activeKey: _activeKey,
 }: {
   activeKey?: "assessment" | "student_lab" | "items" | "practice" | "teacher";
 }) {
@@ -43,38 +15,35 @@ export function Sidebar({
         </div>
       </div>
 
-      <div className="grid gap-2">
-        <NavItem
-          href="/assessment"
-          label="Assessment Home"
-          tone="slate"
-          active={activeKey === "assessment"}
-        />
-        <NavItem
-          href="/student/assessment"
-          label="Student Assessment Lab"
-          tone="teal"
-          active={activeKey === "student_lab"}
-        />
-        <NavItem
-          href="/student/assessment/items"
-          label="Items Test Screen"
-          tone="emerald"
-          active={activeKey === "items"}
-        />
-        <NavItem
-          href="/practice"
-          label="Practice Runner"
-          tone="amber"
-          active={activeKey === "practice"}
-        />
-        <NavItem
-          href="/teacher/dashboard"
-          label="Teacher Dashboard"
-          tone="slate"
-          active={activeKey === "teacher"}
-        />
-      </div>
+      <NavigationSidebar
+        items={[
+          {
+            href: "/assessment",
+            label: "Assessment Home",
+            description: "Choose student or teacher flows",
+          },
+          {
+            href: "/student/assessment",
+            label: "Student Assessment Lab",
+            description: "Sandbox for student routes",
+          },
+          {
+            href: "/student/assessment/items",
+            label: "Items Test Screen",
+            description: "Validate item rendering",
+          },
+          {
+            href: "/practice",
+            label: "Practice Runner",
+            description: "Run checks and mastery practice",
+          },
+          {
+            href: "/teacher/dashboard",
+            label: "Teacher Dashboard",
+            description: "Builder, analytics, and assignment flow",
+          },
+        ]}
+      />
 
       <div className="mt-5 rounded-2xl border border-slate-200  p-4">
         <div className="text-xs font-semibold text-slate-700">Status</div>

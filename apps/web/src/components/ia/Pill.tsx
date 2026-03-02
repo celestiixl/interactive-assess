@@ -25,7 +25,7 @@ export function Pill({
   // Light mode is the primary look right now (clean, airy).
   // Dark mode classes are still included but not the focus.
   const tones: Record<Tone, string> = {
-    neutral: "border-slate-200 bg-white/0 text-slate-800",
+    neutral: "border-slate-200 bg-white/80 text-slate-800",
     teal: "border-teal-200 bg-teal-50 text-teal-900 shadow-[0_0_0_1px_rgba(20,184,166,0.08)]",
     emerald:
       "border-emerald-200 bg-emerald-50 text-emerald-900 shadow-[0_0_0_1px_rgba(16,185,129,0.08)]",
@@ -34,7 +34,7 @@ export function Pill({
     violet:
       "border-violet-200 bg-violet-50 text-violet-900 shadow-[0_0_0_1px_rgba(139,92,246,0.10)]",
     slate:
-      "border-slate-200  text-slate-900 shadow-[0_0_0_1px_rgba(148,163,184,0.10)]",
+      "border-slate-200 bg-white/70 text-slate-900 shadow-[0_0_0_1px_rgba(148,163,184,0.10)]",
     white: "border-white/30 bg-white/20 text-white",
   };
 
@@ -66,7 +66,7 @@ export function IconPill({
     <span
       title={title}
       className={
-        "inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/0 px-2.5 py-1 text-xs font-semibold shadow-sm " +
+        "inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/80 px-2.5 py-1 text-xs font-semibold shadow-sm " +
         className
       }
     >

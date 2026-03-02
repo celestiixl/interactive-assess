@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { PageContent } from "@/components/ui";
+import GlossaryText from "@/components/GlossaryText";
 import {
   TEKS_CATALOG,
   inferReportingCategoryFromTeks,
@@ -10,6 +11,8 @@ import {
 import TeksTooltip from "@/components/common/TeksTooltip";
 import InlineChoiceBuilder from "@/components/teacher/InlineChoiceBuilder";
 import CERBuilder from "@/components/teacher/CERBuilder";
+import { BuilderTypeTabs } from "@/components/features/builder/BuilderTypeTabs";
+import type { GlossaryEntry } from "@/types/item";
 
 type ItemType = "mcq" | "dragdrop" | "hotspot" | "inline_choice" | "cer";
 
@@ -43,48 +46,6 @@ function Pill(props: { children: React.ReactNode }) {
 
 function PreviewCard(props: { children: React.ReactNode }) {
   return <div className="p-4 ia-card-soft ">{props.children}</div>;
-
-  function renderInlineChoicePreview(
-    text: string,
-    opts: Record<string, string[]>,
-  ) {
-    const parts: Array<{ t: "text" | "blank"; v: string }> = [];
-    const re = /\[\[([^\]]+)\]\]/g;
-    let last = 0;
-    let m: RegExpExecArray | null;
-
-    while ((m = re.exec(text)) !== null) {
-      const start = m.index;
-      const end = re.lastIndex;
-      if (start > last) parts.push({ t: "text", v: text.slice(last, start) });
-      parts.push({ t: "blank", v: (m[1] || "").trim() });
-      last = end;
-    }
-    if (last < text.length) parts.push({ t: "text", v: text.slice(last) });
-
-    return (
-      <div className="text-base text-slate-900 leading-relaxed whitespace-pre-wrap">
-        {parts.map((p, i) => {
-          if (p.t === "text") return <span key={i}>{p.v}</span>;
-          const list = (opts?.[p.v] || [p.v]).filter(Boolean);
-          return (
-            <span key={i} className="inline-flex items-center">
-              <select className="mx-1 rounded-lg border bg-whitepx-2 py-1 text-sm shadow-sm">
-                <option value="" disabled selected>
-                  Select…
-                </option>
-                {list.map((o) => (
-                  <option key={o} value={o}>
-                    {o}
-                  </option>
-                ))}
-              </select>
-            </span>
-          );
-        })}
-      </div>
-    );
-  }
 }
 
 export default function TeacherBuilderPage() {
@@ -98,6 +59,12 @@ export default function TeacherBuilderPage() {
 
   // common fields
   const [prompt, setPrompt] = useState("");
+  const [glossary, setGlossary] = useState<GlossaryEntry[]>([]);
+  const [glossarySurface, setGlossarySurface] = useState("");
+  const [glossaryEsSurface, setGlossaryEsSurface] = useState("");
+  const [glossaryEs, setGlossaryEs] = useState("");
+  const [glossaryEn, setGlossaryEn] = useState("");
+  const [glossaryPos, setGlossaryPos] = useState("");
 
   // INLINE_CHOICE_BUILDER_BLOCK
   const [clozeText, setClozeText] = useState<string>(
@@ -113,21 +80,84 @@ export default function TeacherBuilderPage() {
     ],
   });
 
-  function addBlank(label: string) {
-    const k = label.trim();
-    if (!k) return;
-    setClozeOptions((prev) => (prev[k] ? prev : { ...prev, [k]: [k] }));
+  function toInlineChoiceBlanks(options: Record<string, string[]>) {
+    return Object.entries(options).map(([blankId, list]) => ({
+      id: blankId,
+      options: (list || []).map((label, index) => ({
+        id: String.fromCharCode(65 + index),
+        label,
+      })),
+    }));
   }
 
-  function setOptionList(blank: string, csv: string) {
-    const list = csv
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-    setClozeOptions((prev) => ({
+  function fromInlineChoiceBlanks(
+    blanks: Array<{ id: string; options?: Array<{ label?: string }> }>,
+  ) {
+    const next: Record<string, string[]> = {};
+    for (const blank of blanks) {
+      const key = String(blank?.id || "").trim();
+      if (!key) continue;
+      const labels = (blank.options || [])
+        .map((option) => String(option?.label || "").trim())
+        .filter(Boolean);
+      next[key] = labels.length ? labels : [key];
+    }
+    return next;
+  }
+
+  function toGlossaryKey(surface: string) {
+    const normalized = surface
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "_");
+    return normalized || uid("gloss");
+  }
+
+  function addGlossaryEntry() {
+    const surface = glossarySurface.trim();
+    const es = glossaryEs.trim();
+    const en = glossaryEn.trim();
+    if (!surface || !es || !en) return;
+
+    const key = toGlossaryKey(surface);
+    if (glossary.some((g) => g.key === key)) return;
+
+    setGlossary((prev) => [
       ...prev,
-      [blank]: list.length ? list : [blank],
-    }));
+      {
+        key,
+        surface,
+        esSurface: glossaryEsSurface.trim() || undefined,
+        es,
+        en,
+        partOfSpeech: glossaryPos.trim() || undefined,
+      },
+    ]);
+    setGlossarySurface("");
+    setGlossaryEsSurface("");
+    setGlossaryEs("");
+    setGlossaryEn("");
+    setGlossaryPos("");
+  }
+
+  function patchGlossary(key: string, patch: Partial<GlossaryEntry>) {
+    setGlossary((prev) =>
+      prev.map((g) => (g.key === key ? { ...g, ...patch } : g)),
+    );
+  }
+
+  function removeGlossary(key: string) {
+    setGlossary((prev) => prev.filter((g) => g.key !== key));
+  }
+
+  async function insertGlossaryToken(entry: GlossaryEntry) {
+    const token = `[[${entry.surface}|key=${entry.key}]]`;
+    try {
+      await navigator.clipboard.writeText(token);
+    } catch {
+      // ignore clipboard failures
+    }
   }
   // TEKS tags
   const [primaryTeks, setPrimaryTeks] = useState<string>("BIO.8B");
@@ -200,6 +230,7 @@ export default function TeacherBuilderPage() {
       id: uid("q"),
       type,
       prompt,
+      glossary: glossary.length ? glossary : undefined,
       teks: teksList,
       rc,
       languageSupports: supports,
@@ -249,6 +280,7 @@ export default function TeacherBuilderPage() {
   }, [
     type,
     prompt,
+    glossary,
     teksList,
     rc,
     supports,
@@ -259,6 +291,9 @@ export default function TeacherBuilderPage() {
     answerKey,
     imageUrl,
     cerItem,
+    clozeText,
+    clozeOptions,
+    hotspotImage,
   ]);
 
   const [showSavePanel, setShowSavePanel] = useState(false);
@@ -297,23 +332,11 @@ export default function TeacherBuilderPage() {
               Build items quickly, tag TEKS, and preview exactly what students
               will see.
             </p>
-
-            <button
-              type="button"
-              onClick={() => setType("inline_choice")}
-              className={`flex-1 rounded-full border px-6 py-3 text-lg font-semibold transition ${
-                type === "inline_choice"
-                  ? "border-emerald-300 bg-emerald-50 text-emerald-900"
-                  : "border-slate-200 bg-whitetext-slate-900 hover:bg-slate-50"
-              }`}
-            >
-              Inline Choice
-            </button>
           </div>
 
           <div className="flex items-center gap-2">
             <button
-              className="rounded-xl border bg-whitepx-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
+              className="rounded-xl border bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
               onClick={() => setShowSavePanel((v) => !v)}
               type="button"
             >
@@ -338,32 +361,12 @@ export default function TeacherBuilderPage() {
                 title="Item type"
                 subtitle="Choose the interaction style students will use."
               />
-              <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4">
-                {(
-                  [
-                    ["mcq", "Multiple Choice"],
-                    ["dragdrop", "Card Sort"],
-                    ["hotspot", "Hotspot"],
-                    ["cer", "CER Builder"],
-                  ] as const
-                ).map(([k, label]) => {
-                  const active = type === k;
-                  return (
-                    <button
-                      key={k}
-                      type="button"
-                      onClick={() => setType(k)}
-                      className={[
-                        "rounded-2xl border px-3 py-2 text-sm font-semibold",
-                        active
-                          ? "border-emerald-300 bg-emerald-50 text-emerald-900"
-                          : "border-slate-200 bg-whitetext-slate-800 hover:bg-slate-50",
-                      ].join(" ")}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
+              <div className="mt-3">
+                <BuilderTypeTabs value={type} onValueChange={setType} />
+              </div>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <Pill>Selected: {type.replace("_", " ")}</Pill>
+                {type === "inline_choice" ? <Pill>Inline Choice</Pill> : null}
               </div>
 
               {/* Prompt */}
@@ -379,6 +382,141 @@ export default function TeacherBuilderPage() {
                   onChange={(e) => setPrompt(e.target.value)}
                   placeholder="Example: Sort each statement into the correct category."
                 />
+              </div>
+
+              <div className="mt-6 rounded-2xl border bg-white p-4">
+                <SectionTitle
+                  title="Glossary"
+                  subtitle="To link a word in the passage, wrap it like [[word|key=wordKey]]."
+                />
+
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                  <input
+                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    value={glossarySurface}
+                    onChange={(e) => setGlossarySurface(e.target.value)}
+                    placeholder="In-passage term (e.g., photosynthesis)"
+                  />
+                  <input
+                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    value={glossaryEsSurface}
+                    onChange={(e) => setGlossaryEsSurface(e.target.value)}
+                    placeholder="Spanish term shown in popover (optional)"
+                  />
+                  <input
+                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    value={glossaryPos}
+                    onChange={(e) => setGlossaryPos(e.target.value)}
+                    placeholder="Part of speech (optional)"
+                  />
+                  <input
+                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    value={glossaryEs}
+                    onChange={(e) => setGlossaryEs(e.target.value)}
+                    placeholder="Spanish meaning/definition"
+                  />
+                  <input
+                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    value={glossaryEn}
+                    onChange={(e) => setGlossaryEn(e.target.value)}
+                    placeholder="English meaning/translation"
+                  />
+                </div>
+
+                <div className="mt-3">
+                  <button
+                    type="button"
+                    className="rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                    onClick={addGlossaryEntry}
+                    disabled={
+                      !glossarySurface.trim() ||
+                      !glossaryEs.trim() ||
+                      !glossaryEn.trim()
+                    }
+                  >
+                    + Add glossary entry
+                  </button>
+                </div>
+
+                {glossary.length ? (
+                  <div className="mt-3 space-y-2">
+                    {glossary.map((g) => (
+                      <div
+                        key={g.key}
+                        className="rounded-xl border border-slate-200 bg-slate-50 p-3"
+                      >
+                        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                          <div className="text-xs font-semibold text-slate-600">
+                            key: {g.key}
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                              onClick={() => insertGlossaryToken(g)}
+                            >
+                              Insert token
+                            </button>
+                            <button
+                              type="button"
+                              className="rounded-lg border border-rose-200 bg-white px-2 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
+                              onClick={() => removeGlossary(g.key)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="grid gap-2 sm:grid-cols-2">
+                          <input
+                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            value={g.surface}
+                            onChange={(e) =>
+                              patchGlossary(g.key, { surface: e.target.value })
+                            }
+                            placeholder="In-passage term"
+                          />
+                          <input
+                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            value={g.esSurface ?? ""}
+                            onChange={(e) =>
+                              patchGlossary(g.key, {
+                                esSurface: e.target.value || undefined,
+                              })
+                            }
+                            placeholder="Spanish term"
+                          />
+                          <input
+                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            value={g.partOfSpeech ?? ""}
+                            onChange={(e) =>
+                              patchGlossary(g.key, {
+                                partOfSpeech: e.target.value || undefined,
+                              })
+                            }
+                            placeholder="Part of speech"
+                          />
+                          <input
+                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            value={g.es}
+                            onChange={(e) =>
+                              patchGlossary(g.key, { es: e.target.value })
+                            }
+                            placeholder="Spanish"
+                          />
+                          <input
+                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            value={g.en}
+                            onChange={(e) =>
+                              patchGlossary(g.key, { en: e.target.value })
+                            }
+                            placeholder="English"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </div>
 
@@ -472,7 +610,7 @@ export default function TeacherBuilderPage() {
                       />
                       <button
                         type="button"
-                        className="rounded-xl border bg-whitepx-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                        className="rounded-xl border bg-white px-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                         onClick={() => {
                           setMcqChoices((prev) => {
                             if (prev.length <= 2) return prev;
@@ -492,7 +630,7 @@ export default function TeacherBuilderPage() {
                 <div className="mt-3">
                   <button
                     type="button"
-                    className="rounded-xl border bg-whitepx-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    className="rounded-xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     onClick={() =>
                       setMcqChoices((prev) => [
                         ...prev,
@@ -524,7 +662,7 @@ export default function TeacherBuilderPage() {
                         />
                         <button
                           type="button"
-                          className="rounded-xl border bg-whitepx-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                          className="rounded-xl border bg-white px-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                           onClick={() => {
                             setBuckets((prev) =>
                               prev.filter((x) => x.id !== b.id),
@@ -551,7 +689,7 @@ export default function TeacherBuilderPage() {
                   </div>
                   <button
                     type="button"
-                    className="mt-3 rounded-xl border bg-whitepx-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    className="mt-3 rounded-xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     onClick={() =>
                       setBuckets((prev) => [
                         ...prev,
@@ -596,7 +734,7 @@ export default function TeacherBuilderPage() {
 
                         <button
                           type="button"
-                          className="rounded-xl border bg-whitepx-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                          className="rounded-xl border bg-white px-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                           onClick={() => {
                             setCards((prev) =>
                               prev.filter((x) => x.id !== c.id),
@@ -622,7 +760,7 @@ export default function TeacherBuilderPage() {
 
                   <button
                     type="button"
-                    className="mt-3 rounded-xl border bg-whitepx-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    className="mt-3 rounded-xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     onClick={() =>
                       setCards((prev) => [...prev, { id: uid("c"), text: "" }])
                     }
@@ -634,6 +772,31 @@ export default function TeacherBuilderPage() {
                     Tip: The “Answer key” dropdown is what makes this
                     auto-gradeable.
                   </div>
+                </div>
+              </div>
+            ) : null}
+
+            {type === "inline_choice" ? (
+              <div className="rounded-3xl border bg-white p-5 shadow-sm">
+                <SectionTitle
+                  title="Inline Choice Builder"
+                  subtitle="Write passage text with [[blankId]] markers, then define options per blank."
+                />
+                <div className="mt-4">
+                  <InlineChoiceBuilder
+                    item={{
+                      clozeText,
+                      blanks: toInlineChoiceBlanks(clozeOptions),
+                    }}
+                    onPatch={(patch) => {
+                      if (typeof patch?.clozeText === "string") {
+                        setClozeText(patch.clozeText);
+                      }
+                      if (Array.isArray(patch?.blanks)) {
+                        setClozeOptions(fromInlineChoiceBlanks(patch.blanks));
+                      }
+                    }}
+                  />
                 </div>
               </div>
             ) : null}
@@ -673,7 +836,7 @@ export default function TeacherBuilderPage() {
                     />
                     <label
                       htmlFor="hotspotFileInput"
-                      className="mt-2 inline-flex cursor-pointer items-center justify-center rounded-xl border bg-whitepx-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
+                      className="mt-2 inline-flex cursor-pointer items-center justify-center rounded-xl border bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
                     >
                       Choose file
                     </label>
@@ -687,7 +850,7 @@ export default function TeacherBuilderPage() {
                           </span>{" "}
                           <button
                             type="button"
-                            className="ml-2 rounded-lg border bg-whitepx-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                            className="ml-2 rounded-lg border bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                             onClick={() => {
                               setHotspotLocalUrl((prev) => {
                                 if (prev) URL.revokeObjectURL(prev);
@@ -828,7 +991,12 @@ export default function TeacherBuilderPage() {
 
                   <div className="mt-3 text-base font-semibold text-slate-900">
                     {prompt.trim() ? (
-                      prompt
+                      <GlossaryText
+                        text={prompt}
+                        glossary={glossary}
+                        defaultLang="en"
+                        showSupport={false}
+                      />
                     ) : (
                       <span className="text-slate-400">Prompt preview…</span>
                     )}
@@ -893,7 +1061,7 @@ export default function TeacherBuilderPage() {
                           {cards.map((c) => (
                             <div
                               key={c.id}
-                              className="rounded-xl border bg-whitepx-3 py-2 text-sm shadow-sm text-slate-900"
+                              className="rounded-xl border bg-white px-3 py-2 text-sm shadow-sm text-slate-900"
                             >
                               {c.text.trim() ? c.text : "Card…"}
                             </div>
@@ -944,7 +1112,7 @@ export default function TeacherBuilderPage() {
                                     .map((c) => (
                                       <div
                                         key={c.id}
-                                        className="w-full rounded-xl border bg-whitepx-3 py-2 text-sm shadow-sm text-slate-900"
+                                        className="w-full rounded-xl border bg-white px-3 py-2 text-sm shadow-sm text-slate-900"
                                       >
                                         {c.text.trim() ? c.text : "Card…"}
                                       </div>
@@ -980,6 +1148,22 @@ export default function TeacherBuilderPage() {
                     </div>
                     <div className="mt-3 aspect-video w-full rounded-2xl border grid place-items-center text-xs text-slate-500">
                       Image preview (hotspot placement later)
+                    </div>
+                  </PreviewCard>
+                ) : null}
+
+                {type === "inline_choice" ? (
+                  <PreviewCard>
+                    <div className="text-sm font-semibold text-slate-900">
+                      Inline Choice preview
+                    </div>
+                    <div className="mt-3 text-sm text-slate-600">
+                      Blanks: {Object.keys(clozeOptions).length}
+                    </div>
+                    <div className="mt-2 whitespace-pre-wrap text-sm text-slate-900">
+                      {clozeText.trim() || (
+                        <span className="text-slate-400">Cloze text preview…</span>
+                      )}
                     </div>
                   </PreviewCard>
                 ) : null}

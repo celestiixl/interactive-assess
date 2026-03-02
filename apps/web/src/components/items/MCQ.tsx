@@ -1,9 +1,11 @@
-  "use client";
+"use client";
 
-  import BilingualText from "@/components/student/BilingualText";
-  import { GlossaryText } from "@/components/glossary";
-  import { useEffect, useMemo, useState } from "react";
-  import { useLang } from "@/lib/useLang";
+import BilingualText from "@/components/student/BilingualText";
+import { ChoiceButton } from "@/components/ui";
+import { useEffect, useMemo, useState } from "react";
+import { useLang } from "@/lib/useLang";
+import type { GlossaryEntry } from "@/types/item";
+
 export type MCQItem = {
   id: string;
   stem: string;
@@ -12,13 +14,7 @@ export type MCQItem = {
   retryLimit?: number;
   rationale?: string;
   tags?: string[];
-  glossary?: Array<{
-    key: string;
-    surface: string;
-    es: string;
-    en: string;
-    partOfSpeech?: string;
-  }>;
+  glossary?: GlossaryEntry[];
 };
 
 export default function MCQ({
@@ -117,71 +113,54 @@ export default function MCQ({
   return (
     <div className="space-y-4">
       <div className="text-lg font-semibold">
-        {item.glossary && item.glossary.length > 0 ? (
-          <GlossaryText
+        {
+          <BilingualText
             text={item.stem}
-            glossary={item.glossary}
-            defaultLang={lang === "es" ? "es" : "en"}
+            showSupport={lang === "es"}
+            glossary={item.glossary ?? []}
           />
-        ) : (
-          <BilingualText text={item.stem} showSupport={lang === "es"} />
-        )}
+        }
       </div>
 
       <fieldset className="space-y-2">
         <legend className="sr-only">Answer choices</legend>
-        {item.choices.map((c) => {
+        <div role={isMulti ? "group" : "radiogroup"} className="space-y-2">
+        {item.choices.map((c, idx) => {
           const checked = selected.includes(c.id);
-          const showCorrectness = done;
           const isCorrect = item.correctIds.includes(c.id);
 
-          const base =
-            "group flex items-start gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-all duration-150 ease-out";
-          const idle = checked
-            ? "border-neutral-900 bg-white/0"
-            : "border-neutral-300 bg-white/0 hover:bg-neutral-100 hover:border-neutral-900 hover:shadow-sm hover:-translate-y-0.5";
-          const focus =
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900";
-          const result = showCorrectness
+          const state = done
             ? isCorrect
-              ? "border-green-600 bg-green-50"
+              ? "correct"
               : checked
-                ? "border-red-600 bg-red-50"
-                : "border-neutral-300 bg-white/0 opacity-90"
-            : idle;
+                ? "incorrect"
+                : "idle"
+            : checked
+              ? "selected"
+              : "idle";
 
           return (
-            <label
+            <ChoiceButton
               key={c.id}
-              className={`${base} ${result} ${focus} ${done ? "opacity-90" : ""}`}
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === " " || e.key === "Enter") {
-                  e.preventDefault();
-                  toggle(c.id);
-                }
-              }}
+              id={c.id}
+              label={String.fromCharCode(65 + idx)}
+              checked={checked}
+              state={state}
+              roleType={isMulti ? "checkbox" : "radio"}
+              onSelect={toggle}
+              className={done ? "opacity-90" : undefined}
             >
-              <input
-                type={isMulti ? "checkbox" : "radio"}
-                name={`mcq-${item.id}`}
-                value={c.id}
-                checked={checked}
-                onChange={() => toggle(c.id)}
-                className="mt-1 h-4 w-4 rounded border-neutral-300 text-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:outline-none"
-                disabled={done}
-              />
               <span className="leading-6">
-                {<BilingualText text={c.text} showSupport={lang === "es"} />}
+                <BilingualText
+                  text={c.text}
+                  showSupport={lang === "es"}
+                  glossary={item.glossary ?? []}
+                />
               </span>
-              {!done && (
-                <span className="ml-auto opacity-0 transition-opacity group-hover:opacity-60">
-                  →
-                </span>
-              )}
-            </label>
+            </ChoiceButton>
           );
         })}
+        </div>
       </fieldset>
 
       <div className="flex items-center gap-3">

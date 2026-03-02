@@ -4,9 +4,7 @@
     {
       "id": "bank_geneexpr_cardsort_001",
       "title": "Transcription vs Translation Sort",
-      "teks": [
-        "BIO.7B"
-      ],
+      "teks": ["BIO.7B"],
       "topic": "Gene Expression",
       "gradeBand": "HS",
       "difficulty": "medium",
@@ -15,7 +13,51 @@
       "stimulus": {
         "kind": "none"
       },
-      "prompt": "Sort each step into Transcription vs Translation.",
+      "prompt": "Sort each step into [[transcription|key=transcripcion]] vs [[translation|key=traduccion]].",
+      "glossary": [
+        {
+          "key": "transcripcion",
+          "surface": "transcripcion",
+          "es": "Proceso en el que la informacion del ADN se copia en ARN mensajero.",
+          "en": "The process in which information in DNA is copied into messenger RNA (mRNA)."
+        },
+        {
+          "key": "traduccion",
+          "surface": "traduccion",
+          "es": "Proceso en el que el ribosoma usa el ARN mensajero para formar una proteina.",
+          "en": "The process in which a ribosome reads mRNA to build a protein."
+        },
+        {
+          "key": "arn_mensajero",
+          "surface": "ARN mensajero",
+          "es": "Molecula de ARN que lleva instrucciones del ADN al ribosoma.",
+          "en": "RNA molecule that carries genetic instructions from DNA to the ribosome."
+        },
+        {
+          "key": "ribosoma",
+          "surface": "ribosoma",
+          "es": "Estructura celular donde se ensamblan proteinas.",
+          "en": "Cell structure where proteins are assembled from amino acids."
+        },
+        {
+          "key": "citoplasma",
+          "surface": "citoplasma",
+          "es": "Fluido dentro de la celula donde ocurren muchas reacciones.",
+          "en": "Gel-like fluid inside the cell where many reactions occur."
+        },
+        {
+          "key": "codon",
+          "surface": "codon",
+          "es": "Conjunto de tres bases del ARN que codifica un aminoacido.",
+          "en": "A three-base sequence in mRNA that codes for an amino acid."
+        },
+        {
+          "key": "anticodon",
+          "surface": "anticodon",
+          "es": "Triplete en el ARNt que se empareja con un codon del ARNm.",
+          "en": "A three-base sequence in tRNA that pairs with an mRNA codon."
+        }
+      ],
       "answer": {
         "kind": "card_sort",
         "columns": [
@@ -51,17 +93,12 @@
           }
         ]
       },
-      "misconceptionTags": [
-        "location_confusion",
-        "molecule_role_confusion"
-      ]
+      "misconceptionTags": ["location_confusion", "molecule_role_confusion"]
     },
     {
       "id": "bank_geneexpr_diagram_001",
       "title": "DNA → RNA → Protein Flow",
-      "teks": [
-        "BIO.7B"
-      ],
+      "teks": ["BIO.7B"],
       "topic": "Gene Expression",
       "gradeBand": "HS",
       "difficulty": "easy",
@@ -123,9 +160,7 @@
     {
       "id": "bank_cells_mc_001",
       "title": "Prokaryotic vs Eukaryotic Structure",
-      "teks": [
-        "BIO.4A"
-      ],
+      "teks": ["BIO.4A"],
       "topic": "Cells",
       "gradeBand": "HS",
       "difficulty": "easy",
@@ -135,7 +170,39 @@
         "kind": "text",
         "text": "A student observes a cell with an electron microscope."
       },
-      "prompt": "Which feature most strongly indicates the cell is prokaryotic?",
+      "prompt": "Which feature most strongly indicates the cell is [[prokaryotic|key=procariota]]?",
+      "glossary": [
+        {
+          "key": "procariota",
+          "surface": "procariota",
+          "es": "Celula sin nucleo definido ni organelos membranosos.",
+          "en": "A cell type that lacks a nucleus and membrane-bound organelles."
+        },
+        {
+          "key": "eucariota",
+          "surface": "eucariota",
+          "es": "Celula con nucleo definido y organelos membranosos.",
+          "en": "A cell type that has a nucleus and membrane-bound organelles."
+        },
+        {
+          "key": "nucleo",
+          "surface": "nucleo",
+          "es": "Organelo que contiene el ADN en celulas eucariotas.",
+          "en": "Organelle in eukaryotic cells that stores most of the cell's DNA."
+        },
+        {
+          "key": "cloroplasto",
+          "surface": "cloroplasto",
+          "es": "Organelo donde ocurre la fotosintesis en plantas.",
+          "en": "Plant cell organelle where photosynthesis takes place."
+        },
+        {
+          "key": "mitocondria",
+          "surface": "mitocondria",
+          "es": "Organelo que produce ATP por respiracion celular.",
+          "en": "Organelle where most ATP is produced during cellular respiration."
+        }
+      ],
       "choices": [
         {
           "id": "A",
@@ -158,16 +225,12 @@
         "kind": "single",
         "choiceId": "B"
       },
-      "misconceptionTags": [
-        "organelle_presence"
-      ]
+      "misconceptionTags": ["organelle_presence"]
     },
     {
       "id": "bank_photo_mc_001",
       "title": "Photosynthesis Reactants",
-      "teks": [
-        "BIO.4B"
-      ],
+      "teks": ["BIO.4B"],
       "topic": "Photosynthesis",
       "gradeBand": "HS",
       "difficulty": "easy",
@@ -176,7 +239,39 @@
       "stimulus": {
         "kind": "none"
       },
-      "prompt": "Which substances are required as reactants for photosynthesis to occur?",
+      "prompt": "Which substances are required as [[reactants|key=reactivos]] for [[photosynthesis|key=fotosintesis]] to occur?",
+      "glossary": [
+        {
+          "key": "reactivos",
+          "surface": "reactivos",
+          "es": "Sustancias iniciales que se consumen en una reaccion quimica.",
+          "en": "Starting substances that are used up in a chemical reaction."
+        },
+        {
+          "key": "fotosintesis",
+          "surface": "fotosintesis",
+          "es": "Proceso por el cual las plantas convierten luz en energia quimica.",
+          "en": "Process by which plants use light, water, and carbon dioxide to make glucose."
+        },
+        {
+          "key": "dioxido_de_carbono",
+          "surface": "dioxido de carbono",
+          "es": "Gas (CO2) usado por las plantas para producir glucosa.",
+          "en": "Gas (CO2) that plants take in as a reactant for photosynthesis."
+        },
+        {
+          "key": "agua",
+          "surface": "agua",
+          "es": "Molecula H2O necesaria en muchas reacciones biologicas.",
+          "en": "H2O molecule needed as a reactant in photosynthesis and many cell processes."
+        },
+        {
+          "key": "glucosa",
+          "surface": "glucosa",
+          "es": "Azucar simple producida durante la fotosintesis.",
+          "en": "Simple sugar produced by photosynthesis and used by cells for energy."
+        }
+      ],
       "choices": [
         {
           "id": "A",
@@ -199,16 +294,12 @@
         "kind": "single",
         "choiceId": "A"
       },
-      "misconceptionTags": [
-        "product_reactant_confusion"
-      ]
+      "misconceptionTags": ["product_reactant_confusion"]
     },
     {
       "id": "bank_photo_cardsort_001",
       "title": "Photosynthesis vs. Cellular Respiration",
-      "teks": [
-        "BIO.4B"
-      ],
+      "teks": ["BIO.4B"],
       "topic": "Photosynthesis",
       "gradeBand": "HS",
       "difficulty": "medium",
@@ -217,7 +308,39 @@
       "stimulus": {
         "kind": "none"
       },
-      "prompt": "Sort each statement into the correct biological process.",
+      "prompt": "Sort each statement into the correct process: [[photosynthesis|key=fotosintesis]] or [[cellular respiration|key=respiracion_celular]].",
+      "glossary": [
+        {
+          "key": "fotosintesis",
+          "surface": "fotosintesis",
+          "es": "Proceso que usa luz para formar glucosa a partir de CO2 y agua.",
+          "en": "Photosynthesis"
+        },
+        {
+          "key": "respiracion_celular",
+          "surface": "respiracion celular",
+          "es": "Proceso que descompone glucosa para obtener ATP.",
+          "en": "Process that breaks down glucose to release usable energy as ATP."
+        },
+        {
+          "key": "cloroplasto",
+          "surface": "cloroplasto",
+          "es": "Organelo donde ocurre la fotosintesis.",
+          "en": "Chloroplast"
+        },
+        {
+          "key": "mitocondria",
+          "surface": "mitocondria",
+          "es": "Organelo donde ocurre principalmente la respiracion celular.",
+          "en": "Mitochondrion"
+        },
+        {
+          "key": "atp",
+          "surface": "ATP",
+          "es": "Molecula que almacena y transfiere energia util en la celula.",
+          "en": "Molecule that stores and transfers usable energy in cells."
+        }
+      ],
       "answer": {
         "kind": "card_sort",
         "columns": [
@@ -271,9 +394,7 @@
     {
       "id": "bank_biomol_ms_001",
       "title": "Biomolecule Monomers",
-      "teks": [
-        "BIO.5A"
-      ],
+      "teks": ["BIO.5A"],
       "topic": "Biochemistry",
       "gradeBand": "HS",
       "difficulty": "medium",
@@ -283,7 +404,39 @@
         "kind": "text",
         "text": "Large biological molecules (macromolecules) are assembled from smaller repeating subunits called monomers."
       },
-      "prompt": "Which of the following are monomers that make up larger biological macromolecules? Select ALL that apply.",
+      "prompt": "Which of the following are [[monomers|key=monomeros]] that make up larger [[macromolecules|key=macromoleculas]]? Select ALL that apply.",
+      "glossary": [
+        {
+          "key": "monomeros",
+          "surface": "monomeros",
+          "es": "Subunidades pequenas que se unen para formar polimeros.",
+          "en": "Small building-block molecules that join together to form polymers."
+        },
+        {
+          "key": "macromoleculas",
+          "surface": "macromoleculas",
+          "es": "Moleculas biologicas grandes como proteinas, carbohidratos y acidos nucleicos.",
+          "en": "Large biological molecules such as proteins, carbohydrates, lipids, and nucleic acids."
+        },
+        {
+          "key": "aminoacido",
+          "surface": "aminoacido",
+          "es": "Monomero que forma proteinas.",
+          "en": "Monomer that links together to form proteins."
+        },
+        {
+          "key": "nucleotido",
+          "surface": "nucleotido",
+          "es": "Monomero que forma ADN y ARN.",
+          "en": "Monomer that makes up DNA and RNA."
+        },
+        {
+          "key": "glucosa",
+          "surface": "glucosa",
+          "es": "Azucar simple, monomero de varios carbohidratos.",
+          "en": "Glucose"
+        }
+      ],
       "choices": [
         {
           "id": "A",
@@ -304,22 +457,14 @@
       ],
       "answer": {
         "kind": "multi",
-        "choiceIds": [
-          "A",
-          "C",
-          "D"
-        ]
+        "choiceIds": ["A", "C", "D"]
       },
-      "misconceptionTags": [
-        "monomer_polymer_confusion"
-      ]
+      "misconceptionTags": ["monomer_polymer_confusion"]
     },
     {
       "id": "bank_scimethod_mc_001",
       "title": "Control Group Identification",
-      "teks": [
-        "BIO.3A"
-      ],
+      "teks": ["BIO.3A"],
       "topic": "Scientific Methods",
       "gradeBand": "HS",
       "difficulty": "easy",
@@ -329,7 +474,33 @@
         "kind": "text",
         "text": "A student tests whether fertilizer increases plant height. She grows 10 plants with fertilizer and 10 plants with only water, keeping all other conditions identical."
       },
-      "prompt": "Which group of plants is the control group?",
+      "prompt": "Which group of plants is the [[control group|key=grupo_control]]?",
+      "glossary": [
+        {
+          "key": "grupo_control",
+          "surface": "grupo control",
+          "es": "Grupo que no recibe el tratamiento experimental y sirve de comparacion.",
+          "en": "Group in an experiment that does not receive the treatment and is used for comparison."
+        },
+        {
+          "key": "variable",
+          "surface": "variable",
+          "es": "Factor que puede cambiar en un experimento.",
+          "en": "A factor in an experiment that can change or be manipulated."
+        },
+        {
+          "key": "hipotesis",
+          "surface": "hipotesis",
+          "es": "Explicacion o prediccion que puede ponerse a prueba.",
+          "en": "A testable explanation or prediction based on observations."
+        },
+        {
+          "key": "datos",
+          "surface": "datos",
+          "es": "Informacion recolectada durante un experimento.",
+          "en": "Recorded observations and measurements collected during an investigation."
+        }
+      ],
       "choices": [
         {
           "id": "A",
@@ -352,16 +523,12 @@
         "kind": "single",
         "choiceId": "B"
       },
-      "misconceptionTags": [
-        "control_vs_experimental_confusion"
-      ]
+      "misconceptionTags": ["control_vs_experimental_confusion"]
     },
     {
       "id": "bank_ecology_mc_001",
       "title": "Energy Loss in Food Chains",
-      "teks": [
-        "BIO.11A"
-      ],
+      "teks": ["BIO.11A"],
       "topic": "Ecology",
       "gradeBand": "HS",
       "difficulty": "medium",
@@ -370,7 +537,33 @@
       "stimulus": {
         "kind": "none"
       },
-      "prompt": "Why does the amount of available energy decrease at each higher trophic level in a food chain?",
+      "prompt": "Why does available [[energy|key=energia]] decrease at each higher [[trophic level|key=nivel_trofico]] in a food chain?",
+      "glossary": [
+        {
+          "key": "energia",
+          "surface": "energia",
+          "es": "Capacidad de realizar trabajo en sistemas biologicos.",
+          "en": "The ability to do work, transferred through biological systems."
+        },
+        {
+          "key": "nivel_trofico",
+          "surface": "nivel trofico",
+          "es": "Posicion de un organismo en una cadena alimentaria.",
+          "en": "A feeding position in a food chain or food web."
+        },
+        {
+          "key": "metabolismo",
+          "surface": "metabolismo",
+          "es": "Conjunto de reacciones quimicas que ocurren en un organismo.",
+          "en": "All chemical reactions in an organism that sustain life."
+        },
+        {
+          "key": "cadena_alimentaria",
+          "surface": "cadena alimentaria",
+          "es": "Ruta por la cual la energia pasa de un organismo a otro.",
+          "en": "A sequence showing how energy passes from one organism to another."
+        }
+      ],
       "choices": [
         {
           "id": "A",
@@ -393,16 +586,12 @@
         "kind": "single",
         "choiceId": "B"
       },
-      "misconceptionTags": [
-        "energy_conservation_confusion"
-      ]
+      "misconceptionTags": ["energy_conservation_confusion"]
     },
     {
       "id": "bank_evolution_mc_001",
       "title": "Natural Selection in a Population",
-      "teks": [
-        "BIO.9A"
-      ],
+      "teks": ["BIO.9A"],
       "topic": "Evolution",
       "gradeBand": "HS",
       "difficulty": "medium",
@@ -412,7 +601,33 @@
         "kind": "text",
         "text": "A population of beetles lives on dark tree bark. Green beetles are easily spotted and eaten by birds, while dark-brown beetles blend in and survive to reproduce."
       },
-      "prompt": "Which outcome best describes what will happen to this beetle population over many generations?",
+      "prompt": "Which outcome best describes what will happen to this beetle [[population|key=poblacion]] over many generations due to [[natural selection|key=seleccion_natural]]?",
+      "glossary": [
+        {
+          "key": "poblacion",
+          "surface": "poblacion",
+          "es": "Grupo de organismos de la misma especie que vive en una zona.",
+          "en": "Members of the same species living in the same area at the same time."
+        },
+        {
+          "key": "seleccion_natural",
+          "surface": "seleccion natural",
+          "es": "Proceso por el cual rasgos ventajosos se vuelven mas comunes.",
+          "en": "Process where individuals with advantageous traits are more likely to survive and reproduce."
+        },
+        {
+          "key": "adaptacion",
+          "surface": "adaptacion",
+          "es": "Rasgo heredable que mejora la supervivencia o reproduccion.",
+          "en": "An inherited trait that improves survival or reproduction in a specific environment."
+        },
+        {
+          "key": "mutacion",
+          "surface": "mutacion",
+          "es": "Cambio en la secuencia del ADN.",
+          "en": "A change in DNA sequence that can introduce new traits."
+        }
+      ],
       "choices": [
         {
           "id": "A",
@@ -443,9 +658,7 @@
     {
       "id": "bank_genetics_num_001",
       "title": "Tt × Tt Cross: Dominant Phenotype %",
-      "teks": [
-        "BIO.8A"
-      ],
+      "teks": ["BIO.8A"],
       "topic": "Genetics",
       "gradeBand": "HS",
       "difficulty": "medium",
@@ -455,7 +668,33 @@
         "kind": "text",
         "text": "Tall (T) is dominant over short (t) in pea plants. Two heterozygous tall plants (Tt) are crossed."
       },
-      "prompt": "What percentage of the offspring are expected to show the TALL phenotype? Enter a whole number.",
+      "prompt": "What percentage of offspring from a [[heterozygous|key=heterocigoto]] cross are expected to show the TALL [[phenotype|key=fenotipo]]? Enter a whole number.",
+      "glossary": [
+        {
+          "key": "heterocigoto",
+          "surface": "heterocigoto",
+          "es": "Individuo con dos alelos diferentes para un gen (por ejemplo, Tt).",
+          "en": "Having two different alleles for a gene (for example, Tt)."
+        },
+        {
+          "key": "fenotipo",
+          "surface": "fenotipo",
+          "es": "Caracteristica observable de un organismo.",
+          "en": "Observable characteristics of an organism."
+        },
+        {
+          "key": "genotipo",
+          "surface": "genotipo",
+          "es": "Combinacion de alelos que posee un organismo.",
+          "en": "Genetic makeup of an organism; the allele combination it carries."
+        },
+        {
+          "key": "alelo",
+          "surface": "alelo",
+          "es": "Version alternativa de un gen.",
+          "en": "One version of a gene at a specific locus."
+        }
+      ],
       "answer": {
         "kind": "numeric",
         "value": 75
@@ -464,9 +703,7 @@
     {
       "id": "bank_photo_evpair_001",
       "title": "Photosynthesis Evidence Pair",
-      "teks": [
-        "BIO.4B"
-      ],
+      "teks": ["BIO.4B"],
       "topic": "Photosynthesis",
       "gradeBand": "HS",
       "difficulty": "hard",
@@ -476,7 +713,33 @@
         "kind": "text",
         "text": "A scientist places a plant in a sealed container with elevated CO₂. After 24 hours in sunlight, the CO₂ level drops and the plant's mass increases."
       },
-      "prompt": "Part A: Which process most directly explains the decrease in CO₂ inside the container?\nPart B: Which molecule is the primary organic product of that process in the plant?",
+      "prompt": "Part A: Which process ([[photosynthesis|key=fotosintesis]] or [[cellular respiration|key=respiracion_celular]]) best explains the decrease in CO₂?\nPart B: Which molecule is the primary organic product (for example [[glucose|key=glucosa]])?",
+      "glossary": [
+        {
+          "key": "fotosintesis",
+          "surface": "fotosintesis",
+          "es": "Proceso por el cual las plantas usan luz para sintetizar glucosa.",
+          "en": "Photosynthesis"
+        },
+        {
+          "key": "respiracion_celular",
+          "surface": "respiracion celular",
+          "es": "Proceso que convierte la energia de la glucosa en ATP.",
+          "en": "Cellular respiration"
+        },
+        {
+          "key": "glucosa",
+          "surface": "glucosa",
+          "es": "Azucar producida por fotosintesis y usada como fuente de energia.",
+          "en": "Glucose"
+        },
+        {
+          "key": "co2",
+          "surface": "CO2",
+          "es": "Dioxido de carbono, gas reactivo en fotosintesis.",
+          "en": "Carbon dioxide"
+        }
+      ],
       "choices": [
         {
           "id": "A",

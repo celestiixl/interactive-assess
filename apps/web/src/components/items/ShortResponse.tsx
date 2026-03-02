@@ -1,10 +1,10 @@
-  "use client";
+"use client";
 
-  import BilingualText from "@/components/student/BilingualText";
-  import { GlossaryText } from "@/components/glossary";
-  import { useState } from "react";
-  import { useLang } from "@/lib/useLang";
-  import type { ItemShort } from "@/types/item";
+import BilingualText from "@/components/student/BilingualText";
+import { useState } from "react";
+import { useLang } from "@/lib/useLang";
+import type { ItemShort } from "@/types/item";
+
 export default function ShortResponse({
   item,
   onChecked,
@@ -39,17 +39,15 @@ export default function ShortResponse({
 
   return (
     <div className="space-y-3">
-        <div className="text-lg font-semibold">
-          {item.glossary && item.glossary.length > 0 ? (
-            <GlossaryText
-              text={item.stem}
-              glossary={item.glossary}
-              defaultLang={lang === "es" ? "es" : "en"}
-            />
-          ) : (
-            <BilingualText text={item.stem} showSupport={lang === "es"} />
-          )}
-        </div>
+      <div className="text-lg font-semibold">
+        {
+          <BilingualText
+            text={item.stem}
+            showSupport={lang === "es"}
+            glossary={item.glossary ?? []}
+          />
+        }
+      </div>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}

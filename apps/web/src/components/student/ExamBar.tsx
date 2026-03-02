@@ -20,7 +20,7 @@ export function ExamBar({
   flagged?: boolean;
 }) {
   return (
-    <div className="sticky top-0 z-30 border-b border-slate-200 bg-white/0/85 backdrop-blur">
+    <div className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex flex-wrap items-center justify-between gap-3 py-3">
           <div className="min-w-0">
@@ -55,7 +55,7 @@ function ModeToggle({
   onChange?: (m: "learn" | "exam") => void;
 }) {
   return (
-    <div className="flex rounded-xl border border-slate-200 bg-white/0 p-1">
+    <div className="flex rounded-xl border border-slate-200 bg-white/70 p-1">
       <button
         onClick={() => onChange?.("learn")}
         className={[
@@ -98,7 +98,7 @@ function ToolButton({
         "rounded-xl border px-3 py-2 text-xs hover:bg-slate-50",
         active
           ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-          : "border-slate-200 bg-white/0 text-slate-700",
+          : "border-slate-200 bg-white/70 text-slate-700",
       ].join(" ")}
     >
       {label}

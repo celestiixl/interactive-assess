@@ -178,8 +178,8 @@ export default function PracticeByCategory() {
   return (
     <AppShell activeKey="practice">
       <div className="ia-container py-6 space-y-6 text-[15px] leading-normal">
-        <div className="sticky top-0 z-50 /90 backdrop-blur border-b border-slate-200">
-          <div className="sticky top-0 z-50 /90 backdrop-blur border-b border-slate-200 flex items-center justify-between">
+        <div className="sticky top-0 z-50 bg-white/85 backdrop-blur border-b border-slate-200">
+          <div className="flex items-center justify-between">
             <ExamBar
               title={`Practice • ${rcParam || rcLabels[0]}`}
               metaLeft={`Item ${safeIndex + 1} of ${mergedItems.length || 0}`}
@@ -220,7 +220,7 @@ export default function PracticeByCategory() {
             <div className="flex items-center gap-2 text-sm text-slate-700">
               <span className="text-slate-500">Support language:</span>
               <select
-                className="rounded-md border bg-white/0 px-2 py-1"
+                className="rounded-md border border-slate-300 bg-white/80 px-2 py-1 text-slate-900"
                 value={supports.state.supportLanguage}
                 onChange={(e) =>
                   supports.setSupportLanguage(e.target.value as any)
@@ -281,6 +281,7 @@ export default function PracticeByCategory() {
                       supportLanguage={supports.state.supportLanguage}
                       classNameEn="mt-2 text-sm text-slate-700 whitespace-pre-wrap"
                       classNameSupport="mt-1 text-xs text-slate-500 italic whitespace-pre-wrap"
+                      glossary={(safeItem as any)?.glossary ?? []}
                     />
                   </div>
                 </div>

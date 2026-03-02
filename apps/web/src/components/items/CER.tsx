@@ -1,6 +1,6 @@
 "use client";
 
-import { BilingualText } from "@/components/student/BilingualText";
+import GlossaryText from "@/components/GlossaryText";
 import { useState } from "react";
 import { useLang } from "@/lib/useLang";
 import type { ItemCER, CerResponse } from "@/types/item";
@@ -208,7 +208,16 @@ export default function CER({
                         {ev.sourceLabel}
                       </div>
                     )}
-                    {ev?.text}
+                    {ev?.text && item.glossary?.length ? (
+                      <GlossaryText
+                        text={ev.text}
+                        glossary={item.glossary}
+                          defaultLang={lang === "es" ? "es" : "en"}
+                          showSupport={lang === "es"}
+                      />
+                    ) : (
+                      ev?.text
+                    )}
                   </div>
                 );
               })}
@@ -277,7 +286,18 @@ export default function CER({
                 {lang === "es" ? "Paso 1: Reclamo" : "Step 1: Claim"}
               </h3>
               {item.context && (
-                <p className="text-sm text-slate-600 mt-1">{item.context}</p>
+                <p className="text-sm text-slate-600 mt-1">
+                  {item.glossary?.length ? (
+                    <GlossaryText
+                      text={item.context}
+                      glossary={item.glossary}
+                      defaultLang={lang === "es" ? "es" : "en"}
+                      showSupport={lang === "es"}
+                    />
+                  ) : (
+                    item.context
+                  )}
+                </p>
               )}
             </div>
 
@@ -324,7 +344,16 @@ export default function CER({
                   {lang === "es" ? "Reclamo (dado)" : "Given Claim"}
                 </label>
                 <div className="p-3 rounded-lg bg-slate-100 border border-slate-300 text-sm">
-                  {item.claim.text}
+                  {item.glossary?.length ? (
+                    <GlossaryText
+                      text={item.claim.text}
+                      glossary={item.glossary}
+                      defaultLang={lang === "es" ? "es" : "en"}
+                      showSupport={lang === "es"}
+                    />
+                  ) : (
+                    item.claim.text
+                  )}
                 </div>
               </div>
             ) : null}
@@ -392,7 +421,16 @@ export default function CER({
                         </div>
                       )}
                       <p className="text-sm text-slate-900 mt-1">
-                        {evidence.text}
+                        {item.glossary?.length ? (
+                          <GlossaryText
+                            text={evidence.text}
+                            glossary={item.glossary}
+                            defaultLang={lang === "es" ? "es" : "en"}
+                            showSupport={lang === "es"}
+                          />
+                        ) : (
+                          evidence.text
+                        )}
                       </p>
                     </div>
                   </div>

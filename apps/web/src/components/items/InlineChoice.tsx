@@ -1,6 +1,7 @@
 "use client";
 
 import BilingualText from "@/components/student/BilingualText";
+import GlossaryText from "@/components/GlossaryText";
 
 import { useMemo, useState } from "react";
 import { useLang } from "@/lib/useLang";
@@ -88,7 +89,18 @@ export default function InlineChoice({
       <div className="text-base leading-relaxed">
         {parts.map((p, i) =>
           p.t === "text" ? (
-            <span key={i}>{p.v}</span>
+            <span key={i}>
+              {item?.glossary && item.glossary.length ? (
+                <GlossaryText
+                  text={p.v}
+                  glossary={item.glossary}
+                  defaultLang={lang === "es" ? "es" : "en"}
+                  showSupport={lang === "es"}
+                />
+              ) : (
+                p.v
+              )}
+            </span>
           ) : (
             <span
               key={i}
@@ -117,6 +129,7 @@ export default function InlineChoice({
                       <BilingualText
                         text={label as any}
                         showSupport={lang === "es"}
+                        glossary={item?.glossary ?? []}
                       />
                     }
                   </button>

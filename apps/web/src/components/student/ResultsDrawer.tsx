@@ -44,7 +44,7 @@ export default function ResultsDrawer({
       />
 
       {/* Panel */}
-      <aside className="absolute right-0 top-0 h-full w-full max-w-[420px] bg-white/0 shadow-2xl border-l flex flex-col">
+      <aside className="absolute right-0 top-0 h-full w-full max-w-[420px] bg-white/95 shadow-2xl border-l flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between border-b px-4 py-3">
           <div className="font-semibold">Check</div>

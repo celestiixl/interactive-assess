@@ -44,7 +44,7 @@ export default function HotQuestionStudentCard() {
   const dateLabel = getTodayKeyForUI();
 
   return (
-    <div className="/0 p-5 ia-card-soft ">
+    <div className="p-5 ia-card-soft">
       <div className="mb-2 flex items-start justify-between gap-3">
         <div>
           <div className="text-sm font-semibold text-slate-900">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import GlossaryText from "@/components/GlossaryText";
 import type {
   AssignmentSummary,
   StudentSummary,
@@ -213,7 +214,17 @@ export default function AssignmentSummaryClient({
                             );
                             return (
                               <li key={id} className="text-sm">
-                                {it?.title || id} —{" "}
+                                {it?.title ? (
+                                  <GlossaryText
+                                    text={it.title}
+                                    glossary={[]}
+                                    defaultLang="en"
+                                    showSupport={false}
+                                  />
+                                ) : (
+                                  id
+                                )}{" "}
+                                —{" "}
                                 {it ? `${Math.round(it.accuracy * 100)}%` : "—"}
                               </li>
                             );
@@ -254,7 +265,14 @@ export default function AssignmentSummaryClient({
             <tbody>
               {itemSummaries.map((it) => (
                 <tr key={it.itemId} className="border-t">
-                  <td className="p-3 align-top max-w-xl">{it.title}</td>
+                  <td className="p-3 align-top max-w-xl">
+                    <GlossaryText
+                      text={it.title}
+                      glossary={[]}
+                      defaultLang="en"
+                      showSupport={false}
+                    />
+                  </td>
                   <td className="p-3 align-top">
                     <div>{Math.round(it.accuracy * 100)}%</div>
                     <div className="mt-1">
