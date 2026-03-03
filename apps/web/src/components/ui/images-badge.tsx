@@ -75,7 +75,7 @@ export function ImagesBadge({
         <div className="absolute inset-0 rounded-lg bg-linear-to-b from-amber-400 to-amber-500 shadow-sm dark:from-amber-500 dark:to-amber-600">
           {/* Folder Tab */}
           <div
-            className="absolute left-0.5 rounded-t-[2px] bg-linear-to-b from-amber-300 to-amber-400 dark:from-amber-400 dark:to-amber-500"
+            className="absolute left-0.5 rounded-t-xs bg-linear-to-b from-amber-300 to-amber-400 dark:from-amber-400 dark:to-amber-500"
             style={{
               top: -tabHeight * 0.65,
               width: tabWidth,

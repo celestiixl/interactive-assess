@@ -134,7 +134,7 @@ export default function Tooltip({
         typeof document !== "undefined" &&
         createPortal(
           <div
-            className="pointer-events-none fixed z-[9999]"
+            className="pointer-events-none fixed z-9999"
             style={{
               top: coords.top,
               left: coords.left,
