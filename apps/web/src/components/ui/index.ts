@@ -6,3 +6,14 @@ export { default as CardBody } from "./CardBody";
 export { default as StatCard } from "./StatCard";
 export { default as MagicBento } from "./MagicBento";
 export type { MagicBentoProps } from "./MagicBento";
+export { default as SpotlightCard } from "./SpotlightCard";
+export type { SpotlightCardProps } from "./SpotlightCard";
+export { default as GlassSurface } from "./GlassSurface";
+export type { GlassSurfaceProps } from "./GlassSurface";
+export { default as BlurText } from "./BlurText";
+export type { BlurTextProps } from "./BlurText";
+export { default as CountUp } from "./CountUp";
+export type { CountUpProps } from "./CountUp";
+export { default as ShinyText } from "./ShinyText";
+export type { ShinyTextProps } from "./ShinyText";
+
