@@ -38,6 +38,16 @@ export function Sidebar({
             description: "Run checks and mastery practice",
           },
           {
+            href: "/student/learn",
+            label: "BioSpark Quest",
+            description: "Micro-challenges, adaptive difficulty, XP",
+          },
+          {
+            href: "/student/profile",
+            label: "My Profile",
+            description: "XP, badges, streak, and mastery",
+          },
+          {
             href: "/teacher/dashboard",
             label: "Teacher Dashboard",
             description: "Builder, analytics, and assignment flow",

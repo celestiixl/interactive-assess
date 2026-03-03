@@ -1,161 +1,252 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import Link from "next/link";
-import { PageContent, PageBanner, Card } from "@/components/ui";
+import { useEffect, useMemo, useRef, useState } from "react";
+import ThemeToggle from "@/components/ia/ThemeToggle";
+import type { Challenge, StudentProfile } from "@/types/challenge";
 import {
-  formatNextReview,
-  getReviewQueue,
-  updateRecord,
-} from "@/lib/spacedRepetition";
+  BADGE_MILESTONES,
+  CHALLENGES,
+  CHALLENGE_WHY_MATTERS,
+  getTodaysHook,
+  levelFromXP,
+  levelTitle,
+} from "@/lib/challengeData";
+import { useAdaptiveEngine } from "@/components/challenges/AdaptiveEngine";
+import AdaptiveEngine from "@/components/challenges/AdaptiveEnginePanel";
+import Dashboard from "@/components/challenges/Dashboard";
+import ModeSelector from "@/components/challenges/ModeSelector";
+import ChallengeCard from "@/components/challenges/ChallengeCard";
+import BadgeShelf from "@/components/challenges/BadgeShelf";
+import StreakTracker from "@/components/challenges/StreakTracker";
+import RankingsPreview from "@/components/challenges/RankingsPreview";
+import { QUEST_LEADER_ROWS } from "@/lib/questRankings";
+import StudentFloatingDock from "@/components/student/StudentFloatingDock";
+import {
+  DEFAULT_PROFILE,
+  LAST_LOGIN_KEY,
+  loadStudentProfile,
+  saveStudentProfile,
+} from "@/lib/studentProfile";
 
-type TeksItem = {
-  id: string;
-  label: string;
-};
+function ensureDailyStreak(profile: StudentProfile): StudentProfile {
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const last = window.localStorage.getItem(LAST_LOGIN_KEY);
+    if (last === today) return profile;
 
-const TEKS_ITEMS: TeksItem[] = [
-  { id: "BIO.5A", label: "Biomolecules" },
-  { id: "BIO.5C", label: "Transport & homeostasis" },
-  { id: "BIO.6A", label: "Cell cycle & DNA replication" },
-  { id: "BIO.6C", label: "Cell cycle disruption & cancer" },
-  { id: "BIO.7B", label: "Protein synthesis" },
-  { id: "BIO.8B", label: "Genetic crosses" },
-  { id: "BIO.11A", label: "Photosynthesis & respiration" },
-  { id: "BIO.13C", label: "Carbon & nitrogen cycles" },
-];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    const streak = last === yesterday ? profile.streak + 1 : 1;
+    window.localStorage.setItem(LAST_LOGIN_KEY, today);
+    return { ...profile, streak };
+  } catch {
+    return profile;
+  }
+}
+
+function masteryPercent(correct: number, total: number): number {
+  if (!total) return 0;
+  return Math.round((correct / total) * 100);
+}
+
+function getBadgeUpdates(profile: StudentProfile): string[] {
+  const badgeSet = new Set(profile.badges);
+  const hasAnyCorrect = Object.values(profile.topicAccuracy).some((row) => row.correct > 0);
+  const cell = profile.topicAccuracy["Cell Biology"];
+  const cellPct = cell ? masteryPercent(cell.correct, cell.total) : 0;
+
+  if (hasAnyCorrect) badgeSet.add("first-correct");
+  if (profile.streak >= 5) badgeSet.add("streak-5");
+  if (profile.xp >= 100) badgeSet.add("xp-100");
+  if (profile.xp >= 300) badgeSet.add("xp-300");
+  if (cellPct >= 80 && (cell?.total ?? 0) >= 3) badgeSet.add("mastery-cell");
+
+  return [...badgeSet];
+}
+
+function pickNextChallenge(
+  allChallenges: Challenge[],
+  topic: string,
+  difficulty: 1 | 2 | 3,
+  excludeId?: string,
+): Challenge {
+  const sameTopic = allChallenges.filter((c) => c.topic === topic && c.id !== excludeId);
+  const exact = sameTopic.filter((c) => c.difficulty === difficulty);
+  if (exact.length) return exact[Math.floor(Math.random() * exact.length)];
+
+  const close = sameTopic.filter((c) => Math.abs(c.difficulty - difficulty) <= 1);
+  if (close.length) return close[Math.floor(Math.random() * close.length)];
+
+  const fallback = allChallenges.filter((c) => c.id !== excludeId);
+  return fallback[Math.floor(Math.random() * fallback.length)];
+}
 
 export default function StudentLearningHubPage() {
-  const [version, setVersion] = useState(0);
+  const challengeRef = useRef<HTMLDivElement | null>(null);
+  const [profile, setProfile] = useState<StudentProfile>(DEFAULT_PROFILE);
+  const [ready, setReady] = useState(false);
+  const [showLevelBurst, setShowLevelBurst] = useState(false);
 
-  const queue = useMemo(
-    () => getReviewQueue(TEKS_ITEMS.map((t) => t.id)),
-    [version],
-  );
+  useEffect(() => {
+    try {
+      const withStreak = ensureDailyStreak(loadStudentProfile());
+      setProfile(withStreak);
+      saveStudentProfile(withStreak);
+    } catch {
+      setProfile(ensureDailyStreak(DEFAULT_PROFILE));
+    }
+    setReady(true);
+  }, []);
 
-  const dueItems = queue.filter((q) => q.neverReviewed || q.daysOverdue > 0);
-  const firstDue = dueItems[0];
+  useEffect(() => {
+    if (!ready) return;
+    saveStudentProfile(profile);
+  }, [profile, ready]);
 
-  function markReview(teksId: string, quality: number) {
-    updateRecord(teksId, quality);
-    setVersion((v) => v + 1);
+  const { getDifficultyForTopic, registerAttempt, topicSummaries } = useAdaptiveEngine(profile);
+
+  const topics = useMemo(() => Array.from(new Set(CHALLENGES.map((c) => c.topic))), []);
+  const [topicIndex, setTopicIndex] = useState(0);
+  const activeTopic = topics[topicIndex % topics.length] ?? "Cell Biology";
+
+  const [challenge, setChallenge] = useState<Challenge>(() => {
+    return pickNextChallenge(CHALLENGES, "Cell Biology", 1);
+  });
+
+  useEffect(() => {
+    const difficulty = getDifficultyForTopic(activeTopic);
+    setChallenge((prev) => pickNextChallenge(CHALLENGES, activeTopic, difficulty, prev.id));
+  }, [activeTopic]);
+
+  const masteryRows = useMemo(() => {
+    return topics.map((topic) => {
+      const row = profile.topicAccuracy[topic] ?? { correct: 0, total: 0 };
+      return { topic, percent: masteryPercent(row.correct, row.total) };
+    });
+  }, [profile.topicAccuracy, topics]);
+
+  const levelProgress = profile.xp % 100;
+  const availableModes = {
+    video: Boolean(challenge.modes.video),
+    interactive: Boolean(challenge.modes.interactive),
+    visual: Boolean(challenge.modes.visual),
+    text: true,
+  };
+
+  function handleModeSelect(nextMode: StudentProfile["preferredMode"]) {
+    setProfile((prev) => ({ ...prev, preferredMode: nextMode }));
+  }
+
+  function handleResult(correct: boolean, xpGained: number) {
+    setProfile((prev) => {
+      const topicStats = prev.topicAccuracy[challenge.topic] ?? { correct: 0, total: 0 };
+      const nextTopicStats = {
+        correct: topicStats.correct + (correct ? 1 : 0),
+        total: topicStats.total + 1,
+      };
+
+      const nextXP = prev.xp + xpGained;
+      const nextLevel = levelFromXP(nextXP);
+
+      const updated: StudentProfile = {
+        ...prev,
+        xp: nextXP,
+        level: nextLevel,
+        topicAccuracy: {
+          ...prev.topicAccuracy,
+          [challenge.topic]: nextTopicStats,
+        },
+      };
+
+      updated.badges = getBadgeUpdates(updated);
+      registerAttempt(challenge.topic, updated);
+
+      if (nextLevel > prev.level) {
+        setShowLevelBurst(true);
+        window.setTimeout(() => setShowLevelBurst(false), 1500);
+      }
+
+      return updated;
+    });
+  }
+
+  function nextChallenge() {
+    setTopicIndex((prev) => prev + 1);
+    const nextTopic = topics[(topicIndex + 1) % topics.length] ?? activeTopic;
+    const difficulty = getDifficultyForTopic(nextTopic);
+    setChallenge((prev) => pickNextChallenge(CHALLENGES, nextTopic, difficulty, prev.id));
+  }
+
+  function quickStart() {
+    challengeRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  if (!ready) {
+    return <main className="p-6 text-slate-900">Loading BioSpark Quest...</main>;
   }
 
   return (
-    <main className="text-slate-900">
-      <PageBanner
-        title="Learning Hub"
-        subtitle="Spaced-repetition review queue based on your last performance."
-      >
-        <div className="flex flex-wrap items-center gap-3">
-          <Link
-            href="/student/dashboard"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="/student/assignments"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
-          >
-            My Assignments
-          </Link>
+    <main className="ia-vh-page relative h-dvh overflow-hidden px-3 py-3 text-slate-900 sm:px-4 sm:py-4">
+      <div className="ia-vh-grid grid h-full min-h-0 grid-rows-[auto_1fr] gap-3">
+        <Dashboard
+          profile={profile}
+          levelTitle={levelTitle(profile.level)}
+          xpInLevel={levelProgress}
+          xpToNextLevel={100}
+          dailyHook={getTodaysHook()}
+          topicMastery={masteryRows}
+          onQuickStart={quickStart}
+        />
+
+        <div className="ia-vh-grid grid min-h-0 gap-3 lg:grid-cols-[1.25fr_1fr]">
+          <div className="ia-vh-grid grid min-h-0 grid-rows-[auto_1fr_auto] gap-3">
+            <ModeSelector
+              selectedMode={profile.preferredMode}
+              availableModes={availableModes}
+              onSelect={handleModeSelect}
+            />
+
+            <div ref={challengeRef} className="ia-vh-scroll min-h-0 overflow-y-auto pr-1">
+              <ChallengeCard
+                challenge={challenge}
+                mode={profile.preferredMode}
+                whyMatters={CHALLENGE_WHY_MATTERS[challenge.id] ?? "Biology connects directly to your health and community decisions."}
+                onResult={handleResult}
+                onNext={nextChallenge}
+              />
+            </div>
+
+            <AdaptiveEngine topicSummaries={topicSummaries} />
+          </div>
+
+          <div className="ia-vh-grid grid min-h-0 grid-rows-[auto_1fr_auto] gap-3">
+            <StreakTracker streak={profile.streak} />
+
+            <div className="ia-vh-scroll min-h-0 space-y-3 overflow-y-auto pr-1">
+              <BadgeShelf earnedBadges={profile.badges} />
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-xs text-slate-600">
+                <div className="font-semibold text-slate-900">Quest Titles</div>
+                <div className="mt-1">Cell Apprentice → DNA Decoder → Ecosystem Ranger → Genome Guardian → Apex Predator</div>
+                <div className="mt-3 font-semibold text-slate-900">Unlock Milestones</div>
+                <div className="mt-1">{BADGE_MILESTONES.map((b) => b.label).join(" • ")}</div>
+              </div>
+            </div>
+
+            <RankingsPreview rows={QUEST_LEADER_ROWS} />
+          </div>
         </div>
-      </PageBanner>
+      </div>
 
-      <PageContent className="py-8">
-        <div className="grid gap-4 sm:grid-cols-3">
-          <Card variant="sm">
-            <div className="text-sm font-semibold text-slate-800">Due now</div>
-            <div className="mt-2 text-2xl font-bold">{dueItems.length}</div>
-            <div className="mt-1 text-xs text-slate-600">
-              TEKS standards ready for review
-            </div>
-          </Card>
-          <Card variant="sm">
-            <div className="text-sm font-semibold text-slate-800">
-              Tracked TEKS
-            </div>
-            <div className="mt-2 text-2xl font-bold">{TEKS_ITEMS.length}</div>
-            <div className="mt-1 text-xs text-slate-600">
-              Loaded into this learning queue
-            </div>
-          </Card>
-          <Card variant="sm">
-            <div className="text-sm font-semibold text-slate-800">
-              Next practice
-            </div>
-            <div className="mt-2 text-sm font-semibold text-slate-900">
-              {firstDue ? firstDue.teksId : "No due topics"}
-            </div>
-            <div className="mt-3">
-              <Link
-                href={
-                  firstDue
-                    ? `/practice?focus=${encodeURIComponent(firstDue.teksId)}`
-                    : "/practice"
-                }
-                className="inline-flex rounded-xl bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800"
-              >
-                Start review
-              </Link>
-            </div>
-          </Card>
+      {showLevelBurst && (
+        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
+          <div className="ia-level-burst text-center">
+            <div className="text-3xl font-extrabold text-emerald-600">Level Up!</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900">{levelTitle(profile.level)}</div>
+          </div>
         </div>
+      )}
 
-        <div className="mt-6">
-          <Card>
-            <div className="text-sm font-semibold text-slate-900">
-              Review queue
-            </div>
-            <div className="mt-1 text-xs text-slate-600">
-              Simulate outcomes to update SM-2 spacing immediately.
-            </div>
-
-            <div className="mt-4 grid gap-3">
-              {queue.map((q) => {
-                const teks = TEKS_ITEMS.find((t) => t.id === q.teksId);
-                return (
-                  <div
-                    key={q.teksId}
-                    className="rounded-2xl border border-slate-200 bg-white p-4"
-                  >
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div>
-                        <div className="text-sm font-semibold text-slate-900">
-                          {q.teksId} • {teks?.label ?? "TEKS topic"}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600">
-                          {q.neverReviewed
-                            ? "Never reviewed"
-                            : formatNextReview(q.nextReviewAt)}
-                        </div>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => markReview(q.teksId, 2)}
-                          className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-                        >
-                          Struggled (2)
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => markReview(q.teksId, 4)}
-                          className="rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
-                        >
-                          Got it (4)
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </Card>
-        </div>
-      </PageContent>
+      <StudentFloatingDock />
+      <ThemeToggle />
     </main>
   );
 }

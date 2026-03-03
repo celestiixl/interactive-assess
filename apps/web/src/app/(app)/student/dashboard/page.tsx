@@ -3,6 +3,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import type { Segment } from "@/types/segment";
 import AccommodationsButton from "@/components/student/AccommodationsButton";
+import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
@@ -254,7 +255,7 @@ export default function StudentDashboard() {
   }, [segments]);
 
   return (
-    <main className="text-slate-900">
+    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
       <PageBanner
         title="Student Dashboard"
         subtitle="Your personal mastery tracker."
@@ -279,11 +280,24 @@ export default function StudentDashboard() {
           >
             Back to Assessment Lab
           </Link>
+          <Link
+            href="/student/learn"
+            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+          >
+            Open BioSpark Quest
+          </Link>
+          <Link
+            href="/student/profile"
+            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+          >
+            My Profile
+          </Link>
         </div>
       </PageBanner>
-      <PageContent className="py-8">
-        {/* MAIN CONTENT SURFACE */}
-        <Card>
+      <PageContent className="flex-1 min-h-0 py-4">
+        <div className="ia-vh-scroll h-full min-h-0 overflow-y-auto pr-1">
+          {/* MAIN CONTENT SURFACE */}
+          <Card>
           {/* Biome banner */}
           <div className="mb-5 flex flex-wrap items-start justify-between gap-3 rounded-2xl border border-white/20 bg-linear-to-r from-violet-500 via-purple-400 to-amber-400 p-5">
             <div>
@@ -439,6 +453,9 @@ export default function StudentDashboard() {
                 >
                   Practice RC1
                 </Link>
+                <Link className="ia-btn text-sm" href="/student/learn">
+                  BioSpark Quest
+                </Link>
               </div>
             </Card>
 
@@ -466,8 +483,10 @@ export default function StudentDashboard() {
               </div>
             </Card>
           </section>
-        </Card>
+          </Card>
+        </div>
       </PageContent>
+      <StudentFloatingDock />
     </main>
   );
 }

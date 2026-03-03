@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageContent } from "@/components/ui";
+import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 
 function LinkCard({
   title,
@@ -50,9 +51,10 @@ function LinkCard({
 
 export default function StudentAssessmentLabPage() {
   return (
-    <main className="text-slate-900">
-      <PageContent className="py-10">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
+      <PageContent className="flex-1 min-h-0 py-4">
+        <div className="ia-vh-scroll h-full min-h-0 overflow-y-auto pr-1">
+          <div className="ia-vh-grid flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-xl">
             <h1 className="text-3xl font-semibold tracking-tight">
               Assessment Lab
@@ -62,15 +64,28 @@ export default function StudentAssessmentLabPage() {
               item testing.
             </p>
 
-            <div className="mt-6 rounded-2xl border bg-white/95 p-5 shadow-sm">
+            <div className="mt-4 rounded-2xl border bg-white/95 p-4 shadow-sm">
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 Quick links
               </div>
-              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="mt-2 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                 <LinkCard
                   title="Open Student Dashboard"
                   desc="Mastery donut + specimens + goals."
                   href="/student/dashboard"
+                  tone="teal"
+                />
+                <LinkCard
+                  title="BioSpark Quest"
+                  desc="Adaptive micro-challenges + XP + badges."
+                  href="/student/learn"
+                  tone="purple"
+                  badge="new"
+                />
+                <LinkCard
+                  title="My Profile"
+                  desc="View your XP, streak, badges, and mastery."
+                  href="/student/profile"
                   tone="teal"
                 />
                 <LinkCard
@@ -94,14 +109,14 @@ export default function StudentAssessmentLabPage() {
                 />
               </div>
 
-              <div className="mt-4 text-xs text-slate-500">
+              <div className="mt-3 text-xs text-slate-500">
                 Tip: Use this page as your “sandbox hub” while you build.
               </div>
             </div>
           </div>
 
           <div className="w-full max-w-xl">
-            <div className="p-6 ia-card-soft">
+            <div className="p-4 ia-card-soft">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="text-sm font-semibold text-slate-900">
@@ -118,7 +133,7 @@ export default function StudentAssessmentLabPage() {
                 <div className="text-sm text-slate-500 tabular-nums">v0.1</div>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-3">
+              <div className="mt-4 flex flex-wrap gap-2">
                 <Link
                   href="/student/assessment/items"
                   className="rounded-2xl border bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800"
@@ -131,10 +146,22 @@ export default function StudentAssessmentLabPage() {
                 >
                   Go to Dashboard →
                 </Link>
+                <Link
+                  href="/student/learn"
+                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+                >
+                  Open BioSpark Quest →
+                </Link>
+                <Link
+                  href="/student/profile"
+                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+                >
+                  Open My Profile →
+                </Link>
               </div>
             </div>
 
-            <div className="mt-6 p-6 ia-card-soft">
+            <div className="mt-4 p-4 ia-card-soft">
               <div className="text-sm font-semibold text-slate-900">
                 What this page is for
               </div>
@@ -148,11 +175,14 @@ export default function StudentAssessmentLabPage() {
                 <li>
                   • Quickly jump between Student Dashboard and practice flows.
                 </li>
+                <li>• Launch adaptive challenge mode for daily skill boosts.</li>
               </ul>
             </div>
           </div>
         </div>
+        </div>
       </PageContent>
+      <StudentFloatingDock />
     </main>
   );
 }

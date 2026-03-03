@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { PageContent, PageBanner, Card, Badge } from "@/components/ui";
+import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -181,7 +182,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
   const isPastDue = isDue && a.status !== "submitted" && a.status !== "graded";
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
       {/* Header row */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -227,7 +228,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
       </div>
 
       {/* TEKS tags */}
-      <div className="mt-3 flex flex-wrap gap-1.5">
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
         {a.teks.map((t) => (
           <span
             key={t}
@@ -240,7 +241,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
 
       {/* Progress bar (for in-progress) */}
       {(a.status === "in_progress" || a.status === "submitted") && (
-        <div className="mt-3">
+        <div className="mt-2.5">
           <div className="mb-1 flex items-center justify-between text-[10px] text-slate-500">
             <span>
               {a.completedItems}/{a.totalItems} items
@@ -257,7 +258,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
       )}
 
       {/* Footer row */}
-      <div className="mt-4 flex items-center justify-between gap-3">
+      <div className="mt-3 flex items-center justify-between gap-3">
         <div className="text-xs text-slate-500">
           {a.status === "graded" || a.status === "submitted"
             ? `Submitted ${formatDate(a.submittedAt)}`
@@ -370,7 +371,7 @@ export default function StudentAssignmentsPage() {
       : null;
 
   return (
-    <main className="text-slate-900">
+    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
       <PageBanner
         title="My Assignments"
         subtitle="Track your work, due dates, and scores."
@@ -388,12 +389,19 @@ export default function StudentAssignmentsPage() {
           >
             Dashboard
           </Link>
+          <Link
+            href="/student/profile"
+            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+          >
+            My Profile
+          </Link>
         </div>
       </PageBanner>
 
-      <PageContent className="py-8">
+      <PageContent className="flex-1 min-h-0 py-3">
+        <div className="ia-vh-scroll h-full min-h-0 overflow-y-auto pr-1">
         {/* Stat row */}
-        <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
             {
               label: "Active",
@@ -429,7 +437,7 @@ export default function StudentAssignmentsPage() {
         </div>
 
         {/* Tabs */}
-        <div className="mb-5 flex items-center gap-2">
+        <div className="mb-4 flex items-center gap-2">
           {(["active", "completed"] as const).map((t) => (
             <button
               key={t}
@@ -448,7 +456,7 @@ export default function StudentAssignmentsPage() {
           ))}
         </div>
 
-        <div className="mb-5 flex flex-wrap items-center gap-2">
+        <div className="mb-4 flex flex-wrap items-center gap-2">
           <Link
             href="/student/assignments"
             className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
@@ -482,7 +490,7 @@ export default function StudentAssignmentsPage() {
         </div>
 
         {tab === "active" ? (
-          <div className="mb-5 flex flex-wrap items-center gap-2">
+          <div className="mb-4 flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => setDueFilter("all")}
@@ -548,7 +556,7 @@ export default function StudentAssignmentsPage() {
             )}
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {displayed.map((a) => (
               <AssignmentCard key={a.id} a={a} />
             ))}
@@ -556,7 +564,7 @@ export default function StudentAssignmentsPage() {
         )}
 
         {/* Quick practice CTA */}
-        <div className="mt-8 rounded-2xl border border-teal-100 bg-teal-50 p-5">
+        <div className="mt-5 rounded-2xl border border-teal-100 bg-teal-50 p-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <div className="text-sm font-semibold text-teal-900">
@@ -575,7 +583,9 @@ export default function StudentAssignmentsPage() {
             </Link>
           </div>
         </div>
+        </div>
       </PageContent>
+      <StudentFloatingDock />
     </main>
   );
 }
