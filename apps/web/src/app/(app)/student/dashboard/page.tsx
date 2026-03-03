@@ -37,6 +37,7 @@ function getBiomeHealth(segments: Segment[]) {
       desc: "Food web is unstable.",
       pct: Math.round(p * 100),
       badge: "border-neutral-200 text-neutral-800",
+      joyColor: "neutral" as const,
     };
   }
   if (p < 0.5) {
@@ -46,6 +47,7 @@ function getBiomeHealth(segments: Segment[]) {
       desc: "Some stability, gaps remain.",
       pct: Math.round(p * 100),
       badge: "border-amber-200 text-amber-900",
+      joyColor: "warning" as const,
     };
   }
   if (p < 0.75) {
@@ -55,6 +57,7 @@ function getBiomeHealth(segments: Segment[]) {
       desc: "Most relationships are solid.",
       pct: Math.round(p * 100),
       badge: "border-green-200 text-green-900",
+      joyColor: "success" as const,
     };
   }
   return {
@@ -63,6 +66,7 @@ function getBiomeHealth(segments: Segment[]) {
     desc: "Ecosystem is strong and resilient.",
     pct: Math.round(p * 100),
     badge: "border-cyan-200 text-cyan-900",
+    joyColor: "primary" as const,
   };
 }
 
@@ -78,13 +82,13 @@ export default function StudentDashboard() {
       : "";
   const initialTab = tabParam === "specimens" ? "specimens" : "overview";
 
-  const [tab, setTab] = useState<"overview" | "specimens">("overview");
+  const [tab, setTab] = useState<"overview" | "specimens" | "learning">("overview");
 
   // After hydration, restore last selected tab (prevents SSR/client mismatch)
   useEffect(() => {
     try {
       const v = window.localStorage.getItem("studentDashboard.activeTab");
-      if (v === "specimens" || v === "overview") setTab(v);
+      if (v === "specimens" || v === "overview" || v === "learning") setTab(v);
     } catch {}
   }, []);
 
@@ -254,6 +258,11 @@ export default function StudentDashboard() {
     return s ?? null;
   }, [segments]);
 
+  const masteredCount = useMemo(
+    () => segments.filter((s) => (s.value ?? 0) >= 0.75).length,
+    [segments]
+  );
+
   return (
     <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
       <PageBanner
@@ -380,6 +389,15 @@ export default function StudentDashboard() {
             >
               Specimens
             </button>
+            <button
+              type="button"
+              onClick={() => { setTab("learning"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "learning"); }}
+              className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                tab === "learning" ? "bg-slate-900 text-white" : "bg-white text-slate-900 hover:bg-slate-50"
+              }`}
+            >
+              Learning Hub
+            </button>
           </div>
 
           {/* Main panel */}
@@ -388,13 +406,15 @@ export default function StudentDashboard() {
               <>
                 <MasteryRing segments={segments} />
               </>
-            ) : (
+            ) : tab === "specimens" ? (
               <>
                 <div className="mb-4 text-sm text-slate-600">
                   Collect organisms by mastering TEKS segments (75%+ unlock).
                 </div>
                 <SpecimenGrid segments={segments} />
               </>
+            ) : (
+              <LearningHub streak={3} accuracy={74} />
             )}
           </Section>
 

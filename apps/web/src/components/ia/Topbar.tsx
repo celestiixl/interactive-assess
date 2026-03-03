@@ -1,24 +1,32 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Pill } from "./Pill";
 import LangToggle from "./LangToggle";
+import { useTeacherAuth } from "@/lib/teacherAuth";
 
 export function Topbar({
   rightPrimaryHref = "/practice",
   rightPrimaryLabel = "Open Practice",
-  rightSecondaryHref = "/teacher/dashboard",
-  rightSecondaryLabel = "Teacher",
 }: {
   rightPrimaryHref?: string;
   rightPrimaryLabel?: string;
-  rightSecondaryHref?: string;
-  rightSecondaryLabel?: string;
 }) {
+  const { teacher, logout } = useTeacherAuth();
+  const router = useRouter();
+
+  function handleLogout() {
+    logout();
+    router.push("/teacher/login");
+  }
+
   return (
     <header className="w-full">
       <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-4 px-6 py-4">
-        
+
         <LangToggle />
-<div className="flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/30 bg-white/20 text-sm font-bold text-white">
             BS
           </div>
@@ -30,7 +38,7 @@ export function Topbar({
               STAAR Biology • Practice & Mastery
             </div>
           </div>
-        </div>
+        </Link>
 
         <div className="hidden items-center gap-2 md:flex">
           <Pill tone="white">STAAR aligned</Pill>
@@ -45,12 +53,35 @@ export function Topbar({
           >
             {rightPrimaryLabel}
           </Link>
-          <Link
-            href={rightSecondaryHref}
-            className="rounded-xl border border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/30"
-          >
-            {rightSecondaryLabel}
-          </Link>
+
+          {teacher ? (
+            /* Authenticated teacher — show name badge + logout */
+            <div className="flex items-center gap-2">
+              <div className="hidden items-center gap-2 rounded-xl border border-white/30 bg-white/20 px-3 py-2 sm:flex">
+                <div className="grid h-6 w-6 place-items-center rounded-full bg-white/30 text-xs font-bold text-white">
+                  {teacher.name.charAt(0)}
+                </div>
+                <span className="text-sm font-semibold text-white">
+                  {teacher.name}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="rounded-xl border border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/30"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            /* Unauthenticated — show Sign In link */
+            <Link
+              href="/teacher/login"
+              className="rounded-xl border border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/30"
+            >
+              Teacher Sign In
+            </Link>
+          )}
         </div>
       </div>
     </header>

@@ -87,7 +87,7 @@ export default function MCQ({
 
     if (correct) {
       setDone(true);
-      setFeedback("✅ Correct!");
+      setFeedback(`✅ ${getMotivationalMessage()}`);
       await persist(score, nextTries);
       return;
     }

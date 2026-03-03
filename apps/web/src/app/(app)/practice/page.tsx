@@ -24,6 +24,8 @@ import { updateRecord } from "@/lib/spacedRepetition";
 
 export const dynamic = "force-dynamic";
 
+export const dynamic = "force-dynamic";
+
 type Status = "unseen" | "correct" | "wrong";
 
 function clampQuality(n: number): number {
@@ -323,9 +325,7 @@ export default function PracticeByCategory() {
 
           {/* Nav + Item */}
           {mergedItems.length === 0 ? (
-            <div className="p-4 border rounded bg-neutral-50">
-              No items for this category yet.
-            </div>
+            <div className="p-4 border rounded bg-neutral-50">No items for this category yet.</div>
           ) : (
             <StudentSplitLayout
               leftTitle="Question"
