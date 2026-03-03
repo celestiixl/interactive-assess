@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { getMotivationalMessage } from "@/lib/motivationalMessages";
 
 export default function ResultsDrawer({
   open,
@@ -25,12 +26,21 @@ export default function ResultsDrawer({
   onNext?: () => void;
   hasNext?: boolean;
 }) {
+  const [correctMessage, setCorrectMessage] = useState("");
+
+  // Generate a fresh motivational message each time the drawer opens with a correct answer
+  useEffect(() => {
+    if (open && score === max && max > 0) {
+      setCorrectMessage(getMotivationalMessage());
+    }
+  }, [open]);
+
   const summary = useMemo(() => {
     if (max <= 0) return "Checked.";
-    if (score === max) return "Correct! Nice work.";
+    if (score === max) return correctMessage || "Correct! Nice work.";
     if (score === 0) return "Not yet. Try again.";
     return "Partially correct. Keep going.";
-  }, [score, max]);
+  }, [score, max, correctMessage]);
 
   if (!open) return null;
 

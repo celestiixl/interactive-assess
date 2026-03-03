@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { getMotivationalMessage } from "@/lib/motivationalMessages";
 
 type Mode = "learn" | "test";
 
@@ -23,6 +24,7 @@ export function QuestionShell({
 
   const [attempts, setAttempts] = useState(0);
   const [correct, setCorrect] = useState<boolean | null>(null);
+  const [motivationalMessage, setMotivationalMessage] = useState<string>("");
   const [showExplanation, setShowExplanation] = useState(false);
 
   const attemptsLeft = unlimited
@@ -36,6 +38,7 @@ export function QuestionShell({
 
     const isCorrect = onCheck();
     setCorrect(isCorrect);
+    if (isCorrect) setMotivationalMessage(getMotivationalMessage());
     setAttempts((a) => a + 1);
 
     if (!unlimited && attempts + 1 >= (effectiveMax as number)) {
@@ -81,7 +84,7 @@ export function QuestionShell({
       )}
 
       {correct !== null && (
-        <div className="text-sm">{correct ? "Correct" : "Not yet"}</div>
+        <div className="text-sm">{correct ? (motivationalMessage || "Correct") : "Not yet"}</div>
       )}
     </div>
   );
