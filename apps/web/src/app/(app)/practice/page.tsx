@@ -38,7 +38,10 @@ function qualityFromScore(score: number, max: number): number {
 }
 
 function normalizeTeksId(raw: string): string {
-  const base = String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
+  const base = String(raw || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "");
   return base.replace(/^([A-Z]+\.\d+)\.([A-Z0-9]+)$/i, "$1$2");
 }
 
@@ -56,7 +59,9 @@ function extractTeksIds(item: any): string[] {
 export default function PracticeByCategory() {
   const [checkedThisItem, setCheckedThisItem] = useState(false);
   const [attemptsById, setAttemptsById] = useState<Record<string, number>>({});
-  const [statusByIndex, setStatusByIndex] = useState<Record<number, Status>>({});
+  const [statusByIndex, setStatusByIndex] = useState<Record<number, Status>>(
+    {},
+  );
 
   const supports = useSupports();
   const router = useRouter();
@@ -183,7 +188,9 @@ export default function PracticeByCategory() {
 
   const percent = useMemo(() => {
     if (!mergedItems.length) return 0;
-    const seen = Object.values(statusByIndex).filter((s) => s !== "unseen").length;
+    const seen = Object.values(statusByIndex).filter(
+      (s) => s !== "unseen",
+    ).length;
     return Math.round((seen / mergedItems.length) * 100);
   }, [statusByIndex, mergedItems.length]);
   const completedCount = useMemo(
@@ -246,7 +253,8 @@ export default function PracticeByCategory() {
                     Mode: {mode === "learn" ? "Learn" : "Exam"}
                   </span>
                   <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
-                    Completed: {completedCount}/{Math.max(1, mergedItems.length)}
+                    Completed: {completedCount}/
+                    {Math.max(1, mergedItems.length)}
                   </span>
                   <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                     Correct: {correctCount}
@@ -276,7 +284,9 @@ export default function PracticeByCategory() {
                   onChange={(e) => supports.setShowSupport(e.target.checked)}
                 />
                 Show Spanish support
-                <span className="text-slate-400">(helper line under English)</span>
+                <span className="text-slate-400">
+                  (helper line under English)
+                </span>
               </label>
 
               <div className="flex items-center gap-2 text-sm text-slate-700">

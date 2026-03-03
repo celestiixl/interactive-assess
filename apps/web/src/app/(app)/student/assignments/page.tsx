@@ -316,7 +316,9 @@ export default function StudentAssignmentsPage() {
     a.dueDate ? new Date(a.dueDate).getTime() - Date.now() : null;
   const isDueToday = (a: StudentAssignment) => {
     const ms = dueMs(a);
-    return isActiveStatus(a) && ms !== null && ms >= 0 && ms < 24 * 60 * 60 * 1000;
+    return (
+      isActiveStatus(a) && ms !== null && ms >= 0 && ms < 24 * 60 * 60 * 1000
+    );
   };
   const isPastDue = (a: StudentAssignment) => {
     const ms = dueMs(a);

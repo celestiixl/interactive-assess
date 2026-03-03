@@ -51,7 +51,9 @@ export default function ResultsDrawer({
               <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 Check result
               </div>
-              <div className="mt-1 text-lg font-semibold text-slate-900">{summary}</div>
+              <div className="mt-1 text-lg font-semibold text-slate-900">
+                {summary}
+              </div>
             </div>
             <span
               className={`rounded-full px-3 py-1 text-xs font-semibold ${
@@ -94,7 +96,9 @@ export default function ResultsDrawer({
           </div>
 
           <div className="rounded-2xl border border-slate-200 p-4">
-            <div className="text-sm font-semibold text-slate-900">Explanation</div>
+            <div className="text-sm font-semibold text-slate-900">
+              Explanation
+            </div>
             {explanation ? (
               <div className="mt-2 whitespace-pre-wrap text-sm text-slate-700">
                 {explanation}

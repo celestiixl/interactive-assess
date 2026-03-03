@@ -68,15 +68,23 @@ export default function StudentLearningHubPage() {
           <Card variant="sm">
             <div className="text-sm font-semibold text-slate-800">Due now</div>
             <div className="mt-2 text-2xl font-bold">{dueItems.length}</div>
-            <div className="mt-1 text-xs text-slate-600">TEKS standards ready for review</div>
+            <div className="mt-1 text-xs text-slate-600">
+              TEKS standards ready for review
+            </div>
           </Card>
           <Card variant="sm">
-            <div className="text-sm font-semibold text-slate-800">Tracked TEKS</div>
+            <div className="text-sm font-semibold text-slate-800">
+              Tracked TEKS
+            </div>
             <div className="mt-2 text-2xl font-bold">{TEKS_ITEMS.length}</div>
-            <div className="mt-1 text-xs text-slate-600">Loaded into this learning queue</div>
+            <div className="mt-1 text-xs text-slate-600">
+              Loaded into this learning queue
+            </div>
           </Card>
           <Card variant="sm">
-            <div className="text-sm font-semibold text-slate-800">Next practice</div>
+            <div className="text-sm font-semibold text-slate-800">
+              Next practice
+            </div>
             <div className="mt-2 text-sm font-semibold text-slate-900">
               {firstDue ? firstDue.teksId : "No due topics"}
             </div>
@@ -97,7 +105,9 @@ export default function StudentLearningHubPage() {
 
         <div className="mt-6">
           <Card>
-            <div className="text-sm font-semibold text-slate-900">Review queue</div>
+            <div className="text-sm font-semibold text-slate-900">
+              Review queue
+            </div>
             <div className="mt-1 text-xs text-slate-600">
               Simulate outcomes to update SM-2 spacing immediately.
             </div>

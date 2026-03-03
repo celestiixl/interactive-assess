@@ -158,7 +158,11 @@ export default function DragDrop({
     ghost.style.pointerEvents = "none";
     document.body.appendChild(ghost);
 
-    e.dataTransfer.setDragImage(ghost, ghost.offsetWidth / 2, ghost.offsetHeight / 2);
+    e.dataTransfer.setDragImage(
+      ghost,
+      ghost.offsetWidth / 2,
+      ghost.offsetHeight / 2,
+    );
     requestAnimationFrame(() => {
       if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
     });

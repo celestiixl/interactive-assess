@@ -25,7 +25,8 @@ export default function AssignmentNav({
               : status === "wrong"
                 ? "bg-rose-50 text-rose-700 border-rose-300"
                 : "bg-white text-neutral-800 border-neutral-300 hover:bg-neutral-50";
-          const ring = i === current ? "ring-2 ring-emerald-400 ring-offset-2" : "";
+          const ring =
+            i === current ? "ring-2 ring-emerald-400 ring-offset-2" : "";
           return (
             <button
               key={i}

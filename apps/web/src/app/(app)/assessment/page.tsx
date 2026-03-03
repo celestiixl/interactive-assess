@@ -192,8 +192,8 @@ export default function AssessmentDashboardEntry() {
             </li>
           </ul>
           <div className="mt-4 text-xs text-slate-600">
-            Tip: after authentication is connected, this page can auto-route each
-            user to Student or Teacher based on their account role.
+            Tip: after authentication is connected, this page can auto-route
+            each user to Student or Teacher based on their account role.
           </div>
         </Surface>
       </div>
