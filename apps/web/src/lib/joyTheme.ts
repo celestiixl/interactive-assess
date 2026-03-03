@@ -1,7 +1,7 @@
 import { extendTheme } from "@mui/joy/styles";
 
 /**
- * Joy UI theme tokens aligned with the biospark design system.
+ * Biospark Joy UI theme — full component coverage.
  *
  * Color variables come from globals.css:
  *   --ia-grad-from  #0ea5e9  (sky)
@@ -140,52 +140,196 @@ const joyTheme = extendTheme({
   },
 
   components: {
+    /* ── Buttons ── */
     JoyButton: {
-      defaultProps: {
-        size: "sm",
-      },
+      defaultProps: { size: "sm" },
       styleOverrides: {
         root: ({ ownerState }) => ({
           fontWeight: 600,
           borderRadius: "14px",
+          transition: "filter 0.15s, transform 0.1s, background 0.15s",
+          "&:active": { transform: "translateY(1px)" },
           ...(ownerState.variant === "solid" &&
             ownerState.color === "primary" && {
               background: "linear-gradient(to right, #0ea5e9, #2563eb)",
               "&:hover": {
                 background: "linear-gradient(to right, #0284c7, #1d4ed8)",
+                filter: "brightness(1.06)",
               },
+            }),
+          ...(ownerState.variant === "solid" &&
+            ownerState.color === "success" && {
+              background: "linear-gradient(to right, #10b981, #059669)",
+              "&:hover": { filter: "brightness(1.06)" },
             }),
         }),
       },
     },
 
-    JoyCard: {
-      defaultProps: {
-        variant: "outlined",
+    JoyIconButton: {
+      defaultProps: { size: "sm", variant: "soft" },
+      styleOverrides: {
+        root: {
+          borderRadius: "10px",
+          transition: "transform 0.1s",
+          "&:active": { transform: "scale(0.95)" },
+        },
       },
+    },
+
+    /* ── Cards / Surfaces ── */
+    JoyCard: {
+      defaultProps: { variant: "outlined" },
       styleOverrides: {
         root: {
           borderRadius: "28px",
           boxShadow:
             "0 1px 0 rgba(15,23,42,0.04), 0 18px 50px rgba(15,23,42,0.08)",
+          transition: "box-shadow 0.2s, transform 0.2s",
+          "&:hover": {
+            boxShadow:
+              "0 1px 0 rgba(15,23,42,0.06), 0 24px 60px rgba(15,23,42,0.12)",
+            transform: "translateY(-2px)",
+          },
         },
       },
     },
 
+    JoySheet: {
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          borderRadius: "24px",
+          ...(ownerState.variant === "soft" && {
+            backdropFilter: "blur(10px)",
+            background: "rgba(255,255,255,0.76)",
+            border: "1px solid rgb(226,232,240)",
+          }),
+        }),
+      },
+    },
+
+    /* ── Typography ── */
+    JoyTypography: {
+      styleOverrides: {
+        root: {
+          letterSpacing: "-0.01em",
+        },
+      },
+    },
+
+    /* ── Chips / Badges ── */
     JoyChip: {
       styleOverrides: {
         root: {
           borderRadius: "9999px",
           fontWeight: 700,
           fontSize: "12px",
+          transition: "transform 0.1s",
+          "&:active": { transform: "scale(0.97)" },
         },
       },
     },
 
+    JoyBadge: {
+      styleOverrides: {
+        badge: {
+          fontWeight: 700,
+          fontSize: "11px",
+          borderRadius: "9999px",
+          minWidth: "18px",
+          height: "18px",
+          padding: "0 5px",
+        },
+      },
+    },
+
+    /* ── Progress indicators ── */
+    JoyLinearProgress: {
+      defaultProps: { size: "sm" },
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          "--LinearProgress-radius": "9999px",
+          "--LinearProgress-thickness": ownerState.size === "lg" ? "10px" : ownerState.size === "md" ? "8px" : "6px",
+          borderRadius: "9999px",
+          ...(ownerState.color === "success" && {
+            "--LinearProgress-progressColor":
+              "linear-gradient(90deg, #10b981, #059669)",
+          }),
+          ...(ownerState.color === "primary" && {
+            "--LinearProgress-progressColor":
+              "linear-gradient(90deg, #0ea5e9, #2563eb)",
+          }),
+          ...(ownerState.color === "warning" && {
+            "--LinearProgress-progressColor":
+              "linear-gradient(90deg, #fbbf24, #f59e0b)",
+          }),
+          ...(ownerState.color === "danger" && {
+            "--LinearProgress-progressColor":
+              "linear-gradient(90deg, #fb7185, #f43f5e)",
+          }),
+        }),
+      },
+    },
+
+    JoyCircularProgress: {
+      defaultProps: { size: "md" },
+      styleOverrides: {
+        root: {
+          "--CircularProgress-trackThickness": "4px",
+          "--CircularProgress-progressThickness": "4px",
+        },
+      },
+    },
+
+    /* ── Tabs ── */
+    JoyTabs: {
+      defaultProps: { defaultValue: 0 },
+      styleOverrides: {
+        root: {
+          backgroundColor: "transparent",
+          borderRadius: "14px",
+        },
+      },
+    },
+
+    JoyTabList: {
+      styleOverrides: {
+        root: {
+          borderRadius: "9999px",
+          padding: "4px",
+          backgroundColor: "rgb(241,245,249)",
+          gap: "2px",
+          border: "none",
+          boxShadow: "inset 0 1px 2px rgba(15,23,42,0.06)",
+        },
+      },
+    },
+
+    JoyTab: {
+      styleOverrides: {
+        root: {
+          borderRadius: "9999px",
+          fontWeight: 600,
+          fontSize: "14px",
+          transition: "background 0.15s, box-shadow 0.15s",
+          "&[aria-selected='true']": {
+            backgroundColor: "#fff",
+            boxShadow:
+              "0 1px 3px rgba(15,23,42,0.1), 0 1px 2px rgba(15,23,42,0.06)",
+          },
+        },
+      },
+    },
+
+    /* ── Form controls ── */
     JoyInput: {
       styleOverrides: {
         root: {
           borderRadius: "14px",
+          transition: "box-shadow 0.15s",
+          "&:focus-within": {
+            boxShadow: "0 0 0 3px rgba(37,99,235,0.18)",
+          },
         },
       },
     },
@@ -194,6 +338,9 @@ const joyTheme = extendTheme({
       styleOverrides: {
         root: {
           borderRadius: "14px",
+          "&:focus-within": {
+            boxShadow: "0 0 0 3px rgba(37,99,235,0.18)",
+          },
         },
       },
     },
@@ -202,6 +349,151 @@ const joyTheme = extendTheme({
       styleOverrides: {
         root: {
           borderRadius: "14px",
+        },
+        listbox: {
+          borderRadius: "14px",
+          boxShadow:
+            "0 4px 6px rgba(15,23,42,0.07), 0 10px 15px rgba(15,23,42,0.08)",
+        },
+      },
+    },
+
+    JoyFormLabel: {
+      styleOverrides: {
+        root: {
+          fontWeight: 600,
+          fontSize: "13px",
+          letterSpacing: "0.01em",
+        },
+      },
+    },
+
+    JoyCheckbox: {
+      styleOverrides: {
+        root: {
+          "--Checkbox-size": "18px",
+          borderRadius: "6px",
+        },
+        checkbox: {
+          borderRadius: "6px",
+        },
+      },
+    },
+
+    JoyRadio: {
+      styleOverrides: {
+        root: {
+          "--Radio-size": "18px",
+        },
+      },
+    },
+
+    JoySwitch: {
+      styleOverrides: {
+        root: {
+          "--Switch-trackRadius": "9999px",
+          "--Switch-thumbSize": "16px",
+        },
+      },
+    },
+
+    JoySlider: {
+      styleOverrides: {
+        root: {
+          "--Slider-thumbSize": "16px",
+          "--Slider-trackRadius": "9999px",
+          "--Slider-thumbRadius": "9999px",
+          "& .JoySlider-thumb": {
+            transition: "box-shadow 0.15s",
+          },
+        },
+      },
+    },
+
+    /* ── Overlay / feedback ── */
+    JoyAlert: {
+      styleOverrides: {
+        root: {
+          borderRadius: "14px",
+          fontWeight: 500,
+        },
+      },
+    },
+
+    JoyTooltip: {
+      defaultProps: { placement: "top" },
+      styleOverrides: {
+        root: {
+          borderRadius: "8px",
+          fontSize: "12px",
+          fontWeight: 600,
+          padding: "5px 10px",
+          boxShadow:
+            "0 4px 6px rgba(15,23,42,0.1), 0 2px 4px rgba(15,23,42,0.08)",
+        },
+      },
+    },
+
+    JoyModal: {
+      styleOverrides: {
+        root: {
+          backdropFilter: "blur(4px)",
+        },
+      },
+    },
+
+    JoyModalDialog: {
+      styleOverrides: {
+        root: {
+          borderRadius: "28px",
+          boxShadow:
+            "0 20px 60px rgba(15,23,42,0.2), 0 8px 20px rgba(15,23,42,0.1)",
+        },
+      },
+    },
+
+    /* ── Avatar ── */
+    JoyAvatar: {
+      styleOverrides: {
+        root: {
+          fontWeight: 700,
+          fontSize: "13px",
+          "--Avatar-size": "36px",
+        },
+        img: {
+          borderRadius: "inherit",
+        },
+      },
+    },
+
+    /* ── Divider ── */
+    JoyDivider: {
+      styleOverrides: {
+        root: {
+          "--Divider-gap": "16px",
+        },
+      },
+    },
+
+    /* ── List ── */
+    JoyListItemButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "10px",
+          fontWeight: 500,
+          transition: "background 0.12s",
+        },
+      },
+    },
+
+    /* ── Accordion ── */
+    JoyAccordion: {
+      styleOverrides: {
+        root: {
+          borderRadius: "14px",
+          "&:not(:last-child)": {
+            marginBottom: "4px",
+          },
         },
       },
     },

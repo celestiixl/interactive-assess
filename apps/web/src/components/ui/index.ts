@@ -6,6 +6,8 @@ export { default as CardBody } from "./CardBody";
 export { default as StatCard } from "./StatCard";
 export { default as MagicBento } from "./MagicBento";
 export type { MagicBentoProps } from "./MagicBento";
+export { default as BentoGrid, BentoCell } from "./BentoGrid";
+export type { BentoGridProps, BentoCellProps, BentoSpan } from "./BentoGrid";
 export { default as SpotlightCard } from "./SpotlightCard";
 export type { SpotlightCardProps } from "./SpotlightCard";
 export { default as GlassSurface } from "./GlassSurface";
