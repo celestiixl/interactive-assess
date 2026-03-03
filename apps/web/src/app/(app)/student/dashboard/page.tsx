@@ -90,20 +90,20 @@ export default function StudentDashboard() {
   const tabParam = typeof window !== "undefined" ? (new URLSearchParams(window.location.search).get("tab") || "").toLowerCase() : "";
   const initialTab = tabParam === "specimens" ? "specimens" : "overview";
 
-  const [tab, setTab] = useState<"overview" | "specimens">("overview");
+  const [tab, setTab] = useState<"overview" | "specimens" | "learning">("overview");
 
   // After hydration, restore last selected tab (prevents SSR/client mismatch)
   useEffect(() => {
     try {
       const v = window.localStorage.getItem("studentDashboard.activeTab");
-      if (v === "specimens" || v === "overview") setTab(v);
+      if (v === "specimens" || v === "overview" || v === "learning") setTab(v);
     } catch {}
   }, []);
 
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    window.localStorage.setItem("studentDashboard.activeTab", tab === "specimens" ? "specimens" : "overview");
+    window.localStorage.setItem("studentDashboard.activeTab", tab);
   }, [tab]);
 
 
@@ -270,6 +270,15 @@ export default function StudentDashboard() {
             >
               Specimens
             </button>
+            <button
+              type="button"
+              onClick={() => { setTab("learning"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "learning"); }}
+              className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                tab === "learning" ? "bg-slate-900 text-white" : "bg-white text-slate-900 hover:bg-slate-50"
+              }`}
+            >
+              Learning Hub
+            </button>
           </div>
 
           {/* Main panel */}
@@ -281,13 +290,15 @@ export default function StudentDashboard() {
                   Hover a slice to see the TEKS.
                 </div>
               </>
-            ) : (
+            ) : tab === "specimens" ? (
               <>
                 <div className="mb-4 text-sm text-slate-600">
                   Collect organisms by mastering TEKS segments (75%+ unlock).
                 </div>
                 <SpecimenGrid segments={segments} />
               </>
+            ) : (
+              <LearningHub streak={3} accuracy={74} />
             )}
           </Section>
 

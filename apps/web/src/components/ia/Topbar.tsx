@@ -38,7 +38,7 @@ export function Topbar({
               STAAR Biology • Practice & Mastery
             </div>
           </div>
-        </div>
+        </Link>
 
         <div className="hidden items-center gap-2 md:flex">
           <Pill tone="white">STAAR aligned</Pill>

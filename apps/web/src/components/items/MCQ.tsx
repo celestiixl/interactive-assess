@@ -3,6 +3,7 @@
 import BilingualText from "@/components/student/BilingualText";
 import { useEffect, useMemo, useState } from "react";
 import { useLang } from "@/lib/useLang";
+import { getMotivationalMessage } from "@/lib/motivationalMessages";
 
 export type MCQItem = {
   id: string;
@@ -84,7 +85,7 @@ export default function MCQ({
 
     if (correct) {
       setDone(true);
-      setFeedback("✅ Correct!");
+      setFeedback(`✅ ${getMotivationalMessage()}`);
       await persist(score, nextTries);
       return;
     }
