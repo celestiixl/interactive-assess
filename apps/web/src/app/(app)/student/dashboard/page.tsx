@@ -9,6 +9,7 @@ import { useMemo, useState, useEffect } from "react";
 
 import MasteryDonut from "@/components/student/MasteryDonut";
 import SpecimenGrid from "@/components/student/SpecimenGrid";
+import LearningHub from "@/components/student/LearningHub";
 import { PageContent, Card, Section } from "@/components/ui";
 
 
@@ -69,20 +70,20 @@ export default function StudentDashboard() {
   const tabParam = typeof window !== "undefined" ? (new URLSearchParams(window.location.search).get("tab") || "").toLowerCase() : "";
   const initialTab = tabParam === "specimens" ? "specimens" : "overview";
 
-  const [tab, setTab] = useState<"overview" | "specimens">("overview");
+  const [tab, setTab] = useState<"overview" | "specimens" | "learning">("overview");
 
   // After hydration, restore last selected tab (prevents SSR/client mismatch)
   useEffect(() => {
     try {
       const v = window.localStorage.getItem("studentDashboard.activeTab");
-      if (v === "specimens" || v === "overview") setTab(v);
+      if (v === "specimens" || v === "overview" || v === "learning") setTab(v);
     } catch {}
   }, []);
 
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    window.localStorage.setItem("studentDashboard.activeTab", tab === "specimens" ? "specimens" : "overview");
+    window.localStorage.setItem("studentDashboard.activeTab", tab);
   }, [tab]);
 
 
@@ -209,7 +210,7 @@ export default function StudentDashboard() {
           <div className="mb-4 flex items-center gap-2">
             <button
               type="button"
-              onClick={() => { setTab("overview"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "overview"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "overview"); } }
+              onClick={() => { setTab("overview"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "overview"); }}
               className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                 tab === "overview" ? "bg-slate-900 text-white" : "bg-white text-slate-900 hover:bg-slate-50"
               }`}
@@ -218,12 +219,21 @@ export default function StudentDashboard() {
             </button>
             <button
               type="button"
-              onClick={() => { setTab("specimens"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "specimens"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "specimens"); } }
+              onClick={() => { setTab("specimens"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "specimens"); }}
               className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                 tab === "specimens" ? "bg-slate-900 text-white" : "bg-white text-slate-900 hover:bg-slate-50"
               }`}
             >
               Specimens
+            </button>
+            <button
+              type="button"
+              onClick={() => { setTab("learning"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "learning"); }}
+              className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                tab === "learning" ? "bg-slate-900 text-white" : "bg-white text-slate-900 hover:bg-slate-50"
+              }`}
+            >
+              Learning Hub
             </button>
           </div>
 
@@ -236,39 +246,43 @@ export default function StudentDashboard() {
                   Hover a slice to see the TEKS.
                 </div>
               </>
-            ) : (
+            ) : tab === "specimens" ? (
               <>
                 <div className="mb-4 text-sm text-slate-600">
                   Collect organisms by mastering TEKS segments (75%+ unlock).
                 </div>
                 <SpecimenGrid segments={segments} />
               </>
+            ) : (
+              <LearningHub streak={3} accuracy={74} />
             )}
             </Section>
 
-          {/* Bottom cards */}
-          <section className="mt-5 grid gap-4 md:grid-cols-3">
-            <Card variant="sm">
-              <div className="text-sm font-semibold text-slate-800">Next best step</div>
-              <div className="mt-2 text-sm text-slate-600">Focus on RC4 practice sets (lowest mastery).</div>
-              <div className="mt-4 flex gap-2">
-                <Link className="ia-btn-primary text-sm" href="/practice?rc=RC4%20%E2%80%A2%20Biological%20Processes%20%26%20Systems">Practice RC4</Link>
-                <Link className="ia-btn text-sm" href="/practice?rc=RC1%20%E2%80%A2%20Cell%20Structure%20%26%20Function">Practice RC1</Link>
-              </div>
-            </Card>
+          {/* Bottom cards — shown only on overview/specimens tabs */}
+          {tab !== "learning" && (
+            <section className="mt-5 grid gap-4 md:grid-cols-3">
+              <Card variant="sm">
+                <div className="text-sm font-semibold text-slate-800">Next best step</div>
+                <div className="mt-2 text-sm text-slate-600">Focus on RC4 practice sets (lowest mastery).</div>
+                <div className="mt-4 flex gap-2">
+                  <Link className="ia-btn-primary text-sm" href="/practice?rc=RC4%20%E2%80%A2%20Biological%20Processes%20%26%20Systems">Practice RC4</Link>
+                  <Link className="ia-btn text-sm" href="/practice?rc=RC1%20%E2%80%A2%20Cell%20Structure%20%26%20Function">Practice RC1</Link>
+                </div>
+              </Card>
 
-            <Card variant="sm">
-              <div className="text-sm font-semibold text-slate-800" data-focus-hide="1">Streak</div>
-              <div className="mt-2 text-2xl font-semibold">3 days</div>
-              <div className="mt-1 text-sm text-slate-600">Keep going.</div>
-            </Card>
+              <Card variant="sm">
+                <div className="text-sm font-semibold text-slate-800" data-focus-hide="1">Streak</div>
+                <div className="mt-2 text-2xl font-semibold">3 days</div>
+                <div className="mt-1 text-sm text-slate-600">Keep going.</div>
+              </Card>
 
-            <Card variant="sm">
-              <div className="text-sm font-semibold text-slate-800" data-focus-hide="1">Accuracy</div>
-              <div className="mt-2 text-2xl font-semibold">74%</div>
-              <div className="mt-1 text-sm text-slate-600">Last 20 checks (demo).</div>
-            </Card>
-          </section>
+              <Card variant="sm">
+                <div className="text-sm font-semibold text-slate-800" data-focus-hide="1">Accuracy</div>
+                <div className="mt-2 text-2xl font-semibold">74%</div>
+                <div className="mt-1 text-sm text-slate-600">Last 20 checks (demo).</div>
+              </Card>
+            </section>
+          )}
         </Card>
       </PageContent>
     </main>
