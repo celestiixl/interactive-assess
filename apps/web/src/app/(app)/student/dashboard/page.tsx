@@ -29,7 +29,7 @@ function getBiomeHealth(segments: Segment[]) {
       biome: "Polluted Waters",
       desc: "Food web is unstable.",
       pct: Math.round(p * 100),
-      banner: "bg-neutral-50",
+      banner: "bg-neutral-50/60 backdrop-blur-sm",
       badge: "border-neutral-200 text-neutral-800",
     };
   }
@@ -39,7 +39,7 @@ function getBiomeHealth(segments: Segment[]) {
       biome: "Sparse Grassland",
       desc: "Some stability, gaps remain.",
       pct: Math.round(p * 100),
-      banner: "bg-amber-50",
+      banner: "bg-amber-50/60 backdrop-blur-sm",
       badge: "border-amber-200 text-amber-900",
     };
   }
@@ -49,7 +49,7 @@ function getBiomeHealth(segments: Segment[]) {
       biome: "Balanced Forest",
       desc: "Most relationships are solid.",
       pct: Math.round(p * 100),
-      banner: "bg-green-50",
+      banner: "bg-green-50/60 backdrop-blur-sm",
       badge: "border-green-200 text-green-900",
     };
   }
@@ -58,7 +58,7 @@ function getBiomeHealth(segments: Segment[]) {
     biome: "Thriving Reef",
     desc: "Ecosystem is strong and resilient.",
     pct: Math.round(p * 100),
-    banner: "bg-cyan-50",
+    banner: "bg-cyan-50/60 backdrop-blur-sm",
     badge: "border-cyan-200 text-cyan-900",
   };
 }
@@ -141,7 +141,7 @@ export default function StudentDashboard() {
   }, [segments]);
 
   return (
-    <main className="min-h-dvh  text-slate-900">
+    <main className="min-h-dvh text-slate-900">
       {/* FULL-WIDTH HEADER BAND */}
       <div className="bg-linear-to-r from-sky-500 via-blue-600 to-indigo-600">
         <div className="mx-auto max-w-6xl px-6 py-8">

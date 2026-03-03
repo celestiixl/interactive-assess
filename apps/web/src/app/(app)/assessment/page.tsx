@@ -50,7 +50,7 @@ function ActionCard({
 
   return (
     <Link href={href} className="group block">
-      <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/0/90 p-6 shadow-[0_16px_45px_rgba(2,6,23,0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_55px_rgba(2,6,23,0.08)]">
+      <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/75 backdrop-blur-sm p-6 shadow-[0_16px_45px_rgba(2,6,23,0.06)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_55px_rgba(2,6,23,0.08)]">
         <div
           className={`pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b ${accentWash} to-transparent`}
         />
@@ -65,7 +65,7 @@ function ActionCard({
             </h2>
             <p className="mt-2 text-sm text-slate-700">{desc}</p>
           </div>
-          <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white/0/70 text-lg text-slate-900 transition group-hover:bg-white">
+          <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white/50 backdrop-blur-sm text-lg text-slate-900 transition group-hover:bg-white/80">
             →
           </div>
         </div>
@@ -129,19 +129,19 @@ export default function AssessmentDashboardEntry() {
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href="/practice"
-              className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+              className="rounded-xl border border-slate-200 bg-white/60 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white/80"
             >
               Practice Runner
             </Link>
             <Link
               href="/student/assessment/items"
-              className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+              className="rounded-xl border border-slate-200 bg-white/60 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white/80"
             >
               Items Test Screen
             </Link>
             <Link
               href="/student/assessment"
-              className="rounded-xl border border-slate-200 bg-white/0/70 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+              className="rounded-xl border border-slate-200 bg-white/60 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white/80"
             >
               Student Lab
             </Link>

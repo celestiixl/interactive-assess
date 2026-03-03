@@ -5,7 +5,7 @@ function cx(...parts: Array<string | undefined | false>) {
 }
 
 export default function PageShell({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-dvh bg-slate-50">{children}</div>;
+  return <div className="min-h-dvh">{children}</div>;
 }
 
 export function PageContent({ children, className }: { children: React.ReactNode; className?: string }) {

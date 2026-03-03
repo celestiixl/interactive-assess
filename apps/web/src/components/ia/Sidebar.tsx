@@ -20,7 +20,7 @@ export function NavItem({
         "flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-sm font-semibold transition " +
         (active
           ? "border-slate-200 "
-          : "border-slate-200 bg-white/0/70 hover:bg-white")
+          : "border-slate-200 bg-white/60 hover:bg-white/80 backdrop-blur-sm")
       }
     >
       <span className="truncate text-slate-900">{label}</span>

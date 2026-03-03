@@ -14,7 +14,7 @@ function Card({
   tone?: "slate" | "teal" | "amber" | "green" | "purple";
 }) {
   const tones: Record<string, string> = {
-    slate: "border-slate-200 bg-white/95",
+    slate: "border-slate-200 bg-white/75 backdrop-blur-sm",
     teal: "border-teal-200 bg-teal-50/40",
     amber: "border-amber-200 bg-amber-50/40",
     green: "border-green-200 bg-green-50/40",
@@ -34,7 +34,7 @@ function Card({
           <div className="flex items-center gap-2">
             <div className="text-sm font-semibold text-slate-900">{title}</div>
             {badge ? (
-              <span className="rounded-full border bg-white/95 px-2 py-0.5 text-xs text-slate-600">
+              <span className="rounded-full border bg-white/70 backdrop-blur-sm px-2 py-0.5 text-xs text-slate-600">
                 {badge}
               </span>
             ) : null}
