@@ -4,3 +4,5 @@ export { default as Section } from "./Section";
 export { default as CardHeader } from "./CardHeader";
 export { default as CardBody } from "./CardBody";
 export { default as StatCard } from "./StatCard";
+export { default as MagicBento } from "./MagicBento";
+export type { MagicBentoProps } from "./MagicBento";
