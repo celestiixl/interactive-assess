@@ -1,249 +1,191 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import ThemeToggle from "@/components/ia/ThemeToggle";
-import type { Challenge, StudentProfile } from "@/types/challenge";
-import {
-  BADGE_MILESTONES,
-  CHALLENGES,
-  CHALLENGE_WHY_MATTERS,
-  getTodaysHook,
-  levelFromXP,
-  levelTitle,
-} from "@/lib/challengeData";
-import { useAdaptiveEngine } from "@/components/challenges/AdaptiveEngine";
-import AdaptiveEngine from "@/components/challenges/AdaptiveEnginePanel";
-import Dashboard from "@/components/challenges/Dashboard";
-import ModeSelector from "@/components/challenges/ModeSelector";
-import ChallengeCard from "@/components/challenges/ChallengeCard";
-import BadgeShelf from "@/components/challenges/BadgeShelf";
-import StreakTracker from "@/components/challenges/StreakTracker";
-import RankingsPreview from "@/components/challenges/RankingsPreview";
-import { QUEST_LEADER_ROWS } from "@/lib/questRankings";
+import { useMemo, useState } from "react";
+import Link from "next/link";
 import StudentFloatingDock from "@/components/student/StudentFloatingDock";
-import {
-  DEFAULT_PROFILE,
-  LAST_LOGIN_KEY,
-  loadStudentProfile,
-  saveStudentProfile,
-} from "@/lib/studentProfile";
-
-function ensureDailyStreak(profile: StudentProfile): StudentProfile {
-  const today = new Date().toISOString().slice(0, 10);
-  try {
-    const last = window.localStorage.getItem(LAST_LOGIN_KEY);
-    if (last === today) return profile;
-
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-    const streak = last === yesterday ? profile.streak + 1 : 1;
-    window.localStorage.setItem(LAST_LOGIN_KEY, today);
-    return { ...profile, streak };
-  } catch {
-    return profile;
-  }
-}
-
-function masteryPercent(correct: number, total: number): number {
-  if (!total) return 0;
-  return Math.round((correct / total) * 100);
-}
-
-function getBadgeUpdates(profile: StudentProfile): string[] {
-  const badgeSet = new Set(profile.badges);
-  const hasAnyCorrect = Object.values(profile.topicAccuracy).some((row) => row.correct > 0);
-  const cell = profile.topicAccuracy["Cell Biology"];
-  const cellPct = cell ? masteryPercent(cell.correct, cell.total) : 0;
-
-  if (hasAnyCorrect) badgeSet.add("first-correct");
-  if (profile.streak >= 5) badgeSet.add("streak-5");
-  if (profile.xp >= 100) badgeSet.add("xp-100");
-  if (profile.xp >= 300) badgeSet.add("xp-300");
-  if (cellPct >= 80 && (cell?.total ?? 0) >= 3) badgeSet.add("mastery-cell");
-
-  return [...badgeSet];
-}
-
-function pickNextChallenge(
-  allChallenges: Challenge[],
-  topic: string,
-  difficulty: 1 | 2 | 3,
-  excludeId?: string,
-): Challenge {
-  const sameTopic = allChallenges.filter((c) => c.topic === topic && c.id !== excludeId);
-  const exact = sameTopic.filter((c) => c.difficulty === difficulty);
-  if (exact.length) return exact[Math.floor(Math.random() * exact.length)];
-
-  const close = sameTopic.filter((c) => Math.abs(c.difficulty - difficulty) <= 1);
-  if (close.length) return close[Math.floor(Math.random() * close.length)];
-
-  const fallback = allChallenges.filter((c) => c.id !== excludeId);
-  return fallback[Math.floor(Math.random() * fallback.length)];
-}
+import ThemeToggle from "@/components/ia/ThemeToggle";
+import { LEARNING_UNITS } from "@/lib/learningHubContent";
 
 export default function StudentLearningHubPage() {
-  const challengeRef = useRef<HTMLDivElement | null>(null);
-  const [profile, setProfile] = useState<StudentProfile>(DEFAULT_PROFILE);
-  const [ready, setReady] = useState(false);
-  const [showLevelBurst, setShowLevelBurst] = useState(false);
+  const [unitIndex, setUnitIndex] = useState(0);
+  const [completedLessonIds, setCompletedLessonIds] = useState<string[]>([]);
 
-  useEffect(() => {
-    try {
-      const withStreak = ensureDailyStreak(loadStudentProfile());
-      setProfile(withStreak);
-      saveStudentProfile(withStreak);
-    } catch {
-      setProfile(ensureDailyStreak(DEFAULT_PROFILE));
-    }
-    setReady(true);
-  }, []);
+  const activeUnit = LEARNING_UNITS[unitIndex] ?? LEARNING_UNITS[0];
 
-  useEffect(() => {
-    if (!ready) return;
-    saveStudentProfile(profile);
-  }, [profile, ready]);
+  const completedInUnit = useMemo(
+    () =>
+      activeUnit.lessons.filter((lesson) =>
+        completedLessonIds.includes(lesson.id),
+      ).length,
+    [activeUnit, completedLessonIds],
+  );
 
-  const { getDifficultyForTopic, registerAttempt, topicSummaries } = useAdaptiveEngine(profile);
+  const unitProgress = Math.round(
+    (completedInUnit / activeUnit.lessons.length) * 100,
+  );
 
-  const topics = useMemo(() => Array.from(new Set(CHALLENGES.map((c) => c.topic))), []);
-  const [topicIndex, setTopicIndex] = useState(0);
-  const activeTopic = topics[topicIndex % topics.length] ?? "Cell Biology";
-
-  const [challenge, setChallenge] = useState<Challenge>(() => {
-    return pickNextChallenge(CHALLENGES, "Cell Biology", 1);
-  });
-
-  useEffect(() => {
-    const difficulty = getDifficultyForTopic(activeTopic);
-    setChallenge((prev) => pickNextChallenge(CHALLENGES, activeTopic, difficulty, prev.id));
-  }, [activeTopic]);
-
-  const masteryRows = useMemo(() => {
-    return topics.map((topic) => {
-      const row = profile.topicAccuracy[topic] ?? { correct: 0, total: 0 };
-      return { topic, percent: masteryPercent(row.correct, row.total) };
-    });
-  }, [profile.topicAccuracy, topics]);
-
-  const levelProgress = profile.xp % 100;
-  const availableModes = {
-    video: Boolean(challenge.modes.video),
-    interactive: Boolean(challenge.modes.interactive),
-    visual: Boolean(challenge.modes.visual),
-    text: true,
-  };
-
-  function handleModeSelect(nextMode: StudentProfile["preferredMode"]) {
-    setProfile((prev) => ({ ...prev, preferredMode: nextMode }));
-  }
-
-  function handleResult(correct: boolean, xpGained: number) {
-    setProfile((prev) => {
-      const topicStats = prev.topicAccuracy[challenge.topic] ?? { correct: 0, total: 0 };
-      const nextTopicStats = {
-        correct: topicStats.correct + (correct ? 1 : 0),
-        total: topicStats.total + 1,
-      };
-
-      const nextXP = prev.xp + xpGained;
-      const nextLevel = levelFromXP(nextXP);
-
-      const updated: StudentProfile = {
-        ...prev,
-        xp: nextXP,
-        level: nextLevel,
-        topicAccuracy: {
-          ...prev.topicAccuracy,
-          [challenge.topic]: nextTopicStats,
-        },
-      };
-
-      updated.badges = getBadgeUpdates(updated);
-      registerAttempt(challenge.topic, updated);
-
-      if (nextLevel > prev.level) {
-        setShowLevelBurst(true);
-        window.setTimeout(() => setShowLevelBurst(false), 1500);
-      }
-
-      return updated;
-    });
-  }
-
-  function nextChallenge() {
-    setTopicIndex((prev) => prev + 1);
-    const nextTopic = topics[(topicIndex + 1) % topics.length] ?? activeTopic;
-    const difficulty = getDifficultyForTopic(nextTopic);
-    setChallenge((prev) => pickNextChallenge(CHALLENGES, nextTopic, difficulty, prev.id));
-  }
-
-  function quickStart() {
-    challengeRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  if (!ready) {
-    return <main className="p-6 text-slate-900">Loading BioSpark Quest...</main>;
+  function toggleLesson(lessonId: string) {
+    setCompletedLessonIds((prev) =>
+      prev.includes(lessonId)
+        ? prev.filter((id) => id !== lessonId)
+        : [...prev, lessonId],
+    );
   }
 
   return (
-    <main className="ia-vh-page relative h-dvh overflow-hidden px-3 py-3 text-slate-900 sm:px-4 sm:py-4">
-      <div className="ia-vh-grid grid h-full min-h-0 grid-rows-[auto_1fr] gap-3">
-        <Dashboard
-          profile={profile}
-          levelTitle={levelTitle(profile.level)}
-          xpInLevel={levelProgress}
-          xpToNextLevel={100}
-          dailyHook={getTodaysHook()}
-          topicMastery={masteryRows}
-          onQuickStart={quickStart}
-        />
-
-        <div className="ia-vh-grid grid min-h-0 gap-3 lg:grid-cols-[1.25fr_1fr]">
-          <div className="ia-vh-grid grid min-h-0 grid-rows-[auto_1fr_auto] gap-3">
-            <ModeSelector
-              selectedMode={profile.preferredMode}
-              availableModes={availableModes}
-              onSelect={handleModeSelect}
-            />
-
-            <div ref={challengeRef} className="ia-vh-scroll min-h-0 overflow-y-auto pr-1">
-              <ChallengeCard
-                challenge={challenge}
-                mode={profile.preferredMode}
-                whyMatters={CHALLENGE_WHY_MATTERS[challenge.id] ?? "Biology connects directly to your health and community decisions."}
-                onResult={handleResult}
-                onNext={nextChallenge}
-              />
+    <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-slate-900 sm:px-4 sm:py-4">
+      <div className="mx-auto grid w-full max-w-6xl gap-3">
+        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+                Learning Hub
+              </div>
+              <h1 className="mt-1 text-2xl font-bold text-slate-900">
+                Readings, Lectures, and Textbook Notes
+              </h1>
+              <p className="mt-2 text-sm text-slate-600">
+                This hub is for learning content first. Practice and assessments
+                stay in their own separate flows.
+              </p>
             </div>
 
-            <AdaptiveEngine topicSummaries={topicSummaries} />
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/practice"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              >
+                Go to Practice
+              </Link>
+              <Link
+                href="/student/assessment"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              >
+                Go to Assessments
+              </Link>
+            </div>
           </div>
+        </section>
 
-          <div className="ia-vh-grid grid min-h-0 grid-rows-[auto_1fr_auto] gap-3">
-            <StreakTracker streak={profile.streak} />
+        <div className="grid gap-3 lg:grid-cols-[320px_1fr]">
+          <aside className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="text-sm font-semibold text-slate-900">Units</div>
+            <div className="mt-3 space-y-2">
+              {LEARNING_UNITS.map((unit, index) => {
+                const isActive = index === unitIndex;
+                return (
+                  <button
+                    key={unit.id}
+                    type="button"
+                    onClick={() => setUnitIndex(index)}
+                    className={`w-full rounded-2xl border px-3 py-3 text-left transition ${
+                      isActive
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
+                    }`}
+                  >
+                    <div className="text-sm font-semibold">{unit.title}</div>
+                    <div
+                      className={`mt-1 text-xs ${
+                        isActive ? "text-white/80" : "text-slate-500"
+                      }`}
+                    >
+                      {unit.teks.join(" • ")}
+                    </div>
+                    <div
+                      className={`mt-2 text-xs font-semibold ${
+                        isActive ? "text-white/90" : "text-blue-700"
+                      }`}
+                    >
+                      Open Unit →
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </aside>
 
-            <div className="ia-vh-scroll min-h-0 space-y-3 overflow-y-auto pr-1">
-              <BadgeShelf earnedBadges={profile.badges} />
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 text-xs text-slate-600">
-                <div className="font-semibold text-slate-900">Quest Titles</div>
-                <div className="mt-1">Cell Apprentice → DNA Decoder → Ecosystem Ranger → Genome Guardian → Apex Predator</div>
-                <div className="mt-3 font-semibold text-slate-900">Unlock Milestones</div>
-                <div className="mt-1">{BADGE_MILESTONES.map((b) => b.label).join(" • ")}</div>
+          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold text-slate-900">
+                  {activeUnit.title}
+                </h2>
+                <p className="mt-1 text-sm text-slate-600">
+                  Objective: {activeUnit.objective}
+                </p>
+              </div>
+
+              <div className="min-w-[220px]">
+                <div className="mb-1 flex items-center justify-between text-xs font-semibold text-slate-600">
+                  <span>Unit Progress</span>
+                  <span>{unitProgress}%</span>
+                </div>
+                <div className="h-2 rounded-full bg-slate-200">
+                  <div
+                    className="h-2 rounded-full bg-blue-600 transition-all"
+                    style={{ width: `${unitProgress}%` }}
+                  />
+                </div>
               </div>
             </div>
 
-            <RankingsPreview rows={QUEST_LEADER_ROWS} />
-          </div>
+            <div className="mt-4 space-y-3">
+              {activeUnit.lessons.map((lesson) => {
+                const complete = completedLessonIds.includes(lesson.id);
+                return (
+                  <article
+                    key={lesson.id}
+                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          {lesson.type} • {lesson.minutes} min
+                        </div>
+                        <h3 className="mt-1 text-base font-semibold text-slate-900">
+                          {lesson.title}
+                        </h3>
+                        <p className="mt-1 text-sm text-slate-600">
+                          {lesson.summary}
+                        </p>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleLesson(lesson.id)}
+                          className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${
+                            complete
+                              ? "bg-emerald-100 text-emerald-800"
+                              : "bg-slate-900 text-white hover:bg-slate-800"
+                          }`}
+                        >
+                          {complete ? "Completed" : "Mark Complete"}
+                        </button>
+                        <Link
+                          href={`/student/learn/${activeUnit.id}/${lesson.slug}`}
+                          className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50"
+                        >
+                          Open Lesson
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+            <div className="mt-4">
+              <Link
+                href={`/student/learn/${activeUnit.id}`}
+                className="inline-flex rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              >
+                Open Full Unit Page →
+              </Link>
+            </div>
+          </section>
         </div>
       </div>
-
-      {showLevelBurst && (
-        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
-          <div className="ia-level-burst text-center">
-            <div className="text-3xl font-extrabold text-emerald-600">Level Up!</div>
-            <div className="mt-1 text-sm font-semibold text-slate-900">{levelTitle(profile.level)}</div>
-          </div>
-        </div>
-      )}
 
       <StudentFloatingDock />
       <ThemeToggle />

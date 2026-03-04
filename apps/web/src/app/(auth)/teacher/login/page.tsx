@@ -46,7 +46,9 @@ export default function TeacherLoginPage() {
             </div>
             <div>
               <div className="text-sm font-semibold text-white">BioSpark</div>
-              <div className="text-xs text-white/70">STAAR Biology • Practice & Mastery</div>
+              <div className="text-xs text-white/70">
+                STAAR Biology • Practice & Mastery
+              </div>
             </div>
           </div>
         </div>
@@ -73,7 +75,11 @@ export default function TeacherLoginPage() {
           >
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <FormControl error={!!error}>
-                <FormLabel>Email address</FormLabel>
+                <FormLabel
+                  sx={{ color: "rgba(241,245,249,0.92)", fontWeight: 600 }}
+                >
+                  Email address
+                </FormLabel>
                 <Input
                   type="email"
                   placeholder="teacher@biospark.app"
@@ -87,7 +93,11 @@ export default function TeacherLoginPage() {
               </FormControl>
 
               <FormControl error={!!error}>
-                <FormLabel>Password</FormLabel>
+                <FormLabel
+                  sx={{ color: "rgba(241,245,249,0.92)", fontWeight: 600 }}
+                >
+                  Password
+                </FormLabel>
                 <Input
                   type="password"
                   placeholder="••••••••"
@@ -99,7 +109,9 @@ export default function TeacherLoginPage() {
                   sx={{ borderRadius: "14px" }}
                 />
                 {error && (
-                  <FormHelperText>{error}</FormHelperText>
+                  <FormHelperText sx={{ color: "#fda4af", fontWeight: 500 }}>
+                    {error}
+                  </FormHelperText>
                 )}
               </FormControl>
 
@@ -126,7 +138,9 @@ export default function TeacherLoginPage() {
 
             {/* Demo credentials hint */}
             <div className="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm">
-              <div className="font-semibold text-blue-800">Demo credentials</div>
+              <div className="font-semibold text-blue-800">
+                Demo credentials
+              </div>
               <div className="mt-1 text-blue-700">
                 <span className="font-medium">Email:</span> teacher@biospark.app
               </div>
@@ -138,8 +152,11 @@ export default function TeacherLoginPage() {
 
           <p className="mt-6 text-center text-sm text-slate-500">
             Student?{" "}
-            <Link href="/student/assessment" className="font-semibold text-blue-600 hover:underline">
-              Go to Student Lab
+            <Link
+              href="/student/login"
+              className="font-semibold text-blue-600 hover:underline"
+            >
+              Log in here
             </Link>
           </p>
         </div>

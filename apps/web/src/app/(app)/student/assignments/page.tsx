@@ -1,119 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { PageContent, PageBanner, Card, Badge } from "@/components/ui";
 import StudentFloatingDock from "@/components/student/StudentFloatingDock";
+import {
+  type AssignmentKind,
+  type AssignmentStatus,
+  type StudentAssignment,
+  MOCK_STUDENT_ASSIGNMENTS,
+} from "@/lib/studentAssignments";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-
-type AssignmentStatus = "not_started" | "in_progress" | "submitted" | "graded";
-type AssignmentKind = "assignment" | "assessment";
-
-type StudentAssignment = {
-  id: string;
-  title: string;
-  kind: AssignmentKind;
-  subject: string;
-  teks: string[];
-  status: AssignmentStatus;
-  dueDate: string | null;
-  openedAt: string | null;
-  submittedAt: string | null;
-  score: number | null; // 0–100
-  totalItems: number;
-  completedItems: number;
-};
-
-// ─── Mock data ────────────────────────────────────────────────────────────────
-
-const MOCK_STUDENT_ASSIGNMENTS: StudentAssignment[] = [
-  {
-    id: "asgn-1",
-    title: "Unit 2 Check-In: Cell Cycle",
-    kind: "assignment",
-    subject: "Biology",
-    teks: ["BIO.6A", "BIO.6B"],
-    status: "not_started",
-    dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-    openedAt: null,
-    submittedAt: null,
-    score: null,
-    totalItems: 8,
-    completedItems: 0,
-  },
-  {
-    id: "asgn-2",
-    title: "Photosynthesis Quiz",
-    kind: "assessment",
-    subject: "Biology",
-    teks: ["BIO.11A"],
-    status: "in_progress",
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
-    openedAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-    submittedAt: null,
-    score: null,
-    totalItems: 10,
-    completedItems: 4,
-  },
-  {
-    id: "asgn-3",
-    title: "Genetics Practice Set",
-    kind: "assignment",
-    subject: "Biology",
-    teks: ["BIO.7A", "BIO.7B", "BIO.8A", "BIO.8B"],
-    status: "submitted",
-    dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    openedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    submittedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-    score: null,
-    totalItems: 12,
-    completedItems: 12,
-  },
-  {
-    id: "asgn-4",
-    title: "Ecology & Biodiversity Final",
-    kind: "assessment",
-    subject: "Biology",
-    teks: ["BIO.13A", "BIO.13B", "BIO.13C", "BIO.13D"],
-    status: "graded",
-    dueDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    openedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    submittedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    score: 82,
-    totalItems: 15,
-    completedItems: 15,
-  },
-  {
-    id: "asgn-5",
-    title: "Unit 1 Cell Structure Review",
-    kind: "assignment",
-    subject: "Biology",
-    teks: ["BIO.5A", "BIO.5B", "BIO.5C"],
-    status: "graded",
-    dueDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    openedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
-    submittedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    score: 91,
-    totalItems: 10,
-    completedItems: 10,
-  },
-  {
-    id: "asgn-6",
-    title: "Evolution Evidence Check",
-    kind: "assignment",
-    subject: "Biology",
-    teks: ["BIO.9A", "BIO.9B"],
-    status: "not_started",
-    dueDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
-    openedAt: null,
-    submittedAt: null,
-    score: null,
-    totalItems: 6,
-    completedItems: 0,
-  },
-];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -299,7 +198,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
-export default function StudentAssignmentsPage() {
+function StudentAssignmentsPageContent() {
   const searchParams = useSearchParams();
   const [tab, setTab] = useState<"active" | "completed">("active");
   const [dueFilter, setDueFilter] = useState<
@@ -400,192 +299,194 @@ export default function StudentAssignmentsPage() {
 
       <PageContent className="flex-1 min-h-0 py-3">
         <div className="ia-vh-scroll h-full min-h-0 overflow-y-auto pr-1">
-        {/* Stat row */}
-        <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[
-            {
-              label: "Active",
-              value: active.length,
-              color: "text-slate-900",
-            },
-            {
-              label: "Due Today",
-              value: dueToday,
-              color: dueToday > 0 ? "text-amber-600" : "text-slate-900",
-            },
-            {
-              label: "Past Due",
-              value: pastDue,
-              color: pastDue > 0 ? "text-red-600" : "text-slate-900",
-            },
-            {
-              label: "Coming Up",
-              value: comingUp,
-              color: "text-blue-700",
-            },
-          ].map((s) => (
-            <div
-              key={s.label}
-              className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm"
-            >
-              <div className={`text-2xl font-bold tabular-nums ${s.color}`}>
-                {s.value}
-              </div>
-              <div className="mt-1 text-xs text-slate-500">{s.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Tabs */}
-        <div className="mb-4 flex items-center gap-2">
-          {(["active", "completed"] as const).map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => setTab(t)}
-              className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                tab === t
-                  ? "bg-slate-900 text-white"
-                  : "bg-white text-slate-700 hover:bg-slate-50"
-              }`}
-            >
-              {t === "active"
-                ? `Active (${active.length})`
-                : `Completed (${completed.length})`}
-            </button>
-          ))}
-        </div>
-
-        <div className="mb-4 flex flex-wrap items-center gap-2">
-          <Link
-            href="/student/assignments"
-            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-              kindFilter === "all"
-                ? "border-slate-900 bg-slate-900 text-white"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-            }`}
-          >
-            All work
-          </Link>
-          <Link
-            href="/student/assignments?kind=assignment"
-            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-              kindFilter === "assignment"
-                ? "border-slate-900 bg-slate-900 text-white"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-            }`}
-          >
-            Learning Blocks
-          </Link>
-          <Link
-            href="/student/assignments?kind=assessment"
-            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-              kindFilter === "assessment"
-                ? "border-slate-900 bg-slate-900 text-white"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-            }`}
-          >
-            Quizzes
-          </Link>
-        </div>
-
-        {tab === "active" ? (
-          <div className="mb-4 flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setDueFilter("all")}
-              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                dueFilter === "all"
-                  ? "border-slate-900 bg-slate-900 text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-              }`}
-            >
-              All active
-            </button>
-            <button
-              type="button"
-              onClick={() => setDueFilter("due")}
-              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                dueFilter === "due"
-                  ? "border-slate-900 bg-slate-900 text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-              }`}
-            >
-              Due today ({dueToday})
-            </button>
-            <button
-              type="button"
-              onClick={() => setDueFilter("past_due")}
-              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                dueFilter === "past_due"
-                  ? "border-slate-900 bg-slate-900 text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-              }`}
-            >
-              Past due ({pastDue})
-            </button>
-            <button
-              type="button"
-              onClick={() => setDueFilter("coming_up")}
-              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                dueFilter === "coming_up"
-                  ? "border-slate-900 bg-slate-900 text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-              }`}
-            >
-              Coming up ({comingUp})
-            </button>
-          </div>
-        ) : null}
-
-        {/* Assignment list */}
-        {displayed.length === 0 ? (
-          <div className="rounded-2xl border border-slate-100 bg-slate-50 px-6 py-12 text-center">
-            <div className="text-slate-500">
-              {tab === "active"
-                ? "No active assignments right now. 🎉"
-                : "No completed assignments yet."}
-            </div>
-            {tab === "active" && (
-              <Link
-                href="/student/learn"
-                className="mt-4 inline-block rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+          {/* Stat row */}
+          <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              {
+                label: "Active",
+                value: active.length,
+                color: "text-slate-900",
+              },
+              {
+                label: "Due Today",
+                value: dueToday,
+                color: dueToday > 0 ? "text-amber-600" : "text-slate-900",
+              },
+              {
+                label: "Past Due",
+                value: pastDue,
+                color: pastDue > 0 ? "text-red-600" : "text-slate-900",
+              },
+              {
+                label: "Coming Up",
+                value: comingUp,
+                color: "text-blue-700",
+              },
+            ].map((s) => (
+              <div
+                key={s.label}
+                className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm"
               >
-                Go to Learning Hub →
-              </Link>
-            )}
-          </div>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {displayed.map((a) => (
-              <AssignmentCard key={a.id} a={a} />
+                <div className={`text-2xl font-bold tabular-nums ${s.color}`}>
+                  {s.value}
+                </div>
+                <div className="mt-1 text-xs text-slate-500">{s.label}</div>
+              </div>
             ))}
           </div>
-        )}
 
-        {/* Quick practice CTA */}
-        <div className="mt-5 rounded-2xl border border-teal-100 bg-teal-50 p-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <div className="text-sm font-semibold text-teal-900">
-                Need to review? Jump into the Learning Hub
-              </div>
-              <div className="mt-1 text-xs text-teal-700">
-                Personalized spaced-repetition review sessions based on your
-                proficiency level.
-              </div>
-            </div>
+          {/* Tabs */}
+          <div className="mb-4 flex items-center gap-2">
+            {(["active", "completed"] as const).map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setTab(t)}
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                  tab === t
+                    ? "bg-slate-900 text-white"
+                    : "bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                {t === "active"
+                  ? `Active (${active.length})`
+                  : `Completed (${completed.length})`}
+              </button>
+            ))}
+          </div>
+
+          <div className="mb-4 flex flex-wrap items-center gap-2">
             <Link
-              href="/student/learn"
-              className="rounded-2xl bg-teal-700 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-800"
+              href="/student/assignments?kind=assignment"
+              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                kindFilter === "assignment"
+                  ? "border-slate-900 bg-slate-900 text-white"
+                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+              }`}
             >
-              Open Learning Hub →
+              Assignments
+            </Link>
+            <Link
+              href="/student/assignments?kind=assessment"
+              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                kindFilter === "assessment"
+                  ? "border-slate-900 bg-slate-900 text-white"
+                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+              }`}
+            >
+              Quizzes
             </Link>
           </div>
-        </div>
+
+          {tab === "active" ? (
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setDueFilter("all")}
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                  dueFilter === "all"
+                    ? "border-slate-900 bg-slate-900 text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                All active
+              </button>
+              <button
+                type="button"
+                onClick={() => setDueFilter("due")}
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                  dueFilter === "due"
+                    ? "border-slate-900 bg-slate-900 text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                Due today ({dueToday})
+              </button>
+              <button
+                type="button"
+                onClick={() => setDueFilter("past_due")}
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                  dueFilter === "past_due"
+                    ? "border-slate-900 bg-slate-900 text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                Past due ({pastDue})
+              </button>
+              <button
+                type="button"
+                onClick={() => setDueFilter("coming_up")}
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                  dueFilter === "coming_up"
+                    ? "border-slate-900 bg-slate-900 text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                Coming up ({comingUp})
+              </button>
+            </div>
+          ) : null}
+
+          {/* Assignment list */}
+          {displayed.length === 0 ? (
+            <div className="rounded-2xl border border-slate-100 bg-slate-50 px-6 py-12 text-center">
+              <div className="text-slate-500">
+                {tab === "active"
+                  ? "No active assignments right now. 🎉"
+                  : "No completed assignments yet."}
+              </div>
+              {tab === "active" && (
+                <Link
+                  href="/student/learn"
+                  className="mt-4 inline-block rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+                >
+                  Go to Learning Hub →
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {displayed.map((a) => (
+                <AssignmentCard key={a.id} a={a} />
+              ))}
+            </div>
+          )}
+
+          {/* Quick practice CTA */}
+          <div className="mt-5 rounded-2xl border border-teal-100 bg-teal-50 p-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <div className="text-sm font-semibold text-teal-900">
+                  Need to review? Jump into the Learning Hub
+                </div>
+                <div className="mt-1 text-xs text-teal-700">
+                  Personalized spaced-repetition review sessions based on your
+                  proficiency level.
+                </div>
+              </div>
+              <Link
+                href="/student/learn"
+                className="rounded-2xl bg-teal-700 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-800"
+              >
+                Open Learning Hub →
+              </Link>
+            </div>
+          </div>
         </div>
       </PageContent>
       <StudentFloatingDock />
     </main>
+  );
+}
+
+export default function StudentAssignmentsPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="p-6 text-slate-900">Loading assignments...</main>
+      }
+    >
+      <StudentAssignmentsPageContent />
+    </Suspense>
   );
 }

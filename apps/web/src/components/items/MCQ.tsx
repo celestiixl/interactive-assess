@@ -4,6 +4,7 @@ import BilingualText from "@/components/student/BilingualText";
 import { ChoiceButton } from "@/components/ui";
 import { useEffect, useMemo, useState } from "react";
 import { useLang } from "@/lib/useLang";
+import { getMotivationalMessage } from "@/lib/motivationalMessages";
 import type { GlossaryEntry } from "@/types/item";
 
 export type MCQItem = {

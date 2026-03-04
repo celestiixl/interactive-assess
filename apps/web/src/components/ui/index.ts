@@ -13,3 +13,6 @@ export { FormField } from "./FormField";
 export { TabGroup } from "./TabGroup";
 export { NavigationSidebar } from "./NavigationSidebar";
 export { MasteryRing } from "./MasteryRing";
+export { default as BlurText } from "./BlurText";
+export { default as SpotlightCard } from "./SpotlightCard";
+export { default as ShinyText } from "./ShinyText";

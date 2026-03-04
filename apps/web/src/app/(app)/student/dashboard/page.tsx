@@ -4,6 +4,7 @@ import { useRouter, usePathname } from "next/navigation";
 import type { Segment } from "@/types/segment";
 import AccommodationsButton from "@/components/student/AccommodationsButton";
 import StudentFloatingDock from "@/components/student/StudentFloatingDock";
+import LearningHub from "@/components/student/LearningHub";
 
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
@@ -82,7 +83,9 @@ export default function StudentDashboard() {
       : "";
   const initialTab = tabParam === "specimens" ? "specimens" : "overview";
 
-  const [tab, setTab] = useState<"overview" | "specimens" | "learning">("overview");
+  const [tab, setTab] = useState<"overview" | "specimens" | "learning">(
+    "overview",
+  );
 
   // After hydration, restore last selected tab (prevents SSR/client mismatch)
   useEffect(() => {
@@ -260,7 +263,7 @@ export default function StudentDashboard() {
 
   const masteredCount = useMemo(
     () => segments.filter((s) => (s.value ?? 0) >= 0.75).length,
-    [segments]
+    [segments],
   );
 
   return (
@@ -307,202 +310,205 @@ export default function StudentDashboard() {
         <div className="ia-vh-scroll h-full min-h-0 overflow-y-auto pr-1">
           {/* MAIN CONTENT SURFACE */}
           <Card>
-          {/* Biome banner */}
-          <div className="mb-5 flex flex-wrap items-start justify-between gap-3 rounded-2xl border border-white/20 bg-linear-to-r from-violet-500 via-purple-400 to-amber-400 p-5">
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-wide text-white/85">
-                Biome Health
-              </div>
-              <div className="mt-1 text-lg font-semibold text-white">
-                {biome.level} • {biome.biome}{" "}
-                <span className="ml-2 text-sm font-semibold text-white/90">
-                  ({biome.pct}%)
-                </span>
-              </div>
-              <div className="mt-1 text-sm text-white/90">{biome.desc}</div>
-              <div className="mt-3 inline-flex items-center rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-semibold text-white">
-                segments passed: {segments.length}
-              </div>
-            </div>
-
-            <div className="flex items-center">
-              <Link
-                href={
-                  nextSegment
-                    ? `/practice?focus=${encodeURIComponent(nextSegment.key)}`
-                    : "/practice"
-                }
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
-              >
-                {nextSegment
-                  ? `Next: practice ${nextSegment.label}`
-                  : "Start practice"}
-              </Link>
-            </div>
-          </div>
-
-          {/* Tabs */}
-          <div className="mb-4 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                setTab("overview");
-                if (typeof window !== "undefined")
-                  window.localStorage.setItem(
-                    "studentDashboard.activeTab",
-                    "overview",
-                  );
-                if (typeof window !== "undefined")
-                  window.localStorage.setItem(
-                    "studentDashboard.activeTab",
-                    "overview",
-                  );
-              }}
-              className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                tab === "overview"
-                  ? "bg-slate-900 text-white"
-                  : "bg-white text-slate-900 hover:bg-slate-50"
-              }`}
-            >
-              Overview
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setTab("specimens");
-                if (typeof window !== "undefined")
-                  window.localStorage.setItem(
-                    "studentDashboard.activeTab",
-                    "specimens",
-                  );
-                if (typeof window !== "undefined")
-                  window.localStorage.setItem(
-                    "studentDashboard.activeTab",
-                    "specimens",
-                  );
-              }}
-              className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                tab === "specimens"
-                  ? "bg-slate-900 text-white"
-                  : "bg-white text-slate-900 hover:bg-slate-50"
-              }`}
-            >
-              Specimens
-            </button>
-            <button
-              type="button"
-              onClick={() => { setTab("learning"); if (typeof window !== "undefined") window.localStorage.setItem("studentDashboard.activeTab", "learning"); }}
-              className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                tab === "learning" ? "bg-slate-900 text-white" : "bg-white text-slate-900 hover:bg-slate-50"
-              }`}
-            >
-              Learning Hub
-            </button>
-          </div>
-
-          {/* Main panel */}
-          <Section className="p-6 ia-card-soft">
-            {tab === "overview" ? (
-              <>
-                <MasteryRing segments={segments} />
-              </>
-            ) : tab === "specimens" ? (
-              <>
-                <div className="mb-4 text-sm text-slate-600">
-                  Collect organisms by mastering TEKS segments (75%+ unlock).
-                </div>
-                <SpecimenGrid segments={segments} />
-              </>
-            ) : (
-              <LearningHub streak={3} accuracy={74} />
-            )}
-          </Section>
-
-          {/* Bottom cards */}
-          <section className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            {/* Biome banner */}
+            <div className="mb-5 flex flex-wrap items-start justify-between gap-3 rounded-2xl border border-white/20 bg-linear-to-r from-violet-500 via-purple-400 to-amber-400 p-5">
               <div>
-                <div className="text-sm font-semibold text-slate-800">
-                  Assigned work
+                <div className="text-xs font-semibold uppercase tracking-wide text-white/85">
+                  Biome Health
                 </div>
-                <div className="mt-1 text-xs text-slate-600">
-                  Open your teacher-assigned work, learning blocks, and quizzes.
+                <div className="mt-1 text-lg font-semibold text-white">
+                  {biome.level} • {biome.biome}{" "}
+                  <span className="ml-2 text-sm font-semibold text-white/90">
+                    ({biome.pct}%)
+                  </span>
+                </div>
+                <div className="mt-1 text-sm text-white/90">{biome.desc}</div>
+                <div className="mt-3 inline-flex items-center rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-semibold text-white">
+                  segments passed: {segments.length}
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2">
+
+              <div className="flex items-center">
                 <Link
-                  href="/student/assignments"
-                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                  href={
+                    nextSegment
+                      ? `/practice?focus=${encodeURIComponent(nextSegment.key)}`
+                      : "/practice"
+                  }
+                  className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
                 >
-                  Assignments
-                </Link>
-                <Link
-                  href="/student/assignments?kind=assignment"
-                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-                >
-                  Learning Blocks
-                </Link>
-                <Link
-                  href="/student/assignments?kind=assessment"
-                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-                >
-                  Quizzes
+                  {nextSegment
+                    ? `Next: practice ${nextSegment.label}`
+                    : "Start practice"}
                 </Link>
               </div>
             </div>
-          </section>
 
-          <section className="mt-5 grid gap-4 md:grid-cols-3">
-            <Card variant="sm">
-              <div className="text-sm font-semibold text-slate-800">
-                Next best step
-              </div>
-              <div className="mt-2 text-sm text-slate-600">
-                Focus on RC4 practice sets (lowest mastery).
-              </div>
-              <div className="mt-4 flex gap-2">
-                <Link
-                  className="ia-btn-primary text-sm"
-                  href="/practice?rc=RC4%20%E2%80%A2%20Biological%20Processes%20%26%20Systems"
-                >
-                  Practice RC4
-                </Link>
-                <Link
-                  className="ia-btn text-sm"
-                  href="/practice?rc=RC1%20%E2%80%A2%20Cell%20Structure%20%26%20Function"
-                >
-                  Practice RC1
-                </Link>
-                <Link className="ia-btn text-sm" href="/student/learn">
-                  BioSpark Quest
-                </Link>
-              </div>
-            </Card>
-
-            <Card variant="sm">
-              <div
-                className="text-sm font-semibold text-slate-800"
-                data-focus-hide="1"
+            {/* Tabs */}
+            <div className="mb-4 flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setTab("overview");
+                  if (typeof window !== "undefined")
+                    window.localStorage.setItem(
+                      "studentDashboard.activeTab",
+                      "overview",
+                    );
+                  if (typeof window !== "undefined")
+                    window.localStorage.setItem(
+                      "studentDashboard.activeTab",
+                      "overview",
+                    );
+                }}
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                  tab === "overview"
+                    ? "bg-slate-900 text-white"
+                    : "bg-white text-slate-900 hover:bg-slate-50"
+                }`}
               >
-                Streak
-              </div>
-              <div className="mt-2 text-2xl font-semibold">3 days</div>
-              <div className="mt-1 text-sm text-slate-600">Keep going.</div>
-            </Card>
-
-            <Card variant="sm">
-              <div
-                className="text-sm font-semibold text-slate-800"
-                data-focus-hide="1"
+                Overview
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setTab("specimens");
+                  if (typeof window !== "undefined")
+                    window.localStorage.setItem(
+                      "studentDashboard.activeTab",
+                      "specimens",
+                    );
+                  if (typeof window !== "undefined")
+                    window.localStorage.setItem(
+                      "studentDashboard.activeTab",
+                      "specimens",
+                    );
+                }}
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                  tab === "specimens"
+                    ? "bg-slate-900 text-white"
+                    : "bg-white text-slate-900 hover:bg-slate-50"
+                }`}
               >
-                Accuracy
+                Specimens
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setTab("learning");
+                  if (typeof window !== "undefined")
+                    window.localStorage.setItem(
+                      "studentDashboard.activeTab",
+                      "learning",
+                    );
+                }}
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                  tab === "learning"
+                    ? "bg-slate-900 text-white"
+                    : "bg-white text-slate-900 hover:bg-slate-50"
+                }`}
+              >
+                Learning Hub
+              </button>
+            </div>
+
+            {/* Main panel */}
+            <Section className="p-6 ia-card-soft">
+              {tab === "overview" ? (
+                <>
+                  <MasteryRing segments={segments} />
+                </>
+              ) : tab === "specimens" ? (
+                <>
+                  <div className="mb-4 text-sm text-slate-600">
+                    Collect organisms by mastering TEKS segments (75%+ unlock).
+                  </div>
+                  <SpecimenGrid segments={segments} />
+                </>
+              ) : (
+                <LearningHub streak={3} accuracy={74} />
+              )}
+            </Section>
+
+            {/* Bottom cards */}
+            <section className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="text-sm font-semibold text-slate-800">
+                    Assigned work
+                  </div>
+                  <div className="mt-1 text-xs text-slate-600">
+                    Open your teacher-assigned work and quizzes.
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    href="/student/assignments"
+                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                  >
+                    Assignments
+                  </Link>
+                  <Link
+                    href="/student/assignments?kind=assessment"
+                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                  >
+                    Quizzes
+                  </Link>
+                </div>
               </div>
-              <div className="mt-2 text-2xl font-semibold">74%</div>
-              <div className="mt-1 text-sm text-slate-600">
-                Last 20 checks (demo).
-              </div>
-            </Card>
-          </section>
+            </section>
+
+            <section className="mt-5 grid gap-4 md:grid-cols-3">
+              <Card variant="sm">
+                <div className="text-sm font-semibold text-slate-800">
+                  Next best step
+                </div>
+                <div className="mt-2 text-sm text-slate-600">
+                  Focus on RC4 practice sets (lowest mastery).
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <Link
+                    className="ia-btn-primary text-sm"
+                    href="/practice?rc=RC4%20%E2%80%A2%20Biological%20Processes%20%26%20Systems"
+                  >
+                    Practice RC4
+                  </Link>
+                  <Link
+                    className="ia-btn text-sm"
+                    href="/practice?rc=RC1%20%E2%80%A2%20Cell%20Structure%20%26%20Function"
+                  >
+                    Practice RC1
+                  </Link>
+                  <Link className="ia-btn text-sm" href="/student/learn">
+                    BioSpark Quest
+                  </Link>
+                </div>
+              </Card>
+
+              <Card variant="sm">
+                <div
+                  className="text-sm font-semibold text-slate-800"
+                  data-focus-hide="1"
+                >
+                  Streak
+                </div>
+                <div className="mt-2 text-2xl font-semibold">3 days</div>
+                <div className="mt-1 text-sm text-slate-600">Keep going.</div>
+              </Card>
+
+              <Card variant="sm">
+                <div
+                  className="text-sm font-semibold text-slate-800"
+                  data-focus-hide="1"
+                >
+                  Accuracy
+                </div>
+                <div className="mt-2 text-2xl font-semibold">74%</div>
+                <div className="mt-1 text-sm text-slate-600">
+                  Last 20 checks (demo).
+                </div>
+              </Card>
+            </section>
           </Card>
         </div>
       </PageContent>
