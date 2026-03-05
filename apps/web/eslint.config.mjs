@@ -16,6 +16,12 @@ const eslintConfig = defineConfig([
     ".bak_*/**",
     "app__DISABLED_*/**",
     "**/*.bak.*",
+    // Backup files created by patch scripts:
+    ".bak_*/",
+    "app__DISABLED_*/",
+    "**/.bak_*/",
+    "**/app__DISABLED_*/",
+    "*.bak.*",
   ]),
 ]);
 

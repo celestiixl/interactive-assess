@@ -9,14 +9,34 @@ type Props = {
   segments: Segment[];
 };
 
-const ORGANISMS = [
-  { match: "cell", name: "Amoeba", icon: "🦠" },
-  { match: "cycle", name: "Zebrafish", icon: "🐟" },
-  { match: "photosynthesis", name: "Elodea", icon: "🌿" },
-  { match: "genetic", name: "Fruit Fly", icon: "🪰" },
-  { match: "selection", name: "Finch", icon: "🐦" },
-  { match: "ecosystem", name: "Wolf", icon: "🐺" },
-  { match: "energy", name: "Mushroom", icon: "🍄" },
+const ORGANISMS: Array<{ match: string[]; name: string; icon: string }> = [
+  // Cells & Organelles (BIO.5.A, BIO.5.B)
+  { match: ["bacteria", "prokaryote", "prokaryotic"], name: "E. coli Bacteria", icon: "🧫" },
+  { match: ["cell membrane", "membrane", "transport", "homeostasis", "osmosis", "diffusion"], name: "Cell Membrane", icon: "🫧" },
+  { match: ["mitochond", "respiration"], name: "Mitochondria", icon: "⚡" },
+  { match: ["chloroplast"], name: "Chloroplast", icon: "🌿" },
+  { match: ["nucleus", "nuclear"], name: "Nucleus", icon: "🔮" },
+  { match: ["ribosome", "translation"], name: "Ribosome", icon: "🔵" },
+  { match: ["cell", "amoeba", "microbe"], name: "Amoeba", icon: "🦠" },
+  // Biomolecules (BIO.5.A)
+  { match: ["enzyme", "catalyst", "active site", "substrate"], name: "Enzyme", icon: "⚗️" },
+  { match: ["protein", "amino acid", "polypeptide", "peptide"], name: "Protein", icon: "🔗" },
+  { match: ["carbohydrate", "glucose", "starch", "glycogen", "sugar"], name: "Carbohydrate", icon: "🍬" },
+  { match: ["lipid", "fat", "phospholipid", "fatty acid"], name: "Lipid", icon: "💧" },
+  // Nucleic Acids & Genetics (BIO.7.A, BIO.7.B, BIO.7.C)
+  { match: ["dna", "nucleic", "nucleotide", "double helix", "replication"], name: "DNA Double Helix", icon: "🧬" },
+  { match: ["rna", "mrna", "trna", "rrna", "transcription"], name: "RNA", icon: "🧶" },
+  { match: ["gene expression", "protein synthesis", "codon"], name: "Gene Expression", icon: "📖" },
+  { match: ["mutation", "frameshift", "point mutation", "insertion", "deletion"], name: "DNA Mutation", icon: "🔄" },
+  { match: ["genetic", "heredity", "drosophila"], name: "Fruit Fly", icon: "🪰" },
+  // Energy Processes (BIO.11.A)
+  { match: ["photosynthesis", "light reaction", "elodea", "aquatic plant"], name: "Elodea", icon: "🌿" },
+  { match: ["energy", "fungi", "decompos", "mushroom"], name: "Mushroom", icon: "🍄" },
+  // Organisms
+  { match: ["virus", "viral", "bacteriophage", "pathogen"], name: "Bacteriophage Virus", icon: "🦠" },
+  { match: ["cycle", "zebrafish", "development"], name: "Zebrafish", icon: "🐟" },
+  { match: ["selection", "evolution", "adaptation", "finch"], name: "Finch", icon: "🐦" },
+  { match: ["ecosystem", "predator", "food web"], name: "Wolf", icon: "🐺" },
 ];
 
 const CONFETTI_VECTORS: Array<[string, string, string]> = [
@@ -43,7 +63,7 @@ function normValue(v: number) {
 function pickOrganism(label: string) {
   const lower = (label || "").toLowerCase();
   return (
-    ORGANISMS.find((o) => lower.includes(o.match)) ?? {
+    ORGANISMS.find((o) => o.match.some((kw) => lower.includes(kw))) ?? {
       name: "Unknown organism",
       icon: "❔",
     }
