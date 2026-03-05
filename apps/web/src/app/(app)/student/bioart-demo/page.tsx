@@ -283,7 +283,7 @@ export default function BioArtDemoPage() {
                 <p className="text-xs text-slate-500 mt-0.5">
                   Uses {DEMO_SEGMENTS.length} demo segments — each label triggers a different
                   organism from the new ORGANISMS registry. Segments ≥ 75% are
-                  "Discovered!".
+                  &quot;Discovered!&quot;.
                 </p>
               </div>
               <button
