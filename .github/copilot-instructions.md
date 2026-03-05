@@ -442,7 +442,17 @@ Generate placeholder route stubs only — do not generate lesson content without
 
 ---
 
-## 10. Hard Constraints — Do Not Violate
+## 10. Pull Request Standards
+
+Every PR that touches UI must include visual documentation in the description. When drafting or reviewing a PR, always include a **Visual changes** section and prompt the author to fill it in with a screenshot or screen recording before merging.
+
+For new components, the visual documentation should show at minimum the default/empty state and one populated or interactive state. For changes that affect both the student and teacher experience, show both.
+
+When generating a PR description, flag any UI files changed in the diff and explicitly remind the author which views need to be screenshotted. If the change is subtle — a spacing fix, a color change, a loading state — note that in the PR description so reviewers know what to look for.
+
+---
+
+## 11. Hard Constraints — Do Not Violate
 
 - Do not generate lesson content that contradicts the TEA Boundaries specified above
 - Do not require students to know aerobic vs anaerobic respiration details, Krebs cycle, or ETC in Tier 1
