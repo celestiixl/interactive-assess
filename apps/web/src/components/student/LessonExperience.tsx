@@ -10,6 +10,8 @@ import {
   updateLessonProgress,
 } from "@/lib/learningProgress";
 
+const HOOK_DISMISSED_KEY = "biospark.hook.dismissed.v1";
+
 type LessonExperienceProps = {
   unit: LearningUnit;
   lesson: LearningLesson;
@@ -88,6 +90,7 @@ export default function LessonExperience({
   const questions = useMemo(() => buildQuestions(unit, lesson), [lesson, unit]);
   const [language, setLanguage] = useState<"en" | "es">("en");
   const [dyslexiaMode, setDyslexiaMode] = useState(false);
+  const [hookDismissed, setHookDismissed] = useState(false);
   const [sectionChecks, setSectionChecks] = useState<Record<string, boolean>>(
     {},
   );
@@ -113,6 +116,32 @@ export default function LessonExperience({
       addLessonTime(lesson.id, spent);
     };
   }, [lesson.id]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(HOOK_DISMISSED_KEY);
+      const dismissed: string[] = raw ? (JSON.parse(raw) as string[]) : [];
+      setHookDismissed(dismissed.includes(lesson.id));
+    } catch {
+      setHookDismissed(false);
+    }
+  }, [lesson.id]);
+
+  function dismissHook() {
+    setHookDismissed(true);
+    try {
+      const raw = localStorage.getItem(HOOK_DISMISSED_KEY);
+      const dismissed: string[] = raw ? (JSON.parse(raw) as string[]) : [];
+      if (!dismissed.includes(lesson.id)) {
+        localStorage.setItem(
+          HOOK_DISMISSED_KEY,
+          JSON.stringify([...dismissed, lesson.id]),
+        );
+      }
+    } catch {
+      // ignore storage errors
+    }
+  }
 
   const readingProgress = useMemo(() => {
     const total = lesson.sections.length;
@@ -245,6 +274,52 @@ export default function LessonExperience({
           </div>
         </section>
 
+        {lesson.hook && !hookDismissed ? (
+          <aside
+            aria-label="Why this matters"
+            className="rounded-3xl border-y border-r border-amber-200 border-l-4 border-l-amber-400 bg-amber-50 p-5 shadow-sm"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                Why this matters
+              </span>
+              <button
+                type="button"
+                onClick={dismissHook}
+                aria-label="Dismiss why this matters"
+                className="shrink-0 rounded-lg p-1 text-amber-600 hover:bg-amber-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            <p className="mt-2 text-sm font-semibold text-amber-900">
+              {lesson.hook.headline}
+            </p>
+            <p className="mt-1 text-sm leading-6 text-amber-800">
+              {lesson.hook.body}
+            </p>
+            {lesson.hook.source ? (
+              <p className="mt-2 text-xs text-amber-600">
+                — {lesson.hook.source}
+              </p>
+            ) : null}
+          </aside>
+        ) : null}
+
         <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="space-y-5">
             {lesson.sections.map((section) => (
@@ -353,6 +428,25 @@ export default function LessonExperience({
               </div>
             ) : null}
           </div>
+
+          {submitted && lesson.hook ? (
+            <div className="mt-5 rounded-2xl border-y border-r border-amber-200 border-l-4 border-l-amber-400 bg-amber-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                Remember why this mattered
+              </p>
+              <p className="mt-1 text-sm font-semibold text-amber-900">
+                {lesson.hook.headline}
+              </p>
+              <p className="mt-1 text-sm leading-6 text-amber-800">
+                {lesson.hook.body}
+              </p>
+              {lesson.hook.source ? (
+                <p className="mt-2 text-xs text-amber-600">
+                  — {lesson.hook.source}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">

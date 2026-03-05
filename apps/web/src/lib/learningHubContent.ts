@@ -5,6 +5,12 @@ export type LessonSection = {
   body: string[];
 };
 
+export type LessonHook = {
+  headline: string;
+  body: string;
+  source?: string;
+};
+
 export type LearningLesson = {
   id: string;
   slug: string;
@@ -12,6 +18,7 @@ export type LearningLesson = {
   minutes: number;
   type: LessonType;
   summary: string;
+  hook?: LessonHook;
   sections: LessonSection[];
   keyTerms: string[];
 };
@@ -117,6 +124,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Reading",
         summary:
           "Relates carbohydrate, lipid, protein, and nucleic acid functions to cell structures and processes.",
+        hook: {
+          headline: "The protein that decides if a cell lives or dies",
+          body: "Cystic fibrosis is caused by a single misfolded protein. One wrong amino acid changes the shape of a channel protein in lung cells, and the consequences are life-long. That's how much rides on a molecule doing its job correctly.",
+          source: "NIH, 2023",
+        },
         sections: [
           {
             heading: "Biomolecule Roles",
@@ -144,6 +156,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Lecture",
         summary:
           "Compares passive and active transport and investigates how transport supports cellular homeostasis.",
+        hook: {
+          headline: "Why IV fluids can save — or end — a life",
+          body: "When paramedics give IV saline to a dehydrated patient, they're betting on osmosis. Too concentrated, and water rushes out of cells, causing them to shrink. Too dilute, and cells swell until they burst. Getting the concentration exactly right is what keeps cells alive — that's homeostasis enforced molecule by molecule.",
+          source: "NEJM, 2018",
+        },
         sections: [
           {
             heading: "Transport Types",
@@ -170,6 +187,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Notes",
         summary:
           "Explains enzyme roles and models conservation of matter and energy transfer in photosynthesis and cellular respiration.",
+        hook: {
+          headline: "Your breakfast was solar energy, chemically stored",
+          body: "Every calorie on a nutrition label traces back to a plant capturing sunlight. The number on that label is a measure of how much chemical energy got locked into glucose bonds — energy your cells will spend one ATP at a time.",
+          source: "USDA, 2022",
+        },
         sections: [
           {
             heading: "Enzymes in Cell Processes",
@@ -253,6 +275,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Reading",
         summary:
           "Identifies DNA components, base pairing, and replication fundamentals.",
+        hook: {
+          headline: "A molecule with a four-letter alphabet that defines every living thing",
+          body: "In 1953, Watson and Crick published a two-page paper describing a structure that would reshape all of biology — the DNA double helix. The base-pairing rules they described are why your cells can copy three billion letters of genetic code in under eight hours with an error rate of roughly one mistake per billion bases.",
+          source: "Watson & Crick, Nature, 1953",
+        },
         sections: [
           {
             heading: "DNA Components",
@@ -279,6 +306,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Lecture",
         summary:
           "Describes gene expression and explains protein synthesis using DNA/RNA models.",
+        hook: {
+          headline: "mRNA vaccines rewrote what we thought was possible in medicine",
+          body: "The COVID-19 mRNA vaccines developed in 2020 delivered genetic instructions directly into your cells, telling ribosomes to build a harmless piece of coronavirus protein. Your immune system learned from it — all using the same transcription and translation machinery your cells use every single day. What you're learning in this lesson is the mechanism behind one of the fastest vaccine developments in history.",
+          source: "Moderna / BioNTech, 2020",
+        },
         sections: [
           {
             heading: "Transcription",
@@ -305,6 +337,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Notes",
         summary:
           "Illustrates point and frameshift mutations and evaluates likely effects on proteins and traits.",
+        hook: {
+          headline: "One gene, a repair failure, and a decision that changed public conversation",
+          body: "The BRCA1 gene mutation doesn't cause cancer directly — it disables a repair mechanism, so other mutations accumulate unchecked. Angelina Jolie's 2013 op-ed in the New York Times brought this concept to mainstream attention and changed how people talk about genetic risk.",
+          source: "Jolie, New York Times, 2013",
+        },
         sections: [
           {
             heading: "Mutation Types",
