@@ -101,7 +101,9 @@ export default function LessonExperience({
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState<number | null>(null);
-  // Lazy-initialize student ID from profile (read-once on mount)
+  // Lazy-initialize student ID from profile (read-once on mount).
+  // StudentProfile has no stable `id` field — `name` is the best available
+  // per-device identifier for this local-first v1 prototype.
   const [studentId] = useState<string>(() => {
     try {
       const profile = loadStudentProfile();

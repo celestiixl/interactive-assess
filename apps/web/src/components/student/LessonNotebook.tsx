@@ -61,6 +61,9 @@ function SketchCanvas({ initialDataUrl, onChange }: SketchCanvasProps) {
   const [tool, setTool] = useState<"pen" | "eraser">("pen");
   const [confirmClear, setConfirmClear] = useState(false);
 
+  /** Eraser draws at 2× the pen stroke width for better usability. */
+  const effectiveWidth = tool === "eraser" ? strokeWidth * 2 : strokeWidth;
+
   // Load initial image onto canvas after mount
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -98,7 +101,7 @@ function SketchCanvas({ initialDataUrl, onChange }: SketchCanvasProps) {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
     ctx.beginPath();
-    ctx.arc(pos.x, pos.y, (tool === "eraser" ? strokeWidth * 2 : strokeWidth) / 2, 0, Math.PI * 2);
+    ctx.arc(pos.x, pos.y, effectiveWidth / 2, 0, Math.PI * 2);
     ctx.fillStyle = tool === "eraser" ? "#fafaf9" : color;
     ctx.fill();
   }
@@ -113,7 +116,7 @@ function SketchCanvas({ initialDataUrl, onChange }: SketchCanvasProps) {
       ctx.moveTo(lastPos.current.x, lastPos.current.y);
       ctx.lineTo(pos.x, pos.y);
       ctx.strokeStyle = tool === "eraser" ? "#fafaf9" : color;
-      ctx.lineWidth = tool === "eraser" ? strokeWidth * 2 : strokeWidth;
+      ctx.lineWidth = effectiveWidth;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       ctx.stroke();
@@ -342,7 +345,7 @@ export default function LessonNotebook({ lessonSlug, studentId }: Props) {
     const text = newObservationText.trim();
     if (!text) return;
     const entry: NotebookObservation = {
-      id: `obs-${Date.now()}`,
+      id: `obs-${crypto.randomUUID()}`,
       timestamp: new Date().toISOString(),
       text,
     };
