@@ -199,6 +199,12 @@ export default function StudentDashboard() {
           >
             My Profile
           </Link>
+          <Link
+            href="/student/bioart-demo"
+            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+          >
+            🧬 Icon Registry Demo
+          </Link>
         </div>
       </PageBanner>
       <PageContent className="flex-1 min-h-0 py-4">
