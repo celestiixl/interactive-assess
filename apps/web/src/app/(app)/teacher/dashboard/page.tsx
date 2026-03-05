@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PageContent, PageBanner, Card, Button } from "@/components/ui";
+import WeeklyDigestCard from "@/components/teacher/WeeklyDigestCard";
 
 // If these components exist in your repo, keep them.
 // If your import paths differ, the build will tell us and we can patch paths next.
@@ -36,6 +37,9 @@ export default function TeacherDashboardPage() {
       </PageBanner>
       <PageContent className="py-8">
         <div className="flex flex-col gap-6">
+          {/* Weekly Digest — top misconceptions for the week */}
+          <WeeklyDigestCard take={3} showFooter />
+
           {/* Main content */}
           <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <Card className="p-5">
