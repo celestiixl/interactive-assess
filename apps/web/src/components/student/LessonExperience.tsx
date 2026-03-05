@@ -10,6 +10,18 @@ import {
   updateLessonProgress,
 } from "@/lib/learningProgress";
 
+const HOOK_DISMISSED_PREFIX = "biospark.lesson.hook.dismissed.";
+
+function getHookDismissed(lessonId: string): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(`${HOOK_DISMISSED_PREFIX}${lessonId}`) === "1";
+}
+
+function setHookDismissed(lessonId: string): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(`${HOOK_DISMISSED_PREFIX}${lessonId}`, "1");
+}
+
 type LessonExperienceProps = {
   unit: LearningUnit;
   lesson: LearningLesson;
@@ -88,6 +100,7 @@ export default function LessonExperience({
   const questions = useMemo(() => buildQuestions(unit, lesson), [lesson, unit]);
   const [language, setLanguage] = useState<"en" | "es">("en");
   const [dyslexiaMode, setDyslexiaMode] = useState(false);
+  const [hookDismissed, setHookDismissedState] = useState(false);
   const [sectionChecks, setSectionChecks] = useState<Record<string, boolean>>(
     {},
   );
@@ -106,6 +119,7 @@ export default function LessonExperience({
       setScore(saved.checkScore);
       setSubmitted(true);
     }
+    setHookDismissedState(getHookDismissed(lesson.id));
 
     const start = Date.now();
     return () => {
@@ -173,9 +187,45 @@ export default function LessonExperience({
     });
   }
 
+  function dismissHook() {
+    setHookDismissedState(true);
+    setHookDismissed(lesson.id);
+  }
+
   return (
     <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-slate-900 sm:px-4 sm:py-4">
       <div className="mx-auto grid w-full max-w-4xl gap-3">
+        {lesson.hook && !hookDismissed ? (
+          <aside className="relative rounded-3xl border border-amber-200 bg-amber-50 p-5 shadow-sm dark:border-amber-800 dark:bg-amber-950">
+            <div className="absolute left-0 top-0 h-full w-1 rounded-l-3xl bg-amber-400 dark:bg-amber-500" />
+            <div className="flex items-start justify-between gap-3 pl-3">
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400">
+                  Why this matters
+                </div>
+                <h2 className="mt-1 text-base font-bold text-slate-900 dark:text-slate-100">
+                  {lesson.hook.headline}
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
+                  {lesson.hook.body}
+                </p>
+                {lesson.hook.source ? (
+                  <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                    — {lesson.hook.source}
+                  </p>
+                ) : null}
+              </div>
+              <button
+                type="button"
+                onClick={dismissHook}
+                aria-label="Dismiss this context card"
+                className="mt-0.5 shrink-0 rounded-lg px-2 py-1 text-xs font-semibold text-amber-700 hover:bg-amber-100 dark:text-amber-400 dark:hover:bg-amber-900"
+              >
+                Dismiss
+              </button>
+            </div>
+          </aside>
+        ) : null}
         <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -353,6 +403,24 @@ export default function LessonExperience({
               </div>
             ) : null}
           </div>
+
+          {submitted && score !== null && lesson.hook ? (
+            <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950">
+              <div className="border-l-2 border-amber-400 pl-3 dark:border-amber-500">
+                <div className="text-xs font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400">
+                  Remember why this mattered
+                </div>
+                <p className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-300">
+                  {lesson.hook.headline} — {lesson.hook.body}
+                </p>
+                {lesson.hook.source ? (
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    — {lesson.hook.source}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">

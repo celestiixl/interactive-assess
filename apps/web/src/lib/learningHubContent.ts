@@ -5,6 +5,12 @@ export type LessonSection = {
   body: string[];
 };
 
+export type LessonHook = {
+  headline: string;
+  body: string;
+  source?: string;
+};
+
 export type LearningLesson = {
   id: string;
   slug: string;
@@ -12,6 +18,7 @@ export type LearningLesson = {
   minutes: number;
   type: LessonType;
   summary: string;
+  hook?: LessonHook;
   sections: LessonSection[];
   keyTerms: string[];
 };
@@ -117,6 +124,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Reading",
         summary:
           "Relates carbohydrate, lipid, protein, and nucleic acid functions to cell structures and processes.",
+        hook: {
+          headline: "The protein that decides if a cell lives or dies",
+          body: "Cystic fibrosis is caused by a single misfolded protein. One wrong amino acid changes the shape of a channel protein in lung cells, causing thick mucus to build up and making every breath a struggle. That's how much rides on a molecule doing its job correctly — not vaguely, but at the atomic level.",
+          source: "Cystic Fibrosis Foundation, 2023",
+        },
         sections: [
           {
             heading: "Biomolecule Roles",
@@ -144,6 +156,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Lecture",
         summary:
           "Compares passive and active transport and investigates how transport supports cellular homeostasis.",
+        hook: {
+          headline: "Why dialysis patients visit a clinic three times a week",
+          body: "Healthy kidneys use selective transport to filter more than 200 liters of blood every day, letting waste cross cell membranes while keeping proteins inside. When kidney cells stop regulating that traffic, patients need dialysis machines to do it artificially. The entire procedure is an engineering replica of what your cell membranes do without you noticing.",
+          source: "National Kidney Foundation, 2023",
+        },
         sections: [
           {
             heading: "Transport Types",
@@ -170,6 +187,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Notes",
         summary:
           "Explains enzyme roles and models conservation of matter and energy transfer in photosynthesis and cellular respiration.",
+        hook: {
+          headline: "Every calorie on a nutrition label traces back to a leaf",
+          body: "The number on a nutrition label measures how much chemical energy got locked into glucose bonds during photosynthesis — energy your cells will spend one ATP at a time through cellular respiration. A single enzyme can accelerate a reaction by a factor of a million; without that catalytic speed, neither process would sustain life.",
+          source: "NIH National Institute of General Medical Sciences, 2022",
+        },
         sections: [
           {
             heading: "Enzymes in Cell Processes",
@@ -253,6 +275,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Reading",
         summary:
           "Identifies DNA components, base pairing, and replication fundamentals.",
+        hook: {
+          headline: "Your DNA is copied 37 trillion times — and gets it right almost every time",
+          body: "Every time a cell divides, your body copies roughly 3 billion base pairs of DNA. DNA polymerase makes about one error per billion bases copied — but a built-in proofreading mechanism catches most mistakes before they become permanent. When that proofreading system fails, unrepaired errors accumulate and can trigger cancer.",
+          source: "National Human Genome Research Institute, 2023",
+        },
         sections: [
           {
             heading: "DNA Components",
@@ -279,6 +306,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Lecture",
         summary:
           "Describes gene expression and explains protein synthesis using DNA/RNA models.",
+        hook: {
+          headline: "The COVID-19 vaccine is just a messenger",
+          body: "The Moderna and Pfizer COVID-19 vaccines deliver a small strand of mRNA — the same kind your cells produce during transcription. Once inside, your ribosomes translate that mRNA into the spike protein, triggering an immune response without any viral DNA ever entering the picture. It's the central dogma of molecular biology, deployed at mass scale in 2021.",
+          source: "CDC, 2021",
+        },
         sections: [
           {
             heading: "Transcription",
@@ -305,6 +337,11 @@ export const LEARNING_UNITS: LearningUnit[] = [
         type: "Notes",
         summary:
           "Illustrates point and frameshift mutations and evaluates likely effects on proteins and traits.",
+        hook: {
+          headline: "A repair gene, not a cancer gene",
+          body: "The BRCA1 mutation doesn't cause cancer directly — it disables a DNA repair mechanism, so other mutations accumulate unchecked over time. Angelina Jolie's 2013 op-ed in the New York Times brought this concept to mainstream attention after she chose preventive surgery based on her genetic test results. Her story changed how millions of people talk about genetic risk and personal medical decisions.",
+          source: "New York Times / NEJM, 2013",
+        },
         sections: [
           {
             heading: "Mutation Types",
