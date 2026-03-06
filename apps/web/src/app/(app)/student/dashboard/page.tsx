@@ -200,16 +200,16 @@ export default function StudentDashboard() {
             My Profile
           </Link>
           <Link
-            href="/student/learn/simulations/population-genetics"
+            href="/student/genome-browser"
             className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
           >
-            🧬 Simulations
+            🧬 Genome Browser
           </Link>
           <Link
             href="/student/bioart-demo"
             className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
           >
-            🧬 Icon Registry Demo
+            🎨 Icon Registry Demo
           </Link>
         </div>
       </PageBanner>
