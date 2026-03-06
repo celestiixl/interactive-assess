@@ -25,6 +25,28 @@ const config: Config = {
         "teks-rc4": "rgb(var(--teks-rc4) / <alpha-value>)",
         "teks-rc5": "rgb(var(--teks-rc5) / <alpha-value>)",
         "teks-rc6": "rgb(var(--teks-rc6) / <alpha-value>)",
+        // BioSpark design system tokens (bs-*)
+        bs: {
+          bg:          "var(--bs-bg)",
+          surface:     "var(--bs-surface)",
+          raised:      "var(--bs-raised)",
+          overlay:     "var(--bs-overlay)",
+          border:      "var(--bs-border)",
+          "border-soft": "var(--bs-border-soft)",
+          teal:        "var(--bs-teal)",
+          "teal-dim":  "var(--bs-teal-dim)",
+          amber:       "var(--bs-amber)",
+          "amber-dim": "var(--bs-amber-dim)",
+          coral:       "var(--bs-coral)",
+          "coral-dim": "var(--bs-coral-dim)",
+          success:     "var(--bs-success)",
+          warning:     "var(--bs-warning)",
+          danger:      "var(--bs-danger)",
+          info:        "var(--bs-info)",
+          text:        "var(--bs-text)",
+          "text-sub":  "var(--bs-text-sub)",
+          "text-muted":"var(--bs-text-muted)",
+        },
       },
       spacing: {
         18: "4.5rem",
@@ -44,6 +66,8 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-body)", "sans-serif"],
         display: ["var(--font-display)", "sans-serif"],
+        ui:   ["var(--bs-font-ui)", "sans-serif"],
+        mono: ["var(--bs-font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       fontSize: {
         xs: ["var(--text-xs-size)", { lineHeight: "var(--text-xs-line)", letterSpacing: "0em" }],

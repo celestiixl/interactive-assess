@@ -1,8 +1,15 @@
 import "./globals.css";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import PageShell from "@/components/ui/PageShell";
 import ThemeToggle from "@/components/ia/ThemeToggle";
 import OfflineSupport from "@/components/common/OfflineSupport";
+
+export const metadata: Metadata = {
+  title: { default: "BioSpark", template: "%s | BioSpark" },
+  description:
+    "FBISD 9th Grade Biology — mastery-based learning platform",
+};
 
 const initThemeScript = `(() => {
   try {

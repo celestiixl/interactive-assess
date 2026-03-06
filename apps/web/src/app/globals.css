@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
@@ -8,6 +10,52 @@
 
 :root {
   color-scheme: light;
+
+  /* ── BioSpark design tokens (bs-*) ── */
+  --bs-bg:           #0d1e2c;
+  --bs-surface:      #132638;
+  --bs-raised:       #1a3148;
+  --bs-overlay:      #213d58;
+
+  --bs-border:       #1e3f5a;
+  --bs-border-soft:  #162f45;
+
+  --bs-teal:         #00d4aa;
+  --bs-teal-dim:     rgba(0, 212, 170, 0.15);
+  --bs-teal-glow:    0 0 18px rgba(0, 212, 170, 0.28);
+  --bs-amber:        #f5a623;
+  --bs-amber-dim:    rgba(245, 166, 35, 0.15);
+  --bs-coral:        #ff6b6b;
+  --bs-coral-dim:    rgba(255, 107, 107, 0.15);
+
+  --bs-success:      #34d399;
+  --bs-warning:      #fbbf24;
+  --bs-danger:       #f87171;
+  --bs-info:         #60a5fa;
+
+  --bs-text:         #e8f4f0;
+  --bs-text-sub:     #9abcb0;
+  --bs-text-muted:   #5a8070;
+
+  --bs-font-ui:      'Outfit', sans-serif;
+  --bs-font-mono:    'JetBrains Mono', monospace;
+
+  --bs-r-sm:         6px;
+  --bs-r-md:         10px;
+  --bs-r-lg:         16px;
+  --bs-r-xl:         22px;
+  --bs-r-pill:       999px;
+
+  --bs-shadow-sm:    0 1px 4px rgba(0,0,0,0.35);
+  --bs-shadow-md:    0 4px 16px rgba(0,0,0,0.40);
+  --bs-shadow-lg:    0 8px 32px rgba(0,0,0,0.45);
+
+  --bs-ease:         cubic-bezier(0.34, 1.2, 0.64, 1);
+  --bs-ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
+  --bs-dur-fast:     120ms;
+  --bs-dur-base:     220ms;
+  --bs-dur-slow:     380ms;
+
   --ia-grad-from:  #8b5cf6;
   --ia-grad-via:   #a78bfa;
   --ia-grad-to:    #f59e0b;
@@ -81,6 +129,32 @@
 html, body { height: 100%; margin: 0; }
 body { font-size: 16px; line-height: 1.55; color: rgb(var(--ia-ink)); -webkit-font-smoothing: antialiased; }
 h1, h2, h3 { letter-spacing: -0.01em; }
+
+/* BioSpark scrollbar styles */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bs-overlay); border-radius: var(--bs-r-pill); }
+
+/* BioSpark selection */
+::selection { background: var(--bs-teal-dim); color: var(--bs-text); }
+
+/* BioSpark focus-visible */
+:focus-visible {
+  outline: 2px solid var(--bs-teal);
+  outline-offset: 3px;
+  border-radius: var(--bs-r-sm);
+}
+
+/* BioSpark grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
 .ia-header { background: linear-gradient(to right, var(--ia-grad-from), var(--ia-grad-via), var(--ia-grad-to)); }
 .ia-container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 .ia-content { margin-top: -20px; }
@@ -258,6 +332,24 @@ html[data-acc-focus="1"] [data-focus-hide="1"] { display: none !important; }
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* BioSpark token color utilities (bs-*) */
+  --color-bs-bg:          var(--bs-bg);
+  --color-bs-surface:     var(--bs-surface);
+  --color-bs-raised:      var(--bs-raised);
+  --color-bs-overlay:     var(--bs-overlay);
+  --color-bs-border:      var(--bs-border);
+  --color-bs-border-soft: var(--bs-border-soft);
+  --color-bs-teal:        var(--bs-teal);
+  --color-bs-amber:       var(--bs-amber);
+  --color-bs-coral:       var(--bs-coral);
+  --color-bs-success:     var(--bs-success);
+  --color-bs-warning:     var(--bs-warning);
+  --color-bs-danger:      var(--bs-danger);
+  --color-bs-info:        var(--bs-info);
+  --color-bs-text:        var(--bs-text);
+  --color-bs-text-sub:    var(--bs-text-sub);
+  --color-bs-text-muted:  var(--bs-text-muted);
 }
 
 .dark {
