@@ -125,6 +125,11 @@ function masteryBand(value: number) {
   return "remaining";
 }
 
+function clampPct(value: number) {
+  if (!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.min(100, value));
+}
+
 export default function MasteryDonut({
   segments,
   size = 360,
@@ -257,10 +262,21 @@ export default function MasteryDonut({
   const cx = size / 2;
   const cy = size / 2;
 
-  const rOuterOuter = size * 0.42;
-  const rOuterInner = size * 0.26;
+  // Donut encoding:
+  // - angular span (left-to-right) = TEKS/sub-TEKS weight
+  // - radial growth (in/out) = mastery percentage
+  const rInner = size * 0.23;
+  const minThickness = size * 0.12;
+  const maxThickness = size * 0.21;
+  const minOuter = rInner + minThickness;
+  const maxOuter = rInner + maxThickness;
 
-  function renderRing(data: RingArc[], rOuter: number, rInner: number) {
+  function radiusForMastery(value: number) {
+    const pct = clampPct(value) / 100;
+    return minOuter + pct * (maxOuter - minOuter);
+  }
+
+  function renderRing(data: RingArc[]) {
     const total = data.reduce((a, x) => a + x.weight, 0) || 1;
     let ang = -Math.PI / 2;
 
@@ -269,6 +285,7 @@ export default function MasteryDonut({
       const start = ang;
       const end = ang + span;
       ang = end;
+      const rOuter = radiusForMastery(a.value);
 
       const isHover = hoverKey === a.key;
       const dim = hoverKey ? (isHover ? 1 : 0.32) : 1;
@@ -303,7 +320,7 @@ export default function MasteryDonut({
   return (
     <div className="grid gap-4 lg:grid-cols-[380px_1fr]">
       <div className="flex flex-col items-center">
-        <div className="w-full max-w-[340px]">
+        <div className="w-full max-w-85">
           <div className="h-3 overflow-hidden rounded-full bg-slate-200">
             <div className="flex h-full w-full">
               <div
@@ -328,8 +345,10 @@ export default function MasteryDonut({
         </div>
 
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-          {renderRing(arcs, rOuterOuter, rOuterInner)}
-          <circle cx={cx} cy={cy} r={rOuterInner - 8} fill="white" />
+          <circle cx={cx} cy={cy} r={maxOuter} fill="none" stroke="#e2e8f0" />
+          <circle cx={cx} cy={cy} r={minOuter} fill="none" stroke="#cbd5e1" />
+          {renderRing(arcs)}
+          <circle cx={cx} cy={cy} r={rInner - 8} fill="white" />
 
           <text
             x={cx}
@@ -356,13 +375,16 @@ export default function MasteryDonut({
         <div className="-mt-4 text-center text-sm text-slate-600">
           {hoverText(hoverKey)}
         </div>
+        <div className="mt-1 text-center text-xs text-slate-500">
+          Arc width = TEKS count, radial length = mastery
+        </div>
       </div>
 
       <div className="rounded-2xl border border-slate-200 bg-white p-3">
         <div className="mb-2 text-sm font-semibold text-slate-900">
           Color key by unit + TEKS
         </div>
-        <div className="max-h-[360px] space-y-2 overflow-y-auto pr-1">
+        <div className="max-h-90 space-y-2 overflow-y-auto pr-1">
           {units.map((unit) => {
             const isHover = hoverKey === unit.key;
             return (

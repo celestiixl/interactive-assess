@@ -26,6 +26,23 @@ export async function POST(req: Request) {
     });
   }
 
+  if (item?.kind === "quick_check") {
+    const selected = (body?.response?.selectedOption ?? "").toString().trim();
+    const correctAnswer = (item?.correctAnswer ?? "").toString().trim();
+    const isCorrect =
+      Boolean(selected) && Boolean(correctAnswer) && selected === correctAnswer;
+
+    return Response.json({
+      correct: isCorrect,
+      score: isCorrect ? 1 : 0,
+      max: 1,
+      detail: {
+        selectedOption: selected,
+        correctAnswer,
+      },
+    });
+  }
+
   if (item?.kind === "cer") {
     const response = body?.response;
     const correctEvidenceIds = item.correctEvidenceIds;

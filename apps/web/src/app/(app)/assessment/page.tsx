@@ -7,6 +7,71 @@ import { Pill } from "@/components/ia/Pill";
 import { Surface } from "@/components/ia/Surface";
 import { Card, Button } from "@/components/ui";
 
+type RoadmapTone = "emerald" | "teal" | "amber";
+
+type RoadmapSection = {
+  title: string;
+  status: string;
+  tone: RoadmapTone;
+  items: string[];
+};
+
+const ROADMAP_SECTIONS: RoadmapSection[] = [
+  {
+    title: "Live now",
+    status: "shipped",
+    tone: "emerald",
+    items: ["Inline Choice works end-to-end in builder, runner, and scoring."],
+  },
+  {
+    title: "Next sprint",
+    status: "in progress",
+    tone: "teal",
+    items: [
+      "Persist role preference (Student or Teacher) after sign-in.",
+      "Add assignment publishing with due-date and class filters.",
+    ],
+  },
+  {
+    title: "Upcoming",
+    status: "planned",
+    tone: "amber",
+    items: [
+      "Expanded accommodations: read-aloud, extended time, reduced choices.",
+      "Teacher review queue for item quality and revision history.",
+    ],
+  },
+];
+
+const ROADMAP_TONE_STYLES: Record<
+  RoadmapTone,
+  {
+    panel: string;
+    title: string;
+    badge: string;
+    text: string;
+  }
+> = {
+  emerald: {
+    panel: "border-emerald-200 bg-emerald-50/80",
+    title: "text-emerald-800",
+    badge: "border-emerald-300 text-emerald-800",
+    text: "text-emerald-900",
+  },
+  teal: {
+    panel: "border-teal-200 bg-teal-50/80",
+    title: "text-teal-800",
+    badge: "border-teal-300 text-teal-800",
+    text: "text-teal-900",
+  },
+  amber: {
+    panel: "border-amber-200 bg-amber-50/80",
+    title: "text-amber-800",
+    badge: "border-amber-300 text-amber-800",
+    text: "text-amber-900",
+  },
+};
+
 function ActionCard({
   href,
   title,
@@ -177,23 +242,45 @@ export default function AssessmentDashboardEntry() {
             </div>
             <Pill tone="amber">roadmap</Pill>
           </div>
-          <ul className="mt-3 space-y-2 text-sm text-slate-800">
-            <li className="flex gap-2">
-              <span className="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              ✅ Inline Choice is live across builder, runner, and checking flow
-            </li>
-            <li className="flex gap-2">
-              <span className="mt-2 h-1.5 w-1.5 rounded-full bg-teal-500" />
-              🔄 Persist role selection (Student/Teacher) until sign-out
-            </li>
-            <li className="flex gap-2">
-              <span className="mt-2 h-1.5 w-1.5 rounded-full bg-amber-500" />
-              ⏭️ Expand supports: text-to-speech, extended time, reduced choices
-            </li>
-          </ul>
+          <div className="mt-4 space-y-3">
+            {ROADMAP_SECTIONS.map((section) => {
+              const toneStyles = ROADMAP_TONE_STYLES[section.tone];
+
+              return (
+                <div
+                  key={section.title}
+                  className={`rounded-xl border p-3 ${toneStyles.panel}`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div
+                      className={`text-xs font-semibold uppercase tracking-wide ${toneStyles.title}`}
+                    >
+                      {section.title}
+                    </div>
+                    <span
+                      className={`rounded-full border bg-white px-2 py-0.5 text-[10px] font-semibold ${toneStyles.badge}`}
+                    >
+                      {section.status}
+                    </span>
+                  </div>
+                  {section.items.length === 1 ? (
+                    <p className={`mt-1 text-sm ${toneStyles.text}`}>
+                      {section.items[0]}
+                    </p>
+                  ) : (
+                    <ul className={`mt-1 space-y-1 text-sm ${toneStyles.text}`}>
+                      {section.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+          </div>
           <div className="mt-4 text-xs text-slate-600">
-            Tip: after authentication is connected, this page can auto-route
-            each user to Student or Teacher based on their account role.
+            Direction: when authentication is fully connected, this page can
+            route users directly to Student or Teacher based on account role.
           </div>
         </Surface>
       </div>

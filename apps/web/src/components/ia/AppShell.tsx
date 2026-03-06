@@ -14,7 +14,7 @@ export function AppShell({
   fullBleed?: boolean;
 }) {
   const headerClass = fullBleed
-    ? "w-full px-4 py-4 flex items-center"
+    ? "w-full px-2 py-4 flex items-center"
     : "mx-auto max-w-screen-2xl px-6 py-5 flex items-center";
   const bodyClass = fullBleed
     ? "grid w-full grid-cols-1 gap-3 px-2 py-3 lg:grid-cols-[220px_minmax(0,1fr)]"

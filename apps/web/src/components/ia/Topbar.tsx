@@ -23,8 +23,7 @@ export function Topbar({
 
   return (
     <header className="w-full">
-      <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-4 px-6 py-4">
-        <LangToggle />
+      <div className="flex w-full items-center justify-between gap-4 py-2">
         <Link href="/" className="flex items-center gap-3">
           <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/30 bg-white/20 text-sm font-bold text-white">
             BS
@@ -36,6 +35,8 @@ export function Topbar({
             </div>
           </div>
         </Link>
+
+        <LangToggle />
 
         <div className="hidden items-center gap-2 md:flex">
           <Pill tone="white">STAAR aligned</Pill>

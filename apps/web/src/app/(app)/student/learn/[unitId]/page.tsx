@@ -27,6 +27,23 @@ export default async function LearningUnitPage({ params }: UnitPageProps) {
           <p className="mt-2 text-sm text-slate-600">
             Objective: {unit.objective}
           </p>
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600">
+            {unit.instructionalDays ? (
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5">
+                {unit.instructionalDays} instructional days
+              </span>
+            ) : null}
+            {unit.dateRange ? (
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5">
+                {unit.dateRange}
+              </span>
+            ) : null}
+            {unit.concepts ? (
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5">
+                {unit.concepts} concepts
+              </span>
+            ) : null}
+          </div>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-semibold text-slate-700">
               {unit.contentVersion}
@@ -55,6 +72,80 @@ export default async function LearningUnitPage({ params }: UnitPageProps) {
             ))}
           </div>
         </section>
+
+        {unit.lessons.some((lesson) => lesson.vocabularyTiers) ? (
+          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h2 className="text-lg font-semibold text-slate-900">Vocabulary</h2>
+            <p className="mt-1 text-sm text-slate-600">
+              Everyday → Academic → Content Specific
+            </p>
+            <div className="mt-3 space-y-3">
+              {unit.lessons
+                .filter((lesson) => lesson.vocabularyTiers)
+                .map((lesson) => (
+                  <article
+                    key={`${lesson.id}-vocab`}
+                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="text-sm font-semibold text-slate-900">
+                      {lesson.title}
+                    </div>
+                    <div className="mt-2 grid gap-3 md:grid-cols-3">
+                      <div>
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Everyday
+                        </div>
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          {lesson.vocabularyTiers?.everyday.map((word) => (
+                            <span
+                              key={`${lesson.id}-e-${word}`}
+                              className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                            >
+                              {word}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Academic
+                        </div>
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          {lesson.vocabularyTiers?.academic.map((word) => (
+                            <span
+                              key={`${lesson.id}-a-${word}`}
+                              className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                            >
+                              {word}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Content Specific
+                        </div>
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          {lesson.vocabularyTiers?.contentSpecific.map(
+                            (word) => (
+                              <span
+                                key={`${lesson.id}-c-${word}`}
+                                className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                              >
+                                {word}
+                              </span>
+                            ),
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+            </div>
+          </section>
+        ) : null}
 
         <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-3 flex items-center justify-between gap-3">

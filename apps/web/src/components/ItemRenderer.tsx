@@ -11,10 +11,15 @@ export default function ItemRenderer({
   item,
   onChecked,
   checkSignal,
+  mcqOptions,
 }: {
   item: Item;
   onChecked: (r: { score: number; max: number }) => void;
   checkSignal?: number;
+  mcqOptions?: {
+    hideStem?: boolean;
+    externalControls?: boolean;
+  };
 }) {
   if (!item) {
     return (
@@ -49,7 +54,10 @@ export default function ItemRenderer({
       return (
         <MCQ
           item={item as any}
-          onAfterCheck={() => onChecked({ score: 1, max: 1 })}
+          onChecked={onChecked}
+          checkSignal={checkSignal}
+          hideStem={mcqOptions?.hideStem}
+          externalControls={mcqOptions?.externalControls}
         />
       );
     case "dragDrop":

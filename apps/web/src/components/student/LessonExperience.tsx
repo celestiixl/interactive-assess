@@ -2,8 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import type { LearningLesson, LearningUnit } from "@/lib/learningHubContent";
-import type { LearningLevel } from "@/lib/curriculumPolicy";
+import type {
+  LearningLesson,
+  LearningUnit,
+  QuickCheck,
+} from "@/lib/learningHubContent";
+import {
+  interventionStrategyForTier,
+  interventionTierFromCheck,
+  type LearningLevel,
+} from "@/lib/curriculumPolicy";
 import {
   addLessonTime,
   getLessonProgress,
@@ -13,6 +21,8 @@ import PhenomenonBanner from "@/components/student/PhenomenonBanner";
 import { getPhenomenonForLesson } from "@/lib/texasPhenomena";
 import LessonNotebook from "@/components/student/LessonNotebook";
 import { loadStudentProfile } from "@/lib/studentProfile";
+import { speakText, stopSpeaking } from "@/lib/accommodations";
+import { useAccommodations } from "@/lib/useAccommodations";
 
 const HOOK_DISMISSED_KEY = "biospark.hook.dismissed.v1";
 
@@ -25,59 +35,63 @@ type LessonExperienceProps = {
 
 type CheckQuestion = {
   id: string;
-  prompt: string;
-  choices: string[];
-  correctIndex: number;
+  question: string;
+  options: string[];
+  correctAnswer: string;
   teks: string;
   learningLevel: LearningLevel;
   conceptId: string;
   misconceptionTarget?: boolean;
-  misconception?: string;
+  misconceptionDescription?: string;
 };
 
 function buildQuestions(
   unit: LearningUnit,
   lesson: LearningLesson,
 ): CheckQuestion[] {
+  if (Array.isArray(lesson.quickChecks) && lesson.quickChecks.length) {
+    return lesson.quickChecks.map((row: QuickCheck) => ({ ...row }));
+  }
+
   const keyTerms = lesson.keyTerms.length ? lesson.keyTerms : ["concept"];
   const firstTerm = keyTerms[0] ?? "concept";
   const secondTerm = keyTerms[1] ?? "evidence";
   const teks = unit.teks[0] ?? "B.5A";
   const conceptId = `${unit.id}-${lesson.slug}`;
-  const misconception = unit.misconceptions[0] ?? "Common misconception";
+  const misconceptionDescription =
+    unit.misconceptions[0] ?? "Common misconception";
 
   return [
     {
       id: "q1",
-      prompt: "Which term is a key focus of this lesson?",
-      choices: [firstTerm, secondTerm, "None of these", "Random guess"],
-      correctIndex: 0,
+      question: "Which term is a key focus of this lesson?",
+      options: [firstTerm, secondTerm, "None of these", "Random guess"],
+      correctAnswer: firstTerm,
       teks,
       learningLevel: "developing",
       conceptId,
       misconceptionTarget: true,
-      misconception,
+      misconceptionDescription,
     },
     {
       id: "q2",
-      prompt: "What is this lesson format?",
-      choices: ["Reading", "Lecture", "Notes", "Assessment"],
-      correctIndex:
-        lesson.type === "Reading" ? 0 : lesson.type === "Lecture" ? 1 : 2,
+      question: "What is this lesson format?",
+      options: ["Reading", "Lecture", "Notes", "Assessment"],
+      correctAnswer: lesson.type,
       teks,
       learningLevel: "progressing",
       conceptId,
     },
     {
       id: "q3",
-      prompt: "How should you unlock the next lesson?",
-      choices: [
+      question: "How should you unlock the next lesson?",
+      options: [
         "Finish reading and score at least 70%",
         "Only click Next",
         "Skip all sections",
         "Close the page",
       ],
-      correctIndex: 0,
+      correctAnswer: "Finish reading and score at least 70%",
       teks,
       learningLevel: "proficient",
       conceptId,
@@ -91,6 +105,7 @@ export default function LessonExperience({
   previousLesson,
   nextLesson,
 }: LessonExperienceProps) {
+  const { acc } = useAccommodations();
   const questions = useMemo(() => buildQuestions(unit, lesson), [lesson, unit]);
   const [language, setLanguage] = useState<"en" | "es">("en");
   const [dyslexiaMode, setDyslexiaMode] = useState(false);
@@ -112,6 +127,10 @@ export default function LessonExperience({
       return "anonymous";
     }
   });
+  const [questionResults, setQuestionResults] = useState<
+    Record<string, { correct: boolean }>
+  >({});
+  const [interventionTier, setInterventionTier] = useState<2 | 3 | null>(null);
 
   useEffect(() => {
     const saved = getLessonProgress(lesson.id);
@@ -177,35 +196,78 @@ export default function LessonExperience({
   function toggleReadAloud() {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
+      stopSpeaking();
       return;
     }
 
     const body = lesson.sections
       .map((section) => `${section.heading}. ${section.body.join(" ")}`)
       .join(" ");
-    const utterance = new SpeechSynthesisUtterance(
-      `${lesson.title}. ${lesson.summary}. ${body}`,
-    );
-    utterance.lang = language === "es" ? "es-US" : "en-US";
-    window.speechSynthesis.speak(utterance);
+    void speakText({
+      text: `${lesson.title}. ${lesson.summary}. ${body}`,
+      language,
+      voicePreference: acc.ttsVoice,
+      speedPreference: acc.ttsSpeed,
+    });
   }
 
-  function handleSubmitCheck() {
-    const correctCount = questions.reduce((acc, question) => {
-      return acc + (answers[question.id] === question.correctIndex ? 1 : 0);
-    }, 0);
+  async function handleSubmitCheck() {
+    const results: Record<string, { correct: boolean }> = {};
+    let correctCount = 0;
+
+    for (const question of questions) {
+      const selectedIndex = answers[question.id];
+      const selectedOption =
+        typeof selectedIndex === "number"
+          ? question.options[selectedIndex]
+          : "";
+
+      let correct = false;
+      try {
+        const res = await fetch("/api/check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            item: {
+              kind: "quick_check",
+              id: question.id,
+              teks: question.teks,
+              correctAnswer: question.correctAnswer,
+            },
+            response: {
+              selectedOption,
+            },
+          }),
+        });
+        const data = await res.json();
+        correct = Boolean(data?.correct);
+      } catch {
+        // Client fallback if check endpoint is temporarily unavailable.
+        correct = selectedOption === question.correctAnswer;
+      }
+
+      results[question.id] = { correct };
+      if (correct) correctCount += 1;
+    }
+
+    setQuestionResults(results);
+
     const pct = Math.round((correctCount / questions.length) * 100);
     const prev = getLessonProgress(lesson.id);
     const attempts = (prev?.checkAttempts ?? 0) + 1;
+    const failedAttempts =
+      (prev?.failedCheckAttempts ?? 0) + (pct < 70 ? 1 : 0);
+    const tier = interventionTierFromCheck(pct, failedAttempts);
 
     updateLessonProgress(lesson.id, {
       checkScore: pct,
       checkAttempts: attempts,
+      failedCheckAttempts: failedAttempts,
       completed: readingProgress === 100 && pct >= 70,
       percent: readingProgress,
     });
 
+    setInterventionTier(tier);
     setScore(pct);
     setSubmitted(true);
   }
@@ -240,7 +302,18 @@ export default function LessonExperience({
               <button
                 type="button"
                 onClick={toggleReadAloud}
-                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                disabled={!acc.tts}
+                title={
+                  acc.tts
+                    ? "Read this lesson aloud"
+                    : "Enable Read aloud in Supports to use this"
+                }
+                className={[
+                  "rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold",
+                  acc.tts
+                    ? "text-slate-700 hover:bg-slate-50"
+                    : "cursor-not-allowed text-slate-400",
+                ].join(" ")}
               >
                 Read Aloud
               </button>
@@ -289,6 +362,63 @@ export default function LessonExperience({
               </span>
             ))}
           </div>
+
+          {lesson.vocabularyTiers ? (
+            <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Vocabulary: Everyday to Academic to Content Specific
+              </div>
+              <div className="mt-2 grid gap-3 md:grid-cols-3">
+                <div>
+                  <div className="text-xs font-semibold text-slate-700">
+                    Everyday
+                  </div>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {lesson.vocabularyTiers.everyday.map((word) => (
+                      <span
+                        key={`v-e-${word}`}
+                        className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                      >
+                        {word}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-xs font-semibold text-slate-700">
+                    Academic
+                  </div>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {lesson.vocabularyTiers.academic.map((word) => (
+                      <span
+                        key={`v-a-${word}`}
+                        className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                      >
+                        {word}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-xs font-semibold text-slate-700">
+                    Content Specific
+                  </div>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {lesson.vocabularyTiers.contentSpecific.map((word) => (
+                      <span
+                        key={`v-c-${word}`}
+                        className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                      >
+                        {word}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </section>
 
         {phenomenon ? <PhenomenonBanner phenomenon={phenomenon} /> : null}
@@ -355,17 +485,26 @@ export default function LessonExperience({
                 key={question.id}
                 className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
               >
+                <div className="mb-2 flex flex-wrap items-center gap-2">
+                  <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700">
+                    TEKS {question.teks}
+                  </span>
+                  <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-700">
+                    {question.learningLevel}
+                  </span>
+                </div>
                 <div className="text-sm font-semibold text-slate-900">
-                  {index + 1}. {question.prompt}
+                  {index + 1}. {question.question}
                 </div>
                 <div className="mt-2 space-y-2">
-                  {question.choices.map((choice, optionIndex) => (
+                  {question.options.map((choice, optionIndex) => (
                     <label
                       key={choice}
                       className="flex items-center gap-2 text-sm text-slate-700"
                     >
                       <input
                         type="radio"
+                        aria-label={`${question.id}-${choice}`}
                         name={question.id}
                         checked={answers[question.id] === optionIndex}
                         onChange={() =>
@@ -379,6 +518,23 @@ export default function LessonExperience({
                     </label>
                   ))}
                 </div>
+                {submitted && !questionResults[question.id]?.correct ? (
+                  <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+                    <div className="font-semibold">Not quite.</div>
+                    <div className="mt-1">
+                      Correct answer:{" "}
+                      <span className="font-semibold">
+                        {question.correctAnswer}
+                      </span>
+                    </div>
+                    {question.misconceptionTarget &&
+                    question.misconceptionDescription ? (
+                      <div className="mt-1">
+                        {question.misconceptionDescription}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
             ))}
           </div>
@@ -387,6 +543,7 @@ export default function LessonExperience({
             <button
               type="button"
               onClick={handleSubmitCheck}
+              aria-label="Submit quick check"
               className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
             >
               Submit Check
@@ -394,6 +551,7 @@ export default function LessonExperience({
             <button
               type="button"
               onClick={markComplete}
+              aria-label="Mark lesson complete"
               className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
             >
               Mark Lesson Complete
@@ -401,6 +559,18 @@ export default function LessonExperience({
             {submitted && score !== null ? (
               <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800">
                 Score: {score}%
+              </div>
+            ) : null}
+            {submitted && interventionTier ? (
+              <div
+                className={
+                  interventionTier === 3
+                    ? "rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-800"
+                    : "rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800"
+                }
+              >
+                Tier {interventionTier} intervention triggered:{" "}
+                {interventionStrategyForTier(interventionTier)}
               </div>
             ) : null}
           </div>

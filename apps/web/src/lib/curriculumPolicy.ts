@@ -15,6 +15,8 @@ export const PRIORITY_TEKS = [
   "B.7A",
   "B.7B",
   "B.7C",
+  "B.6A",
+  "B.6C",
 ] as const;
 
 const PRIORITY_TEKS_SET = new Set<string>(PRIORITY_TEKS);

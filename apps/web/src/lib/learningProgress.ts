@@ -4,6 +4,7 @@ export type LessonProgress = {
   lastVisitedAt: string;
   checkScore?: number;
   checkAttempts?: number;
+  failedCheckAttempts?: number;
   timeSpentSec?: number;
 };
 
@@ -48,6 +49,7 @@ export function updateLessonProgress(
     percent: 0,
     lastVisitedAt: new Date().toISOString(),
     checkAttempts: 0,
+    failedCheckAttempts: 0,
     timeSpentSec: 0,
   };
   map[lessonId] = {
@@ -69,6 +71,7 @@ export function addLessonTime(
     percent: 0,
     lastVisitedAt: new Date().toISOString(),
     checkAttempts: 0,
+    failedCheckAttempts: 0,
     timeSpentSec: 0,
   };
   map[lessonId] = {

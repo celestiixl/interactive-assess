@@ -2,7 +2,7 @@ export type ReportingCategory = "RC1" | "RC2" | "RC3" | "RC4";
 
 export type TeksEntry = {
   id: string; // e.g., "B.5A"
-  unit: 1 | 2;
+  unit: 1 | 2 | 3;
   strand: string;
   title: string;
   description: string;
@@ -16,7 +16,7 @@ export const RC_LABELS: Record<ReportingCategory, string> = {
   RC4: "Gene Expression and Mutation",
 };
 
-// FBISD-aligned starter catalog (Units 1-2 only)
+// FBISD-aligned starter catalog (Units 1-3)
 export const TEKS_CATALOG: Record<string, TeksEntry> = {
   "B.1A": {
     id: "B.1A",
@@ -147,5 +147,50 @@ export const TEKS_CATALOG: Record<string, TeksEntry> = {
     description:
       "Identify and illustrate changes in DNA and evaluate significance of those changes.",
     teaPriority: "Priority Content",
+  },
+  "B.5D": {
+    id: "B.5D",
+    unit: 3,
+    strand: "Viruses and cells",
+    title: "Compare virus and cell structures",
+    description:
+      "Compare structures of viruses to cells and explain how viruses spread and cause disease.",
+    teaPriority: "Content",
+  },
+  "B.6A": {
+    id: "B.6A",
+    unit: 3,
+    strand: "Cell cycle",
+    title: "Cell cycle importance and models",
+    description:
+      "Explain the importance of the cell cycle to organism growth and model the overview of stages and DNA replication.",
+    teaPriority: "Priority Content",
+  },
+  "B.6B": {
+    id: "B.6B",
+    unit: 3,
+    strand: "Differentiation",
+    title: "Cell specialization",
+    description:
+      "Explain cell specialization through differentiation including the role of environmental factors.",
+    teaPriority: "Content",
+  },
+  "B.6C": {
+    id: "B.6C",
+    unit: 3,
+    strand: "Cell cycle disruptions",
+    title: "Disruptions and disease",
+    description:
+      "Relate disruptions of the cell cycle to the development of diseases such as cancer.",
+    teaPriority: "Priority Content",
+  },
+  "B.8A": {
+    id: "B.8A",
+    unit: 3,
+    strand: "Meiosis and diversity",
+    title: "Meiosis and genetic diversity",
+    description:
+      "Analyze the significance of chromosome reduction, independent assortment, and crossing-over during meiosis in increasing diversity in sexually reproducing populations.",
+    teaPriority: "Content",
   },
 };

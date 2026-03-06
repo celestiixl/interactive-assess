@@ -1,40 +1,52 @@
-import type { MCQItem } from "@/components/items/MCQ";
+import type { ItemMCQ } from "@/types/item";
 
-export const bio9Items: MCQItem[] = [
+export const bio9Items: ItemMCQ[] = [
   {
+    kind: "mcq",
     id: "bio-1",
-    tags: ["BIO.5.B", "BIO.5.A"], // organelles & biomolecules/cell function
-    stem: "Which organelle modifies, sorts, and packages proteins for secretion?",
+    tags: ["BIO.5.B", "BIO.5.A"],
+    teks: ["BIO.5.B", "BIO.5.A"],
+    stem: "A secretory cell makes large amounts of digestive enzymes. Which organelle is most directly responsible for modifying, sorting, and packaging these proteins before release?",
     choices: [
-      { id: "a", text: "Nucleus" },
-      { id: "b", text: "Mitochondrion" },
-      { id: "c", text: "Golgi apparatus" },
-      { id: "d", text: "Ribosome" },
+      { id: "a", text: "Ribosome" },
+      { id: "b", text: "Golgi apparatus" },
+      { id: "c", text: "Rough endoplasmic reticulum" },
+      { id: "d", text: "Lysosome" },
     ],
-    correctIds: ["c"],
+    correctIds: ["b"],
     retryLimit: 2,
     rationale:
-      "The Golgi apparatus processes and packages proteins from the ER for transport.",
+      "Ribosomes build proteins, but the Golgi apparatus modifies, sorts, and packages them into vesicles for transport or secretion.",
   },
   {
+    kind: "mcq",
     id: "bio-2",
-    tags: ["BIO.5.A"], // biomolecules & function
-    stem: "Which macromolecule pairing is correctly matched with its primary function?",
+    tags: ["BIO.5.A"],
+    teks: ["BIO.5.A"],
+    stem: "Which biomolecule-to-function match is most accurate?",
     choices: [
-      { id: "a", text: "Enzymes — proteins" },
-      { id: "b", text: "Starch — carbohydrate" },
-      { id: "c", text: "DNA — nucleic acid" },
-      { id: "d", text: "Phospholipid — lipid" },
+      {
+        id: "a",
+        text: "Nucleic acids: store and transmit genetic information",
+      },
+      { id: "b", text: "Lipids: form peptide bonds between amino acids" },
+      { id: "c", text: "Carbohydrates: directly code for proteins" },
+      {
+        id: "d",
+        text: "Proteins: long-term storage of hereditary information",
+      },
     ],
     correctIds: ["a"],
     retryLimit: 2,
     rationale:
-      "Enzymes are proteins that catalyze reactions. Starch is a carbohydrate; DNA is a nucleic acid; phospholipids are lipids.",
+      "Nucleic acids (DNA and RNA) store and transmit genetic information. Lipids, carbohydrates, and proteins have other primary roles.",
   },
   {
+    kind: "mcq",
     id: "bio-3",
-    tags: ["BIO.11.A"], // photosynthesis vs respiration
-    stem: "Which statement accurately describes photosynthesis and cellular respiration?",
+    tags: ["BIO.11.A"],
+    teks: ["BIO.11.A"],
+    stem: "Which statement best compares photosynthesis and cellular respiration?",
     choices: [
       {
         id: "a",
@@ -50,12 +62,14 @@ export const bio9Items: MCQItem[] = [
     correctIds: ["c"],
     retryLimit: 2,
     rationale:
-      "Photosynthesis captures energy to build glucose; cellular respiration breaks glucose to make ATP.",
+      "Photosynthesis captures light energy and stores it in glucose. Cellular respiration releases that stored chemical energy to produce ATP.",
   },
   {
+    kind: "mcq",
     id: "bio-4",
-    tags: ["BIO.7.A"], // DNA/RNA components
-    stem: "Which component is found in RNA but not in DNA?",
+    tags: ["BIO.7.A"],
+    teks: ["BIO.7.A"],
+    stem: "Which feature is found in RNA but not in DNA?",
     choices: [
       { id: "a", text: "Thymine" },
       { id: "b", text: "Uracil" },
@@ -64,12 +78,15 @@ export const bio9Items: MCQItem[] = [
     ],
     correctIds: ["b"],
     retryLimit: 2,
-    rationale: "RNA contains uracil instead of thymine and uses ribose sugar.",
+    rationale:
+      "RNA contains uracil (U) and uses ribose sugar, while DNA contains thymine (T) and deoxyribose.",
   },
   {
+    kind: "mcq",
     id: "bio-5",
-    tags: ["BIO.8.B"], // Punnett outcomes
-    stem: "In peas, yellow (Y) is dominant to green (y). What fraction of offspring from Yy × yy are expected to be green?",
+    tags: ["BIO.8.B"],
+    teks: ["BIO.8.B"],
+    stem: "In pea plants, yellow seed color (Y) is dominant to green (y). What fraction of offspring from Yy × yy are expected to be green?",
     choices: [
       { id: "a", text: "0" },
       { id: "b", text: "1/4" },
@@ -81,8 +98,10 @@ export const bio9Items: MCQItem[] = [
     rationale: "Yy × yy → 50% Yy (yellow) and 50% yy (green).",
   },
   {
+    kind: "mcq",
     id: "bio-6",
-    tags: ["BIO.10.A", "BIO.10.B"], // natural selection concepts
+    tags: ["BIO.10.A", "BIO.10.B"],
+    teks: ["BIO.10.A", "BIO.10.B"],
     stem: "Which situation best demonstrates natural selection?",
     choices: [
       { id: "a", text: "Plants grow faster when watered daily." },
@@ -99,8 +118,10 @@ export const bio9Items: MCQItem[] = [
       "Antibiotics select for resistant bacteria; survivors reproduce, changing the population.",
   },
   {
+    kind: "mcq",
     id: "bio-7",
-    tags: ["BIO.12.A"], // homeostasis via system interactions
+    tags: ["BIO.12.A"],
+    teks: ["BIO.12.A"],
     stem: "Which is an example of negative feedback maintaining homeostasis in humans?",
     choices: [
       { id: "a", text: "A wound forms a scar" },
@@ -114,8 +135,10 @@ export const bio9Items: MCQItem[] = [
       "When blood glucose rises, insulin reduces it toward the set point (negative feedback).",
   },
   {
+    kind: "mcq",
     id: "bio-8",
-    tags: ["BIO.13.A", "BIO.13.B"], // succession & stability
+    tags: ["BIO.13.A", "BIO.13.B"],
+    teks: ["BIO.13.A", "BIO.13.B"],
     stem: "Primary succession most likely occurs in which situation?",
     choices: [
       { id: "a", text: "After a forest fire leaves soil intact" },
@@ -129,8 +152,10 @@ export const bio9Items: MCQItem[] = [
       "Primary succession starts where no soil exists, such as new lava flows or glacial retreats.",
   },
   {
+    kind: "mcq",
     id: "bio-9",
-    tags: ["BIO.5.C"], // osmosis—cell transport
+    tags: ["BIO.5.C"],
+    teks: ["BIO.5.C"],
     stem: "Water moving across a semipermeable membrane from high water concentration to low water concentration is called—",
     choices: [
       { id: "a", text: "Active transport" },

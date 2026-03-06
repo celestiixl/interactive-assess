@@ -116,7 +116,7 @@ export default function StudentLearningHubPage() {
               </h1>
               <p className="mt-2 text-sm text-slate-600">
                 Readings, lectures, and notes with mastery pathing and
-                assignment-linked pacing for Units 1-2.
+                assignment-linked pacing for Units 1-3.
               </p>
               <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-slate-600">
                 <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1">

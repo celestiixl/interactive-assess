@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import ItemRenderer from "@/components/ItemRenderer";
 import AssignmentNav from "@/components/AssignmentNav";
 import ProgressBar from "@/components/ui/ProgressBar";
-import { ExamBar } from "@/components/student/ExamBar";
 import ResultsDrawer from "@/components/student/ResultsDrawer";
 import { StudentSplitLayout } from "@/components/student/StudentSplitLayout";
 import { useSupports } from "@/components/student/supportsStore";
@@ -203,6 +202,161 @@ export default function PracticeByCategory() {
   );
   const safeIndex = Math.max(0, Math.min(current, mergedItems.length - 1));
   const safeItem = mergedItems[safeIndex];
+  const isHotspotItem = (safeItem as any)?.kind === "hotspot";
+
+  function handleItemChecked(r: { score: number; max: number }) {
+    if (!safeItem) return;
+
+    const id = String((safeItem as any)?.id ?? safeIndex);
+    const itemAttempts = (safeItem as any)?.attempts;
+
+    // Exam mode: always 1 attempt. Unlimited only allowed in Learn.
+    const allowed =
+      mode === "exam"
+        ? 1
+        : itemAttempts === "unlimited"
+          ? Infinity
+          : typeof itemAttempts === "number"
+            ? Math.max(1, itemAttempts)
+            : 2;
+
+    const usedPrev = attemptsById[id] ?? 0;
+    const usedNow = usedPrev + 1;
+    setAttemptsById((prev) => ({ ...prev, [id]: usedNow }));
+
+    const attemptsLeft =
+      allowed === Infinity ? Infinity : Math.max(0, allowed - usedNow);
+
+    const timeSeconds = Math.max(
+      0,
+      Math.round((Date.now() - questionStartRef.current) / 1000),
+    );
+
+    const correct = r.score === r.max;
+    const quality = qualityFromScore(r.score, r.max);
+    const teksIds = extractTeksIds(safeItem);
+
+    if (teksIds.length) {
+      try {
+        teksIds.forEach((teksId) => {
+          updateRecord(teksId, quality);
+        });
+      } catch {}
+    }
+
+    // Explanation gating:
+    // - Exam: never show
+    // - Learn + unlimited: show anytime
+    // - Learn + numbered: show only after attempts are used up
+    const canShowExplanation =
+      mode === "learn" &&
+      (correct || allowed === Infinity || usedNow >= allowed);
+
+    setLastResult({
+      score: r.score,
+      max: r.max,
+      correct,
+      timeSeconds,
+      attemptsLeft,
+      canShowExplanation,
+    });
+
+    setStatusByIndex((prev) => ({
+      ...prev,
+      [safeIndex]: correct ? "correct" : "wrong",
+    }));
+
+    setCheckedThisItem(true);
+    setDrawerOpen(true);
+  }
+
+  function handleCheckOrContinue() {
+    if (!checkedThisItem) {
+      // Prefer clicking the item's own Check button if it exists.
+      const btn = document.querySelector(
+        'button[data-check-button="true"]',
+      ) as HTMLButtonElement | null;
+      if (btn) {
+        btn.click();
+        return;
+      }
+      // Otherwise signal the item to check itself.
+      setCheckSignal((n) => n + 1);
+      return;
+    }
+
+    // After checking, allow moving forward.
+    if (safeIndex < mergedItems.length - 1) {
+      setCurrent(Math.min(mergedItems.length - 1, safeIndex + 1));
+    }
+  }
+
+  const questionPanel = (
+    <div className="space-y-3">
+      <div className="text-base text-slate-600">
+        TEKS: {Array.isArray(safeItem?.teks) ? safeItem.teks.join(", ") : "—"}
+      </div>
+
+      <div className="rounded-2xl border border-slate-200 bg-white p-4">
+        <div className="text-base font-semibold text-slate-900">Prompt</div>
+        <BilingualText
+          text={
+            (safeItem as any)?.prompt ??
+            (safeItem as any)?.stem ??
+            "No prompt found for this item yet."
+          }
+          showSupport={effectiveShowSupport}
+          supportLanguage={supports.state.supportLanguage}
+          classNameEn="mt-2 text-lg leading-8 text-slate-800 whitespace-pre-wrap"
+          classNameSupport="mt-1 text-xs text-slate-500 italic whitespace-pre-wrap"
+          glossary={(safeItem as any)?.glossary ?? []}
+        />
+      </div>
+    </div>
+  );
+
+  const answerWorkspace = (
+    <>
+      {!safeItem ? (
+        <div className="p-4 border rounded bg-neutral-50">
+          Couldn&apos;t load this item. Try another one.
+        </div>
+      ) : (
+        <ItemRenderer
+          checkSignal={checkSignal}
+          item={safeItem as any}
+          onChecked={handleItemChecked}
+          mcqOptions={{ hideStem: true, externalControls: true }}
+        />
+      )}
+
+      <div className="flex justify-between text-sm text-neutral-600">
+        <button
+          className="rounded-md border px-3 py-1.5 hover:bg-neutral-100 disabled:opacity-50"
+          onClick={() => setCurrent(Math.max(0, safeIndex - 1))}
+          disabled={safeIndex === 0}
+        >
+          ← Previous
+        </button>
+        <button
+          className="rounded-md border px-3 py-1.5 hover:bg-neutral-100 disabled:opacity-50"
+          onClick={handleCheckOrContinue}
+          disabled={
+            !safeItem ||
+            (checkedThisItem && safeIndex === mergedItems.length - 1)
+          }
+        >
+          {checkedThisItem
+            ? safeIndex === mergedItems.length - 1
+              ? "Done"
+              : "Next"
+            : "Next"}
+        </button>
+      </div>
+    </>
+  );
+
+  const splitRightPanel = <div className="space-y-3">{answerWorkspace}</div>;
 
   // Reset per-question state
   useEffect(() => {
@@ -223,20 +377,7 @@ export default function PracticeByCategory() {
 
   return (
     <AppShell activeKey="practice" fullBleed>
-      <div className="w-full py-4 space-y-5 text-[15px] leading-normal">
-        <div className="sticky top-0 z-50 bg-white/85 backdrop-blur border-b border-slate-200">
-          <div className="flex items-center justify-between">
-            <ExamBar
-              title={`Practice • ${rcParam || rcLabels[0]}`}
-              metaLeft={`Item ${safeIndex + 1} of ${mergedItems.length || 0}`}
-              mode={mode}
-              onModeChange={setMode}
-              onToggleFlag={() => setFlagged((v) => !v)}
-              flagged={flagged}
-            />
-          </div>
-        </div>
-
+      <div className="w-full space-y-5 bg-linear-to-b from-slate-50 to-white py-4 text-[15px] leading-normal">
         <div className="w-full px-2 py-4 pb-8 space-y-5 lg:px-3">
           <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-14 bg-linear-to-r from-violet-100/70 via-white to-amber-100/70" />
@@ -262,7 +403,54 @@ export default function PracticeByCategory() {
                 </div>
               </div>
 
-              <div className="relative z-10 flex items-center gap-2">
+              <div className="relative z-10 flex flex-wrap items-center justify-end gap-2">
+                <div className="flex rounded-xl border border-slate-200 bg-white/70 p-1">
+                  <button
+                    type="button"
+                    onClick={() => setMode("learn")}
+                    className={[
+                      "rounded-lg px-3 py-1.5 text-xs font-semibold",
+                      mode === "learn"
+                        ? "bg-slate-900 text-white"
+                        : "text-slate-600 hover:bg-slate-50",
+                    ].join(" ")}
+                  >
+                    Learn
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode("exam")}
+                    className={[
+                      "rounded-lg px-3 py-1.5 text-xs font-semibold",
+                      mode === "exam"
+                        ? "bg-slate-900 text-white"
+                        : "text-slate-600 hover:bg-slate-50",
+                    ].join(" ")}
+                  >
+                    Exam
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  className="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 text-xs text-slate-700 hover:bg-slate-50"
+                >
+                  Notes
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setFlagged((v) => !v)}
+                  className={[
+                    "rounded-xl border px-3 py-2 text-xs",
+                    flagged
+                      ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                      : "border-slate-200 bg-white/70 text-slate-700 hover:bg-slate-50",
+                  ].join(" ")}
+                >
+                  {flagged ? "Flagged" : "Flag"}
+                </button>
+
                 <div className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
                   {safeIndex + 1}/{Math.max(1, mergedItems.length)}
                 </div>
@@ -319,6 +507,18 @@ export default function PracticeByCategory() {
                 </button>
               ))}
             </div>
+
+            <div className="relative z-10 mt-4 rounded-2xl border border-slate-200 bg-white/80 p-3">
+              <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Question navigator
+              </div>
+              <AssignmentNav
+                total={mergedItems.length}
+                current={safeIndex}
+                statusByIndex={statusByIndex}
+                onSelect={setCurrent}
+              />
+            </div>
           </div>
 
           {/* Nav + Item */}
@@ -326,174 +526,32 @@ export default function PracticeByCategory() {
             <div className="p-4 border rounded bg-neutral-50">
               No items for this category yet.
             </div>
+          ) : isHotspotItem ? (
+            <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm ring-1 ring-slate-100">
+              <header className="border-b border-slate-200 bg-linear-to-r from-sky-50 via-indigo-50 to-emerald-50 px-4 py-3">
+                <div className="text-sm font-semibold text-slate-900">
+                  Interactive Hotspot
+                </div>
+                <div className="text-xs text-slate-500">
+                  Select regions directly on the image, then check your answer.
+                </div>
+              </header>
+              <div className="grid gap-4 p-4 xl:grid-cols-[0.95fr_1.05fr]">
+                <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                  {questionPanel}
+                </div>
+
+                <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
+                  {answerWorkspace}
+                </div>
+              </div>
+            </section>
           ) : (
             <StudentSplitLayout
               leftTitle="Question"
               rightTitle="Your Work"
-              left={
-                <div className="space-y-3">
-                  <div className="text-sm text-slate-500">
-                    TEKS:{" "}
-                    {Array.isArray(safeItem?.teks)
-                      ? safeItem.teks.join(", ")
-                      : "—"}
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 p-4">
-                    <div className="text-sm font-semibold text-slate-900">
-                      Prompt
-                    </div>
-                    <BilingualText
-                      text={
-                        (safeItem as any)?.prompt ??
-                        (safeItem as any)?.stem ??
-                        "No prompt found for this item yet."
-                      }
-                      showSupport={effectiveShowSupport}
-                      supportLanguage={supports.state.supportLanguage}
-                      classNameEn="mt-2 text-sm text-slate-700 whitespace-pre-wrap"
-                      classNameSupport="mt-1 text-xs text-slate-500 italic whitespace-pre-wrap"
-                      glossary={(safeItem as any)?.glossary ?? []}
-                    />
-                  </div>
-                </div>
-              }
-              right={
-                <div className="space-y-3">
-                  <AssignmentNav
-                    total={mergedItems.length}
-                    current={safeIndex}
-                    statusByIndex={statusByIndex}
-                    onSelect={setCurrent}
-                  />
-
-                  {!safeItem ? (
-                    <div className="p-4 border rounded bg-neutral-50">
-                      Couldn&apos;t load this item. Try another one.
-                    </div>
-                  ) : (
-                    <ItemRenderer
-                      checkSignal={checkSignal}
-                      item={safeItem as any}
-                      onChecked={(r) => {
-                        const id = String((safeItem as any)?.id ?? safeIndex);
-                        const itemAttempts = (safeItem as any)?.attempts;
-
-                        // Exam mode: always 1 attempt. Unlimited only allowed in Learn.
-                        const allowed =
-                          mode === "exam"
-                            ? 1
-                            : itemAttempts === "unlimited"
-                              ? Infinity
-                              : typeof itemAttempts === "number"
-                                ? Math.max(1, itemAttempts)
-                                : 2;
-
-                        const usedPrev = attemptsById[id] ?? 0;
-                        const usedNow = usedPrev + 1;
-                        setAttemptsById((prev) => ({ ...prev, [id]: usedNow }));
-
-                        const attemptsLeft =
-                          allowed === Infinity
-                            ? Infinity
-                            : Math.max(0, allowed - usedNow);
-
-                        const timeSeconds = Math.max(
-                          0,
-                          Math.round(
-                            (Date.now() - questionStartRef.current) / 1000,
-                          ),
-                        );
-
-                        const correct = r.score === r.max;
-                        const quality = qualityFromScore(r.score, r.max);
-                        const teksIds = extractTeksIds(safeItem);
-
-                        if (teksIds.length) {
-                          try {
-                            teksIds.forEach((teksId) => {
-                              updateRecord(teksId, quality);
-                            });
-                          } catch {}
-                        }
-
-                        // Explanation gating:
-                        // - Exam: never show
-                        // - Learn + unlimited: show anytime
-                        // - Learn + numbered: show only after attempts are used up
-                        const canShowExplanation =
-                          mode === "learn" &&
-                          (correct ||
-                            allowed === Infinity ||
-                            usedNow >= allowed);
-
-                        setLastResult({
-                          score: r.score,
-                          max: r.max,
-                          correct,
-                          timeSeconds,
-                          attemptsLeft,
-                          canShowExplanation,
-                        });
-
-                        setStatusByIndex((prev) => ({
-                          ...prev,
-                          [safeIndex]: correct ? "correct" : "wrong",
-                        }));
-
-                        setCheckedThisItem(true);
-                        setDrawerOpen(true);
-                      }}
-                    />
-                  )}
-
-                  <div className="flex justify-between text-sm text-neutral-600">
-                    <button
-                      className="rounded-md border px-3 py-1.5 hover:bg-neutral-100 disabled:opacity-50"
-                      onClick={() => setCurrent(Math.max(0, safeIndex - 1))}
-                      disabled={safeIndex === 0}
-                    >
-                      ← Previous
-                    </button>
-                    <button
-                      className="rounded-md border px-3 py-1.5 hover:bg-neutral-100 disabled:opacity-50"
-                      onClick={() => {
-                        if (!checkedThisItem) {
-                          // Prefer clicking the item's own Check button if it exists:
-                          const btn = document.querySelector(
-                            'button[data-check-button="true"]',
-                          ) as HTMLButtonElement | null;
-                          if (btn) {
-                            btn.click();
-                            return;
-                          }
-                          // Otherwise signal the item to check itself:
-                          setCheckSignal((n) => n + 1);
-                          return;
-                        }
-
-                        // After checking, allow moving forward
-                        if (safeIndex < mergedItems.length - 1) {
-                          setCurrent(
-                            Math.min(mergedItems.length - 1, safeIndex + 1),
-                          );
-                        }
-                      }}
-                      disabled={
-                        !safeItem ||
-                        (checkedThisItem &&
-                          safeIndex === mergedItems.length - 1)
-                      }
-                    >
-                      {checkedThisItem
-                        ? safeIndex === mergedItems.length - 1
-                          ? "Done"
-                          : "Continue"
-                        : "Check Answer"}
-                    </button>
-                  </div>
-                </div>
-              }
+              left={questionPanel}
+              right={splitRightPanel}
             />
           )}
 

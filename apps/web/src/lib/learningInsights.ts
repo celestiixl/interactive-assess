@@ -2,6 +2,7 @@ import { LEARNING_UNITS, type LearningUnit } from "@/lib/learningHubContent";
 import {
   interventionStrategyForTier,
   interventionTierFromCheck,
+  isPriorityTeks,
   type InterventionTier,
 } from "@/lib/curriculumPolicy";
 import type { LearningProgressMap } from "@/lib/learningProgress";
@@ -82,7 +83,10 @@ export function buildInterventionQueue(
       const row = progress[lesson.id];
       if (!row) continue;
 
-      const tier = interventionTierFromCheck(row.checkScore, row.checkAttempts);
+      const tier = interventionTierFromCheck(
+        row.checkScore,
+        row.failedCheckAttempts ?? row.checkAttempts,
+      );
       const stalled = !row.completed && (row.percent ?? 0) >= 60;
 
       if (tier || stalled) {
@@ -217,9 +221,19 @@ export function isLessonUnlocked(
   if (lessonIndex === 0) return true;
 
   const prev = unit.lessons[lessonIndex - 1];
+  const currentLesson = unit.lessons[lessonIndex];
   const prevProgress = progress[prev.id];
   const prevMastered =
     Boolean(prevProgress?.completed) && (prevProgress?.checkScore ?? 0) >= 70;
+
+  const currentHasPriority = (currentLesson?.teks ?? []).some((teks) =>
+    isPriorityTeks(teks),
+  );
+
+  // Priority TEKS lessons are mastery-gated and cannot bypass via assignment state.
+  if (currentHasPriority) {
+    return prevMastered;
+  }
 
   if (prevMastered) return true;
 

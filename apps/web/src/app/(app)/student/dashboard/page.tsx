@@ -145,6 +145,36 @@ export default function StudentDashboard() {
       value: 0.44,
       group: "B.7",
     },
+    {
+      key: "B.5D",
+      label: "Viruses vs cells",
+      value: 0.48,
+      group: "B.5",
+    },
+    {
+      key: "B.6A",
+      label: "Cell cycle importance",
+      value: 0.41,
+      group: "B.6",
+    },
+    {
+      key: "B.6B",
+      label: "Differentiation",
+      value: 0.46,
+      group: "B.6",
+    },
+    {
+      key: "B.6C",
+      label: "Cell cycle disruptions",
+      value: 0.39,
+      group: "B.6",
+    },
+    {
+      key: "B.8A",
+      label: "Meiosis and diversity",
+      value: 0.43,
+      group: "B.8",
+    },
   ];
 
   const segments = SEGMENTS;
@@ -154,6 +184,13 @@ export default function StudentDashboard() {
   const nextSegment = useMemo(() => {
     const s = [...segments].sort((a, b) => (a.value ?? 0) - (b.value ?? 0))[0];
     return s ?? null;
+  }, [segments]);
+
+  const weakestSegment = useMemo(() => {
+    const sorted = [...segments].sort(
+      (a, b) => (a.value ?? 0) - (b.value ?? 0),
+    );
+    return sorted[0] ?? null;
   }, [segments]);
 
   const masteredCount = useMemo(
@@ -385,20 +422,25 @@ export default function StudentDashboard() {
                   Next best step
                 </div>
                 <div className="mt-2 text-sm text-slate-600">
-                  Focus on RC4 practice sets (lowest mastery).
+                  {weakestSegment
+                    ? `Focus on ${weakestSegment.key} (${weakestSegment.label}) to raise your lowest mastery segment.`
+                    : "Focus on your lowest mastery segment."}
                 </div>
                 <div className="mt-4 flex gap-2">
                   <Link
                     className="ia-btn-primary text-sm"
-                    href="/practice?rc=RC4%20%E2%80%A2%20Biological%20Processes%20%26%20Systems"
+                    href={
+                      weakestSegment
+                        ? `/practice?focus=${encodeURIComponent(weakestSegment.key)}`
+                        : "/practice"
+                    }
                   >
-                    Practice RC4
+                    {weakestSegment
+                      ? `Practice ${weakestSegment.key}`
+                      : "Practice"}
                   </Link>
-                  <Link
-                    className="ia-btn text-sm"
-                    href="/practice?rc=RC1%20%E2%80%A2%20Cell%20Structure%20%26%20Function"
-                  >
-                    Practice RC1
+                  <Link className="ia-btn text-sm" href="/student/learn/unit-3">
+                    Unit 3 Hub
                   </Link>
                   <Link className="ia-btn text-sm" href="/student/learn">
                     BioSpark Quest

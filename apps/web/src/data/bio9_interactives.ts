@@ -13,11 +13,11 @@ export const bioInteractives: Item[] = [
     id: "bio5a-dd1",
     attempts: 2,
     teks: ["BIO.5.A"],
-    stem: "Drag each biomolecule to its primary function.",
+    stem: "Drag each molecule to the category that best matches its main role.",
     zones: [
-      { id: "energy", label: "Energy" },
-      { id: "enz", label: "Enzymes/Structure" },
-      { id: "info", label: "Genetic Info" },
+      { id: "energy", label: "Energy/Storage" },
+      { id: "enz", label: "Structure/Protein Function" },
+      { id: "info", label: "Genetic Information" },
     ],
     cards: [
       { id: "glucose", text: "Glucose" },
@@ -27,12 +27,12 @@ export const bioInteractives: Item[] = [
     ],
     correct: {
       glucose: "energy",
-      cellulose: "energy",
+      cellulose: "enz",
       hemoglobin: "enz",
       dna: "info",
     },
     rationale:
-      "Carbs → energy/structure; proteins → enzymes/structure; nucleic acids → information.",
+      "Glucose supports quick energy, cellulose is a structural carbohydrate, hemoglobin is a protein, and DNA stores hereditary information.",
   } as ItemDragDrop,
 
   // Card sort — BIO.7.B
@@ -41,7 +41,7 @@ export const bioInteractives: Item[] = [
     id: "bio7b-cs1",
     attempts: 2,
     teks: ["BIO.7.B"],
-    stem: "Sort each step into Transcription vs Translation.",
+    stem: "Sort each process into Transcription or Translation.",
     columns: [
       { id: "tx", label: "Transcription" },
       { id: "tl", label: "Translation" },
@@ -61,7 +61,7 @@ export const bioInteractives: Item[] = [
     id: "bio5b-hs1",
     attempts: "unlimited",
     teks: ["BIO.5.B"],
-    stem: "Click the organelle where cellular respiration mainly occurs.",
+    stem: "Click the organelle where most cellular respiration occurs in eukaryotic cells.",
     image:
       "https://upload.wikimedia.org/wikipedia/commons/3/3e/Animal_cell_structure_en.svg",
     regions: [
@@ -79,7 +79,8 @@ export const bioInteractives: Item[] = [
       },
     ],
     correct: ["mito"],
-    rationale: "Mitochondria are the site of most ATP production.",
+    rationale:
+      "Mitochondria perform most ATP-generating steps of cellular respiration in eukaryotic cells.",
   } as ItemHotspot,
 
   // Short response — BIO.11.A
@@ -87,7 +88,7 @@ export const bioInteractives: Item[] = [
     kind: "short",
     id: "bio11a-sh1",
     teks: ["BIO.11.A"],
-    stem: "Explain how matter and energy change during photosynthesis.",
+    stem: "Explain how matter and energy are transformed during photosynthesis.",
     rubric: {
       points: 3,
       criteria: [
