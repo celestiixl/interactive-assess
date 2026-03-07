@@ -248,6 +248,22 @@ export default function StudentDashboard() {
           >
             🎨 Icon Registry Demo
           </Link>
+          <button
+            type="button"
+            onClick={() => router.push("/simulations")}
+            className="rounded-full bg-white px-4 py-2 text-xs font-semibold text-slate-900 shadow-sm hover:bg-slate-100"
+            aria-label="Open simulations"
+          >
+            Simulations
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/phenomena-studio")}
+            className="rounded-full bg-white px-4 py-2 text-xs font-semibold text-slate-900 shadow-sm hover:bg-slate-100"
+            aria-label="Open phenomenon exploration"
+          >
+            SparkScope
+          </button>
         </div>
       </PageBanner>
       <PageContent className="flex-1 min-h-0 py-4">

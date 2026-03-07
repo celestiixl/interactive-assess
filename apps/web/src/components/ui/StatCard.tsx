@@ -43,12 +43,14 @@ export default function StatCard({
   return (
     <Card variant="elevated" className={className} animate>
       {label || value !== undefined ? (
-        <div className="space-y-2">
+        <div className="space-y-2 rounded-xl bg-bs-raised p-3">
           <div className="flex items-center justify-between gap-2">
-            <div className="text-sm font-semibold text-text">{label}</div>
+            <div className="text-[10px] font-semibold uppercase tracking-wide text-bs-text-muted">
+              {label}
+            </div>
             {icon}
           </div>
-          <div className="text-2xl font-semibold tracking-tight text-text">
+          <div className="font-mono text-[18px] font-bold tracking-tight text-bs-text">
             {displayValue}
           </div>
           {cta ? <div className="pt-1">{cta}</div> : null}

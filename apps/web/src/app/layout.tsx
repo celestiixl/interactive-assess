@@ -2,7 +2,6 @@ import "./globals.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import PageShell from "@/components/ui/PageShell";
-import ThemeToggle from "@/components/ia/ThemeToggle";
 import OfflineSupport from "@/components/common/OfflineSupport";
 
 export const metadata: Metadata = {
@@ -13,17 +12,10 @@ export const metadata: Metadata = {
 
 const initThemeScript = `(() => {
   try {
-    const key = "ia.theme.v1";
-    const stored = window.localStorage.getItem(key);
-    const theme =
-      stored === "dark" || stored === "light"
-        ? stored
-        : window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light";
     const root = document.documentElement;
-    root.dataset.theme = theme;
-    root.classList.toggle("dark", theme === "dark");
+    root.dataset.theme = "dark";
+    root.classList.add("dark");
+    window.localStorage.setItem("ia.theme.v1", "dark");
   } catch {}
 })();`;
 
@@ -31,11 +23,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
         <script dangerouslySetInnerHTML={{ __html: initThemeScript }} />
       </head>
-      <body className="min-h-dvh antialiased">
+      <body className="min-h-dvh bg-bs-bg font-sans text-bs-text antialiased">
         <PageShell>{children}</PageShell>
-        <ThemeToggle />
         <OfflineSupport />
       </body>
     </html>

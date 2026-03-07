@@ -23,14 +23,16 @@ export function Topbar({
 
   return (
     <header className="w-full">
-      <div className="flex w-full items-center justify-between gap-4 py-2">
+      <div className="flex h-14 w-full items-center justify-between gap-4 py-1">
         <Link href="/" className="flex items-center gap-3">
-          <div className="grid h-10 w-10 place-items-center rounded-2xl border border-white/30 bg-white/20 text-sm font-bold text-white">
-            BS
+          <div className="grid h-8 w-8 place-items-center rounded-xl bg-linear-to-r from-bs-teal to-[#0099aa] text-sm shadow-[var(--bs-teal-glow)]">
+            ⚡
           </div>
           <div>
-            <div className="text-sm font-semibold text-white">BioSpark</div>
-            <div className="text-xs text-white/70">
+            <div className="text-sm font-semibold text-bs-text">
+              Bio<span className="text-bs-teal">Spark</span>
+            </div>
+            <div className="text-xs text-bs-text-muted">
               STAAR Biology • Practice & Mastery
             </div>
           </div>
@@ -39,15 +41,30 @@ export function Topbar({
         <LangToggle />
 
         <div className="hidden items-center gap-2 md:flex">
-          <Pill tone="white">STAAR aligned</Pill>
-          <Pill tone="white">Interactive</Pill>
-          <Pill tone="white">Practice/Test</Pill>
+          <Pill
+            tone="white"
+            className="border-bs-teal/55 bg-[var(--bs-teal-dim)] text-bs-teal"
+          >
+            STAAR aligned
+          </Pill>
+          <Pill
+            tone="white"
+            className="border-bs-teal/55 bg-[var(--bs-teal-dim)] text-bs-teal"
+          >
+            Interactive
+          </Pill>
+          <Pill
+            tone="white"
+            className="border-bs-teal/55 bg-[var(--bs-teal-dim)] text-bs-teal"
+          >
+            Practice/Test
+          </Pill>
         </div>
 
         <div className="flex items-center gap-2">
           <Link
             href={rightPrimaryHref}
-            className="rounded-xl border border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/30"
+            className="rounded-full border border-bs-teal/55 bg-[var(--bs-teal-dim)] px-4 py-2 text-sm font-semibold text-bs-teal transition hover:bg-bs-teal hover:text-[#04231f]"
           >
             {rightPrimaryLabel}
           </Link>
@@ -55,18 +72,18 @@ export function Topbar({
           {teacher ? (
             /* Authenticated teacher — show name badge + logout */
             <div className="flex items-center gap-2">
-              <div className="hidden items-center gap-2 rounded-xl border border-white/30 bg-white/20 px-3 py-2 sm:flex">
-                <div className="grid h-6 w-6 place-items-center rounded-full bg-white/30 text-xs font-bold text-white">
+              <div className="hidden items-center gap-2 rounded-xl border border-bs-border bg-bs-raised px-3 py-2 sm:flex">
+                <div className="grid h-6 w-6 place-items-center rounded-full bg-bs-overlay text-xs font-bold text-bs-text">
                   {teacher.name.charAt(0)}
                 </div>
-                <span className="text-sm font-semibold text-white">
+                <span className="text-sm font-semibold text-bs-text">
                   {teacher.name}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="rounded-xl border border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/30"
+                className="rounded-full border border-bs-coral/50 bg-bs-coral px-4 py-2 text-sm font-semibold text-[#2b0b0b] transition hover:brightness-105"
               >
                 Sign Out
               </button>
@@ -75,7 +92,7 @@ export function Topbar({
             /* Unauthenticated — show Sign In link */
             <Link
               href="/teacher/login"
-              className="rounded-xl border border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/30"
+              className="rounded-full border border-bs-border bg-transparent px-4 py-2 text-sm font-semibold text-bs-text transition hover:border-bs-teal/55 hover:text-bs-teal"
             >
               Teacher Sign In
             </Link>

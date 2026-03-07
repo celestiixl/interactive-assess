@@ -5,11 +5,11 @@ import ThemeToggle from "@/components/ia/ThemeToggle";
 import { getUnitById } from "@/lib/learningHubContent";
 
 type UnitPageProps = {
-  params: Promise<{ unitId: string }>;
+  params: { unitId: string };
 };
 
-export default async function LearningUnitPage({ params }: UnitPageProps) {
-  const { unitId } = await params;
+export default function Page({ params }: UnitPageProps) {
+  const { unitId } = params;
   const unit = getUnitById(unitId);
 
   if (!unit) notFound();

@@ -6,6 +6,22 @@ module.exports = {
     extend: {
       // wosTokens: bioscience design system (do not remove)
       colors: {
+        "bs-bg": "#0d1e2c",
+        "bs-surface": "#132638",
+        "bs-raised": "#1a3148",
+        "bs-overlay": "#213d58",
+        "bs-border": "#1e3f5a",
+        "bs-border-soft": "#162f45",
+        "bs-teal": "#00d4aa",
+        "bs-amber": "#f5a623",
+        "bs-coral": "#ff6b6b",
+        "bs-success": "#34d399",
+        "bs-warning": "#fbbf24",
+        "bs-info": "#60a5fa",
+        "bs-violet": "#a78bfa",
+        "bs-text": "#e8f4f0",
+        "bs-text-sub": "#9abcb0",
+        "bs-text-muted": "#5a8070",
         bg: "rgb(var(--color-bg) / <alpha-value>)",
         text: "rgb(var(--color-text) / <alpha-value>)",
         "text-muted": "rgb(var(--color-text-muted) / <alpha-value>)",
@@ -72,10 +88,10 @@ module.exports = {
         lg: "var(--shadow-lg)",
       },
       fontFamily: {
-        sans: ["var(--font-body)", "sans-serif"],
+        sans: ["Outfit", "sans-serif"],
         display: ["var(--font-display)", "sans-serif"],
         mono: [
-          "var(--font-mono)",
+          "JetBrains Mono",
           "ui-monospace",
           "SFMono-Regular",
           "Menlo",
@@ -83,14 +99,38 @@ module.exports = {
         ],
       },
       fontSize: {
-        xs: ["var(--text-xs-size)", { lineHeight: "var(--text-xs-line)", letterSpacing: "0em" }],
-        sm: ["var(--text-sm-size)", { lineHeight: "var(--text-sm-line)", letterSpacing: "0em" }],
-        base: ["var(--text-base-size)", { lineHeight: "var(--text-base-line)", letterSpacing: "0em" }],
-        lg: ["var(--text-lg-size)", { lineHeight: "var(--text-lg-line)", letterSpacing: "-0.005em" }],
-        xl: ["var(--text-xl-size)", { lineHeight: "var(--text-xl-line)", letterSpacing: "-0.01em" }],
-        "2xl": ["var(--text-2xl-size)", { lineHeight: "var(--text-2xl-line)", letterSpacing: "-0.012em" }],
-        "3xl": ["var(--text-3xl-size)", { lineHeight: "var(--text-3xl-line)", letterSpacing: "-0.015em" }],
-        "4xl": ["var(--text-4xl-size)", { lineHeight: "var(--text-4xl-line)", letterSpacing: "-0.02em" }],
+        xs: [
+          "var(--text-xs-size)",
+          { lineHeight: "var(--text-xs-line)", letterSpacing: "0em" },
+        ],
+        sm: [
+          "var(--text-sm-size)",
+          { lineHeight: "var(--text-sm-line)", letterSpacing: "0em" },
+        ],
+        base: [
+          "var(--text-base-size)",
+          { lineHeight: "var(--text-base-line)", letterSpacing: "0em" },
+        ],
+        lg: [
+          "var(--text-lg-size)",
+          { lineHeight: "var(--text-lg-line)", letterSpacing: "-0.005em" },
+        ],
+        xl: [
+          "var(--text-xl-size)",
+          { lineHeight: "var(--text-xl-line)", letterSpacing: "-0.01em" },
+        ],
+        "2xl": [
+          "var(--text-2xl-size)",
+          { lineHeight: "var(--text-2xl-line)", letterSpacing: "-0.012em" },
+        ],
+        "3xl": [
+          "var(--text-3xl-size)",
+          { lineHeight: "var(--text-3xl-line)", letterSpacing: "-0.015em" },
+        ],
+        "4xl": [
+          "var(--text-4xl-size)",
+          { lineHeight: "var(--text-4xl-line)", letterSpacing: "-0.02em" },
+        ],
       },
     },
   },

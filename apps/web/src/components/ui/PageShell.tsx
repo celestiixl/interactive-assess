@@ -5,11 +5,7 @@ function cx(...parts: Array<string | undefined | false>) {
 }
 
 export default function PageShell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-dvh bg-[rgb(var(--color-bg))] text-[rgb(var(--color-text))]">
-      {children}
-    </div>
-  );
+  return <div className="min-h-dvh bg-bs-bg text-bs-text">{children}</div>;
 }
 
 export function PageContent({
@@ -21,10 +17,7 @@ export function PageContent({
 }) {
   return (
     <div
-      className={cx(
-        "mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8",
-        className,
-      )}
+      className={cx("mx-auto w-full max-w-350 px-4 sm:px-6 lg:px-8", className)}
     >
       {children}
     </div>

@@ -33,6 +33,24 @@ export default function TeacherDashboardPage() {
           >
             Builder
           </Button>
+
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={() => router.push("/simulations")}
+            aria-label="Open simulations"
+          >
+            Simulations
+          </Button>
+
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={() => router.push("/phenomena-studio")}
+            aria-label="Open phenomenon exploration"
+          >
+            SparkScope
+          </Button>
         </div>
       </PageBanner>
       <PageContent className="py-8">

@@ -221,6 +221,20 @@ export default function AssessmentDashboardEntry() {
             <Button
               variant="secondary"
               size="md"
+              onClick={() => router.push("/simulations")}
+            >
+              Simulations
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => router.push("/phenomena-studio")}
+            >
+              SparkScope
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
               onClick={() => router.push("/student/assessment/items")}
             >
               Items Test Screen

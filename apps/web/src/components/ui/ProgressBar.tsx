@@ -15,15 +15,16 @@ export default function ProgressBar({
   const p = clamp(percent);
   return (
     <div className="w-full">
-      <div className="mb-1 flex justify-between text-sm text-neutral-700">
+      <div className="mb-1 flex justify-between text-sm text-bs-text-sub">
         <span>{label ?? "Progress"}</span>
-        <span>{p}%</span>
+        <span className="font-mono text-bs-text">{p}%</span>
       </div>
-      <div className="h-3 w-full overflow-hidden rounded-full bg-neutral-200/70">
+      <div className="h-[5px] w-full overflow-hidden rounded-full bg-bs-raised">
         <div
           className="h-full rounded-full"
           style={{
-            background: "linear-gradient(90deg, var(--brand) 0%, #34d399 100%)",
+            background: "var(--bs-teal)",
+            boxShadow: "0 0 8px #00d4aa88",
             width: `${p}%`,
             transition: `width ${durationMs}ms cubic-bezier(.2,.8,.2,1)`,
           }}

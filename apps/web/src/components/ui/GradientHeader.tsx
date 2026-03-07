@@ -13,14 +13,21 @@ export function GradientHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <div className={cn("bg-brand-gradient", gradientClassName)}>
-      <div className="mx-auto w-full max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8">
+    <div
+      className={cn(
+        "sticky top-0 z-100 border-b border-bs-border bg-bs-surface/95 backdrop-blur-md",
+        gradientClassName,
+      )}
+    >
+      <div className="mx-auto w-full max-w-350 px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-semibold tracking-tight text-white">
+            <h1 className="text-4xl font-semibold tracking-tight text-bs-text">
               {title}
             </h1>
-            {subtitle ? <p className="mt-2 text-white/90">{subtitle}</p> : null}
+            {subtitle ? (
+              <p className="mt-2 text-bs-text-sub">{subtitle}</p>
+            ) : null}
           </div>
           {children}
         </div>

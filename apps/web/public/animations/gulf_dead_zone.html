@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gulf of Mexico Dead Zone</title>
+
+<!-- ============================================================
+  ✏️  EDITABLE CONFIG
+  ============================================================ -->
+<script>
+const CONFIG = {
+  unit:     "Unit 6 · Ecosystems · Willowridge Biology",
+  title:    "The Gulf of Mexico",
+  titleEm:  "Dead Zone",
+  subtitle: "Every summer, a zone the size of New Jersey loses all its oxygen. A farm in Iowa caused it.",
+
+  tabs: [
+    { icon: "🌊", label: "Intro",     theme: "" },
+    { icon: "⚗️",  label: "Nitrogen", theme: "n" },
+    { icon: "🔥", label: "Carbon",   theme: "c" },
+    { icon: "💧", label: "Water",    theme: "w" },
+    { icon: "🔗", label: "Connect",  theme: "f" },
+  ],
+
+  intro: {
+    captionTitle: "Something Is Killing the Gulf",
+    captionBody:  "Every summer, a zone the size of New Jersey off the Louisiana coast runs out of oxygen. Fish suffocate. Shrimp flee. The seafloor goes silent. Scientists traced it back to <strong>farms 1,000 miles away in the Midwest</strong>. Three cycles connect them.",
+    chips: [
+      { label: "📍 Louisiana/Texas Gulf Coast",  theme: "" },
+      { label: "📅 Forms every summer",          theme: "" },
+      { label: "~6,000 sq miles in 2023",        theme: "w" },
+      { label: "Fish, shrimp, crabs suffocate",  theme: "c" },
+      { label: "Linked to Midwest farming",      theme: "n" },
+    ],
+    btnLabel: "Start with Nitrogen →",
+  },
+
+  nitrogen: {
+    captionTitle: "⚗️ The Nitrogen Cycle — The Fuel",
+    captionBody:  "Farmers add nitrogen fertilizer so crops grow faster. Rain washes that excess nitrogen into rivers. It flows down the Mississippi and dumps into the Gulf — where algae treats it like an all-you-can-eat buffet. The bloom explodes. When the algae dies, bacteria decompose it and consume every last bit of oxygen.",
+    flow: ["Farm Fertilizer (N)", "Rain Runoff", "Mississippi River", "Algae Bloom", "Bacteria decompose algae", "💀 Dead Zone"],
+    chips: [
+      "🌾 Excess N fertilizer washes off farms every rain",
+      "🌿 Algae uses nitrogen to grow explosively",
+      "🦠 Decomposers consume all remaining oxygen",
+      "🐟 Fish suffocate — there's no O₂ left",
+    ],
+    prompts: [
+      { label:"Pause + Respond", question:"Trace the path of nitrogen from a fertilizer bag in Iowa to a dead fish in the Gulf.", hint:"Use the flow chart above. Step by step.", placeholder:"The nitrogen starts at the farm as fertilizer and then..." },
+      { label:"Think About It",  question:"What would happen if we removed all the decomposer bacteria from this cycle?", hint:"", placeholder:"Without bacteria, the dead zone would..." },
+    ],
+    btnLabel: "Cycle 2: Carbon →",
+  },
+
+  carbon: {
+    captionTitle: "🔥 The Carbon Cycle — Getting Disrupted",
+    captionBody:  "When the algae bloom explodes, it temporarily <strong>pulls massive CO₂ out of the water</strong> through photosynthesis. Then the algae dies. Decomposers break it down and <strong>release all that carbon back</strong> — while consuming all the oxygen. The ocean's carbon cycle is thrown completely off balance.",
+    flow: ["Plants absorb CO₂", "Stored in biomass", "Algae dies en masse", "Decomposers release CO₂", "Cycle disrupted 🔥"],
+    callout: { title:"🔗 Carbon + Nitrogen Connection", body:"The algae bloom (caused by nitrogen overload) smothers phytoplankton — the ocean's main carbon absorbers. So <strong>disrupting the nitrogen cycle automatically disrupts the carbon cycle</strong>. One cycle going wrong cascades into the next." },
+    prompts: [
+      { label:"Pause + Respond", question:"How does the algae bloom both disrupt the carbon cycle AND make the dead zone worse at the same time?", hint:"", placeholder:"The algae bloom disrupts the carbon cycle by..." },
+    ],
+    btnLabel: "Cycle 3: Water →",
+  },
+
+  water: {
+    captionTitle: "💧 The Water Cycle — The Delivery System",
+    captionBody:  "Without the water cycle, none of this happens. <strong>Rain loosens nitrogen from farm soil.</strong> Rivers carry it south. The Gulf receives it. Water then evaporates from the Gulf surface, forms clouds above the coast, drifts inland, and rains again — delivering another load of nutrients. <strong>Houston's concrete speeds it all up.</strong>",
+    flow: ["Rain falls on farms", "N washes into rivers", "Mississippi carries it south", "Gulf receives nutrients", "Evaporates → Gulf clouds", "Rains inland again 🌧️"],
+    callout: { title:"🏙️ The Houston Connection", body:"Houston's highways and concrete mean <strong>rainwater can't soak into the ground</strong> — it rushes off surfaces as runoff, picking up fertilizers and chemicals, flooding into bayous and straight into the Gulf. Harvey flood events dump massive nutrient loads all at once." },
+    prompts: [
+      { label:"Pause + Respond", question:"Why is the water cycle called the \"delivery system\" for the dead zone? What would change if it stopped raining?", hint:"", placeholder:"The water cycle is the delivery system because..." },
+    ],
+    btnLabel: "Connect It All →",
+  },
+
+  connect: {
+    captionTitle: "🔗 Three Cycles. One Dead Zone.",
+    captionBody:  "Watch all three cycles working — and breaking — at the same time. The nitrogen cycle delivers the fuel. The carbon cycle gets disrupted. The water cycle is the delivery network. <strong>When one cycle breaks, they all feel it.</strong>",
+    summaryCards: [
+      { icon:"⚗️", theme:"n", label:"NITROGEN", body:"Fertilizer runoff feeds the algae bloom" },
+      { icon:"🔥", theme:"c", label:"CARBON",   body:"Bloom blocks ocean CO₂ absorption" },
+      { icon:"💧", theme:"w", label:"WATER",    body:"Rain connects farm to Gulf and back" },
+    ],
+    prompts: [
+      { label:"Revise Your Thinking", question:"Look back at what you thought at the start. What did you get right? What did you miss?",         hint:"", placeholder:"Originally I thought... but now I understand that...", tall:false },
+      { label:"Final Response",       question:"Explain how all three cycles connect to the Gulf dead zone. Then explain what would need to change in any one cycle to actually shrink it.", hint:"Challenge: use nitrogen, runoff, algae, decompose, carbon, oxygen, precipitation, ecosystem stability.", placeholder:"All three cycles connect to the dead zone because...", tall:true },
+      { label:"Houston Connection",   question:"We live near this. How does what happens in Houston — our highways, our floods, our ship channel — connect to the Gulf dead zone?", hint:"", placeholder:"Houston connects to this phenomenon because...", tall:false },
+    ],
+  },
+
+  colors: { nitrogen:"#f59e0b", carbon:"#ef4444", water:"#38bdf8", algae:"#4ade80" },
+};
+
+</script>
+<!-- ============================================================ END CONFIG ============================================================ -->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&display=swap');
+:root {
+  --bg:#0b1120; --panel:#111827; --border:rgba(255,255,255,0.08);
+  --nitrogen:#f59e0b; --carbon:#ef4444; --water:#38bdf8; --algae:#4ade80;
+  --text:#f1f5f9; --muted:#64748b;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
+.backdrop{position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse at 20% 80%,rgba(14,50,100,.4) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 20%,rgba(10,30,60,.3) 0%,transparent 50%),var(--bg);}
+.particle{position:absolute;border-radius:50%;pointer-events:none;animation:drift linear infinite;}
+@keyframes drift{from{transform:translateY(100vh);opacity:0;}10%{opacity:1;}90%{opacity:.3;}to{transform:translateY(-100px);opacity:0;}}
+.wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:24px 20px 40px;}
+.hd{text-align:center;padding:28px 0 20px;}
+.hd-chip{display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--water);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);padding:4px 14px;border-radius:20px;margin-bottom:12px;}
+.hd h1{font-family:'Syne',sans-serif;font-size:clamp(30px,6vw,60px);font-weight:800;line-height:1;letter-spacing:-1px;}
+.hd h1 em{font-style:normal;color:var(--algae);}
+.hd p{margin-top:8px;color:var(--muted);font-size:14px;font-style:italic;}
+.tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:6px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;}
+.tab{flex:1;min-width:80px;text-align:center;font-size:12px;font-weight:500;padding:9px 6px;border-radius:10px;cursor:pointer;transition:all .3s;color:var(--muted);white-space:nowrap;border:1px solid transparent;user-select:none;}
+.tab.done{color:var(--algae);}
+.tab.active{color:white;background:rgba(255,255,255,.08);border-color:var(--border);}
+.tab.n.active{color:var(--nitrogen);background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);}
+.tab.c.active{color:var(--carbon);background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);}
+.tab.w.active{color:var(--water);background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.3);}
+.tab.f.active{color:var(--algae);background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);}
+.scene{display:none;animation:sin .5s ease both;}
+.scene.on{display:block;}
+@keyframes sin{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.vc{border-radius:20px;overflow:hidden;border:1px solid var(--border);margin-bottom:18px;}
+.vc svg{width:100%;display:block;}
+.vcap{padding:14px 20px;background:rgba(11,17,32,.95);border-top:1px solid var(--border);}
+.vcap h2{font-family:'Syne',sans-serif;font-size:21px;font-weight:700;margin-bottom:6px;}
+.vcap p{font-size:14px;color:var(--muted);line-height:1.65;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;}
+.chip{font-size:12.5px;padding:5px 13px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);}
+.chip.n{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3);color:var(--nitrogen);}
+.chip.c{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3);color:var(--carbon);}
+.chip.w{background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.3);color:var(--water);}
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin:10px 0 16px;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:12px;}
+.fn{font-size:12px;font-weight:600;padding:5px 11px;border-radius:10px;}
+.fn.n{background:rgba(245,158,11,.15);color:var(--nitrogen);border:1px solid rgba(245,158,11,.3);}
+.fn.c{background:rgba(239,68,68,.15);color:var(--carbon);border:1px solid rgba(239,68,68,.3);}
+.fn.w{background:rgba(56,189,248,.15);color:var(--water);border:1px solid rgba(56,189,248,.3);}
+.fn.dead{background:rgba(220,38,38,.2);color:#f87171;border:1px solid rgba(220,38,68,.4);}
+.fa{color:var(--muted);font-weight:700;font-size:14px;}
+.callout{border-radius:12px;padding:13px 17px;margin-bottom:16px;font-size:13px;line-height:1.65;}
+.callout.c{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);}
+.callout.w{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);}
+.callout.g{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);}
+.callout h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:5px;}
+.callout.c h4{color:var(--carbon);}.callout.w h4{color:var(--water);}.callout.g h4{color:var(--algae);}
+.callout strong{color:var(--text);}
+.prompt{border-radius:14px;padding:16px 18px;margin-bottom:12px;}
+.prompt.n{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);}
+.prompt.c{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);}
+.prompt.w{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);}
+.prompt.final{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);}
+.plbl{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:6px;}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
+.prompt.n .plbl{color:var(--nitrogen);}.prompt.n .dot{background:var(--nitrogen);}
+.prompt.c .plbl{color:var(--carbon);}.prompt.c .dot{background:var(--carbon);}
+.prompt.w .plbl{color:var(--water);}.prompt.w .dot{background:var(--water);}
+.prompt.final .plbl{color:var(--algae);}.prompt.final .dot{background:var(--algae);}
+.pq{font-size:16px;font-weight:600;margin-bottom:7px;line-height:1.4;color:white;}
+.ph{font-size:12px;color:var(--muted);margin-bottom:10px;font-style:italic;line-height:1.5;}
+textarea{width:100%;min-height:88px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;resize:vertical;line-height:1.6;transition:border-color .2s;}
+textarea.tall{min-height:130px;}
+textarea:focus{outline:none;border-color:rgba(255,255,255,.25);}
+textarea::placeholder{color:rgba(255,255,255,.18);}
+.cgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;}
+.ccard{border-radius:12px;padding:14px;text-align:center;}
+.ccard.n{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);}
+.ccard.c{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);}
+.ccard.w{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);}
+.ccard .ci{font-size:24px;margin-bottom:6px;}
+.ccard .cl{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.ccard.n .cl{color:var(--nitrogen);}.ccard.c .cl{color:var(--carbon);}.ccard.w .cl{color:var(--water);}
+.ccard .cb{font-size:11px;color:var(--muted);line-height:1.5;}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;}
+.btn{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:11px 22px;border-radius:10px;border:none;cursor:pointer;transition:all .25s;}
+.btn-ghost{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{background:rgba(255,255,255,.1);}
+.btn-go{background:var(--algae);color:#0b1120;}
+.btn-go:hover{background:white;transform:translateY(-2px);box-shadow:0 8px 24px rgba(74,222,128,.3);}
+.btn-n{background:var(--nitrogen);color:#0b1120;}.btn-n:hover{background:#fbbf24;transform:translateY(-2px);}
+.btn-c{background:var(--carbon);color:white;}.btn-c:hover{background:#f87171;transform:translateY(-2px);}
+.btn-w{background:var(--water);color:#0b1120;}.btn-w:hover{background:#7dd3fc;transform:translateY(-2px);}
+.slbl{font-size:11px;color:var(--muted);letter-spacing:1px;font-family:monospace;}
+</style>
+</head>
+<body>
+<div class="backdrop" id="bd"></div>
+<div class="wrap">
+  <div class="hd">
+    <div class="hd-chip" id="hd-chip"></div>
+    <h1 id="hd-t"></h1>
+    <p id="hd-s"></p>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div id="scenes"></div>
+</div>
+
+<!-- ══════════════════ SVG TEMPLATES ══════════════════ -->
+
+<!-- INTRO SVG -->
+<template id="svg-intro">
+<svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="iSky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"   stop-color="#020912"/>
+    <stop offset="100%" stop-color="#071830"/>
+  </linearGradient>
+  <linearGradient id="iSea" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"   stop-color="#0d3060"/>
+    <stop offset="60%"  stop-color="#051528"/>
+    <stop offset="100%" stop-color="#020810"/>
+  </linearGradient>
+  <linearGradient id="iLand" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"   stop-color="#243e14"/>
+    <stop offset="100%" stop-color="#0b1606"/>
+  </linearGradient>
+  <linearGradient id="iRiverCore" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#4db8e8"/>
+    <stop offset="45%" stop-color="#1f78ad"/>
+    <stop offset="100%" stop-color="#0f476e"/>
+  </linearGradient>
+  <!-- Moon glow radial -->
+  <radialGradient id="iMoonGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#e8f4f8" stop-opacity=".22"/>
+    <stop offset="100%" stop-color="#b8d4e8" stop-opacity="0"/>
+  </radialGradient>
+  <!-- Algae: contained radial, not a full-panel flood -->
+  <radialGradient id="iAlgaeR" cx="50%" cy="40%" r="55%">
+    <stop offset="0%"   stop-color="#22c55e" stop-opacity=".72"/>
+    <stop offset="50%"  stop-color="#15803d" stop-opacity=".55"/>
+    <stop offset="100%" stop-color="#052e16" stop-opacity=".15"/>
+  </radialGradient>
+  <filter id="iGlow" x="-25%" y="-25%" width="150%" height="150%">
+    <feGaussianBlur stdDeviation="5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="iMoonBlur" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="12"/>
+  </filter>
+  <clipPath id="seaClip"><rect x="250" y="148" width="630" height="222"/></clipPath>
+</defs>
+
+<!-- ═══ SKY ═══ -->
+<rect width="880" height="370" fill="url(#iSky)"/>
+<!-- stars -->
+<circle cx="310" cy="22"  r="1.2" fill="white" opacity=".65"/>
+<circle cx="460" cy="12"  r="1"   fill="white" opacity=".5"/>
+<circle cx="560" cy="36"  r="1.3" fill="white" opacity=".6"/>
+<circle cx="720" cy="20"  r="1"   fill="white" opacity=".4"/>
+<circle cx="660" cy="48"  r="1.1" fill="white" opacity=".55"/>
+<circle cx="170" cy="50"  r="1"   fill="white" opacity=".4"/>
+<circle cx="420" cy="62"  r=".8"  fill="white" opacity=".35"/>
+
+<!-- ═══ MOON — atmospheric glow layers + crisp disc ═══ -->
+<!-- outer atmosphere halo (blurred) -->
+<circle cx="788" cy="58" r="68"  fill="url(#iMoonGlow)" filter="url(#iMoonBlur)"/>
+<!-- mid glow ring -->
+<circle cx="788" cy="58" r="44"  fill="#c8dff0" opacity=".06"/>
+<circle cx="788" cy="58" r="34"  fill="#d8eaf5" opacity=".09"/>
+<!-- crisp moon body -->
+<circle cx="788" cy="58" r="24"  fill="#f0f6fa" opacity=".92"/>
+<!-- subtle crater shadows -->
+<ellipse cx="782" cy="52" rx="5"  ry="3.5" fill="#d8e8f0" opacity=".45"/>
+<ellipse cx="796" cy="64" rx="3.5" ry="2.5" fill="#d8e8f0" opacity=".35"/>
+<ellipse cx="778" cy="66" rx="2.5" ry="2"   fill="#d8e8f0" opacity=".3"/>
+<!-- inner highlight -->
+<ellipse cx="783" cy="53" rx="6" ry="4" fill="white" opacity=".25"/>
+
+<!-- ═══ LAND — organic hill shape ═══ -->
+<path d="M0,158 Q55,138 120,150 Q170,160 220,154 Q240,150 258,158 L258,370 L0,370 Z" fill="url(#iLand)"/>
+<!-- crop rows following the hill -->
+<line x1="8"  y1="178" x2="242" y2="170" stroke="#3a6020" stroke-width="1"  opacity=".38"/>
+<line x1="8"  y1="190" x2="242" y2="182" stroke="#3a6020" stroke-width=".9" opacity=".3"/>
+<line x1="8"  y1="202" x2="242" y2="194" stroke="#3a6020" stroke-width=".8" opacity=".24"/>
+<!-- shore edge — visible boundary -->
+<path d="M258,158 Q310,148 400,152 Q500,156 600,150 Q730,144 880,148"
+      stroke="#38bdf8" stroke-width="1.2" fill="none" opacity=".32"/>
+
+<!-- ═══ FARM — grounded: land surface ~y=158 at x=30, farm bottom must hit that ═══ -->
+<!-- house bottom at local y=58, so translate_y = 158-58 = 100 -->
+<g transform="translate(30,100)">
+  <!-- house: roof peak y=6, base y=58 → bottom at 100+58=158 ✓ -->
+  <rect x="0"  y="26" width="44" height="32" fill="#6b3a14" rx="2"/>
+  <polygon points="-3,26 22,6 47,26"      fill="#8a4a18"/>
+  <rect x="4"  y="32" width="10" height="10" fill="#3d1a05" rx="1"/>
+  <rect x="6"  y="34" width="3"  height="3"  fill="#7dd3fc" opacity=".4"/>
+  <rect x="30" y="34" width="12" height="24" fill="#4a2208" rx="1"/>
+  <!-- silo: base at y=26, height=32, bottom y=58 ✓ -->
+  <rect x="47" y="24" width="14" height="34" fill="#b09050" rx="2"/>
+  <ellipse cx="54" cy="24" rx="7" ry="3.5" fill="#d4b060"/>
+  <!-- fence posts on ground (y=54–58) -->
+  <line x1="-24" y1="58" x2="-24" y2="46" stroke="#8a6030" stroke-width="1.5"/>
+  <line x1="-14" y1="57" x2="-14" y2="45" stroke="#8a6030" stroke-width="1.5"/>
+  <line x1="-4"  y1="58" x2="-4"  y2="46" stroke="#8a6030" stroke-width="1.5"/>
+  <line x1="-26" y1="50" x2="2"   y2="50" stroke="#8a6030" stroke-width="1"/>
+  <line x1="-26" y1="55" x2="2"   y2="55" stroke="#8a6030" stroke-width="1"/>
+  <!-- label directly below, just under house -->
+  <text x="22" y="70" fill="#aad468" font-size="9" font-family="monospace" font-weight="bold" text-anchor="middle">Iowa Farm</text>
+</g>
+
+<!-- ═══ MISSISSIPPI RIVER — natural winding river ═══ -->
+<!-- dark muddy bank (slightly wider than water) -->
+<path d="M150,155 C142,170 146,187 153,200 C160,214 154,227 147,240 C140,254 145,268 156,278 C170,291 196,291 220,281 C243,271 262,255 280,244 C292,237 302,232 311,229"
+  stroke="#16280d" stroke-width="8.5" fill="none" opacity=".9" stroke-linecap="round"/>
+<!-- damp edge between bank and water -->
+<path d="M150,155 C142,170 146,187 153,200 C160,214 154,227 147,240 C140,254 145,268 156,278 C170,291 196,291 220,281 C243,271 262,255 280,244 C292,237 302,232 311,229"
+  stroke="#2f4d20" stroke-width="5.8" fill="none" opacity=".52" stroke-linecap="round"/>
+<!-- water channel — narrow, dark blue, natural -->
+<path d="M150,155 C142,170 146,187 153,200 C160,214 154,227 147,240 C140,254 145,268 156,278 C170,291 196,291 220,281 C243,271 262,255 280,244 C292,237 302,232 311,229"
+  stroke="url(#iRiverCore)" stroke-width="4.2" fill="none" opacity=".92" stroke-linecap="round"/>
+<!-- surface current ribbons -->
+<path d="M150,155 C142,170 146,187 153,200 C160,214 154,227 147,240 C140,254 145,268 156,278 C170,291 196,291 220,281 C243,271 262,255 280,244 C292,237 302,232 311,229"
+  stroke="#8fd9ff" stroke-width="1.1" fill="none" opacity=".55" stroke-linecap="round" stroke-dasharray="7,9">
+  <animate attributeName="stroke-dashoffset" from="60" to="0" dur="3.4s" repeatCount="indefinite"/>
+</path>
+<path d="M149,163 C144,177 148,191 154,205 C160,219 154,231 148,243 C143,255 149,267 158,275 C170,286 193,286 216,277 C240,267 259,252 277,241 C289,234 298,230 306,227"
+  stroke="#2f99cf" stroke-width=".9" fill="none" opacity=".36" stroke-linecap="round" stroke-dasharray="4,10">
+  <animate attributeName="stroke-dashoffset" from="45" to="0" dur="2.9s" repeatCount="indefinite"/>
+</path>
+<!-- small distributary branches at river mouth -->
+<path d="M286,241 C294,237 304,232 315,229 C325,226 336,223 347,221" stroke="#2f99cf" stroke-width="1.2" fill="none" opacity=".42" stroke-linecap="round"/>
+<path d="M280,246 C290,246 301,247 313,248 C325,250 337,253 349,257" stroke="#2a87bd" stroke-width="1" fill="none" opacity=".35" stroke-linecap="round"/>
+<!-- sediment plume where river meets gulf -->
+<path d="M312,228 C336,224 360,224 384,228 C407,232 429,240 451,253" stroke="#8fd9ff" stroke-width="8" fill="none" opacity=".09" stroke-linecap="round"/>
+<!-- river label — rotated along bank -->
+<text x="118" y="188" fill="#38bdf8" font-size="8.5" font-family="monospace" opacity=".55"
+      transform="rotate(-80,118,188)">Mississippi R.</text>
+<!-- N particles flowing south -->
+<circle r="2.5" fill="#f59e0b" opacity="0">
+  <animateMotion dur="4.8s" repeatCount="indefinite" path="M150,157 C142,171 147,188 154,201 C160,214 154,227 148,240 C142,254 146,268 156,277 C170,289 195,289 220,279 C243,269 262,254 280,243 C293,236 303,231 312,228"/>
+  <animate attributeName="opacity" values="0;.85;.55;0" dur="4.5s" repeatCount="indefinite"/>
+</circle>
+<circle r="2" fill="#f59e0b" opacity="0">
+  <animateMotion dur="4.8s" repeatCount="indefinite" begin="2s" path="M150,157 C142,171 147,188 154,201 C160,214 154,227 148,240 C142,254 146,268 156,277 C170,289 195,289 220,279 C243,269 262,254 280,243 C293,236 303,231 312,228"/>
+  <animate attributeName="opacity" values="0;.7;.4;0" dur="4.5s" repeatCount="indefinite" begin="2s"/>
+</circle>
+
+<!-- ═══ OCEAN BASE ═══ -->
+<path d="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z" fill="url(#iSea)"/>
+
+<!-- ═══ ALGAE BLOOM — contained oval cluster, not full-panel flood ═══ -->
+<!-- outer halo glow -->
+<ellipse cx="640" cy="192" rx="140" ry="38" fill="#15803d" opacity=".12" filter="url(#iGlow)"/>
+<!-- bloom body — pulsing, constrained -->
+<ellipse cx="640" cy="194" rx="118" ry="28" fill="#1a5c0a" opacity=".5">
+  <animate attributeName="rx" values="118;134;118" dur="4.2s" repeatCount="indefinite"/>
+  <animate attributeName="ry" values="28;34;28"    dur="4.2s" repeatCount="indefinite"/>
+</ellipse>
+<!-- algae cells — clustered naturally, NOT in a row -->
+<circle cx="580" cy="188" r="16" fill="#22c55e" opacity=".78" filter="url(#iGlow)">
+  <animate attributeName="r" values="16;20;16" dur="3.2s" repeatCount="indefinite"/>
+</circle>
+<circle cx="610" cy="180" r="20" fill="#4ade80" opacity=".85" filter="url(#iGlow)">
+  <animate attributeName="r" values="20;25;20" dur="3.6s" repeatCount="indefinite" begin=".3s"/>
+</circle>
+<circle cx="646" cy="184" r="17" fill="#86efac" opacity=".82" filter="url(#iGlow)">
+  <animate attributeName="r" values="17;21;17" dur="3s"   repeatCount="indefinite" begin=".6s"/>
+</circle>
+<circle cx="680" cy="190" r="14" fill="#4ade80" opacity=".75" filter="url(#iGlow)">
+  <animate attributeName="r" values="14;18;14" dur="3.4s" repeatCount="indefinite" begin=".2s"/>
+</circle>
+<circle cx="594" cy="198" r="10" fill="#16a34a" opacity=".65">
+  <animate attributeName="r" values="10;13;10" dur="2.8s" repeatCount="indefinite" begin=".9s"/>
+</circle>
+<circle cx="660" cy="198" r="11" fill="#22c55e" opacity=".6">
+  <animate attributeName="r" values="11;14;11" dur="3.1s" repeatCount="indefinite" begin=".5s"/>
+</circle>
+<!-- label pill -->
+<rect x="573" y="208" width="136" height="32" rx="8" fill="#052e16" opacity=".88"/>
+<text x="641" y="224" fill="#4ade80" font-size="11"  font-family="monospace" text-anchor="middle" font-weight="bold">ALGAE BLOOM</text>
+<text x="641" y="235" fill="#86efac" font-size="8.5" font-family="monospace" text-anchor="middle" opacity=".72">LOW OXYGEN ZONE</text>
+
+<!-- ═══ DEAD FISH + LIVE FISH (clipped to sea) ═══ -->
+<g clip-path="url(#seaClip)">
+  <!-- dead fish 1 — belly up, gently bobbing -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="3s" repeatCount="indefinite"/>
+    <g transform="translate(476,256)">
+      <text x="0" y="-16" fill="#ef4444" font-size="9" font-family="monospace" font-weight="bold" text-anchor="middle" opacity=".88">dead fish</text>
+      <g transform="rotate(180)">
+        <ellipse cx="0" cy="0" rx="22" ry="8" fill="#90a4ae"/>
+        <polygon points="22,0 35,-12 35,12" fill="#607d8b"/>
+        <path d="M2,-8 Q7,-19 12,-8" fill="#b0bec5" stroke="#607d8b" stroke-width=".5"/>
+        <path d="M1,8 Q6,15 9,8" fill="#b0bec5" stroke="#607d8b" stroke-width=".4"/>
+        <path d="M-8,-8 Q-13,0 -8,8" fill="none" stroke="#607d8b" stroke-width="1" opacity=".45"/>
+        <ellipse cx="-2" cy="1" rx="11" ry="3" fill="#cfd8dc" opacity=".5"/>
+        <circle cx="-11" cy="-1" r="3" fill="white"/><circle cx="-11" cy="-1" r="1" fill="#37474f"/>
+      </g>
+    </g>
+  </g>
+  <!-- dead fish 2 -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="4s" repeatCount="indefinite" begin=".8s"/>
+    <g transform="translate(740,272)">
+      <text x="0" y="-14" fill="#ef4444" font-size="9" font-family="monospace" font-weight="bold" text-anchor="middle" opacity=".82">dead fish</text>
+      <g transform="rotate(180)">
+        <ellipse cx="0" cy="0" rx="17" ry="6" fill="#78909c"/>
+        <polygon points="17,0 27,-9 27,9" fill="#546e7a"/>
+        <path d="M1,-6 Q5,-14 9,-6" fill="#90a4ae" stroke="#546e7a" stroke-width=".5"/>
+        <path d="M0,6 Q5,11 7,6" fill="#90a4ae" stroke="#546e7a" stroke-width=".4"/>
+        <path d="M-6,-6 Q-10,0 -6,6" fill="none" stroke="#546e7a" stroke-width="1" opacity=".45"/>
+        <ellipse cx="-2" cy="1" rx="8" ry="2" fill="#b0bec5" opacity=".5"/>
+        <circle cx="-8" cy="-1" r="2" fill="white"/><circle cx="-8" cy="-1" r="1" fill="#37474f"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- live fish — JS driven -->
+  <g id="iFish1">
+    <g class="fR">
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="15" ry="6" fill="#64b5f6"/>
+      <!-- tail -->
+      <polygon points="15,0 24,-9 24,9" fill="#2979cc"/>
+      <!-- dorsal fin (top) -->
+      <path d="M-1,-6 Q5,-14 8,-6" fill="#90caf9" stroke="#2979cc" stroke-width=".5"/>
+      <!-- ventral fin (bottom) -->
+      <path d="M0,6 Q4,11 6,6" fill="#90caf9" stroke="#2979cc" stroke-width=".4"/>
+      <!-- gill arc -->
+      <path d="M-5,-6 Q-9,0 -5,6" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55"/>
+      <!-- belly highlight -->
+      <ellipse cx="-1" cy="1" rx="7" ry="2" fill="#bbdefb" opacity=".45"/>
+      <!-- eye -->
+      <circle cx="-8" cy="-1" r="3" fill="white"/>
+      <circle cx="-8" cy="-1" r="1" fill="#0d2a5e"/>
+    </g>
+    <g class="fL" style="display:none">
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="15" ry="6" fill="#64b5f6"/>
+      <!-- tail -->
+      <polygon points="-15,0 -24,-9 -24,9" fill="#2979cc"/>
+      <!-- dorsal fin (top) -->
+      <path d="M-1,-6 Q-5,-14 -8,-6" fill="#90caf9" stroke="#2979cc" stroke-width=".5"/>
+      <!-- ventral fin (bottom) -->
+      <path d="M-0,6 Q-4,11 -6,6" fill="#90caf9" stroke="#2979cc" stroke-width=".4"/>
+      <!-- gill arc -->
+      <path d="M5,-6 Q9,0 5,6" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55"/>
+      <!-- belly highlight -->
+      <ellipse cx="1" cy="1" rx="7" ry="2" fill="#bbdefb" opacity=".45"/>
+      <!-- eye -->
+      <circle cx="8" cy="-1" r="3" fill="white"/>
+      <circle cx="8" cy="-1" r="1" fill="#0d2a5e"/>
+    </g>
+  </g>
+  <g id="iFish2">
+    <g class="fR">
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="12" ry="5" fill="#4fc3f7"/>
+      <!-- tail -->
+      <polygon points="12,0 19,-7 19,7" fill="#0288d1"/>
+      <!-- dorsal fin (top) -->
+      <path d="M-1,-5 Q4,-12 6,-5" fill="#81d4fa" stroke="#0288d1" stroke-width=".5"/>
+      <!-- ventral fin (bottom) -->
+      <path d="M0,5 Q3,9 5,5" fill="#81d4fa" stroke="#0288d1" stroke-width=".4"/>
+      <!-- gill arc -->
+      <path d="M-4,-5 Q-7,0 -4,5" fill="none" stroke="#0288d1" stroke-width="1" opacity=".55"/>
+      <!-- belly highlight -->
+      <ellipse cx="-1" cy="1" rx="6" ry="1" fill="#b3e5fc" opacity=".45"/>
+      <!-- eye -->
+      <circle cx="-6" cy="-1" r="2" fill="white"/>
+      <circle cx="-6" cy="-1" r="1" fill="#0d2a5e"/>
+    </g>
+    <g class="fL" style="display:none">
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="12" ry="5" fill="#4fc3f7"/>
+      <!-- tail -->
+      <polygon points="-12,0 -19,-7 -19,7" fill="#0288d1"/>
+      <!-- dorsal fin (top) -->
+      <path d="M-1,-5 Q-4,-12 -6,-5" fill="#81d4fa" stroke="#0288d1" stroke-width=".5"/>
+      <!-- ventral fin (bottom) -->
+      <path d="M-0,5 Q-3,9 -5,5" fill="#81d4fa" stroke="#0288d1" stroke-width=".4"/>
+      <!-- gill arc -->
+      <path d="M4,-5 Q7,0 4,5" fill="none" stroke="#0288d1" stroke-width="1" opacity=".55"/>
+      <!-- belly highlight -->
+      <ellipse cx="1" cy="1" rx="6" ry="1" fill="#b3e5fc" opacity=".45"/>
+      <!-- eye -->
+      <circle cx="6" cy="-1" r="2" fill="white"/>
+      <circle cx="6" cy="-1" r="1" fill="#0d2a5e"/>
+    </g>
+  </g>
+
+  <!-- seaweed — near shore in healthier water -->
+  <g transform="translate(292,310)" opacity=".6">
+    <path d="M0,38 Q-3,26 0,16 Q3,8 -2,0"            stroke="#1a5c0a" stroke-width="2.2" fill="none"/>
+    <path d="M-1,28 Q-10,22 -11,13 Q-7,11 -3,20"     fill="#2d7a0f" stroke="#1a5c0a" stroke-width=".7"/>
+    <path d="M0,16 Q9,11 10,3 Q6,1 2,9"               fill="#2d7a0f" stroke="#1a5c0a" stroke-width=".7"/>
+  </g>
+
+  <!-- rising bubbles from dead zone -->
+  <circle cx="545" cy="300" r="3.5" fill="none" stroke="#4ade80" stroke-width="1" opacity="0">
+    <animate attributeName="cy"      values="300;248;215"  dur="4.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;.38;0"      dur="4.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="618" cy="315" r="2.5" fill="none" stroke="#4ade80" stroke-width=".8" opacity="0">
+    <animate attributeName="cy"      values="315;265;228"  dur="3.8s" repeatCount="indefinite" begin="1.4s"/>
+    <animate attributeName="opacity" values="0;.3;0"       dur="3.8s" repeatCount="indefinite" begin="1.4s"/>
+  </circle>
+</g>
+
+<!-- DEAD ZONE badge -->
+<rect x="550" y="310" width="140" height="26" rx="13" fill="#dc2626" opacity=".92"/>
+<text x="620" y="327" fill="white" font-size="10.5" font-family="monospace" font-weight="bold" text-anchor="middle">⚠ DEAD ZONE</text>
+<text x="740" y="362" fill="#38bdf8" font-size="10" font-family="monospace" text-anchor="middle" opacity=".38">Gulf of Mexico</text>
+</svg>
+</template>
+
+<!-- NITROGEN SVG -->
+<template id="svg-nitrogen">
+<svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="nSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a00"/><stop offset="100%" stop-color="#0a1628"/></linearGradient>
+  <linearGradient id="nGnd" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a4010"/><stop offset="100%" stop-color="#0d1a02"/></linearGradient>
+  <linearGradient id="nSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a2040"/><stop offset="100%" stop-color="#020810"/></linearGradient>
+  <linearGradient id="nAlgaeOmbre" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#0a2040" stop-opacity="0"/>
+    <stop offset="40%" stop-color="#1a4a10" stop-opacity=".6"/>
+    <stop offset="100%" stop-color="#2d7a0f" stop-opacity=".88"/>
+  </linearGradient>
+  <marker id="aN" markerWidth="8" markerHeight="8" refX="6" refY="3.5" orient="auto"><path d="M0,0 L0,7 L8,3.5 Z" fill="#f59e0b"/></marker>
+  <filter id="nglow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <clipPath id="nSeaClip"><rect x="555" y="120" width="325" height="200"/></clipPath>
+</defs>
+<rect width="880" height="320" fill="url(#nSky)"/>
+<!-- land: green with crop rows -->
+<rect y="180" width="570" height="140" fill="url(#nGnd)"/>
+<line x1="0" y1="195" x2="560" y2="188" stroke="#3a6020" stroke-width="1" opacity=".3"/>
+<line x1="0" y1="208" x2="560" y2="201" stroke="#3a6020" stroke-width="1" opacity=".28"/>
+<line x1="0" y1="220" x2="560" y2="213" stroke="#3a6020" stroke-width="1" opacity=".25"/>
+<!-- ocean -->
+<rect x="550" y="130" width="330" height="190" fill="url(#nSea)"/>
+<path d="M550,130 Q640,124 740,128 Q810,131 880,124" stroke="#38bdf8" stroke-width="1" fill="none" opacity=".3"/>
+<!-- ombre algae bloom gradient in sea -->
+<path d="M558,130 Q680,124 880,120 L880,320 Q680,320 558,320 Z" fill="url(#nAlgaeOmbre)"/>
+
+<!-- N₂ atmosphere badge — styled pill with concentric glow rings -->
+<circle cx="66" cy="44" r="48" fill="none" stroke="#f59e0b" stroke-width="1"   opacity=".10"/>
+<circle cx="66" cy="44" r="38" fill="none" stroke="#f59e0b" stroke-width="1.2" opacity=".18"/>
+<circle cx="66" cy="44" r="28" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity=".28"/>
+<rect x="12" y="14" width="108" height="58" rx="12" fill="#1a1000" opacity=".82"/>
+<rect x="12" y="14" width="108" height="58" rx="12" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity=".45"/>
+<text x="56" y="56" fill="#f59e0b" font-size="38" font-family="monospace" font-weight="bold" text-anchor="middle" opacity=".95" filter="url(#nglow)">N₂</text>
+<text x="66" y="82" fill="#f59e0b" font-size="9.5" font-family="monospace" text-anchor="middle" opacity=".72" letter-spacing="1">78% of atmosphere</text>
+
+<!-- Farm — grounded: land y=180, house bottom = translate_y + 64 = 180, so translate_y = 116 -->
+<g transform="translate(155,116)">
+  <rect x="0" y="28" width="50" height="36" fill="#6b3a14" rx="2"/>
+  <polygon points="-3,28 25,7 53,28" fill="#8a4a18"/>
+  <rect x="5" y="36" width="12" height="12" fill="#3d1a05" rx="1"/>
+  <rect x="7" y="38" width="4" height="4" fill="#7dd3fc" opacity=".4"/>
+  <rect x="33" y="40" width="14" height="24" fill="#4a2208" rx="1"/>
+  <rect x="54" y="28" width="16" height="36" fill="#b09050" rx="2"/>
+  <ellipse cx="62" cy="28" rx="8" ry="3.5" fill="#d4b060"/>
+  <line x1="-22" y1="64" x2="-22" y2="52" stroke="#8a6030" stroke-width="1.5"/>
+  <line x1="-11" y1="64" x2="-11" y2="52" stroke="#8a6030" stroke-width="1.5"/>
+  <line x1="0"   y1="64" x2="0"   y2="52" stroke="#8a6030" stroke-width="1.5"/>
+  <line x1="-24" y1="55" x2="2"   y2="55" stroke="#8a6030" stroke-width="1"/>
+  <line x1="-24" y1="60" x2="2"   y2="60" stroke="#8a6030" stroke-width="1"/>
+  <rect x="72" y="50" width="22" height="14" fill="#f59e0b" opacity=".88" rx="2"/>
+  <text x="83" y="60" fill="#0a0a00" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">N</text>
+  <text x="83" y="74" fill="#f59e0b" font-size="9" font-family="monospace" text-anchor="middle" opacity=".85">fertilizer</text>
+</g>
+
+<!-- N-fix bacteria node — placed below farm, won't overlap -->
+<g transform="translate(100,230)">
+  <circle cx="0" cy="0" r="22" fill="#1a2a05" stroke="#f59e0b" stroke-width="1.5" opacity=".85"/>
+  <rect x="-8" y="-5" width="11" height="4" rx="2" fill="#fde68a" opacity=".8"/>
+  <rect x="-3" y="2" width="9" height="3.5" rx="1.8" fill="#fde68a" opacity=".7"/>
+  <circle cx="7" cy="-2.5" r="4.5" fill="#fde68a" opacity=".6"/>
+  <text x="0" y="32" fill="#f59e0b" font-size="9" font-family="monospace" text-anchor="middle" opacity=".8">N-fix bacteria</text>
+</g>
+
+<!-- Plant — positioned so its label doesn't collide -->
+<g transform="translate(305,98)">
+  <path d="M0,80 Q-9,96 -6,112 M0,80 Q0,98 2,116" stroke="#5a3820" stroke-width="1.5" fill="none"/>
+  <line x1="0" y1="80" x2="0" y2="24" stroke="#2d7a0f" stroke-width="3.5"/>
+  <path d="M0,58 Q-18,48 -20,33 Q-7,31 0,46" fill="#3d9a1f" stroke="#2d7a0f" stroke-width="1"/>
+  <path d="M0,45 Q18,35 20,21 Q7,19 0,32" fill="#4ab22a" stroke="#2d7a0f" stroke-width="1"/>
+  <ellipse cx="0" cy="18" rx="7" ry="10" fill="#5dc435" stroke="#2d7a0f" stroke-width=".8"/>
+  <!-- label ABOVE the plant, clear of runoff path -->
+  <text x="0" y="10" fill="#4ade80" font-size="10" font-family="monospace" text-anchor="middle" opacity=".8">plant absorbs N</text>
+</g>
+
+<!-- runoff flow — animated dashed path, clearly below plant label -->
+<path d="M418,186 Q455,176 498,181 Q525,185 552,182" stroke="#38bdf8" stroke-width="5.5" fill="none" opacity=".55" stroke-dasharray="12,5"><animate attributeName="stroke-dashoffset" from="170" to="0" dur="2.5s" repeatCount="indefinite"/></path>
+<!-- runoff label ABOVE the arrow -->
+<text x="485" y="172" fill="#38bdf8" font-size="10" font-family="monospace" text-anchor="middle" opacity=".8" font-weight="bold">surface runoff →</text>
+
+<!-- ALGAE BLOOM nitrogen tab — layered cells with glow -->
+<g transform="translate(690,180)">
+  <!-- outer halo glow -->
+  <ellipse cx="0" cy="0" rx="88" ry="48" fill="#15803d" opacity=".15" filter="url(#nglow)"/>
+  <!-- main bloom body -->
+  <ellipse cx="0" cy="0" rx="72" ry="38" fill="#1a5c0a" opacity=".55">
+    <animate attributeName="rx" values="72;86;72" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="ry" values="38;46;38" dur="4s" repeatCount="indefinite"/>
+  </ellipse>
+  <!-- mid layer -->
+  <ellipse cx="-4" cy="-4" rx="48" ry="26" fill="#2d7a0f" opacity=".65">
+    <animate attributeName="rx" values="48;58;48" dur="3.5s" repeatCount="indefinite" begin=".3s"/>
+  </ellipse>
+  <!-- cells -->
+  <circle cx="-22" cy="-8" r="13" fill="#4ade80" opacity=".8" filter="url(#nglow)">
+    <animate attributeName="r" values="13;16;13" dur="2.8s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="6" cy="-14" r="16" fill="#86efac" opacity=".85" filter="url(#nglow)">
+    <animate attributeName="r" values="16;20;16" dur="3.2s" repeatCount="indefinite" begin=".4s"/>
+  </circle>
+  <circle cx="28" cy="-2" r="12" fill="#4ade80" opacity=".78" filter="url(#nglow)">
+    <animate attributeName="r" values="12;15;12" dur="2.6s" repeatCount="indefinite" begin=".7s"/>
+  </circle>
+  <circle cx="-8" cy="10" r="11" fill="#22c55e" opacity=".75">
+    <animate attributeName="r" values="11;14;11" dur="3s" repeatCount="indefinite" begin=".2s"/>
+  </circle>
+  <!-- label pill -->
+  <rect x="-54" y="46" width="110" height="28" rx="8" fill="#052e16" opacity=".88"/>
+  <text x="1" y="64" fill="#4ade80" font-size="11" font-family="monospace" font-weight="bold" text-anchor="middle">ALGAE BLOOM</text>
+</g>
+
+<!-- dead fish clipped — label RIGHT SIDE UP above the fish -->
+<g clip-path="url(#nSeaClip)">
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="3.5s" repeatCount="indefinite"/>
+    <g transform="translate(600,258)">
+      <!-- label above, upright -->
+      <text x="0" y="-18" fill="#ef4444" font-size="10" font-family="monospace" font-weight="bold" text-anchor="middle" opacity=".9">dead fish</text>
+      <!-- fish belly up (rotated at origin, so label stays upright) -->
+      <g transform="rotate(180)">
+        <ellipse cx="0" cy="0" rx="20" ry="7" fill="#90a4ae"/>
+        <polygon points="20,0 32,-10 32,10" fill="#607d8b"/>
+        <path d="M2,-7 Q7,-16 11,-7" fill="#b0bec5" stroke="#607d8b" stroke-width=".5"/>
+        <path d="M1,7 Q6,13 9,7" fill="#b0bec5" stroke="#607d8b" stroke-width=".4"/>
+        <path d="M-7,-7 Q-11,0 -7,7" fill="none" stroke="#607d8b" stroke-width="1" opacity=".45"/>
+        <ellipse cx="-2" cy="1" rx="10" ry="2" fill="#cfd8dc" opacity=".5"/>
+        <circle cx="-10" cy="-1" r="3" fill="white"/><circle cx="-10" cy="-1" r="1" fill="#37474f"/>
+      </g>
+    </g>
+  </g>
+</g>
+
+<!-- live fish — JS driven -->
+<g id="nFish1">
+    <g class="fR">
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="15" ry="6" fill="#64b5f6"/>
+      <!-- tail -->
+      <polygon points="15,0 24,-9 24,9" fill="#2979cc"/>
+      <!-- dorsal fin (top) -->
+      <path d="M-1,-6 Q5,-14 8,-6" fill="#90caf9" stroke="#2979cc" stroke-width=".5"/>
+      <!-- ventral fin (bottom) -->
+      <path d="M0,6 Q4,11 6,6" fill="#90caf9" stroke="#2979cc" stroke-width=".4"/>
+      <!-- gill arc -->
+      <path d="M-5,-6 Q-9,0 -5,6" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55"/>
+      <!-- belly highlight -->
+      <ellipse cx="-1" cy="1" rx="7" ry="2" fill="#bbdefb" opacity=".45"/>
+      <!-- eye -->
+      <circle cx="-8" cy="-1" r="3" fill="white"/>
+      <circle cx="-8" cy="-1" r="1" fill="#0d2a5e"/>
+    </g>
+    <g class="fL" style="display:none">
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="15" ry="6" fill="#64b5f6"/>
+      <!-- tail -->
+      <polygon points="-15,0 -24,-9 -24,9" fill="#2979cc"/>
+      <!-- dorsal fin (top) -->
+      <path d="M-1,-6 Q-5,-14 -8,-6" fill="#90caf9" stroke="#2979cc" stroke-width=".5"/>
+      <!-- ventral fin (bottom) -->
+      <path d="M-0,6 Q-4,11 -6,6" fill="#90caf9" stroke="#2979cc" stroke-width=".4"/>
+      <!-- gill arc -->
+      <path d="M5,-6 Q9,0 5,6" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55"/>
+      <!-- belly highlight -->
+      <ellipse cx="1" cy="1" rx="7" ry="2" fill="#bbdefb" opacity=".45"/>
+      <!-- eye -->
+      <circle cx="8" cy="-1" r="3" fill="white"/>
+      <circle cx="8" cy="-1" r="1" fill="#0d2a5e"/>
+    </g>
+  </g>
+
+<!-- step labels — placed to avoid overlap -->
+<text x="440" y="108" fill="#f59e0b" font-size="10" font-family="monospace" opacity=".82" text-anchor="middle" font-weight="bold">① nitrogen runoff →</text>
+<text x="620" y="148" fill="#f59e0b" font-size="10" font-family="monospace" opacity=".78" text-anchor="middle" font-weight="bold">② algae explodes</text>
+<text x="690" y="298" fill="#ef4444" font-size="10" font-family="monospace" opacity=".9" text-anchor="middle" font-weight="bold">③ O₂ gone</text>
+
+<!-- arrows -->
+<path d="M97,72 Q86,130 100,208" stroke="#f59e0b" stroke-width="1.8" fill="none" marker-end="url(#aN)" stroke-dasharray="5,3" opacity=".7"><animate attributeName="stroke-dashoffset" from="50" to="0" dur="2s" repeatCount="indefinite"/></path>
+<path d="M268,160 Q280,168 298,180" stroke="#f59e0b" stroke-width="1.8" fill="none" marker-end="url(#aN)" opacity=".65"/>
+<path d="M335,200 Q370,208 412,190" stroke="#f59e0b" stroke-width="1.8" fill="none" marker-end="url(#aN)" opacity=".65"/>
+<path d="M555,180 Q600,172 635,174" stroke="#f59e0b" stroke-width="1.8" fill="none" marker-end="url(#aN)" opacity=".75"/>
+<path d="M690,216 Q668,234 634,252" stroke="#f59e0b" stroke-width="1.8" fill="none" marker-end="url(#aN)" opacity=".65"/>
+</svg>
+</template>
+
+<!-- CARBON SVG — TEKS B.13C / B.13D: Carbon Cycle & Dead Zone Disruption -->
+<template id="svg-carbon">
+<svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="cSky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#1a0808"/><stop offset="100%" stop-color="#0d1528"/>
+  </linearGradient>
+  <linearGradient id="cGrass" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#2a5c14"/><stop offset="100%" stop-color="#1a3c08"/>
+  </linearGradient>
+  <linearGradient id="cSoil" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#6b4220"/><stop offset="100%" stop-color="#2d1808"/>
+  </linearGradient>
+  <linearGradient id="cOcean" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#0a2040"/><stop offset="100%" stop-color="#020810"/>
+  </linearGradient>
+  <linearGradient id="cBloom" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#0a2040" stop-opacity="0"/>
+    <stop offset="35%" stop-color="#1a4a10" stop-opacity=".45"/>
+    <stop offset="100%" stop-color="#2d7a0f" stop-opacity=".82"/>
+  </linearGradient>
+  <marker id="mC" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L0,10 L10,5 Z" fill="#ef4444"/>
+  </marker>
+  <marker id="mG" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L0,10 L10,5 Z" fill="#4ade80"/>
+  </marker>
+  <marker id="mT" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L0,10 L10,5 Z" fill="#c8956a"/>
+  </marker>
+  <filter id="cGlow">
+    <feGaussianBlur stdDeviation="6" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+
+<!-- SKY/ATMOSPHERE background -->
+<rect width="900" height="420" fill="url(#cSky)"/>
+<!-- LAND SURFACE — left 2/3 of canvas -->
+<rect x="0" y="220" width="615" height="50" fill="url(#cGrass)"/>
+<!-- SOIL UNDERGROUND -->
+<rect x="0" y="270" width="615" height="150" fill="url(#cSoil)"/>
+<!-- Soil texture lines -->
+<line x1="15" y1="292" x2="600" y2="292" stroke="#8a5228" stroke-width=".7" opacity=".32"/>
+<line x1="15" y1="314" x2="600" y2="314" stroke="#8a5228" stroke-width=".7" opacity=".25"/>
+<line x1="15" y1="336" x2="600" y2="336" stroke="#8a5228" stroke-width=".6" opacity=".2"/>
+<!-- OCEAN PANEL — right 1/3 -->
+<rect x="615" y="0" width="285" height="420" fill="url(#cOcean)"/>
+<!-- Algae ombre overlay on ocean -->
+<rect x="615" y="0" width="285" height="420" fill="url(#cBloom)"/>
+<!-- Shoreline divider -->
+<rect x="612" y="220" width="5" height="200" fill="#1a3c08"/>
+
+<!-- ══ CO₂ LABEL — top center, atmosphere zone ══ -->
+<!-- Dark backdrop pill so CO₂ always readable -->
+<rect x="200" y="8" width="220" height="80" rx="16" fill="#2a0808" opacity=".55"/>
+<text x="310" y="58" fill="#ef4444" font-size="52" font-family="monospace" font-weight="bold" text-anchor="middle" filter="url(#cGlow)" opacity=".97">CO&#x2082;</text>
+<text x="310" y="78" fill="#ef4444" font-size="11" font-family="monospace" text-anchor="middle" opacity=".75" font-weight="bold">atmospheric carbon</text>
+
+<!-- ══ SUN — top far left, isolated ══ -->
+<circle cx="50" cy="46" r="24" fill="#fbbf24" opacity=".9"/>
+<line x1="50" y1="12" x2="50" y2="4"  stroke="#fbbf24" stroke-width="2.2" opacity=".65"/>
+<line x1="50" y1="80" x2="50" y2="88"  stroke="#fbbf24" stroke-width="2.2" opacity=".65"/>
+<line x1="16" y1="46" x2="8"  y2="46"  stroke="#fbbf24" stroke-width="2.2" opacity=".65"/>
+<line x1="84" y1="46" x2="92" y2="46"  stroke="#fbbf24" stroke-width="2.2" opacity=".65"/>
+<line x1="26" y1="22" x2="20" y2="16"  stroke="#fbbf24" stroke-width="1.8" opacity=".5"/>
+<line x1="74" y1="22" x2="80" y2="16"  stroke="#fbbf24" stroke-width="1.8" opacity=".5"/>
+<line x1="26" y1="70" x2="20" y2="76"  stroke="#fbbf24" stroke-width="1.8" opacity=".5"/>
+<line x1="74" y1="70" x2="80" y2="76"  stroke="#fbbf24" stroke-width="1.8" opacity=".5"/>
+<text x="50" y="104" fill="#fbbf24" font-size="11" font-family="monospace" text-anchor="middle" opacity=".88">Sunlight</text>
+
+<!-- ══ BIG TREE — far left column (x≈100), photosynthesis ══ -->
+<!-- Labels sit above the tree in their own clear area (y<88) -->
+<text x="108" y="72" fill="#4ade80" font-size="12" font-family="monospace" text-anchor="middle" font-weight="bold" opacity=".97">Photosynthesis</text>
+<text x="108" y="87" fill="#4ade80" font-size="10.5" font-family="monospace" text-anchor="middle" opacity=".85">absorbs CO&#x2082;</text>
+<!-- trunk + roots (grass layer 220-270) -->
+<rect x="102" y="175" width="12" height="70" fill="#5c3d1a" rx="3"/>
+<path d="M106,245 Q90,262 86,280"  stroke="#5c3d1a" stroke-width="2.2" fill="none" opacity=".5"/>
+<path d="M110,245 Q122,262 126,282" stroke="#5c3d1a" stroke-width="2.2" fill="none" opacity=".45"/>
+<path d="M108,248 Q108,268 106,285" stroke="#5c3d1a" stroke-width="1.8" fill="none" opacity=".4"/>
+<!-- layered canopy (centered at 108,135) -->
+<circle cx="108" cy="140" r="46" fill="#2d7a14"/>
+<circle cx="76"  cy="156" r="30" fill="#235a0e"/>
+<circle cx="140" cy="156" r="30" fill="#235a0e"/>
+<circle cx="92"  cy="124" r="26" fill="#3d8b1f"/>
+<circle cx="122" cy="120" r="28" fill="#3d9a20"/>
+<circle cx="108" cy="110" r="20" fill="#4aaa28"/>
+
+<!-- ══ SMALLER TREE — center column (x≈320) ══ -->
+<line x1="320" y1="220" x2="320" y2="190" stroke="#5c3d1a" stroke-width="4.5"/>
+<circle cx="320" cy="178" r="24" fill="#2d6b14"/>
+<circle cx="308" cy="188" r="15" fill="#235a0e"/>
+<circle cx="332" cy="188" r="15" fill="#235a0e"/>
+<!-- root hints -->
+<path d="M317,220 Q305,236 302,255" stroke="#5c3d1a" stroke-width="1.5" fill="none" opacity=".4"/>
+<path d="M323,220 Q333,236 336,255" stroke="#5c3d1a" stroke-width="1.5" fill="none" opacity=".35"/>
+
+<!-- ══ COW — proper dairy cow, center stage (x≈390, y≈190) ══ -->
+<g transform="translate(390,188)">
+  <!-- BODY — large horizontal oval -->
+  <ellipse cx="0" cy="14" rx="50" ry="24" fill="#f0ece0"/>
+  <!-- Black patches on body -->
+  <ellipse cx="-18" cy="6"  rx="18" ry="13" fill="#2a2218" opacity=".72"/>
+  <ellipse cx="18"  cy="24" rx="14" ry="9"  fill="#2a2218" opacity=".58"/>
+  <ellipse cx="-5"  cy="28" rx="10" ry="7"  fill="#2a2218" opacity=".45"/>
+  <!-- UDDER (pink, under belly) -->
+  <ellipse cx="-6" cy="37" rx="18" ry="9" fill="#f0b0a0"/>
+  <line x1="-16" y1="46" x2="-17" y2="54" stroke="#d89080" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="-8"  y1="46" x2="-8"  y2="55" stroke="#d89080" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="0"   y1="46" x2="1"   y2="54" stroke="#d89080" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- TAIL (left side) -->
+  <path d="M-50,10 Q-62,4 -60,20 Q-58,30 -54,34" stroke="#c8b880" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <ellipse cx="-54" cy="36" rx="6" ry="4" fill="#c8b880"/>
+  <!-- NECK -->
+  <ellipse cx="38" cy="2" rx="16" ry="18" fill="#f0ece0"/>
+  <!-- BLACK NECK PATCH -->
+  <ellipse cx="40" cy="2" rx="10" ry="12" fill="#2a2218" opacity=".45"/>
+  <!-- HEAD (large, facing right) -->
+  <ellipse cx="58" cy="-10" rx="22" ry="18" fill="#f0ece0"/>
+  <!-- Head patch -->
+  <ellipse cx="60" cy="-8"  rx="14" ry="11" fill="#2a2218" opacity=".48"/>
+  <!-- SNOUT / muzzle area -->
+  <ellipse cx="76" cy="-4" rx="12" ry="9" fill="#e8c8b0"/>
+  <!-- nostrils -->
+  <ellipse cx="72" cy="-3" rx="2.5" ry="2" fill="#8a5848"/>
+  <ellipse cx="80" cy="-2" rx="2.5" ry="2" fill="#8a5848"/>
+  <!-- Mouth -->
+  <path d="M70,4 Q76,8 82,4" stroke="#8a5848" stroke-width="1.4" fill="none"/>
+  <!-- EYE — large expressive cow eye -->
+  <circle cx="50" cy="-18" r="6"   fill="white"/>
+  <circle cx="50" cy="-18" r="4"   fill="#6b3a10"/>
+  <circle cx="50" cy="-18" r="2.2" fill="#1a0800"/>
+  <circle cx="51.5" cy="-19.5" r="1.2" fill="white"/>
+  <!-- Eyelashes -->
+  <path d="M44,-23 Q50,-27 56,-23" stroke="#4a2c08" stroke-width="1.5" fill="none"/>
+  <!-- EAR -->
+  <ellipse cx="40" cy="-26" rx="7" ry="5" fill="#f0ece0" transform="rotate(-25,40,-26)"/>
+  <ellipse cx="40" cy="-26" rx="4" ry="2.8" fill="#e8c8b0" transform="rotate(-25,40,-26)"/>
+  <!-- HORNS -->
+  <path d="M44,-28 Q38,-40 33,-35" stroke="#c8b060" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M54,-28 Q60,-40 65,-34" stroke="#c8b060" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- LEGS — four solid rectangular legs with hooves -->
+  <rect x="-36" y="36" width="10" height="28" fill="#e8d8b0" rx="2"/>
+  <rect x="-20" y="36" width="10" height="28" fill="#e8d8b0" rx="2"/>
+  <rect x="4"   y="36" width="10" height="28" fill="#e8d8b0" rx="2"/>
+  <rect x="20"  y="36" width="10" height="28" fill="#e8d8b0" rx="2"/>
+  <!-- Hooves (dark) -->
+  <rect x="-36" y="60" width="10" height="5" fill="#3a2a10" rx="1.5"/>
+  <rect x="-20" y="60" width="10" height="5" fill="#3a2a10" rx="1.5"/>
+  <rect x="4"   y="60" width="10" height="5" fill="#3a2a10" rx="1.5"/>
+  <rect x="20"  y="60" width="10" height="5" fill="#3a2a10" rx="1.5"/>
+  <!-- Labels BELOW cow, clear of hooves -->
+  <text x="10" y="82" fill="#d4c8a0" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold" opacity=".92">animal</text>
+  <text x="10" y="96" fill="#d4c8a0" font-size="11"   font-family="monospace" text-anchor="middle" opacity=".8">respiration</text>
+</g>
+
+<!-- ══ FACTORY — right land zone (x≈490), labels below ══ -->
+<g transform="translate(490,124)">
+  <rect x="0" y="36" width="76" height="62" fill="#374151" rx="2"/>
+  <!-- Three smokestacks -->
+  <rect x="7"  y="14" width="16" height="26" fill="#4b5563" rx="2"/>
+  <rect x="30" y="18" width="16" height="22" fill="#4b5563" rx="2"/>
+  <rect x="52" y="22" width="14" height="18" fill="#4b5563" rx="2"/>
+  <!-- Windows -->
+  <rect x="8"  y="52" width="14" height="11" fill="#6b7280" rx="1" opacity=".55"/>
+  <rect x="30" y="52" width="14" height="11" fill="#6b7280" rx="1" opacity=".55"/>
+  <rect x="52" y="52" width="12" height="11" fill="#6b7280" rx="1" opacity=".5"/>
+  <rect x="8"  y="70" width="14" height="11" fill="#6b7280" rx="1" opacity=".45"/>
+  <rect x="30" y="70" width="14" height="11" fill="#6b7280" rx="1" opacity=".45"/>
+  <!-- Animated smoke -->
+  <circle cx="15" cy="4"  r="9"  fill="#9ca3af" opacity=".5"><animate attributeName="cy" values="4;-22;-50"  dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values=".5;.25;0"  dur="2.8s" repeatCount="indefinite"/><animate attributeName="r" values="9;15;20"  dur="2.8s" repeatCount="indefinite"/></circle>
+  <circle cx="38" cy="8"  r="7"  fill="#9ca3af" opacity=".4"><animate attributeName="cy" values="8;-18;-46"  dur="2.4s" repeatCount="indefinite" begin=".7s"/><animate attributeName="opacity" values=".4;.2;0"  dur="2.4s" repeatCount="indefinite" begin=".7s"/></circle>
+  <circle cx="59" cy="12" r="6"  fill="#9ca3af" opacity=".35"><animate attributeName="cy" values="12;-14;-42" dur="3.2s" repeatCount="indefinite" begin="1.3s"/><animate attributeName="opacity" values=".35;.15;0" dur="3.2s" repeatCount="indefinite" begin="1.3s"/></circle>
+  <!-- Labels BELOW building -->
+  <text x="38" y="112" fill="#9ca3af" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold">fossil fuels</text>
+  <text x="38" y="126" fill="#9ca3af" font-size="10.5" font-family="monospace" text-anchor="middle" opacity=".72">auto &amp; factory</text>
+</g>
+
+<!-- ══ UNDERGROUND ZONE — labels in soil, well spaced ══ -->
+<!-- Root respiration label — far left, below grass line -->
+<text x="34" y="290" fill="#ef4444" font-size="11"   font-family="monospace" font-weight="bold" opacity=".82">root</text>
+<text x="34" y="305" fill="#ef4444" font-size="11"   font-family="monospace" opacity=".78">respiration</text>
+<!-- Organic Carbon label -->
+<text x="160" y="296" fill="#d4a96a" font-size="12"   font-family="monospace" font-weight="bold" opacity=".92">Organic Carbon</text>
+<!-- Dead organism blobs + label -->
+<ellipse cx="168" cy="320" rx="20" ry="8"  fill="#2d1a08" stroke="#8a5a28" stroke-width="1.2" opacity=".75"/>
+<ellipse cx="196" cy="325" rx="14" ry="6"  fill="#2d1a08" stroke="#8a5a28" stroke-width="1"   opacity=".62"/>
+<text x="168" y="344" fill="#c8956a" font-size="11"   font-family="monospace" opacity=".88">Dead organisms &amp; waste</text>
+<!-- Decay organisms — center soil -->
+<text x="380" y="296" fill="#c8956a" font-size="11.5" font-family="monospace" font-weight="bold" opacity=".85">Decay organisms</text>
+<circle cx="390" cy="316" r="8"  fill="#fde68a" stroke="#8a5a28" stroke-width="1"   opacity=".55"/>
+<circle cx="410" cy="320" r="6"  fill="#fde68a" stroke="#8a5a28" stroke-width=".8"  opacity=".48"/>
+<circle cx="370" cy="320" r="5"  fill="#fde68a" stroke="#8a5a28" stroke-width=".8"  opacity=".42"/>
+<!-- Fossil bar at very bottom -->
+<rect x="16" y="378" width="590" height="32" fill="#1a0e04" rx="3" opacity=".88"/>
+<text x="308" y="399" fill="#8a6a3a" font-size="11.5" font-family="monospace" text-anchor="middle" opacity=".92">Fossils &amp; fossil fuel</text>
+
+<!-- ══ OCEAN PANEL — right ══ -->
+<text x="757" y="22" fill="#38bdf8" font-size="11.5" font-family="monospace" text-anchor="middle" opacity=".72" font-weight="bold">Gulf of Mexico</text>
+<!-- Ocean normal/blocked note — top ocean, isolated area -->
+<rect x="635" y="32" width="240" height="44" rx="8" fill="#0a1528" opacity=".7"/>
+<text x="755" y="52" fill="#38bdf8" font-size="10"   font-family="monospace" text-anchor="middle" opacity=".75">normally: ocean absorbs CO&#x2082;</text>
+<text x="755" y="68" fill="#ef4444" font-size="10.5" font-family="monospace" text-anchor="middle" opacity=".92" font-weight="bold">&#x2190; BLOCKED by algae bloom</text>
+<!-- ALGAE BLOOM carbon tab — layered cells with glow -->
+<!-- outer halo -->
+<ellipse cx="757" cy="220" rx="106" ry="56" fill="#15803d" opacity=".15" filter="url(#cGlow)"/>
+<!-- main body -->
+<ellipse cx="757" cy="220" rx="90" ry="46" fill="#1a5c0a" opacity=".55">
+  <animate attributeName="rx" values="90;108;90" dur="4s" repeatCount="indefinite"/>
+  <animate attributeName="ry" values="46;56;46" dur="4s" repeatCount="indefinite"/>
+</ellipse>
+<!-- mid layer -->
+<ellipse cx="750" cy="216" rx="60" ry="32" fill="#2d7a0f" opacity=".68">
+  <animate attributeName="rx" values="60;72;60" dur="3.5s" repeatCount="indefinite" begin=".3s"/>
+</ellipse>
+<!-- cells -->
+<circle cx="730" cy="206" r="15" fill="#4ade80" opacity=".82" filter="url(#cGlow)">
+  <animate attributeName="r" values="15;18;15" dur="2.8s" repeatCount="indefinite"/>
+</circle>
+<circle cx="756" cy="196" r="18" fill="#86efac" opacity=".88" filter="url(#cGlow)">
+  <animate attributeName="r" values="18;22;18" dur="3.2s" repeatCount="indefinite" begin=".4s"/>
+</circle>
+<circle cx="782" cy="210" r="13" fill="#4ade80" opacity=".8" filter="url(#cGlow)">
+  <animate attributeName="r" values="13;16;13" dur="2.6s" repeatCount="indefinite" begin=".7s"/>
+</circle>
+<circle cx="742" cy="228" r="11" fill="#22c55e" opacity=".72">
+  <animate attributeName="r" values="11;14;11" dur="3s" repeatCount="indefinite" begin=".2s"/>
+</circle>
+<circle cx="770" cy="232" r="10" fill="#4ade80" opacity=".68">
+  <animate attributeName="r" values="10;13;10" dur="2.9s" repeatCount="indefinite" begin=".9s"/>
+</circle>
+<!-- label pill -->
+<rect x="678" y="244" width="160" height="38" rx="8" fill="#052e16" opacity=".88"/>
+<text x="758" y="260" fill="#4ade80" font-size="12"   font-family="monospace" font-weight="bold" text-anchor="middle">ALGAE BLOOM</text>
+<text x="758" y="274" fill="#86efac" font-size="9.5"  font-family="monospace" text-anchor="middle" opacity=".78">N fertilizer → explosive growth</text>
+<!-- Disrupted phytoplankton — lower ocean (plenty of room) -->
+<g transform="translate(700,310)">
+  <circle cx="0" cy="0" r="19" fill="#c8f5a0" stroke="#4a8f2a" stroke-width="1.8"/>
+  <ellipse cx="-5" cy="-4" rx="7.5" ry="5" fill="#4a8f2a" opacity=".7"/>
+  <line x1="-23" y1="-23" x2="23" y2="23" stroke="#ef4444" stroke-width="4" opacity=".85"/>
+  <line x1="23"  y1="-23" x2="-23" y2="23" stroke="#ef4444" stroke-width="4" opacity=".85"/>
+  <text x="0" y="34"  fill="#ef4444" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold">DISRUPTED</text>
+  <text x="0" y="49"  fill="#ef4444" font-size="10.5" font-family="monospace" text-anchor="middle" opacity=".88">phytoplankton</text>
+  <text x="0" y="63"  fill="#9ca3af" font-size="9.5"  font-family="monospace" text-anchor="middle" opacity=".72">(ocean carbon sink)</text>
+</g>
+<!-- Dead zone badge -->
+<rect x="672" y="378" width="170" height="32" rx="16" fill="#dc2626" opacity=".94"/>
+<text x="757" y="399" fill="white" font-size="12" font-family="monospace" font-weight="bold" text-anchor="middle">&#x26A0; DEAD ZONE</text>
+
+<!-- ══ CYCLE ARROWS — clear paths with no label collision ══ -->
+
+<!-- A. CO₂ → Photosynthesis: big GREEN arc from atmosphere down-left to treetop -->
+<!-- Goes from x=200,y=60 curving down to tree label at ~108,88 -->
+<path d="M196,64 Q155,52 130,88" stroke="#4ade80" stroke-width="3.5" fill="none" marker-end="url(#mG)" opacity=".9">
+  <animate attributeName="stroke-dasharray" values="0,200;200,0" dur="2.5s" repeatCount="indefinite"/>
+</path>
+
+<!-- B. Tree releases organic carbon / respiration — short green arc from tree back up to CO₂ zone -->
+<path d="M136,88 Q172,62 200,62" stroke="#4ade80" stroke-width="2.5" fill="none" marker-end="url(#mG)" stroke-dasharray="6,4" opacity=".7">
+  <animate attributeName="stroke-dashoffset" from="50" to="0" dur="2s" repeatCount="indefinite"/>
+</path>
+
+<!-- C. Factory emissions → CO₂: big RED arc from chimney tops up-left -->
+<!-- Factory is at translate(490,124), chimneys top around y=124+4=128 → absolute y≈128, x≈528 center -->
+<!-- Arc goes to CO₂ label at 310,60 -->
+<path d="M555,118 Q490,60 420,62" stroke="#ef4444" stroke-width="3.5" fill="none" marker-end="url(#mC)" opacity=".82">
+  <animate attributeName="stroke-dashoffset" from="100" to="0" dur="3s" repeatCount="indefinite"/>
+</path>
+<!-- Emission label — sits on arc midpoint in the clear sky zone above factory, no overlap -->
+<rect x="488" y="76" width="112" height="32" rx="6" fill="#1a0808" opacity=".65"/>
+<text x="544" y="90"  fill="#ef4444" font-size="10.5" font-family="monospace" text-anchor="middle" font-weight="bold">auto &amp; factory</text>
+<text x="544" y="104" fill="#ef4444" font-size="10"   font-family="monospace" text-anchor="middle" opacity=".82">emissions &#x2192;</text>
+
+<!-- D. Animal respiration → CO₂: RED dashed arc from cow upward -->
+<!-- Cow at translate(390,188), top of cow ~y=188-28=160 → arc origin ~420,168 -->
+<path d="M430,172 Q390,110 355,76" stroke="#ef4444" stroke-width="2.8" fill="none" marker-end="url(#mC)" stroke-dasharray="7,4" opacity=".78">
+  <animate attributeName="stroke-dashoffset" from="70" to="0" dur="2.8s" repeatCount="indefinite"/>
+</path>
+<!-- "respiration" label — mid arc, backdrop pill so it doesn't melt into tree -->
+<rect x="358" y="112" width="94" height="22" rx="5" fill="#1a0808" opacity=".6"/>
+<text x="405" y="128" fill="#ef4444" font-size="10.5" font-family="monospace" text-anchor="middle" opacity=".88">respiration</text>
+
+<!-- E. Root/decay → CO₂: long dashed arc up left edge -->
+<path d="M44,270 Q18,202 56,120 Q96,52 208,60" stroke="#ef4444" stroke-width="2.5" fill="none" marker-end="url(#mC)" stroke-dasharray="7,4" opacity=".52">
+  <animate attributeName="stroke-dashoffset" from="130" to="0" dur="5.5s" repeatCount="indefinite"/>
+</path>
+
+<!-- F. Dead matter sinks to fossil layer: downward tan arrow in soil -->
+<path d="M168,348 Q168,362 168,374" stroke="#c8956a" stroke-width="2.8" fill="none" marker-end="url(#mT)" opacity=".78"/>
+
+<!-- G. Algae bloom disrupts ocean carbon: RED dashed arc from algae over to CO₂ area -->
+<!-- Algae is at ~757,190; arc goes to CO₂ at ~420,60 -->
+<path d="M756,176 Q756,110 680,72 Q610,44 500,58" stroke="#ef4444" stroke-width="2.8" fill="none" marker-end="url(#mC)" stroke-dasharray="7,4" opacity=".72">
+  <animate attributeName="stroke-dashoffset" from="100" to="0" dur="3.5s" repeatCount="indefinite"/>
+</path>
+<!-- Label for G — sits in upper ocean/sky boundary zone, well above other elements -->
+<rect x="618" y="84" width="138" height="36" rx="7" fill="#0a1528" opacity=".75"/>
+<text x="687" y="100" fill="#ef4444" font-size="10.5" font-family="monospace" text-anchor="middle" font-weight="bold">algae disrupts</text>
+<text x="687" y="115" fill="#ef4444" font-size="10"   font-family="monospace" text-anchor="middle" opacity=".82">ocean C cycle</text>
+
+<!-- TEKS badge -->
+<rect x="6" y="6" width="122" height="22" rx="11" fill="#1e1b4b" opacity=".88"/>
+<text x="67" y="21" fill="#a5b4fc" font-size="9.5" font-family="monospace" text-anchor="middle" opacity=".95">TEKS B.13C &#xB7; B.13D</text>
+</svg>
+</template>
+
+<!-- WATER SVG -->
+<template id="svg-water">
+<svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wSky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#060e1c"/><stop offset="100%" stop-color="#0d1c38"/>
+  </linearGradient>
+  <linearGradient id="wLand" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#1e3a10"/><stop offset="100%" stop-color="#0d1e06"/>
+  </linearGradient>
+  <linearGradient id="wRiver" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#1a6090"/><stop offset="100%" stop-color="#0a3060"/>
+  </linearGradient>
+  <linearGradient id="wGulf" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#0a2040"/><stop offset="100%" stop-color="#020810"/>
+  </linearGradient>
+  <radialGradient id="wAlgaeCore" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#86efac" stop-opacity="1"/>
+    <stop offset="40%"  stop-color="#4ade80" stop-opacity=".95"/>
+    <stop offset="75%"  stop-color="#16a34a" stop-opacity=".85"/>
+    <stop offset="100%" stop-color="#064e24" stop-opacity=".7"/>
+  </radialGradient>
+  <radialGradient id="wAlgaeOuter" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#22c55e" stop-opacity=".6"/>
+    <stop offset="65%"  stop-color="#15803d" stop-opacity=".45"/>
+    <stop offset="100%" stop-color="#052e16" stop-opacity=".18"/>
+  </radialGradient>
+  <filter id="wAlgaeGlow" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur stdDeviation="8" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="wAlgaeSoftGlow" x="-20%" y="-20%" width="140%" height="140%">
+    <feGaussianBlur stdDeviation="4" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <marker id="wAB" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+    <path d="M0,0 L0,9 L9,4.5 Z" fill="#38bdf8"/>
+  </marker>
+  <marker id="wAN" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+    <path d="M0,0 L0,9 L9,4.5 Z" fill="#f59e0b"/>
+  </marker>
+  <marker id="wAG" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+    <path d="M0,0 L0,8 L8,4 Z" fill="#4ade80"/>
+  </marker>
+  <clipPath id="wGulfClip">
+    <rect x="640" y="0" width="260" height="420"/>
+  </clipPath>
+</defs>
+
+<!-- ═══ BACKGROUNDS ═══ -->
+<rect width="900" height="420" fill="url(#wSky)"/>
+<!-- Stars (zone 1-3 sky) -->
+<circle cx="60"  cy="80"  r=".8" fill="white" opacity=".4"/>
+<circle cx="180" cy="50"  r=".7" fill="white" opacity=".35"/>
+<circle cx="320" cy="90"  r=".8" fill="white" opacity=".3"/>
+<circle cx="560" cy="60"  r=".7" fill="white" opacity=".35"/>
+<!-- Land -->
+<rect x="0" y="258" width="645" height="162" fill="url(#wLand)"/>
+<!-- Subtle field rows -->
+<line x1="0" y1="276" x2="638" y2="276" stroke="#2a5018" stroke-width="1" opacity=".28"/>
+<line x1="0" y1="294" x2="638" y2="294" stroke="#2a5018" stroke-width=".8" opacity=".2"/>
+<!-- Shore divider -->
+<rect x="637" y="258" width="6" height="162" fill="#1e3a10"/>
+<!-- Gulf panel -->
+<rect x="640" y="0" width="260" height="420" fill="url(#wGulf)"/>
+<!-- Gulf surface shimmer -->
+<path d="M640,258 Q700,253 770,257 Q840,259 900,253" stroke="#38bdf8" stroke-width="1" fill="none" opacity=".25"/>
+
+<!-- ═══ RIVER CHANNEL ═══ -->
+<path d="M148,284 C245,274 345,286 448,281 C528,277 588,279 642,282" stroke="#082f1b" stroke-width="46" fill="none" stroke-linecap="round" opacity=".84"/>
+<path d="M149,284 C245,274 345,286 448,281 C528,277 588,279 641,282" stroke="url(#wRiver)" stroke-width="38" fill="none" stroke-linecap="round" opacity=".95"/>
+<path d="M150,288 C248,280 346,289 447,284 C528,280 587,282 640,285" stroke="#0b3e6b" stroke-width="15" fill="none" stroke-linecap="round" opacity=".36"/>
+<!-- River surface shimmer -->
+<path d="M158,272 Q260,268 380,272 Q480,276 638,271" stroke="#7dd3fc" stroke-width="1.1" fill="none" opacity=".52" stroke-dasharray="10,8">
+  <animate attributeName="stroke-dashoffset" from="100" to="0" dur="4s" repeatCount="indefinite"/>
+</path>
+<path d="M158,279 Q260,275 380,279 Q480,283 638,278" stroke="#bae6fd" stroke-width="1.2" fill="none" opacity=".22" stroke-dasharray="6,10">
+  <animate attributeName="stroke-dashoffset" from="80" to="0" dur="3.2s" repeatCount="indefinite"/>
+</path>
+<!-- Wave ticks -->
+<path d="M195,270 Q199,267 203,270" stroke="#7dd3fc" stroke-width="1" fill="none" opacity=".45"/>
+<path d="M290,271 Q294,268 298,271" stroke="#7dd3fc" stroke-width="1" fill="none" opacity=".4"/>
+<path d="M390,270 Q394,267 398,270" stroke="#7dd3fc" stroke-width="1" fill="none" opacity=".4"/>
+<path d="M500,271 Q504,268 508,271" stroke="#7dd3fc" stroke-width="1" fill="none" opacity=".35"/>
+<path d="M600,270 Q604,267 608,270" stroke="#7dd3fc" stroke-width="1" fill="none" opacity=".3"/>
+<!-- sediment flecks carried by flow -->
+<circle r="2.8" fill="#fbbf24" opacity="0.75">
+  <animateMotion dur="3.8s" repeatCount="indefinite" path="M155,284 Q270,278 390,282 Q510,286 635,282"/>
+  <animate attributeName="opacity" values="0;0.75;0.75;0" dur="3.8s" repeatCount="indefinite"/>
+</circle>
+<circle r="2.3" fill="#fde68a" opacity="0.65">
+  <animateMotion dur="3.8s" repeatCount="indefinite" begin="1.2s" path="M155,284 Q270,278 390,282 Q510,286 635,282"/>
+  <animate attributeName="opacity" values="0;0.65;0.65;0" dur="3.8s" repeatCount="indefinite" begin="1.2s"/>
+</circle>
+
+<!-- ═══ STEP BADGES ═══ -->
+<line x1="225" y1="40" x2="225" y2="252" stroke="#38bdf8" stroke-width=".5" opacity=".18" stroke-dasharray="5,7"/>
+<line x1="435" y1="40" x2="435" y2="252" stroke="#38bdf8" stroke-width=".5" opacity=".18" stroke-dasharray="5,7"/>
+<line x1="640" y1="40" x2="640" y2="252" stroke="#38bdf8" stroke-width=".5" opacity=".18" stroke-dasharray="5,7"/>
+
+<!-- Badge 1 -->
+<rect x="26" y="10" width="106" height="26" rx="13" fill="#0d2a50" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="79" y="27" fill="#38bdf8" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold">FARM</text>
+<circle cx="24" cy="23" r="13" fill="#38bdf8"/>
+<text x="24" y="29" fill="#0d2a50" font-size="15" font-family="monospace" text-anchor="middle" font-weight="bold">1</text>
+
+<!-- Badge 2 -->
+<rect x="254" y="10" width="172" height="26" rx="13" fill="#0d2a50" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="340" y="27" fill="#38bdf8" font-size="11" font-family="monospace" text-anchor="middle" font-weight="bold">RIVER / HOUSTON</text>
+<circle cx="252" cy="23" r="13" fill="#38bdf8"/>
+<text x="252" y="29" fill="#0d2a50" font-size="15" font-family="monospace" text-anchor="middle" font-weight="bold">2</text>
+
+<!-- Badge 3 -->
+<rect x="462" y="10" width="172" height="26" rx="13" fill="#0d2a50" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="548" y="27" fill="#38bdf8" font-size="11" font-family="monospace" text-anchor="middle" font-weight="bold">MISSISSIPPI → GULF</text>
+<circle cx="460" cy="23" r="13" fill="#38bdf8"/>
+<text x="460" y="29" fill="#0d2a50" font-size="15" font-family="monospace" text-anchor="middle" font-weight="bold">3</text>
+
+<!-- Badge 4 -->
+<rect x="668" y="10" width="106" height="26" rx="13" fill="#0d2a50" stroke="#38bdf8" stroke-width="1.5"/>
+<text x="721" y="27" fill="#38bdf8" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold">GULF</text>
+<circle cx="666" cy="23" r="13" fill="#38bdf8"/>
+<text x="666" y="29" fill="#0d2a50" font-size="15" font-family="monospace" text-anchor="middle" font-weight="bold">4</text>
+
+<!-- ═══ ZONE 1: FARM ═══ -->
+<!-- Rain cloud — sky position, centered in zone -->
+<g transform="translate(112,52)">
+  <ellipse cx="0"   cy="22" rx="56" ry="22" fill="#2a4a6f" opacity=".95"/>
+  <ellipse cx="30"  cy="10" rx="40" ry="20" fill="#2a4a6f" opacity=".95"/>
+  <ellipse cx="-26" cy="14" rx="32" ry="19" fill="#2a4a6f" opacity=".9"/>
+  <line x1="-28" y1="44" x2="-32" y2="70" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round">
+    <animate attributeName="y1" values="44;58" dur="1s" repeatCount="indefinite"/>
+    <animate attributeName="y2" values="70;94" dur="1s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".9;0" dur="1s" repeatCount="indefinite"/>
+  </line>
+  <line x1="-10" y1="44" x2="-13" y2="70" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round">
+    <animate attributeName="y1" values="44;58" dur="1s" repeatCount="indefinite" begin=".25s"/>
+    <animate attributeName="y2" values="70;94" dur="1s" repeatCount="indefinite" begin=".25s"/>
+    <animate attributeName="opacity" values=".8;0" dur="1s" repeatCount="indefinite" begin=".25s"/>
+  </line>
+  <line x1="10"  y1="44" x2="7"   y2="70" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round">
+    <animate attributeName="y1" values="44;58" dur="1s" repeatCount="indefinite" begin=".5s"/>
+    <animate attributeName="y2" values="70;94" dur="1s" repeatCount="indefinite" begin=".5s"/>
+    <animate attributeName="opacity" values=".85;0" dur="1s" repeatCount="indefinite" begin=".5s"/>
+  </line>
+  <line x1="30"  y1="44" x2="27"  y2="70" stroke="#38bdf8" stroke-width="2" stroke-linecap="round">
+    <animate attributeName="y1" values="44;58" dur="1s" repeatCount="indefinite" begin=".75s"/>
+    <animate attributeName="y2" values="70;94" dur="1s" repeatCount="indefinite" begin=".75s"/>
+    <animate attributeName="opacity" values=".7;0" dur="1s" repeatCount="indefinite" begin=".75s"/>
+  </line>
+</g>
+
+<!-- Precipitation label — below cloud, above farm -->
+<rect x="16" y="136" width="164" height="38" rx="7" fill="#0a1a30" opacity=".85"/>
+<text x="98" y="153" fill="#38bdf8" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold">precipitation inland</text>
+<text x="98" y="167" fill="#38bdf8" font-size="10"   font-family="monospace" text-anchor="middle" opacity=".78">rain loosens nitrogen</text>
+
+<!-- Farmhouse + silo — sitting on ground y=258, bottom of house at 258 -->
+<g transform="translate(38,184)">
+  <rect x="0"  y="26" width="52" height="48" fill="#7a4218" rx="2"/>
+  <polygon points="-4,26 26,4 56,26" fill="#a05828"/>
+  <rect x="18" y="46" width="14" height="28" fill="#4a2208" rx="1"/>
+  <rect x="4"  y="32" width="11" height="11" fill="#1a2a3a" rx="1"/>
+  <rect x="37" y="32" width="11" height="11" fill="#1a2a3a" rx="1"/>
+  <rect x="5"  y="33" width="4"  height="4"  fill="#7dd3fc" opacity=".45"/>
+  <rect x="38" y="33" width="4"  height="4"  fill="#7dd3fc" opacity=".45"/>
+  <rect x="37" y="10" width="8"  height="18" fill="#8a4a1a"/>
+  <rect x="56" y="18" width="18" height="56" fill="#c0a050" rx="2"/>
+  <ellipse cx="65" cy="18" rx="9" ry="4" fill="#d4b860"/>
+  <!-- fence -->
+  <line x1="-18" y1="74" x2="-18" y2="58" stroke="#8a6030" stroke-width="2"/>
+  <line x1="-6"  y1="74" x2="-6"  y2="58" stroke="#8a6030" stroke-width="2"/>
+  <line x1="4"   y1="74" x2="4"   y2="58" stroke="#8a6030" stroke-width="2"/>
+  <line x1="-20" y1="63" x2="6"   y2="63" stroke="#8a6030" stroke-width="1.2"/>
+  <line x1="-20" y1="70" x2="6"   y2="70" stroke="#8a6030" stroke-width="1.2"/>
+  <!-- fertilizer bag on ground -->
+  <rect x="78" y="66" width="18" height="12" fill="#d4a020" rx="2" opacity=".9"/>
+  <text x="87" y="76" fill="#1a0a00" font-size="7" font-family="monospace" text-anchor="middle" font-weight="bold">N</text>
+</g>
+
+<!-- Farm bottom label — below river, left zone -->
+<rect x="10" y="322" width="208" height="44" rx="7" fill="#0a1a10" opacity=".82"/>
+<text x="114" y="340" fill="#f59e0b" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold">rain washes N off fields</text>
+<text x="114" y="357" fill="#38bdf8" font-size="10.5" font-family="monospace" text-anchor="middle" opacity=".85">enters river as runoff</text>
+
+<!-- ═══ ZONE 2: HOUSTON ═══ -->
+<!-- Skyline: translate so road base lands exactly at y=258 -->
+<g transform="translate(246,129)">
+  <!-- ground base -->
+  <rect x="0" y="121" width="168" height="8" fill="#1a2535" rx="1"/>
+  <!-- Chase Tower (tallest) -->
+  <rect x="64" y="14" width="18" height="107" fill="#1e3a5c"/>
+  <rect x="66" y="14" width="14" height="107" fill="#243f62"/>
+  <polygon points="64,14 73,0 82,14" fill="#1e3a5c"/>
+  <rect x="67" y="22" width="3" height="3" fill="#7dd3fc" opacity=".55"/>
+  <rect x="73" y="22" width="3" height="3" fill="#7dd3fc" opacity=".55"/>
+  <rect x="67" y="34" width="3" height="3" fill="#7dd3fc" opacity=".5"/>
+  <rect x="73" y="34" width="3" height="3" fill="#7dd3fc" opacity=".45"/>
+  <rect x="67" y="48" width="3" height="3" fill="#7dd3fc" opacity=".5"/>
+  <rect x="73" y="48" width="3" height="3" fill="#7dd3fc" opacity=".4"/>
+  <rect x="67" y="62" width="3" height="3" fill="#7dd3fc" opacity=".45"/>
+  <rect x="73" y="62" width="3" height="3" fill="#7dd3fc" opacity=".45"/>
+  <!-- Tower 2 -->
+  <rect x="86" y="30" width="16" height="91" fill="#162840"/>
+  <rect x="88" y="30" width="12" height="91" fill="#1c3349"/>
+  <rect x="89" y="38" width="3" height="3" fill="#93c5fd" opacity=".45"/>
+  <rect x="94" y="38" width="3" height="3" fill="#93c5fd" opacity=".45"/>
+  <rect x="89" y="52" width="3" height="3" fill="#93c5fd" opacity=".5"/>
+  <rect x="94" y="52" width="3" height="3" fill="#93c5fd" opacity=".4"/>
+  <!-- Tower 3 -->
+  <rect x="106" y="46" width="14" height="75" fill="#1a2f48"/>
+  <ellipse cx="113" cy="46" rx="7" ry="4" fill="#243d5a"/>
+  <rect x="108" y="54" width="3" height="3" fill="#7dd3fc" opacity=".38"/>
+  <rect x="114" y="54" width="3" height="3" fill="#7dd3fc" opacity=".42"/>
+  <!-- Low-rises -->
+  <rect x="26" y="68" width="32" height="53" fill="#141e2c"/>
+  <rect x="28" y="74" width="4" height="4" fill="#5b9bd5" opacity=".4"/>
+  <rect x="36" y="74" width="4" height="4" fill="#5b9bd5" opacity=".4"/>
+  <rect x="124" y="54" width="28" height="67" fill="#141e2c"/>
+  <rect x="126" y="62" width="4" height="4" fill="#60a5fa" opacity=".4"/>
+  <rect x="134" y="62" width="4" height="4" fill="#60a5fa" opacity=".38"/>
+  <!-- Road -->
+  <rect x="0" y="127" width="168" height="5" fill="#0f1720"/>
+  <line x1="24"  y1="130" x2="44"  y2="130" stroke="#fbbf24" stroke-width="1" stroke-dasharray="5,5" opacity=".5"/>
+  <line x1="68"  y1="130" x2="88"  y2="130" stroke="#fbbf24" stroke-width="1" stroke-dasharray="5,5" opacity=".5"/>
+  <line x1="108" y1="130" x2="128" y2="130" stroke="#fbbf24" stroke-width="1" stroke-dasharray="5,5" opacity=".5"/>
+</g>
+
+<!-- Houston label — BELOW river on land strip, not overlapping river -->
+<rect x="238" y="316" width="172" height="42" rx="7" fill="#0a1a30" opacity=".88"/>
+<text x="324" y="333" fill="#38bdf8" font-size="13.5" font-family="monospace" text-anchor="middle" font-weight="bold">Houston</text>
+<text x="324" y="350" fill="#f59e0b" font-size="10.5" font-family="monospace" text-anchor="middle" opacity=".9">concrete → faster runoff</text>
+
+<!-- ═══ ZONE 3: TRANSPIRATION TREE ═══ -->
+<!-- Tree sits on ground: translate y so trunk bottom (at local y=100) lands at y=258 → translate y=158 -->
+<g transform="translate(535,158)">
+  <line x1="0" y1="100" x2="0" y2="60" stroke="#5c3d1a" stroke-width="5"/>
+  <circle cx="0"   cy="46" r="34" fill="#2d7a14"/>
+  <circle cx="-22" cy="58" r="22" fill="#235a0e"/>
+  <circle cx="22"  cy="58" r="22" fill="#235a0e"/>
+  <circle cx="0"   cy="34" r="20" fill="#3d9a20"/>
+  <!-- transpiration vapor — thin dashed lines rising from canopy top, no big arrowhead -->
+  <path d="M-6,10 Q-9,-8 -6,-28" stroke="#4ade80" stroke-width="1.8" fill="none" stroke-dasharray="4,3" opacity=".72">
+    <animate attributeName="stroke-dashoffset" from="40" to="0" dur="2.4s" repeatCount="indefinite"/>
+  </path>
+  <path d="M8,12 Q11,-6 8,-26" stroke="#4ade80" stroke-width="1.4" fill="none" stroke-dasharray="4,3" opacity=".5">
+    <animate attributeName="stroke-dashoffset" from="40" to="0" dur="2.4s" repeatCount="indefinite" begin=".6s"/>
+  </path>
+  <path d="M-18,18 Q-22,2 -18,-14" stroke="#4ade80" stroke-width="1.2" fill="none" stroke-dasharray="3,3" opacity=".38">
+    <animate attributeName="stroke-dashoffset" from="30" to="0" dur="2.8s" repeatCount="indefinite" begin="1.1s"/>
+  </path>
+</g>
+
+<!-- Transpiration label — in sky above tree, compact, no dark box -->
+<text x="535" y="120" fill="#4ade80" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold" opacity=".82">transpiration</text>
+<text x="535" y="135" fill="#4ade80" font-size="9.5"  font-family="monospace" text-anchor="middle" opacity=".6">water vapor ↑</text>
+
+<!-- Mississippi label — BELOW river on land, not overlapping -->
+<rect x="444" y="316" width="192" height="42" rx="7" fill="#0a1a30" opacity=".88"/>
+<text x="540" y="333" fill="#38bdf8" font-size="12.5" font-family="monospace" text-anchor="middle" font-weight="bold">Mississippi R. → Gulf</text>
+<text x="540" y="350" fill="#f59e0b" font-size="10.5" font-family="monospace" text-anchor="middle" opacity=".9">carrying N nutrients</text>
+
+<!-- ═══ ZONE 4: GULF ═══ -->
+<!-- SUN — fully inside gulf zone, clear of right edge (cx=820, r=26 → right edge 846, left 794) -->
+<circle cx="820" cy="58" r="38" fill="#fbbf24" opacity=".07"/>
+<circle cx="820" cy="58" r="30" fill="#fbbf24" opacity=".1"/>
+<!-- rays -->
+<line x1="820" y1="22" x2="820" y2="13"  stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" opacity=".72"/>
+<line x1="820" y1="94" x2="820" y2="103" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" opacity=".72"/>
+<line x1="770" y1="58" x2="761" y2="58"  stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" opacity=".72"/>
+<line x1="870" y1="58" x2="879" y2="58"  stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" opacity=".72"/>
+<line x1="786" y1="24" x2="780" y2="18"  stroke="#fbbf24" stroke-width="2"   stroke-linecap="round" opacity=".55"/>
+<line x1="854" y1="24" x2="860" y2="18"  stroke="#fbbf24" stroke-width="2"   stroke-linecap="round" opacity=".55"/>
+<line x1="786" y1="92" x2="780" y2="98"  stroke="#fbbf24" stroke-width="2"   stroke-linecap="round" opacity=".55"/>
+<line x1="854" y1="92" x2="860" y2="98"  stroke="#fbbf24" stroke-width="2"   stroke-linecap="round" opacity=".55"/>
+<!-- sun body — layered circles -->
+<circle cx="820" cy="58" r="26" fill="#fde68a"/>
+<circle cx="820" cy="58" r="22" fill="#fbbf24"/>
+<circle cx="820" cy="58" r="18" fill="#fcd34d"/>
+<ellipse cx="813" cy="51" rx="7" ry="5" fill="#fef3c7" opacity=".5"/>
+<text x="820" y="118" fill="#fbbf24" font-size="11" font-family="monospace" text-anchor="middle" font-weight="bold" opacity=".9">evaporation ↑</text>
+
+<!-- Evaporation lines rising from Gulf surface up toward sun/cloud -->
+<path d="M668,256 Q663,218 658,178 Q654,144 651,112" stroke="#38bdf8" stroke-width="1.8" fill="none" stroke-dasharray="5,4" opacity=".6">
+  <animate attributeName="stroke-dashoffset" from="0" to="-58" dur="2.2s" repeatCount="indefinite"/>
+</path>
+<path d="M706,255 Q702,218 697,178 Q693,144 691,112" stroke="#38bdf8" stroke-width="1.6" fill="none" stroke-dasharray="5,4" opacity=".48">
+  <animate attributeName="stroke-dashoffset" from="0" to="-58" dur="2.6s" repeatCount="indefinite" begin=".4s"/>
+</path>
+<path d="M744,254 Q740,218 736,180 Q733,146 731,114" stroke="#38bdf8" stroke-width="1.3" fill="none" stroke-dasharray="4,4" opacity=".35">
+  <animate attributeName="stroke-dashoffset" from="0" to="-50" dur="3s" repeatCount="indefinite" begin=".9s"/>
+</path>
+
+<!-- Gulf cloud — formed from evaporation -->
+<g transform="translate(656,80)">
+  <ellipse cx="0"   cy="22" rx="52" ry="22" fill="#2a4a6f" opacity=".95"/>
+  <ellipse cx="26"  cy="10" rx="36" ry="20" fill="#2a4a6f" opacity=".95"/>
+  <ellipse cx="-24" cy="14" rx="28" ry="18" fill="#2a4a6f" opacity=".9"/>
+</g>
+
+<!-- Gulf info label — between cloud and bloom -->
+<rect x="648" y="148" width="180" height="54" rx="8" fill="#0a1a30" opacity=".88"/>
+<text x="738" y="165" fill="#38bdf8" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold">Gulf receives nutrients</text>
+<text x="738" y="181" fill="#4ade80" font-size="12"   font-family="monospace" text-anchor="middle" font-weight="bold">ALGAE BLOOM</text>
+<text x="738" y="195" fill="#4ade80" font-size="9.5"  font-family="monospace" text-anchor="middle" opacity=".72">N fuels explosive growth</text>
+
+<!-- Cloud drift arrow — subtle, no arrowhead -->
+<path d="M650,96 Q592,80 530,68 Q490,61 440,57" stroke="#38bdf8" stroke-width="1.6" fill="none" stroke-dasharray="8,6" opacity=".45">
+  <animate attributeName="stroke-dashoffset" from="0" to="-84" dur="3.5s" repeatCount="indefinite"/>
+</path>
+<!-- "clouds drift inland" — inline text, no pill box, in open sky zone -->
+<text x="556" y="52" fill="#38bdf8" font-size="10.5" font-family="monospace" text-anchor="middle" opacity=".68" font-weight="bold">clouds drift inland ↺</text>
+
+<!-- ═══ ALGAE BLOOM in Gulf ═══ -->
+<ellipse cx="770" cy="348" rx="106" ry="54" fill="#15803d" opacity=".18" filter="url(#wAlgaeGlow)" clip-path="url(#wGulfClip)"/>
+<ellipse cx="770" cy="348" rx="88" ry="46" fill="url(#wAlgaeOuter)" clip-path="url(#wGulfClip)">
+  <animate attributeName="rx" values="88;106;88" dur="4s" repeatCount="indefinite"/>
+  <animate attributeName="ry" values="46;56;46" dur="4s" repeatCount="indefinite"/>
+</ellipse>
+<ellipse cx="762" cy="344" rx="58" ry="32" fill="url(#wAlgaeCore)" opacity=".8" clip-path="url(#wGulfClip)">
+  <animate attributeName="rx" values="58;70;58" dur="3.5s" repeatCount="indefinite" begin=".3s"/>
+  <animate attributeName="ry" values="32;38;32" dur="3.5s" repeatCount="indefinite" begin=".3s"/>
+</ellipse>
+<circle cx="748" cy="336" r="12" fill="#86efac" opacity=".85" filter="url(#wAlgaeSoftGlow)" clip-path="url(#wGulfClip)">
+  <animate attributeName="r" values="12;15;12" dur="2.8s" repeatCount="indefinite"/>
+</circle>
+<circle cx="770" cy="328" r="15" fill="#4ade80" opacity=".9" filter="url(#wAlgaeSoftGlow)" clip-path="url(#wGulfClip)">
+  <animate attributeName="r" values="15;19;15" dur="3.2s" repeatCount="indefinite" begin=".4s"/>
+</circle>
+<circle cx="792" cy="340" r="11" fill="#86efac" opacity=".82" filter="url(#wAlgaeSoftGlow)" clip-path="url(#wGulfClip)">
+  <animate attributeName="r" values="11;14;11" dur="2.6s" repeatCount="indefinite" begin=".7s"/>
+</circle>
+<circle cx="754" cy="354" r="9" fill="#22c55e" opacity=".76" clip-path="url(#wGulfClip)">
+  <animate attributeName="r" values="9;12;9" dur="3s" repeatCount="indefinite" begin=".2s"/>
+</circle>
+<circle cx="782" cy="358" r="8" fill="#4ade80" opacity=".72" clip-path="url(#wGulfClip)">
+  <animate attributeName="r" values="8;11;8" dur="2.7s" repeatCount="indefinite" begin=".9s"/>
+</circle>
+<rect x="698" y="382" width="148" height="30" rx="7" fill="#052e16" opacity=".88" clip-path="url(#wGulfClip)"/>
+<text x="772" y="398" fill="#4ade80" font-size="11.5" font-family="monospace" text-anchor="middle" font-weight="bold" clip-path="url(#wGulfClip)">ALGAE BLOOM</text>
+<text x="772" y="410" fill="#86efac" font-size="9"    font-family="monospace" text-anchor="middle" opacity=".75" clip-path="url(#wGulfClip)">N from runoff fuels growth</text>
+
+<!-- ═══ FLOW ARROWS ═══ -->
+<!-- ARROW A: Farm N runoff → river (orange, inside river channel) -->
+<path d="M148,284 Q195,280 255,283 Q305,285 355,283" stroke="#f59e0b" stroke-width="3" fill="none" marker-end="url(#wAN)" opacity=".88"/>
+<circle r="5" fill="#fbbf24">
+  <animateMotion dur="2.2s" repeatCount="indefinite" path="M148,284 Q195,280 255,283 Q305,285 355,283"/>
+  <animate attributeName="opacity" values="0;1;1;0" dur="2.2s" repeatCount="indefinite"/>
+</circle>
+<circle r="4" fill="#f59e0b">
+  <animateMotion dur="2.2s" repeatCount="indefinite" begin=".75s" path="M148,284 Q195,280 255,283 Q305,285 355,283"/>
+  <animate attributeName="opacity" values="0;.9;.9;0" dur="2.2s" repeatCount="indefinite" begin=".75s"/>
+</circle>
+<circle r="3.5" fill="#fde68a">
+  <animateMotion dur="2.2s" repeatCount="indefinite" begin="1.5s" path="M148,284 Q195,280 255,283 Q305,285 355,283"/>
+  <animate attributeName="opacity" values="0;.8;.8;0" dur="2.2s" repeatCount="indefinite" begin="1.5s"/>
+</circle>
+<!-- "N runoff" label — BELOW river on land -->
+<text x="252" y="314" fill="#f59e0b" font-size="10.5" font-family="monospace" text-anchor="middle" font-weight="bold" opacity=".9">↑ N runoff enters river</text>
+
+<!-- ARROW B: River → Gulf (blue, from zone 2 into gulf) -->
+<path d="M365,284 Q430,280 500,283 Q565,285 633,283" stroke="#38bdf8" stroke-width="3" fill="none" marker-end="url(#wAB)" opacity=".85"/>
+<circle r="5" fill="#fbbf24">
+  <animateMotion dur="2.8s" repeatCount="indefinite" path="M365,284 Q430,280 500,283 Q565,285 633,283"/>
+  <animate attributeName="opacity" values="0;1;1;0" dur="2.8s" repeatCount="indefinite"/>
+</circle>
+<circle r="4" fill="#f59e0b">
+  <animateMotion dur="2.8s" repeatCount="indefinite" begin=".9s" path="M365,284 Q430,280 500,283 Q565,285 633,283"/>
+  <animate attributeName="opacity" values="0;.9;.9;0" dur="2.8s" repeatCount="indefinite" begin=".9s"/>
+</circle>
+<circle r="3.5" fill="#fde68a">
+  <animateMotion dur="2.8s" repeatCount="indefinite" begin="1.8s" path="M365,284 Q430,280 500,283 Q565,285 633,283"/>
+  <animate attributeName="opacity" values="0;.8;.8;0" dur="2.8s" repeatCount="indefinite" begin="1.8s"/>
+</circle>
+
+<!-- TEKS badge -->
+<rect x="6" y="394" width="130" height="20" rx="10" fill="#1e1b4b" opacity=".88"/>
+<text x="71" y="408" fill="#a5b4fc" font-size="9" font-family="monospace" text-anchor="middle" opacity=".92">TEKS B.10C · B.13D</text>
+</svg>
+</template>
+
+<!-- CONNECT SVG — all 3 cycles visible simultaneously -->
+<template id="svg-connect">
+<svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="coSky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#050d1a"/><stop offset="100%" stop-color="#091525"/>
+  </linearGradient>
+  <linearGradient id="coGnd" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#1e3010"/><stop offset="100%" stop-color="#0a1204"/>
+  </linearGradient>
+  <linearGradient id="coSea" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#0c2540"/><stop offset="100%" stop-color="#020810"/>
+  </linearGradient>
+  <!-- Algae gradient: subtle, not overwhelming -->
+  <radialGradient id="coAlgaeR" cx="50%" cy="35%" r="55%">
+    <stop offset="0%"   stop-color="#22c55e" stop-opacity=".7"/>
+    <stop offset="50%"  stop-color="#15803d" stop-opacity=".55"/>
+    <stop offset="100%" stop-color="#052e16" stop-opacity=".2"/>
+  </radialGradient>
+  <!-- Soft glow for cycle labels -->
+  <filter id="coglow" x="-20%" y="-20%" width="140%" height="140%">
+    <feGaussianBlur stdDeviation="3" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="coSunGlow" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur stdDeviation="5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <!-- Arrows -->
+  <marker id="aNc" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+    <path d="M0,0 L0,6 L7,3 Z" fill="#f59e0b"/>
+  </marker>
+  <marker id="aCc" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+    <path d="M0,0 L0,6 L7,3 Z" fill="#ef4444"/>
+  </marker>
+  <marker id="aWc" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+    <path d="M0,0 L0,6 L7,3 Z" fill="#38bdf8"/>
+  </marker>
+  <!-- Ocean clip — stays cleanly inside ocean panel -->
+  <clipPath id="coSeaClip">
+    <rect x="310" y="138" width="570" height="242"/>
+  </clipPath>
+</defs>
+
+<!-- ═══ BACKGROUNDS ═══ -->
+<rect width="880" height="380" fill="url(#coSky)"/>
+<!-- Stars in sky -->
+<circle cx="50"  cy="30"  r=".7" fill="white" opacity=".4"/>
+<circle cx="180" cy="18"  r=".8" fill="white" opacity=".35"/>
+<circle cx="440" cy="24"  r=".7" fill="white" opacity=".3"/>
+<circle cx="560" cy="40"  r=".6" fill="white" opacity=".35"/>
+
+<!-- Land — left panel -->
+<rect x="0" y="180" width="330" height="200" fill="url(#coGnd)"/>
+<line x1="0" y1="194" x2="326" y2="188" stroke="#2a5018" stroke-width="1" opacity=".28"/>
+<line x1="0" y1="208" x2="326" y2="202" stroke="#2a5018" stroke-width=".8" opacity=".2"/>
+
+<!-- Ocean — right panel, dark not green -->
+<rect x="310" y="138" width="570" height="242" fill="url(#coSea)"/>
+<!-- Shore line -->
+<path d="M310,138 Q370,132 450,136 Q530,139 570,137" stroke="#38bdf8" stroke-width="1" fill="none" opacity=".2"/>
+
+<!-- Algae bloom — contained, not overwhelming — upper-mid ocean only -->
+<ellipse cx="530" cy="196" rx="96" ry="38" fill="#15803d" opacity=".12" filter="url(#coglow)"/>
+<ellipse cx="530" cy="198" rx="80" ry="30" fill="url(#coAlgaeR)">
+  <animate attributeName="rx" values="80;94;80" dur="4.5s" repeatCount="indefinite"/>
+  <animate attributeName="ry" values="30;36;30" dur="4.5s" repeatCount="indefinite"/>
+</ellipse>
+<!-- algae cells — tighter cluster, less spread -->
+<circle cx="510" cy="190" r="14" fill="#4ade80" opacity=".78" filter="url(#coglow)">
+  <animate attributeName="r" values="14;17;14" dur="3s" repeatCount="indefinite"/>
+</circle>
+<circle cx="532" cy="183" r="16" fill="#86efac" opacity=".82" filter="url(#coglow)">
+  <animate attributeName="r" values="16;20;16" dur="3.4s" repeatCount="indefinite" begin=".4s"/>
+</circle>
+<circle cx="554" cy="193" r="12" fill="#4ade80" opacity=".75" filter="url(#coglow)">
+  <animate attributeName="r" values="12;15;12" dur="2.8s" repeatCount="indefinite" begin=".7s"/>
+</circle>
+<circle cx="518" cy="204" r="10" fill="#22c55e" opacity=".68">
+  <animate attributeName="r" values="10;13;10" dur="3.2s" repeatCount="indefinite" begin=".2s"/>
+</circle>
+<!-- ALGAE BLOOM label — compact pill below cells -->
+<rect x="476" y="218" width="116" height="24" rx="8" fill="#052e16" opacity=".88"/>
+<text x="534" y="234" fill="#4ade80" font-size="10.5" font-family="monospace" font-weight="bold" text-anchor="middle">ALGAE BLOOM</text>
+
+<!-- Dead zone — lower ocean, dark and ominous (contrasts with algae above) -->
+<rect x="310" y="290" width="570" height="90" fill="#030a14" opacity=".7"/>
+<!-- dead zone gradient fade -->
+<rect x="310" y="278" width="570" height="22" fill="#030a14" opacity=".4"/>
+<!-- bubbles rising from decomposition -->
+<circle cx="460" cy="330" r="3" fill="none" stroke="#4ade80" stroke-width=".8" opacity="0">
+  <animate attributeName="cy" values="340;290;260" dur="4.2s" repeatCount="indefinite"/>
+  <animate attributeName="opacity" values="0;.35;0" dur="4.2s" repeatCount="indefinite"/>
+</circle>
+<circle cx="530" cy="350" r="2" fill="none" stroke="#4ade80" stroke-width=".7" opacity="0">
+  <animate attributeName="cy" values="350;305;275" dur="3.6s" repeatCount="indefinite" begin="1.4s"/>
+  <animate attributeName="opacity" values="0;.28;0" dur="3.6s" repeatCount="indefinite" begin="1.4s"/>
+</circle>
+<circle cx="610" cy="335" r="2.5" fill="none" stroke="#4ade80" stroke-width=".7" opacity="0">
+  <animate attributeName="cy" values="335;288;258" dur="5s" repeatCount="indefinite" begin=".8s"/>
+  <animate attributeName="opacity" values="0;.25;0" dur="5s" repeatCount="indefinite" begin=".8s"/>
+</circle>
+
+<!-- DEAD ZONE badge — in the dark zone -->
+<rect x="480" y="324" width="140" height="28" rx="14" fill="#dc2626" opacity=".92"/>
+<text x="550" y="342" fill="white" font-size="11" font-family="monospace" font-weight="bold" text-anchor="middle">⚠ DEAD ZONE</text>
+
+<!-- ═══ SUN — proper with rays, fully inside right sky ═══ -->
+<!-- corona -->
+<circle cx="820" cy="52" r="36" fill="#fbbf24" opacity=".08" filter="url(#coSunGlow)"/>
+<circle cx="820" cy="52" r="28" fill="#fbbf24" opacity=".1"/>
+<!-- rays -->
+<line x1="820" y1="16" x2="820" y2="8"   stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+<line x1="820" y1="88" x2="820" y2="96"  stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+<line x1="778" y1="52" x2="770" y2="52"  stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+<line x1="862" y1="52" x2="870" y2="52"  stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+<line x1="790" y1="22" x2="784" y2="16"  stroke="#fbbf24" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>
+<line x1="850" y1="22" x2="856" y2="16"  stroke="#fbbf24" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>
+<line x1="790" y1="82" x2="784" y2="88"  stroke="#fbbf24" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>
+<line x1="850" y1="82" x2="856" y2="88"  stroke="#fbbf24" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>
+<!-- sun body -->
+<circle cx="820" cy="52" r="22" fill="#fde68a"/>
+<circle cx="820" cy="52" r="18" fill="#fbbf24"/>
+<circle cx="820" cy="52" r="14" fill="#fcd34d"/>
+<ellipse cx="814" cy="46" rx="5" ry="4" fill="#fef3c7" opacity=".5"/>
+
+<!-- ═══ WATER CYCLE (blue) — upper right ═══ -->
+<!-- Cloud — properly formed, labeled cleanly -->
+<g transform="translate(634,22)">
+  <ellipse cx="0"   cy="14" rx="48" ry="20" fill="#1e3a5f" opacity=".95"/>
+  <ellipse cx="24"  cy="6"  rx="34" ry="18" fill="#1e3a5f" opacity=".92"/>
+  <ellipse cx="-22" cy="9"  rx="26" ry="15" fill="#1e3a5f" opacity=".88"/>
+  <!-- rain drops -->
+  <line x1="-18" y1="34" x2="-21" y2="52" stroke="#38bdf8" stroke-width="1.6" stroke-linecap="round">
+    <animate attributeName="y1" values="34;44" dur="1.1s" repeatCount="indefinite"/>
+    <animate attributeName="y2" values="52;70" dur="1.1s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".75;0" dur="1.1s" repeatCount="indefinite"/>
+  </line>
+  <line x1="-4"  y1="34" x2="-7"  y2="52" stroke="#38bdf8" stroke-width="1.6" stroke-linecap="round">
+    <animate attributeName="y1" values="34;44" dur="1.1s" repeatCount="indefinite" begin=".3s"/>
+    <animate attributeName="y2" values="52;70" dur="1.1s" repeatCount="indefinite" begin=".3s"/>
+    <animate attributeName="opacity" values=".7;0" dur="1.1s" repeatCount="indefinite" begin=".3s"/>
+  </line>
+  <line x1="11"  y1="34" x2="8"   y2="52" stroke="#38bdf8" stroke-width="1.6" stroke-linecap="round">
+    <animate attributeName="y1" values="34;44" dur="1.1s" repeatCount="indefinite" begin=".6s"/>
+    <animate attributeName="y2" values="52;70" dur="1.1s" repeatCount="indefinite" begin=".6s"/>
+    <animate attributeName="opacity" values=".65;0" dur="1.1s" repeatCount="indefinite" begin=".6s"/>
+  </line>
+</g>
+<!-- "Water cycle" label above cloud — no pill, clean text -->
+<text x="680" y="18" fill="#38bdf8" font-size="9.5" font-family="monospace" text-anchor="middle" font-weight="bold" opacity=".7">WATER CYCLE</text>
+<!-- Evaporation lines rising from ocean to cloud -->
+<path d="M680,138 Q676,108 670,82 Q665,60 658,44" stroke="#38bdf8" stroke-width="1.4" fill="none" stroke-dasharray="4,3" opacity=".48">
+  <animate attributeName="stroke-dashoffset" from="0" to="-44" dur="2.4s" repeatCount="indefinite"/>
+</path>
+<path d="M718,137 Q714,108 708,82 Q703,61 700,46" stroke="#38bdf8" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity=".35">
+  <animate attributeName="stroke-dashoffset" from="0" to="-44" dur="2.8s" repeatCount="indefinite" begin=".5s"/>
+</path>
+<!-- "evaporation" inline label -->
+<text x="700" y="100" fill="#38bdf8" font-size="8.5" font-family="monospace" text-anchor="middle" opacity=".55">evaporation ↑</text>
+<!-- cloud drifts inland arrow — subtle -->
+<path d="M572,34 Q538,28 504,25" stroke="#38bdf8" stroke-width="1.4" fill="none" stroke-dasharray="5,4" marker-end="url(#aWc)" opacity=".45">
+  <animate attributeName="stroke-dashoffset" from="0" to="-36" dur="3s" repeatCount="indefinite"/>
+</path>
+<text x="537" y="22" fill="#38bdf8" font-size="8" font-family="monospace" text-anchor="middle" opacity=".55">clouds drift inland → rain</text>
+
+<!-- ═══ NITROGEN CYCLE (orange) — left ═══ -->
+<!-- "NITROGEN CYCLE" label -->
+<text x="52" y="68" fill="#f59e0b" font-size="9.5" font-family="monospace" font-weight="bold" opacity=".8" filter="url(#coglow)">NITROGEN CYCLE</text>
+<!-- Farm -->
+<g transform="translate(18,82)">
+  <rect x="0" y="24" width="42" height="30" fill="#6b3a14" rx="1.5"/>
+  <polygon points="-2,24 21,6 44,24" fill="#8a4a18"/>
+  <rect x="4" y="30" width="10" height="10" fill="#3d1a05" rx="1"/>
+  <rect x="5" y="31" width="3.5" height="3.5" fill="#7dd3fc" opacity=".35"/>
+  <rect x="44" y="26" width="14" height="28" fill="#b09050" rx="2"/>
+  <ellipse cx="51" cy="26" rx="7" ry="3" fill="#d4b060"/>
+  <text x="24" y="65" fill="#f59e0b" font-size="8.5" font-family="monospace" text-anchor="middle" opacity=".85" font-weight="bold">Farm + Fertilizer</text>
+</g>
+<!-- N runoff arrow: farm → river channel -->
+<path d="M88,120 Q112,138 138,158 Q162,170 188,172" stroke="#f59e0b" stroke-width="1.5" fill="none" marker-end="url(#aNc)" stroke-dasharray="4,3" opacity=".72">
+  <animate attributeName="stroke-dashoffset" from="40" to="0" dur="2s" repeatCount="indefinite"/>
+</path>
+<!-- River / runoff channel on land -->
+<path d="M188,172 Q228,164 268,170 Q295,174 314,172" stroke="#f59e0b" stroke-width="3" fill="none" opacity=".45" stroke-dasharray="8,4">
+  <animate attributeName="stroke-dashoffset" from="100" to="0" dur="2.2s" repeatCount="indefinite"/>
+</path>
+<text x="252" y="160" fill="#f59e0b" font-size="8.5" font-family="monospace" opacity=".78" text-anchor="middle" font-weight="bold">N runoff →</text>
+<!-- N → algae arrow crossing into ocean -->
+<path d="M316,172 Q370,178 440,190 Q468,195 480,196" stroke="#f59e0b" stroke-width="1.4" fill="none" marker-end="url(#aNc)" stroke-dasharray="5,3" opacity=".68">
+  <animate attributeName="stroke-dashoffset" from="60" to="0" dur="2.2s" repeatCount="indefinite"/>
+</path>
+<text x="400" y="170" fill="#f59e0b" font-size="8" font-family="monospace" opacity=".7" text-anchor="middle">N feeds algae</text>
+
+<!-- ═══ CARBON CYCLE (red) — left sky + ocean ═══ -->
+<!-- CO₂ label in atmosphere -->
+<text x="196" y="50" fill="#ef4444" font-size="26" font-family="monospace" font-weight="bold" opacity=".82" filter="url(#coglow)">CO₂</text>
+<text x="196" y="66" fill="#ef4444" font-size="8.5" font-family="monospace" opacity=".55" text-anchor="middle">CARBON CYCLE</text>
+<!-- Two trees — grounded on land (y=180), translate so trunk bottom = 180) -->
+<g transform="translate(108,100)">
+  <!-- tree 1 -->
+  <line x1="0"  y1="80" x2="0"  y2="54" stroke="#5c3d1a" stroke-width="4"/>
+  <circle cx="0"  cy="44" r="20" fill="#2d6b14"/>
+  <circle cx="-11" cy="52" r="13" fill="#235a0e"/>
+  <circle cx="11" cy="52" r="13" fill="#235a0e"/>
+  <!-- tree 2 -->
+  <line x1="46" y1="80" x2="46" y2="56" stroke="#5c3d1a" stroke-width="3.5"/>
+  <circle cx="46" cy="47" r="17" fill="#3d8b1f"/>
+  <circle cx="36" cy="55" r="11" fill="#2d7a14"/>
+  <circle cx="56" cy="55" r="11" fill="#2d7a14"/>
+</g>
+<!-- "photosynthesis" label below trees -->
+<text x="152" y="196" fill="#4ade80" font-size="8.5" font-family="monospace" text-anchor="middle" opacity=".7">photosynthesis</text>
+<!-- CO₂ → tree (absorption) -->
+<path d="M186,56 Q168,62 152,84 Q140,100 136,114" stroke="#ef4444" stroke-width="1.4" fill="none" marker-end="url(#aCc)" stroke-dasharray="4,3" opacity=".65">
+  <animate attributeName="stroke-dashoffset" from="40" to="0" dur="2.2s" repeatCount="indefinite"/>
+</path>
+<!-- tree → CO₂ (respiration, dashed back up) -->
+<path d="M130,106 Q154,80 178,66" stroke="#ef4444" stroke-width="1.2" fill="none" marker-end="url(#aCc)" stroke-dasharray="3,4" opacity=".45">
+  <animate attributeName="stroke-dashoffset" from="40" to="0" dur="2.6s" repeatCount="indefinite"/>
+</path>
+<!-- Decomposers node — in ocean, under algae -->
+<g transform="translate(388,268)">
+  <circle cx="0" cy="0" r="22" fill="#0f0a04" stroke="#ef4444" stroke-width="1.5" opacity=".9"/>
+  <!-- bacteria shapes -->
+  <rect x="-8" y="-5" width="12" height="4.5" rx="2.2" fill="#fde68a" opacity=".75"/>
+  <circle cx="7" cy="-2" r="4.5" fill="#fde68a" opacity=".6"/>
+  <rect x="-4" y="2" width="10" height="3.5" rx="1.8" fill="#fde68a" opacity=".55"/>
+  <text x="0" y="34"  fill="#ef4444" font-size="8.5" font-family="monospace" text-anchor="middle" opacity=".88">decomposers</text>
+  <text x="0" y="46"  fill="#ef4444" font-size="8"   font-family="monospace" text-anchor="middle" opacity=".7">eat algae, use O₂</text>
+</g>
+<!-- algae → decomposers -->
+<path d="M510,226 Q476,244 418,264" stroke="#ef4444" stroke-width="1.3" fill="none" marker-end="url(#aCc)" opacity=".6"/>
+<!-- decomposers → CO₂ (long arc back to atmosphere) -->
+<path d="M368,258 Q330,224 294,188 Q264,156 238,118 Q216,88 200,66" stroke="#ef4444" stroke-width="1.2" fill="none" marker-end="url(#aCc)" stroke-dasharray="4,4" opacity=".38">
+  <animate attributeName="stroke-dashoffset" from="100" to="0" dur="5s" repeatCount="indefinite"/>
+</path>
+
+<!-- ═══ DEAD FISH + MARINE LIFE (clipped to ocean) ═══ -->
+<g clip-path="url(#coSeaClip)">
+  <!-- dead fish 1 -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="3.2s" repeatCount="indefinite"/>
+    <g transform="translate(650,298)">
+      <text x="0" y="-14" fill="#ef4444" font-size="8.5" font-family="monospace" font-weight="bold" text-anchor="middle" opacity=".85">✕ dead</text>
+      <g transform="rotate(180)">
+        <ellipse cx="0" cy="0" rx="18" ry="6" fill="#94a3b8"/>
+        <polygon points="18,0 26,-7 26,7" fill="#7f8ea3"/>
+        <path d="M-3,-6 Q2,-12 7,-6" fill="#b0bec5" stroke="#7f8ea3" stroke-width=".5"/>
+        <circle cx="-10" cy="-1" r="2.6" fill="white"/><circle cx="-10" cy="-1" r="1.3" fill="#37474f"/>
+      </g>
+    </g>
+  </g>
+  <!-- dead fish 2 -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0,0;0,-2.5;0,0" dur="4s" repeatCount="indefinite" begin=".8s"/>
+    <g transform="translate(790,310)">
+      <text x="0" y="-12" fill="#ef4444" font-size="8.5" font-family="monospace" font-weight="bold" text-anchor="middle" opacity=".78">✕ dead</text>
+      <g transform="rotate(180)">
+        <ellipse cx="0" cy="0" rx="14" ry="5" fill="#90a4ae"/>
+        <polygon points="14,0 20,-6 20,6" fill="#78909c"/>
+        <circle cx="-7" cy="-1" r="2.2" fill="white"/><circle cx="-7" cy="-1" r="1.1" fill="#37474f"/>
+      </g>
+    </g>
+  </g>
+  <!-- live fish — JS driven -->
+  <g id="cFish1">
+    <g class="fR">
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="12" ry="5" fill="#64b5f6"/>
+      <!-- tail -->
+      <polygon points="12,0 19,-7 19,7" fill="#2979cc"/>
+      <!-- dorsal fin (top) -->
+      <path d="M-1,-5 Q4,-12 6,-5" fill="#90caf9" stroke="#2979cc" stroke-width=".5"/>
+      <!-- ventral fin (bottom) -->
+      <path d="M0,5 Q3,9 5,5" fill="#90caf9" stroke="#2979cc" stroke-width=".4"/>
+      <!-- gill arc -->
+      <path d="M-4,-5 Q-7,0 -4,5" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55"/>
+      <!-- belly highlight -->
+      <ellipse cx="-1" cy="1" rx="6" ry="1" fill="#bbdefb" opacity=".45"/>
+      <!-- eye -->
+      <circle cx="-6" cy="-1" r="2" fill="white"/>
+      <circle cx="-6" cy="-1" r="1" fill="#0d2a5e"/>
+    </g>
+    <g class="fL" style="display:none">
+      <!-- body -->
+      <ellipse cx="0" cy="0" rx="12" ry="5" fill="#64b5f6"/>
+      <!-- tail -->
+      <polygon points="-12,0 -19,-7 -19,7" fill="#2979cc"/>
+      <!-- dorsal fin (top) -->
+      <path d="M-1,-5 Q-4,-12 -6,-5" fill="#90caf9" stroke="#2979cc" stroke-width=".5"/>
+      <!-- ventral fin (bottom) -->
+      <path d="M-0,5 Q-3,9 -5,5" fill="#90caf9" stroke="#2979cc" stroke-width=".4"/>
+      <!-- gill arc -->
+      <path d="M4,-5 Q7,0 4,5" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55"/>
+      <!-- belly highlight -->
+      <ellipse cx="1" cy="1" rx="6" ry="1" fill="#bbdefb" opacity=".45"/>
+      <!-- eye -->
+      <circle cx="6" cy="-1" r="2" fill="white"/>
+      <circle cx="6" cy="-1" r="1" fill="#0d2a5e"/>
+    </g>
+  </g>
+  <!-- phytoplankton disrupted — small, bottom-right ocean -->
+  <g transform="translate(748,178)">
+    <circle cx="0" cy="0" r="10" fill="#c8f5a0" stroke="#4a8f2a" stroke-width="1"/>
+    <ellipse cx="-2" cy="-2" rx="4" ry="2.8" fill="#4a8f2a" opacity=".7"/>
+    <line x1="-13" y1="-13" x2="13" y2="13" stroke="#ef4444" stroke-width="2" opacity=".8"/>
+    <line x1="13"  y1="-13" x2="-13" y2="13" stroke="#ef4444" stroke-width="2" opacity=".8"/>
+    <text x="0" y="24" fill="#ef4444" font-size="8" font-family="monospace" text-anchor="middle" opacity=".78">phytopl. blocked</text>
+  </g>
+  <!-- seaweed — in healthy left-ocean near shore, not in dead zone -->
+  <g transform="translate(330,260)" opacity=".6">
+    <path d="M0,38 Q-3,25 0,14 Q3,6 -2,0" stroke="#1a5c0a" stroke-width="2" fill="none"/>
+    <path d="M-1,26 Q-10,20 -11,11 Q-7,9 -3,18" fill="#2d7a0f" stroke="#1a5c0a" stroke-width=".7"/>
+    <path d="M0,14 Q9,9 10,2 Q6,0 2,8" fill="#2d7a0f" stroke="#1a5c0a" stroke-width=".7"/>
+  </g>
+</g>
+
+<!-- ═══ CYCLE CONNECTOR LABELS — bottom strip ═══ -->
+<!-- Three cycle labels in a bottom row, clearly separated -->
+<rect x="6"   y="354" width="88"  height="20" rx="10" fill="#1a1200" stroke="#f59e0b" stroke-width="1" opacity=".88"/>
+<text x="50"  y="368" fill="#f59e0b" font-size="8.5" font-family="monospace" text-anchor="middle" font-weight="bold">🌿 NITROGEN</text>
+<rect x="100" y="354" width="88"  height="20" rx="10" fill="#1a0808" stroke="#ef4444" stroke-width="1" opacity=".88"/>
+<text x="144" y="368" fill="#ef4444" font-size="8.5" font-family="monospace" text-anchor="middle" font-weight="bold">🔥 CARBON</text>
+<rect x="194" y="354" width="88"  height="20" rx="10" fill="#001a2a" stroke="#38bdf8" stroke-width="1" opacity=".88"/>
+<text x="238" y="368" fill="#38bdf8" font-size="8.5" font-family="monospace" text-anchor="middle" font-weight="bold">💧 WATER</text>
+<!-- Connection text -->
+<text x="500" y="368" fill="#9ca3af" font-size="9" font-family="monospace" text-anchor="middle" opacity=".6">all three converge → dead zone</text>
+
+<!-- TEKS badge -->
+<rect x="742" y="354" width="132" height="20" rx="10" fill="#1e1b4b" opacity=".88"/>
+<text x="808" y="368" fill="#a5b4fc" font-size="8.5" font-family="monospace" text-anchor="middle" opacity=".92">TEKS B.13C · B.13D</text>
+</svg>
+</template>
+
+
+<script>
+// apply colors
+const R = document.documentElement;
+Object.entries(CONFIG.colors).forEach(([k,v])=>R.style.setProperty(`--${k}`,v));
+// header
+document.getElementById('hd-chip').textContent = CONFIG.unit;
+document.getElementById('hd-t').innerHTML = CONFIG.title+' <em>'+CONFIG.titleEm+'</em>';
+document.getElementById('hd-s').textContent = CONFIG.subtitle;
+// tabs
+const tabsEl = document.getElementById('tabs');
+CONFIG.tabs.forEach((t,i)=>{
+  const d=document.createElement('div');
+  d.className='tab'+(t.theme?' '+t.theme:'')+(i===0?' active':'');
+  d.id='t'+i; d.textContent=t.icon+' '+t.label; d.onclick=()=>go(i);
+  tabsEl.appendChild(d);
+});
+// helpers
+function mkPrompt(p,th){
+  const d=document.createElement('div');d.className='prompt '+th;
+  d.innerHTML=`<div class="plbl"><span class="dot"></span>${p.label}</div>
+  <div class="pq">${p.question}</div>
+  ${p.hint?`<div class="ph">${p.hint}</div>`:''}
+  <textarea class="${p.tall?'tall':''}" placeholder="${p.placeholder}"></textarea>`;
+  return d;
+}
+function mkFlow(steps,th){
+  const d=document.createElement('div');d.className='flow';
+  steps.forEach((s,i)=>{
+    const isDead=s.includes('💀')||s.includes('🌧️')||s.includes('🔥');
+    const sp=document.createElement('span');sp.className='fn '+(isDead?'dead':th);sp.textContent=s;d.appendChild(sp);
+    if(i<steps.length-1){const a=document.createElement('span');a.className='fa';a.textContent='→';d.appendChild(a);}
+  });return d;
+}
+function mkChips(chips,th){
+  const d=document.createElement('div');d.className='chips';
+  chips.forEach(c=>{const sp=document.createElement('span');sp.className='chip '+(typeof c==='object'?c.theme:th);sp.textContent=typeof c==='object'?c.label:c;d.appendChild(sp);});
+  return d;
+}
+function mkCallout(c,th){const d=document.createElement('div');d.className='callout '+th;d.innerHTML=`<h4>${c.title}</h4>${c.body}`;return d;}
+function mkNav(back,fwd,lbl,cls,step){
+  const d=document.createElement('div');d.className='nav';
+  d.innerHTML=`${back>=0?`<button class="btn btn-ghost" onclick="go(${back})">← Back</button>`:'<span></span>'}
+  <span class="slbl">${step}</span>
+  <button class="btn ${cls}" onclick="${fwd==='print'?'window.print()':'go('+fwd+')'}">${lbl}</button>`;
+  return d;
+}
+function mkVC(svgId,captTitle,captBody,titleColor=''){
+  const d=document.createElement('div');d.className='vc';
+  const tpl=document.getElementById(svgId);
+  if(tpl)d.appendChild(tpl.content.cloneNode(true));
+  const cap=document.createElement('div');cap.className='vcap';
+  cap.innerHTML=`<h2 style="${titleColor?'color:'+titleColor:''}">${captTitle}</h2><p>${captBody}</p>`;
+  d.appendChild(cap);return d;
+}
+// build scenes
+const SC=document.getElementById('scenes');
+// s0 intro
+const s0=document.createElement('div');s0.className='scene on';s0.id='s0';
+s0.appendChild(mkVC('svg-intro',CONFIG.intro.captionTitle,CONFIG.intro.captionBody));
+const ch=mkChips([],'');
+CONFIG.intro.chips.forEach(c=>{const sp=document.createElement('span');sp.className='chip '+(c.theme||'');sp.textContent=c.label;ch.appendChild(sp);});
+s0.appendChild(ch);s0.appendChild(mkNav(-1,1,CONFIG.intro.btnLabel,'btn-n','01/05'));SC.appendChild(s0);
+// s1 nitrogen
+const s1=document.createElement('div');s1.className='scene';s1.id='s1';
+s1.appendChild(mkVC('svg-nitrogen',CONFIG.nitrogen.captionTitle,CONFIG.nitrogen.captionBody,'var(--nitrogen)'));
+s1.appendChild(mkFlow(CONFIG.nitrogen.flow,'n'));
+s1.appendChild(mkChips(CONFIG.nitrogen.chips,'n'));
+CONFIG.nitrogen.prompts.forEach(p=>s1.appendChild(mkPrompt(p,'n')));
+s1.appendChild(mkNav(0,2,CONFIG.nitrogen.btnLabel,'btn-c','02/05'));SC.appendChild(s1);
+// s2 carbon
+const s2=document.createElement('div');s2.className='scene';s2.id='s2';
+s2.appendChild(mkVC('svg-carbon',CONFIG.carbon.captionTitle,CONFIG.carbon.captionBody,'var(--carbon)'));
+s2.appendChild(mkFlow(CONFIG.carbon.flow,'c'));
+s2.appendChild(mkCallout(CONFIG.carbon.callout,'c'));
+CONFIG.carbon.prompts.forEach(p=>s2.appendChild(mkPrompt(p,'c')));
+s2.appendChild(mkNav(1,3,CONFIG.carbon.btnLabel,'btn-w','03/05'));SC.appendChild(s2);
+// s3 water
+const s3=document.createElement('div');s3.className='scene';s3.id='s3';
+s3.appendChild(mkVC('svg-water',CONFIG.water.captionTitle,CONFIG.water.captionBody,'var(--water)'));
+s3.appendChild(mkFlow(CONFIG.water.flow,'w'));
+s3.appendChild(mkCallout(CONFIG.water.callout,'w'));
+CONFIG.water.prompts.forEach(p=>s3.appendChild(mkPrompt(p,'w')));
+s3.appendChild(mkNav(2,4,CONFIG.water.btnLabel,'btn-go','04/05'));SC.appendChild(s3);
+// s4 connect
+const s4=document.createElement('div');s4.className='scene';s4.id='s4';
+s4.appendChild(mkVC('svg-connect',CONFIG.connect.captionTitle,CONFIG.connect.captionBody));
+const cgrid=document.createElement('div');cgrid.className='cgrid';
+CONFIG.connect.summaryCards.forEach(c=>{const card=document.createElement('div');card.className=`ccard ${c.theme}`;card.innerHTML=`<div class="ci">${c.icon}</div><div class="cl">${c.label}</div><div class="cb">${c.body}</div>`;cgrid.appendChild(card);});
+s4.appendChild(cgrid);
+s4.appendChild(mkCallout({title:'🔗 All Three Together',body:'The nitrogen delivers the fuel. The water delivers it to the Gulf. The carbon cycle gets disrupted when the algae explodes. <strong>One cycle breaking cascades into the others — that\'s ecosystem instability.</strong>'},'g'));
+CONFIG.connect.prompts.forEach(p=>s4.appendChild(mkPrompt(p,'final')));
+s4.appendChild(mkNav(3,'print','🖨️ Print My Responses','btn-go','05/05'));SC.appendChild(s4);
+// particles
+const bd=document.getElementById('bd');
+for(let i=0;i<18;i++){const p=document.createElement('div');p.className='particle';const sz=Math.random()*3+1;p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;background:rgba(56,189,248,${Math.random()*.15+.03});animation-duration:${Math.random()*20+15}s;animation-delay:${Math.random()*-20}s;`;bd.appendChild(p);}
+// nav
+let cur=0;
+function go(n){
+  document.getElementById('s'+cur).classList.remove('on');
+  document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.remove('active');if(i<n)t.classList.add('done');else t.classList.remove('done');});
+  cur=n;document.getElementById('s'+n).classList.add('on');document.querySelectorAll('.tab')[n].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// FISH ENGINE — requestAnimationFrame, no SMIL, no teleport
+// Fish bounce within swim lanes; fR/fL bodies swap on turn.
+// Runs once; querySelector finds elements in any visible SVG.
+// ═══════════════════════════════════════════════════════════
+(function(){
+  const FISH = [
+    // id,       start x, y,   dx,    dy,   xMin, xMax, yMin, yMax, wobble phase
+    { id:'iFish1',  x:280, y:310, dx: 0.50, dy: 0.06, xMin:215, xMax:855, yMin:293, yMax:332, w:0.0  },
+    { id:'iFish2',  x:670, y:320, dx:-0.35, dy: 0.05, xMin:215, xMax:855, yMin:295, yMax:336, w:1.9  },
+    { id:'nFish1',  x:400, y:265, dx: 0.42, dy: 0.04, xMin:310, xMax:820, yMin:240, yMax:285, w:0.7  },
+    { id:'cFish1',  x:360, y:308, dx: 0.44, dy: 0.06, xMin:325, xMax:855, yMin:295, yMax:350, w:1.1  },
+    { id:'cFish1b', x:580, y:320, dx:-0.32, dy: 0.04, xMin:325, xMax:855, yMin:298, yMax:354, w:2.5  },
+  ];
+
+  let last = null;
+
+  function tick(ts) {
+    const raw = last === null ? 16 : ts - last;
+    last = ts;
+    const dt = Math.min(raw, 48); // cap to avoid jump on tab refocus
+
+    for (const f of FISH) {
+      // update position
+      f.w  += dt * 0.0018;
+      f.x  += f.dx * dt * 0.055;
+      f.y  += (f.dy + Math.sin(f.w) * 0.25) * dt * 0.038;
+
+      // bounce — clamp then flip, never teleport
+      if (f.x < f.xMin) { f.x = f.xMin; f.dx =  Math.abs(f.dx); }
+      if (f.x > f.xMax) { f.x = f.xMax; f.dx = -Math.abs(f.dx); }
+      if (f.y < f.yMin) { f.y = f.yMin; f.dy =  Math.abs(f.dy); }
+      if (f.y > f.yMax) { f.y = f.yMax; f.dy = -Math.abs(f.dy); }
+
+      // find element (may be in any currently-rendered SVG copy)
+      const el = document.getElementById(f.id);
+      if (!el) continue;
+
+      el.setAttribute('transform', `translate(${f.x.toFixed(1)},${f.y.toFixed(1)})`);
+
+      const fR = el.querySelector('.fR');
+      const fL = el.querySelector('.fL');
+      if (fR && fL) {
+        const goRight = f.dx >= 0;
+        fR.style.display = goRight ? 'none'   : 'inline';
+        fL.style.display = goRight ? 'inline' : 'none';
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+})();
+</script>
+
+</body>
+</html>
