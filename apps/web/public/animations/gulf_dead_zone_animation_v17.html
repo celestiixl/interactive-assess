@@ -746,11 +746,26 @@
             <stop offset="0%" stop-color="#243e14" />
             <stop offset="100%" stop-color="#0b1606" />
           </linearGradient>
+          <linearGradient id="iCoastFade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#173416" stop-opacity="0.42" />
+            <stop offset="55%" stop-color="#1a4930" stop-opacity="0.18" />
+            <stop offset="100%" stop-color="#1d6b8b" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="iEstuary" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#153b20" stop-opacity="0.7" />
+            <stop offset="65%" stop-color="#1f5f4b" stop-opacity="0.35" />
+            <stop offset="100%" stop-color="#1b6b8a" stop-opacity="0" />
+          </linearGradient>
           <linearGradient id="iRiverCore" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="#4db8e8" />
             <stop offset="45%" stop-color="#1f78ad" />
             <stop offset="100%" stop-color="#0f476e" />
           </linearGradient>
+          <radialGradient id="iOxyDrop" cx="50%" cy="45%" r="58%">
+            <stop offset="0%" stop-color="#1f2937" stop-opacity=".6" />
+            <stop offset="60%" stop-color="#111827" stop-opacity=".34" />
+            <stop offset="100%" stop-color="#030712" stop-opacity="0" />
+          </radialGradient>
           <!-- Moon glow radial -->
           <radialGradient id="iMoonGlow" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stop-color="#e8f4f8" stop-opacity=".22" />
@@ -825,8 +840,17 @@
 
         <!-- ═══ LAND — organic hill shape ═══ -->
         <path
-          d="M0,158 Q55,138 120,150 Q170,160 220,154 Q240,150 258,158 L258,370 L0,370 Z"
+          d="M0,158 Q55,138 120,150 Q170,160 220,154 Q240,150 258,158 L270,370 L0,370 Z"
           fill="url(#iLand)"
+        />
+        <!-- soft coast blend, kept narrow to avoid visible block shapes -->
+        <rect
+          x="253"
+          y="150"
+          width="18"
+          height="220"
+          fill="url(#iCoastFade)"
+          opacity=".12"
         />
         <!-- crop rows following the hill -->
         <line
@@ -856,14 +880,27 @@
           stroke-width=".8"
           opacity=".24"
         />
-        <!-- shore edge — visible boundary -->
+        <!-- marshy estuary shelf softens land/ocean transition -->
         <path
-          d="M258,158 Q310,148 400,152 Q500,156 600,150 Q730,144 880,148"
-          stroke="#38bdf8"
-          stroke-width="1.2"
-          fill="none"
-          opacity=".32"
+          d="M246,154 Q284,148 338,151 Q404,156 470,153 Q542,150 626,152 Q756,156 880,150 L880,168 Q760,170 626,168 Q540,166 470,169 Q404,172 338,168 Q284,165 246,169 Z"
+          fill="url(#iEstuary)"
+          opacity=".9"
         />
+        <!-- shoreline foam line -->
+        <path
+          d="M252,158 Q306,149 396,153 Q500,157 612,151 Q744,145 880,149"
+          stroke="#7dd3fc"
+          stroke-width="1.05"
+          fill="none"
+          opacity=".38"
+        >
+          <animate
+            attributeName="d"
+            values="M252,158 Q306,149 396,153 Q500,157 612,151 Q744,145 880,149;M252,160 Q306,153 396,156 Q500,153 612,156 Q744,151 880,152;M252,158 Q306,149 396,153 Q500,157 612,151 Q744,145 880,149"
+            dur="7.8s"
+            repeatCount="indefinite"
+          />
+        </path>
 
         <!-- ═══ FARM — grounded: land surface ~y=158 at x=30, farm bottom must hit that ═══ -->
         <!-- house bottom at local y=58, so translate_y = 158-58 = 100 -->
@@ -935,7 +972,7 @@
         <!-- ═══ MISSISSIPPI RIVER — natural winding river ═══ -->
         <!-- dark muddy bank (slightly wider than water) -->
         <path
-          d="M150,155 C142,170 146,187 153,200 C160,214 154,227 147,240 C140,254 145,268 156,278 C170,291 196,291 220,281 C243,271 262,255 280,244 C292,237 302,232 311,229"
+          d="M150,155 C140,171 145,188 152,202 C160,217 155,232 148,246 C141,260 148,274 161,284 C176,295 198,294 220,284 C243,274 261,258 277,244 C289,234 299,228 308,224"
           stroke="#16280d"
           stroke-width="8.5"
           fill="none"
@@ -944,7 +981,7 @@
         />
         <!-- damp edge between bank and water -->
         <path
-          d="M150,155 C142,170 146,187 153,200 C160,214 154,227 147,240 C140,254 145,268 156,278 C170,291 196,291 220,281 C243,271 262,255 280,244 C292,237 302,232 311,229"
+          d="M150,155 C140,171 145,188 152,202 C160,217 155,232 148,246 C141,260 148,274 161,284 C176,295 198,294 220,284 C243,274 261,258 277,244 C289,234 299,228 308,224"
           stroke="#2f4d20"
           stroke-width="5.8"
           fill="none"
@@ -953,33 +990,34 @@
         />
         <!-- water channel — narrow, dark blue, natural -->
         <path
-          d="M150,155 C142,170 146,187 153,200 C160,214 154,227 147,240 C140,254 145,268 156,278 C170,291 196,291 220,281 C243,271 262,255 280,244 C292,237 302,232 311,229"
+          d="M150,155 C140,171 145,188 152,202 C160,217 155,232 148,246 C141,260 148,274 161,284 C176,295 198,294 220,284 C243,274 261,258 277,244 C289,234 299,228 308,224"
           stroke="url(#iRiverCore)"
           stroke-width="4.2"
           fill="none"
           opacity=".92"
           stroke-linecap="round"
         />
-        <!-- surface current ribbons -->
+        <!-- broad undercurrent (slow) -->
         <path
-          d="M150,155 C142,170 146,187 153,200 C160,214 154,227 147,240 C140,254 145,268 156,278 C170,291 196,291 220,281 C243,271 262,255 280,244 C292,237 302,232 311,229"
-          stroke="#8fd9ff"
-          stroke-width="1.1"
+          d="M150,160 C142,176 146,192 153,206 C159,220 155,234 149,247 C144,259 150,272 162,281 C176,291 197,290 219,281 C240,272 258,258 274,246 C286,237 296,230 304,226"
+          stroke="#1d6f99"
+          stroke-width="2.2"
           fill="none"
-          opacity=".55"
+          opacity=".36"
           stroke-linecap="round"
-          stroke-dasharray="7,9"
+          stroke-dasharray="24,16"
         >
           <animate
             attributeName="stroke-dashoffset"
-            from="60"
+            from="160"
             to="0"
-            dur="3.4s"
+            dur="7.6s"
             repeatCount="indefinite"
           />
         </path>
+        <!-- fine surface ripple (faster) -->
         <path
-          d="M149,163 C144,177 148,191 154,205 C160,219 154,231 148,243 C143,255 149,267 158,275 C170,286 193,286 216,277 C240,267 259,252 277,241 C289,234 298,230 306,227"
+          d="M149,163 C142,178 147,193 154,207 C160,221 155,235 149,248 C144,260 151,272 163,280 C177,289 197,288 219,279 C241,270 259,256 275,244 C287,236 297,230 305,226"
           stroke="#2f99cf"
           stroke-width=".9"
           fill="none"
@@ -997,28 +1035,36 @@
         </path>
         <!-- small distributary branches at river mouth -->
         <path
-          d="M286,241 C294,237 304,232 315,229 C325,226 336,223 347,221"
+          d="M284,244 C295,239 304,233 316,229 C331,225 346,224 363,225"
           stroke="#2f99cf"
-          stroke-width="1.2"
+          stroke-width="1.05"
           fill="none"
-          opacity=".42"
+          opacity=".34"
           stroke-linecap="round"
         />
         <path
-          d="M280,246 C290,246 301,247 313,248 C325,250 337,253 349,257"
+          d="M278,247 C290,247 302,248 315,251 C331,254 348,259 367,268"
           stroke="#2a87bd"
-          stroke-width="1"
+          stroke-width=".95"
           fill="none"
-          opacity=".35"
+          opacity=".3"
+          stroke-linecap="round"
+        />
+        <path
+          d="M287,242 C297,237 307,233 320,231 C336,229 352,231 370,238"
+          stroke="#5fb8e2"
+          stroke-width=".8"
+          fill="none"
+          opacity=".22"
           stroke-linecap="round"
         />
         <!-- sediment plume where river meets gulf -->
         <path
-          d="M312,228 C336,224 360,224 384,228 C407,232 429,240 451,253"
+          d="M307,225 C330,221 353,222 376,228 C401,234 425,244 451,260"
           stroke="#8fd9ff"
-          stroke-width="8"
+          stroke-width="7"
           fill="none"
-          opacity=".09"
+          opacity=".06"
           stroke-linecap="round"
         />
         <!-- river label — rotated along bank -->
@@ -1036,9 +1082,9 @@
         <!-- N particles flowing south -->
         <circle r="2.5" fill="#f59e0b" opacity="0">
           <animateMotion
-            dur="4.8s"
+            dur="5.1s"
             repeatCount="indefinite"
-            path="M150,157 C142,171 147,188 154,201 C160,214 154,227 148,240 C142,254 146,268 156,277 C170,289 195,289 220,279 C243,269 262,254 280,243 C293,236 303,231 312,228"
+            path="M150,157 C140,172 146,188 153,202 C160,217 155,232 148,246 C142,260 149,273 161,283 C176,294 198,293 220,283 C242,273 260,257 276,244 C290,234 304,228 320,227 C334,226 348,230 364,238"
           />
           <animate
             attributeName="opacity"
@@ -1049,10 +1095,10 @@
         </circle>
         <circle r="2" fill="#f59e0b" opacity="0">
           <animateMotion
-            dur="4.8s"
+            dur="5.1s"
             repeatCount="indefinite"
             begin="2s"
-            path="M150,157 C142,171 147,188 154,201 C160,214 154,227 148,240 C142,254 146,268 156,277 C170,289 195,289 220,279 C243,269 262,254 280,243 C293,236 303,231 312,228"
+            path="M150,157 C140,172 146,188 153,202 C160,217 155,232 148,246 C142,260 149,273 161,283 C176,294 198,293 220,283 C242,273 260,257 276,244 C290,234 304,228 320,227 C334,226 348,230 364,238"
           />
           <animate
             attributeName="opacity"
@@ -1065,9 +1111,114 @@
 
         <!-- ═══ OCEAN BASE ═══ -->
         <path
-          d="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z"
+          d="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L272,370 Q252,282 258,158 Z"
           fill="url(#iSea)"
-        />
+        >
+          <animate
+            attributeName="d"
+            values="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L272,370 Q252,282 258,158 Z;M258,160 Q360,151 500,154 Q660,150 880,152 L880,370 L272,370 Q251,286 258,160 Z;M258,157 Q360,145 500,149 Q660,160 880,147 L880,370 L272,370 Q253,280 258,157 Z;M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L272,370 Q252,282 258,158 Z"
+            dur="10.5s"
+            repeatCount="indefinite"
+          />
+        </path>
+
+        <!-- moving current bands and caustics give the Gulf a water-like drift -->
+        <g clip-path="url(#seaClip)">
+          <path
+            d="M290,208 C380,198 476,214 584,204 C682,195 772,210 868,202"
+            stroke="#38bdf8"
+            stroke-width="1.1"
+            fill="none"
+            opacity=".19"
+            stroke-linecap="round"
+            stroke-dasharray="10,22"
+          >
+            <animate
+              attributeName="stroke-dashoffset"
+              from="140"
+              to="0"
+              dur="6.2s"
+              repeatCount="indefinite"
+            />
+          </path>
+          <path
+            d="M272,246 C362,236 454,252 558,242 C668,232 760,250 884,238"
+            stroke="#7dd3fc"
+            stroke-width="1"
+            fill="none"
+            opacity=".14"
+            stroke-linecap="round"
+            stroke-dasharray="8,26"
+          >
+            <animate
+              attributeName="stroke-dashoffset"
+              from="0"
+              to="160"
+              dur="8.4s"
+              repeatCount="indefinite"
+            />
+          </path>
+          <ellipse cx="372" cy="224" rx="72" ry="12" fill="#7dd3fc" opacity=".07">
+            <animateTransform
+              attributeName="transform"
+              type="translate"
+              values="0 0;70 -5;0 0"
+              dur="11s"
+              repeatCount="indefinite"
+            />
+          </ellipse>
+          <ellipse cx="520" cy="276" rx="96" ry="14" fill="#38bdf8" opacity=".05">
+            <animateTransform
+              attributeName="transform"
+              type="translate"
+              values="0 0;-52 -4;0 0"
+              dur="13.6s"
+              repeatCount="indefinite"
+            />
+          </ellipse>
+        </g>
+
+        <!-- nutrient delivery path from river mouth to bloom -->
+        <path
+          d="M364,238 C422,227 486,214 548,205 C575,201 600,198 624,198"
+          stroke="#f59e0b"
+          stroke-width="1"
+          fill="none"
+          opacity=".14"
+          stroke-linecap="round"
+          stroke-dasharray="2,11"
+        >
+          <animate
+            attributeName="stroke-dashoffset"
+            from="50"
+            to="0"
+            dur="3.2s"
+            repeatCount="indefinite"
+          />
+        </path>
+        <circle r="1.8" fill="#f59e0b" opacity="0">
+          <animateMotion
+            dur="3.6s"
+            repeatCount="indefinite"
+            path="M364,238 C422,227 486,214 548,205 C575,201 600,198 624,198"
+          />
+          <animate
+            attributeName="opacity"
+            values="0;.55;.3;0"
+            dur="3.6s"
+            repeatCount="indefinite"
+          />
+        </circle>
+
+        <!-- oxygen depletion pocket below bloom -->
+        <ellipse cx="622" cy="286" rx="156" ry="48" fill="url(#iOxyDrop)" opacity=".34">
+          <animate
+            attributeName="ry"
+            values="48;52;48"
+            dur="4.4s"
+            repeatCount="indefinite"
+          />
+        </ellipse>
 
         <!-- ═══ ALGAE BLOOM — contained oval cluster, not full-panel flood ═══ -->
         <!-- outer halo glow -->
@@ -2340,6 +2491,15 @@
             <stop offset="35%" stop-color="#1a4a10" stop-opacity=".45" />
             <stop offset="100%" stop-color="#2d7a0f" stop-opacity=".82" />
           </linearGradient>
+          <radialGradient id="cAtmosHaze" cx="38%" cy="8%" r="72%">
+            <stop offset="0%" stop-color="#ef4444" stop-opacity=".18" />
+            <stop offset="55%" stop-color="#ef4444" stop-opacity=".06" />
+            <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+          </radialGradient>
+          <linearGradient id="cOceanSheen" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#7dd3fc" stop-opacity=".36" />
+            <stop offset="100%" stop-color="#7dd3fc" stop-opacity="0" />
+          </linearGradient>
           <marker
             id="mC"
             markerWidth="10"
@@ -2381,6 +2541,7 @@
 
         <!-- SKY/ATMOSPHERE background -->
         <rect width="900" height="420" fill="url(#cSky)" />
+        <rect width="900" height="190" fill="url(#cAtmosHaze)" />
         <!-- LAND SURFACE — left 2/3 of canvas -->
         <rect x="0" y="220" width="615" height="50" fill="url(#cGrass)" />
         <!-- SOIL UNDERGROUND -->
@@ -2419,23 +2580,77 @@
         <rect x="615" y="0" width="285" height="420" fill="url(#cBloom)" />
         <!-- Shoreline divider -->
         <rect x="612" y="220" width="5" height="200" fill="#1a3c08" />
+        <rect x="614" y="0" width="2" height="420" fill="#38bdf8" opacity=".2" />
+        <!-- Ocean surface shimmer + gentle current drift -->
+        <path
+          d="M615,220 Q662,214 712,219 Q780,225 900,218"
+          stroke="#7dd3fc"
+          stroke-width="1.2"
+          fill="none"
+          opacity=".5"
+        >
+          <animate
+            attributeName="d"
+            values="M615,220 Q662,214 712,219 Q780,225 900,218;M615,222 Q662,219 712,223 Q780,218 900,221;M615,220 Q662,214 712,219 Q780,225 900,218"
+            dur="8.2s"
+            repeatCount="indefinite"
+          />
+        </path>
+        <g>
+          <path
+            d="M628,252 C682,246 732,257 788,249 C834,244 865,252 896,248"
+            stroke="#38bdf8"
+            stroke-width="1"
+            fill="none"
+            opacity=".16"
+            stroke-linecap="round"
+            stroke-dasharray="9,18"
+          >
+            <animate
+              attributeName="stroke-dashoffset"
+              from="90"
+              to="0"
+              dur="6.8s"
+              repeatCount="indefinite"
+            />
+          </path>
+          <path
+            d="M622,292 C676,286 738,298 798,291 C844,286 872,294 902,290"
+            stroke="#7dd3fc"
+            stroke-width="1"
+            fill="none"
+            opacity=".12"
+            stroke-linecap="round"
+            stroke-dasharray="7,20"
+          >
+            <animate
+              attributeName="stroke-dashoffset"
+              from="0"
+              to="120"
+              dur="9.6s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </g>
 
         <!-- ══ CO₂ LABEL — top center, atmosphere zone ══ -->
         <!-- Dark backdrop pill so CO₂ always readable -->
         <rect
-          x="200"
+          x="194"
           y="8"
-          width="220"
-          height="80"
-          rx="16"
+          width="236"
+          height="86"
+          rx="18"
           fill="#2a0808"
-          opacity=".55"
+          opacity=".62"
+          stroke="#ef4444"
+          stroke-opacity=".2"
         />
         <text
           x="310"
-          y="58"
+          y="60"
           fill="#ef4444"
-          font-size="52"
+          font-size="54"
           font-family="monospace"
           font-weight="bold"
           text-anchor="middle"
@@ -2446,12 +2661,12 @@
         </text>
         <text
           x="310"
-          y="78"
+          y="82"
           fill="#ef4444"
-          font-size="11"
+          font-size="11.5"
           font-family="monospace"
           text-anchor="middle"
-          opacity=".75"
+          opacity=".82"
           font-weight="bold"
         >
           atmospheric carbon
@@ -3081,33 +3296,35 @@
         </text>
         <!-- Ocean normal/blocked note — top ocean, isolated area -->
         <rect
-          x="635"
-          y="32"
-          width="240"
-          height="44"
-          rx="8"
+          x="634"
+          y="28"
+          width="242"
+          height="52"
+          rx="10"
           fill="#0a1528"
-          opacity=".7"
+          opacity=".8"
+          stroke="#38bdf8"
+          stroke-opacity=".16"
         />
         <text
           x="755"
-          y="52"
+          y="49"
           fill="#38bdf8"
-          font-size="10"
+          font-size="10.5"
           font-family="monospace"
           text-anchor="middle"
-          opacity=".75"
+          opacity=".86"
         >
           normally: ocean absorbs CO&#x2082;
         </text>
         <text
           x="755"
-          y="68"
+          y="67"
           fill="#ef4444"
-          font-size="10.5"
+          font-size="11"
           font-family="monospace"
           text-anchor="middle"
-          opacity=".92"
+          opacity=".96"
           font-weight="bold"
         >
           &#x2190; BLOCKED by algae bloom
@@ -6731,7 +6948,7 @@
             y: 310,
             dx: 0.5,
             dy: 0.06,
-            xMin: 215,
+            xMin: 290,
             xMax: 855,
             yMin: 293,
             yMax: 332,
@@ -6743,7 +6960,7 @@
             y: 320,
             dx: -0.35,
             dy: 0.05,
-            xMin: 215,
+            xMin: 290,
             xMax: 855,
             yMin: 295,
             yMax: 336,
@@ -6755,7 +6972,7 @@
             y: 265,
             dx: 0.42,
             dy: 0.04,
-            xMin: 310,
+            xMin: 580,
             xMax: 820,
             yMin: 240,
             yMax: 285,
@@ -6767,7 +6984,7 @@
             y: 308,
             dx: 0.44,
             dy: 0.06,
-            xMin: 325,
+            xMin: 340,
             xMax: 855,
             yMin: 295,
             yMax: 350,
@@ -6779,7 +6996,7 @@
             y: 320,
             dx: -0.32,
             dy: 0.04,
-            xMin: 325,
+            xMin: 340,
             xMax: 855,
             yMin: 298,
             yMax: 354,

@@ -275,7 +275,11 @@ textarea::placeholder{color:rgba(255,255,255,.18);}
 <line x1="8"  y1="202" x2="242" y2="194" stroke="#3a6020" stroke-width=".8" opacity=".24"/>
 <!-- shore edge — visible boundary -->
 <path d="M258,158 Q310,148 400,152 Q500,156 600,150 Q730,144 880,148"
-      stroke="#38bdf8" stroke-width="1.2" fill="none" opacity=".32"/>
+  stroke="#38bdf8" stroke-width="1.2" fill="none" opacity=".32">
+  <animate attributeName="d"
+       values="M258,158 Q310,148 400,152 Q500,156 600,150 Q730,144 880,148;M258,160 Q310,152 400,156 Q500,153 600,156 Q730,150 880,152;M258,158 Q310,148 400,152 Q500,156 600,150 Q730,144 880,148"
+       dur="7.8s" repeatCount="indefinite"/>
+</path>
 
 <!-- ═══ FARM — grounded: land surface ~y=158 at x=30, farm bottom must hit that ═══ -->
 <!-- house bottom at local y=58, so translate_y = 158-58 = 100 -->
@@ -323,7 +327,30 @@ textarea::placeholder{color:rgba(255,255,255,.18);}
 </circle>
 
 <!-- ═══ OCEAN BASE ═══ -->
-<path d="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z" fill="url(#iSea)"/>
+<path d="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z" fill="url(#iSea)">
+  <animate attributeName="d"
+           values="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z;M258,160 Q360,151 500,154 Q660,150 880,152 L880,370 L258,370 Z;M258,157 Q360,145 500,149 Q660,160 880,147 L880,370 L258,370 Z;M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z"
+           dur="10.5s" repeatCount="indefinite"/>
+</path>
+<!-- moving current bands and caustics give the Gulf a water-like drift -->
+<g clip-path="url(#seaClip)">
+  <path d="M290,208 C380,198 476,214 584,204 C682,195 772,210 868,202"
+        stroke="#38bdf8" stroke-width="1.1" fill="none" opacity=".19"
+        stroke-linecap="round" stroke-dasharray="10,22">
+    <animate attributeName="stroke-dashoffset" from="140" to="0" dur="6.2s" repeatCount="indefinite"/>
+  </path>
+  <path d="M272,246 C362,236 454,252 558,242 C668,232 760,250 884,238"
+        stroke="#7dd3fc" stroke-width="1" fill="none" opacity=".14"
+        stroke-linecap="round" stroke-dasharray="8,26">
+    <animate attributeName="stroke-dashoffset" from="0" to="160" dur="8.4s" repeatCount="indefinite"/>
+  </path>
+  <ellipse cx="372" cy="224" rx="72" ry="12" fill="#7dd3fc" opacity=".07">
+    <animateTransform attributeName="transform" type="translate" values="0 0;70 -5;0 0" dur="11s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="520" cy="276" rx="96" ry="14" fill="#38bdf8" opacity=".05">
+    <animateTransform attributeName="transform" type="translate" values="0 0;-52 -4;0 0" dur="13.6s" repeatCount="indefinite"/>
+  </ellipse>
+</g>
 
 <!-- ═══ ALGAE BLOOM — contained oval cluster, not full-panel flood ═══ -->
 <!-- outer halo glow -->
@@ -1952,7 +1979,11 @@ textarea::placeholder{color:rgba(255,255,255,.18);}
 <line x1="8"  y1="202" x2="242" y2="194" stroke="#3a6020" stroke-width=".8" opacity=".24"/>
 <!-- shore edge — visible boundary -->
 <path d="M258,158 Q310,148 400,152 Q500,156 600,150 Q730,144 880,148"
-      stroke="#38bdf8" stroke-width="1.2" fill="none" opacity=".32"/>
+  stroke="#38bdf8" stroke-width="1.2" fill="none" opacity=".32">
+  <animate attributeName="d"
+       values="M258,158 Q310,148 400,152 Q500,156 600,150 Q730,144 880,148;M258,160 Q310,152 400,156 Q500,153 600,156 Q730,150 880,152;M258,158 Q310,148 400,152 Q500,156 600,150 Q730,144 880,148"
+       dur="7.8s" repeatCount="indefinite"/>
+</path>
 
 <!-- ═══ FARM — grounded: land surface ~y=158 at x=30, farm bottom must hit that ═══ -->
 <!-- house bottom at local y=58, so translate_y = 158-58 = 100 -->
@@ -2000,7 +2031,30 @@ textarea::placeholder{color:rgba(255,255,255,.18);}
 </circle>
 
 <!-- ═══ OCEAN BASE ═══ -->
-<path d="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z" fill="url(#iSea)"/>
+<path d="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z" fill="url(#iSea)">
+  <animate attributeName="d"
+           values="M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z;M258,160 Q360,151 500,154 Q660,150 880,152 L880,370 L258,370 Z;M258,157 Q360,145 500,149 Q660,160 880,147 L880,370 L258,370 Z;M258,158 Q360,147 500,152 Q660,157 880,148 L880,370 L258,370 Z"
+           dur="10.5s" repeatCount="indefinite"/>
+</path>
+<!-- moving current bands and caustics give the Gulf a water-like drift -->
+<g clip-path="url(#seaClip)">
+  <path d="M290,208 C380,198 476,214 584,204 C682,195 772,210 868,202"
+        stroke="#38bdf8" stroke-width="1.1" fill="none" opacity=".19"
+        stroke-linecap="round" stroke-dasharray="10,22">
+    <animate attributeName="stroke-dashoffset" from="140" to="0" dur="6.2s" repeatCount="indefinite"/>
+  </path>
+  <path d="M272,246 C362,236 454,252 558,242 C668,232 760,250 884,238"
+        stroke="#7dd3fc" stroke-width="1" fill="none" opacity=".14"
+        stroke-linecap="round" stroke-dasharray="8,26">
+    <animate attributeName="stroke-dashoffset" from="0" to="160" dur="8.4s" repeatCount="indefinite"/>
+  </path>
+  <ellipse cx="372" cy="224" rx="72" ry="12" fill="#7dd3fc" opacity=".07">
+    <animateTransform attributeName="transform" type="translate" values="0 0;70 -5;0 0" dur="11s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="520" cy="276" rx="96" ry="14" fill="#38bdf8" opacity=".05">
+    <animateTransform attributeName="transform" type="translate" values="0 0;-52 -4;0 0" dur="13.6s" repeatCount="indefinite"/>
+  </ellipse>
+</g>
 
 <!-- ═══ ALGAE BLOOM — contained oval cluster, not full-panel flood ═══ -->
 <!-- outer halo glow -->
@@ -3372,11 +3426,11 @@ function go(n){
 (function(){
   const FISH = [
     // id,       start x, y,   dx,    dy,   xMin, xMax, yMin, yMax, wobble phase
-    { id:'iFish1',  x:280, y:310, dx: 0.50, dy: 0.06, xMin:215, xMax:855, yMin:293, yMax:332, w:0.0  },
-    { id:'iFish2',  x:670, y:320, dx:-0.35, dy: 0.05, xMin:215, xMax:855, yMin:295, yMax:336, w:1.9  },
-    { id:'nFish1',  x:400, y:265, dx: 0.42, dy: 0.04, xMin:310, xMax:820, yMin:240, yMax:285, w:0.7  },
-    { id:'cFish1',  x:360, y:308, dx: 0.44, dy: 0.06, xMin:325, xMax:855, yMin:295, yMax:350, w:1.1  },
-    { id:'cFish1b', x:580, y:320, dx:-0.32, dy: 0.04, xMin:325, xMax:855, yMin:298, yMax:354, w:2.5  },
+    { id:'iFish1',  x:280, y:310, dx: 0.50, dy: 0.06, xMin:290, xMax:855, yMin:293, yMax:332, w:0.0  },
+    { id:'iFish2',  x:670, y:320, dx:-0.35, dy: 0.05, xMin:290, xMax:855, yMin:295, yMax:336, w:1.9  },
+    { id:'nFish1',  x:400, y:265, dx: 0.42, dy: 0.04, xMin:580, xMax:820, yMin:240, yMax:285, w:0.7  },
+    { id:'cFish1',  x:360, y:308, dx: 0.44, dy: 0.06, xMin:340, xMax:855, yMin:295, yMax:350, w:1.1  },
+    { id:'cFish1b', x:580, y:320, dx:-0.32, dy: 0.04, xMin:340, xMax:855, yMin:298, yMax:354, w:2.5  },
   ];
 
   let last = null;
