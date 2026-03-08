@@ -713,6 +713,88 @@
         letter-spacing: 1px;
         font-family: monospace;
       }
+      .teacher-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        background: rgba(17, 24, 39, 0.92);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 8px;
+        margin-bottom: 12px;
+      }
+      .teacher-btn {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      .teacher-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .teacher-btn.active {
+        border-color: rgba(56, 189, 248, 0.5);
+        color: #7dd3fc;
+        background: rgba(56, 189, 248, 0.14);
+      }
+      .scene-pill {
+        margin-left: auto;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--text-sub);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 7px 10px;
+        background: rgba(0, 0, 0, 0.22);
+      }
+      .readable .vcap {
+        background: rgba(11, 17, 32, 0.98);
+      }
+      .readable .vcap h2 {
+        font-size: 25px;
+      }
+      .readable .vcap p {
+        font-size: 17px;
+        line-height: 1.8;
+        color: #cbd5e1;
+      }
+      .readable .chip,
+      .readable .fn,
+      .readable .cb,
+      .readable .ph,
+      .readable .slbl {
+        font-size: 14px;
+        color: #cbd5e1;
+      }
+      .readable .pq {
+        font-size: 19px;
+        line-height: 1.5;
+      }
+      .readable .prompt {
+        border-width: 2px;
+      }
+      .focus-mode .chips,
+      .focus-mode .flow,
+      .focus-mode .callout,
+      .focus-mode .cgrid,
+      .focus-mode .prompt,
+      .focus-mode textarea {
+        display: none !important;
+      }
+      .motion-paused .particle {
+        animation-play-state: paused;
+      }
+      @media (max-width: 760px) {
+        .scene-pill {
+          margin-left: 0;
+        }
+      }
     </style>
   </head>
   <body>
@@ -722,6 +804,14 @@
         <div class="hd-chip" id="hd-chip"></div>
         <h1 id="hd-t"></h1>
         <p id="hd-s"></p>
+      </div>
+      <div class="teacher-bar" id="teacher-bar">
+        <button type="button" class="teacher-btn" id="ctrl-prev">◀ Prev</button>
+        <button type="button" class="teacher-btn" id="ctrl-next">Next ▶</button>
+        <button type="button" class="teacher-btn" id="ctrl-motion">Pause Motion</button>
+        <button type="button" class="teacher-btn" id="ctrl-readable">Readable Text</button>
+        <button type="button" class="teacher-btn" id="ctrl-focus">Focus Visual</button>
+        <span class="scene-pill" id="ctrl-scene">Scene 1 / 5</span>
       </div>
       <div class="tabs" id="tabs"></div>
       <div id="scenes"></div>
@@ -3140,7 +3230,7 @@
             text-anchor="middle"
             font-weight="bold"
           >
-            fossil fuels
+            fossil fuel
           </text>
           <text
             x="38"
@@ -3151,64 +3241,11 @@
             text-anchor="middle"
             opacity=".72"
           >
-            auto &amp; factory
+            emissions
           </text>
         </g>
 
-        <!-- ══ UNDERGROUND ZONE — labels in soil, well spaced ══ -->
-        <!-- Root respiration label — far left, below grass line -->
-        <rect
-          x="24"
-          y="274"
-          width="64"
-          height="38"
-          rx="6"
-          fill="#1a0808"
-          opacity=".34"
-        />
-        <text
-          x="34"
-          y="290"
-          fill="#ef4444"
-          font-size="11"
-          font-family="monospace"
-          font-weight="bold"
-          opacity=".82"
-        >
-          root
-        </text>
-        <text
-          x="34"
-          y="305"
-          fill="#ef4444"
-          font-size="11"
-          font-family="monospace"
-          opacity=".78"
-        >
-          respiration
-        </text>
-        <!-- Organic Carbon label -->
-        <rect
-          x="152"
-          y="281"
-          width="126"
-          height="21"
-          rx="5"
-          fill="#1a0808"
-          opacity=".28"
-        />
-        <text
-          x="160"
-          y="296"
-          fill="#d4a96a"
-          font-size="12"
-          font-family="monospace"
-          font-weight="bold"
-          opacity=".92"
-        >
-          Organic Carbon
-        </text>
-        <!-- Dead organism blobs + label -->
+        <!-- ══ UNDERGROUND ZONE — simplified for cleaner teaching view ══ -->
         <ellipse
           cx="168"
           cy="320"
@@ -3227,38 +3264,18 @@
           fill="#2d1a08"
           stroke="#8a5a28"
           stroke-width="1"
-          opacity=".62"
+          opacity=".55"
         />
         <text
-          x="168"
-          y="344"
-          fill="#c8956a"
-          font-size="11"
-          font-family="monospace"
-          opacity=".88"
-        >
-          Dead organisms &amp; waste
-        </text>
-        <!-- Decay organisms — center soil -->
-        <rect
-          x="372"
-          y="281"
-          width="130"
-          height="21"
-          rx="5"
-          fill="#1a0808"
-          opacity=".24"
-        />
-        <text
-          x="380"
+          x="165"
           y="296"
-          fill="#c8956a"
-          font-size="11.5"
+          fill="#d4a96a"
+          font-size="12"
           font-family="monospace"
           font-weight="bold"
-          opacity=".85"
+          opacity=".9"
         >
-          Decay organisms
+          soil carbon + decay
         </text>
         <circle
           cx="390"
@@ -3607,11 +3624,11 @@
         <path
           d="M130,114 Q176,88 214,70"
           stroke="#4ade80"
-          stroke-width="2.5"
+          stroke-width="1.8"
           fill="none"
           marker-end="url(#mG)"
           stroke-dasharray="6,4"
-          opacity=".7"
+          opacity=".3"
         >
           <animate
             attributeName="stroke-dashoffset"
@@ -3628,10 +3645,10 @@
         <path
           d="M556,118 Q500,70 420,66"
           stroke="#ef4444"
-          stroke-width="3.5"
+          stroke-width="2.8"
           fill="none"
           marker-end="url(#mC)"
-          opacity=".82"
+          opacity=".72"
         >
           <animate
             attributeName="stroke-dashoffset"
@@ -3641,49 +3658,16 @@
             repeatCount="indefinite"
           />
         </path>
-        <!-- Emission label — sits on arc midpoint in the clear sky zone above factory, no overlap -->
-        <rect
-          x="484"
-          y="122"
-          width="118"
-          height="32"
-          rx="6"
-          fill="#1a0808"
-          opacity=".72"
-        />
-        <text
-          x="544"
-          y="136"
-          fill="#ef4444"
-          font-size="10.5"
-          font-family="monospace"
-          text-anchor="middle"
-          font-weight="bold"
-        >
-          auto &amp; factory
-        </text>
-        <text
-          x="544"
-          y="149"
-          fill="#ef4444"
-          font-size="10"
-          font-family="monospace"
-          text-anchor="middle"
-          opacity=".82"
-        >
-          emissions &#x2192;
-        </text>
-
         <!-- D. Animal respiration → CO₂: RED dashed arc from cow upward -->
         <!-- Cow at translate(390,188), top of cow ~y=188-28=160 → arc origin ~420,168 -->
         <path
           d="M430,172 Q390,110 355,76"
           stroke="#ef4444"
-          stroke-width="2.8"
+          stroke-width="2"
           fill="none"
           marker-end="url(#mC)"
           stroke-dasharray="7,4"
-          opacity=".78"
+          opacity=".46"
         >
           <animate
             attributeName="stroke-dashoffset"
@@ -3693,37 +3677,15 @@
             repeatCount="indefinite"
           />
         </path>
-        <!-- "respiration" label — mid arc, backdrop pill so it doesn't melt into tree -->
-        <rect
-          x="358"
-          y="112"
-          width="94"
-          height="22"
-          rx="5"
-          fill="#1a0808"
-          opacity=".6"
-        />
-        <text
-          x="405"
-          y="128"
-          fill="#ef4444"
-          font-size="10.5"
-          font-family="monospace"
-          text-anchor="middle"
-          opacity=".88"
-        >
-          respiration
-        </text>
-
         <!-- E. Root/decay → CO₂: long dashed arc up left edge -->
         <path
           d="M44,270 Q18,202 56,120 Q96,52 208,60"
           stroke="#ef4444"
-          stroke-width="2.5"
+          stroke-width="1.8"
           fill="none"
           marker-end="url(#mC)"
           stroke-dasharray="7,4"
-          opacity=".52"
+          opacity=".24"
         >
           <animate
             attributeName="stroke-dashoffset"
@@ -3749,11 +3711,11 @@
         <path
           d="M756,176 Q742,150 702,142 Q626,128 500,90"
           stroke="#ef4444"
-          stroke-width="2.8"
+          stroke-width="2.4"
           fill="none"
           marker-end="url(#mC)"
           stroke-dasharray="7,4"
-          opacity=".72"
+          opacity=".68"
         >
           <animate
             attributeName="stroke-dashoffset"
@@ -3763,38 +3725,7 @@
             repeatCount="indefinite"
           />
         </path>
-        <!-- Label for G — sits in upper ocean/sky boundary zone, well above other elements -->
-        <rect
-          x="618"
-          y="84"
-          width="138"
-          height="36"
-          rx="7"
-          fill="#0a1528"
-          opacity=".75"
-        />
-        <text
-          x="687"
-          y="100"
-          fill="#ef4444"
-          font-size="10.5"
-          font-family="monospace"
-          text-anchor="middle"
-          font-weight="bold"
-        >
-          algae disrupts
-        </text>
-        <text
-          x="687"
-          y="115"
-          fill="#ef4444"
-          font-size="10"
-          font-family="monospace"
-          text-anchor="middle"
-          opacity=".82"
-        >
-          ocean C cycle
-        </text>
+        <!-- Secondary arrow labels removed to reduce clutter in projection mode -->
 
         <!-- TEKS badge -->
         <rect
@@ -6756,6 +6687,7 @@
       document.getElementById("hd-s").textContent = CONFIG.subtitle;
       // tabs
       const tabsEl = document.getElementById("tabs");
+      window.__gulfMotionPaused = false;
       CONFIG.tabs.forEach((t, i) => {
         const d = document.createElement("div");
         d.className =
@@ -6947,7 +6879,66 @@
       }
       // nav
       let cur = 0;
+      const motionBtn = document.getElementById("ctrl-motion");
+      const readableBtn = document.getElementById("ctrl-readable");
+      const focusBtn = document.getElementById("ctrl-focus");
+      const prevBtn = document.getElementById("ctrl-prev");
+      const nextBtn = document.getElementById("ctrl-next");
+      const scenePill = document.getElementById("ctrl-scene");
+
+      function setSvgMotionPaused(paused) {
+        document.querySelectorAll("svg").forEach((svg) => {
+          if (typeof svg.pauseAnimations !== "function") return;
+          if (paused) svg.pauseAnimations();
+          else svg.unpauseAnimations();
+        });
+      }
+
+      function setMotionPaused(paused) {
+        window.__gulfMotionPaused = paused;
+        document.body.classList.toggle("motion-paused", paused);
+        setSvgMotionPaused(paused);
+        motionBtn.textContent = paused ? "Resume Motion" : "Pause Motion";
+        motionBtn.classList.toggle("active", paused);
+      }
+
+      function updateTeacherUi() {
+        scenePill.textContent = `Scene ${cur + 1} / ${CONFIG.tabs.length}`;
+        prevBtn.disabled = cur === 0;
+        nextBtn.disabled = cur === CONFIG.tabs.length - 1;
+      }
+
+      prevBtn.onclick = () => go(cur - 1);
+      nextBtn.onclick = () => go(cur + 1);
+      motionBtn.onclick = () => setMotionPaused(!window.__gulfMotionPaused);
+      readableBtn.onclick = () => {
+        const on = document.body.classList.toggle("readable");
+        readableBtn.classList.toggle("active", on);
+      };
+      focusBtn.onclick = () => {
+        const on = document.body.classList.toggle("focus-mode");
+        focusBtn.classList.toggle("active", on);
+      };
+
+      document.addEventListener("keydown", (e) => {
+        const tag = (e.target && e.target.tagName) || "";
+        if (tag === "TEXTAREA" || tag === "INPUT") return;
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          go(cur + 1);
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          go(cur - 1);
+        }
+        if (e.key === " ") {
+          e.preventDefault();
+          setMotionPaused(!window.__gulfMotionPaused);
+        }
+      });
+
       function go(n) {
+        if (n < 0 || n >= CONFIG.tabs.length) return;
         document.getElementById("s" + cur).classList.remove("on");
         document.querySelectorAll(".tab").forEach((t, i) => {
           t.classList.remove("active");
@@ -6957,8 +6948,12 @@
         cur = n;
         document.getElementById("s" + n).classList.add("on");
         document.querySelectorAll(".tab")[n].classList.add("active");
+        updateTeacherUi();
+        if (window.__gulfMotionPaused) setSvgMotionPaused(true);
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
+
+      updateTeacherUi();
     </script>
 
     <script>
@@ -7035,6 +7030,12 @@
         let last = null;
 
         function tick(ts) {
+          if (window.__gulfMotionPaused) {
+            last = ts;
+            requestAnimationFrame(tick);
+            return;
+          }
+
           const raw = last === null ? 16 : ts - last;
           last = ts;
           const dt = Math.min(raw, 48); // cap to avoid jump on tab refocus
