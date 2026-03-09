@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Bring Your Own Phenomenon Preview</title>
+  <desc id="desc">Dark interface card showing custom HTML import flow into the explorer.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06101c" />
+      <stop offset="100%" stop-color="#0d2235" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f2638" />
+      <stop offset="100%" stop-color="#0a1a2a" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)" />
+
+  <rect x="90" y="95" width="1020" height="485" rx="28" fill="url(#panel)" stroke="#1d3e57" stroke-width="2" />
+  <rect x="135" y="145" width="320" height="380" rx="18" fill="#0f1d2f" stroke="#27516e" />
+  <rect x="495" y="145" width="570" height="178" rx="18" fill="#0f1d2f" stroke="#27516e" />
+  <rect x="495" y="347" width="570" height="178" rx="18" fill="#0f1d2f" stroke="#27516e" />
+
+  <g font-family="'JetBrains Mono', monospace" font-weight="700" fill="#7dd3fc">
+    <text x="156" y="198" font-size="26">Upload HTML</text>
+    <text x="516" y="198" font-size="26">Validate structure</text>
+    <text x="516" y="400" font-size="26">Open in Explorer</text>
+  </g>
+
+  <g font-family="'JetBrains Mono', monospace" fill="#b7d2e4" font-size="20">
+    <text x="156" y="242">- phenomenon-name.html</text>
+    <text x="156" y="276">- assets in /public/phenomena</text>
+    <text x="156" y="310">- route: /phenomena-studio/[slug]</text>
+
+    <text x="516" y="242">- checks file path</text>
+    <text x="516" y="276">- safe iframe load</text>
+    <text x="516" y="310">- launch card + tags</text>
+
+    <text x="516" y="444">- return to phenomena</text>
+    <text x="516" y="478">- preview + metadata</text>
+  </g>
+
+  <path d="M462 233 C 482 233, 490 233, 504 233" stroke="#22d3ee" stroke-width="5" fill="none" marker-end="url(#arrow)" />
+  <path d="M780 323 C 780 334, 780 340, 780 350" stroke="#22d3ee" stroke-width="5" fill="none" marker-end="url(#arrow)" />
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#22d3ee" />
+    </marker>
+  </defs>
+
+  <g fill="#22d3ee" font-family="'JetBrains Mono', monospace" font-weight="800">
+    <text x="90" y="64" font-size="38">Phenomenon Preview</text>
+    <text x="90" y="612" font-size="56">Bring Your Own Phenomenon</text>
+  </g>
+</svg>

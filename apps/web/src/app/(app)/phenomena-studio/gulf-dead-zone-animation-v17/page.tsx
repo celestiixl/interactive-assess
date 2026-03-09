@@ -24,7 +24,7 @@ export default function GulfDeadZoneLessonPage() {
         }}
       >
         <Link
-          href="/student/learn/unit-6"
+          href="/phenomena-studio"
           style={{
             textDecoration: "none",
             color: "var(--bs-text)",
@@ -32,7 +32,7 @@ export default function GulfDeadZoneLessonPage() {
             fontWeight: 600,
           }}
         >
-          {"← Unit 6: Ecosystems"}
+          {"← Return to Phenomena"}
         </Link>
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

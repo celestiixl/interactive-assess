@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { PageContent } from "@/components/ui";
+import Link from "next/link";
 
 type PhenomenonPageProps = {
   params: Promise<{ slug: string }>;
@@ -17,6 +18,12 @@ export default async function PhenomenonHtmlPage({
     <main>
       <PageContent className="py-6">
         <div className="mx-auto max-w-6xl">
+          <Link
+            href="/phenomena-studio"
+            className="inline-flex text-sm font-semibold text-bs-text hover:text-bs-teal"
+          >
+            {"\u2190 Return to Phenomena"}
+          </Link>
           <h1 className="text-2xl font-semibold text-bs-text">
             Phenomenon: {slug}
           </h1>
