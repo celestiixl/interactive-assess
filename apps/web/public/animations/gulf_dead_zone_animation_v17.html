@@ -808,9 +808,21 @@
       <div class="teacher-bar" id="teacher-bar">
         <button type="button" class="teacher-btn" id="ctrl-prev">◀ Prev</button>
         <button type="button" class="teacher-btn" id="ctrl-next">Next ▶</button>
-        <button type="button" class="teacher-btn" id="ctrl-motion">Pause Motion</button>
-        <button type="button" class="teacher-btn" id="ctrl-readable">Readable Text</button>
-        <button type="button" class="teacher-btn" id="ctrl-focus">Focus Visual</button>
+        <button type="button" class="teacher-btn" id="ctrl-motion">
+          Pause Motion
+        </button>
+        <button type="button" class="teacher-btn" id="ctrl-readable">
+          Readable Text
+        </button>
+        <button type="button" class="teacher-btn" id="ctrl-focus">
+          Focus Visual
+        </button>
+        <button type="button" class="teacher-btn" id="ctrl-download">
+          Download HTML
+        </button>
+        <button type="button" class="teacher-btn" id="ctrl-fullscreen">
+          Fullscreen
+        </button>
         <span class="scene-pill" id="ctrl-scene">Scene 1 / 5</span>
       </div>
       <div class="tabs" id="tabs"></div>
@@ -6882,9 +6894,75 @@
       const motionBtn = document.getElementById("ctrl-motion");
       const readableBtn = document.getElementById("ctrl-readable");
       const focusBtn = document.getElementById("ctrl-focus");
+      const downloadBtn = document.getElementById("ctrl-download");
+      const fullscreenBtn = document.getElementById("ctrl-fullscreen");
       const prevBtn = document.getElementById("ctrl-prev");
       const nextBtn = document.getElementById("ctrl-next");
       const scenePill = document.getElementById("ctrl-scene");
+
+      function downloadCurrentHtml() {
+        const rootClone = document.documentElement.cloneNode(true);
+
+        // Remove runtime-generated DOM so the bootstrap script can rebuild once.
+        const cloneBackdrop = rootClone.querySelector("#bd");
+        if (cloneBackdrop) cloneBackdrop.innerHTML = "";
+
+        const cloneTabs = rootClone.querySelector("#tabs");
+        if (cloneTabs) cloneTabs.innerHTML = "";
+
+        const cloneScenes = rootClone.querySelector("#scenes");
+        if (cloneScenes) cloneScenes.innerHTML = "";
+
+        const cloneBody = rootClone.querySelector("body");
+        if (cloneBody) {
+          cloneBody.classList.remove("readable", "focus-mode", "motion-paused");
+        }
+
+        const html = "<!doctype html>\n" + rootClone.outerHTML;
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "gulf_dead_zone_animation.html";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function getFullscreenElement() {
+        return (
+          document.fullscreenElement || document.webkitFullscreenElement || null
+        );
+      }
+
+      function updateFullscreenUi() {
+        const on = !!getFullscreenElement();
+        fullscreenBtn.textContent = on ? "Exit Fullscreen" : "Fullscreen";
+        fullscreenBtn.classList.toggle("active", on);
+      }
+
+      async function toggleFullscreen() {
+        try {
+          if (getFullscreenElement()) {
+            if (document.exitFullscreen) {
+              await document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen();
+            }
+            return;
+          }
+
+          const root = document.documentElement;
+          if (root.requestFullscreen) {
+            await root.requestFullscreen();
+          } else if (root.webkitRequestFullscreen) {
+            root.webkitRequestFullscreen();
+          }
+        } catch {
+          // Browser blocked fullscreen without a trusted gesture.
+        }
+      }
 
       function setSvgMotionPaused(paused) {
         document.querySelectorAll("svg").forEach((svg) => {
@@ -6919,6 +6997,15 @@
         const on = document.body.classList.toggle("focus-mode");
         focusBtn.classList.toggle("active", on);
       };
+      downloadBtn.onclick = () => {
+        downloadCurrentHtml();
+      };
+      fullscreenBtn.onclick = () => {
+        toggleFullscreen();
+      };
+
+      document.addEventListener("fullscreenchange", updateFullscreenUi);
+      document.addEventListener("webkitfullscreenchange", updateFullscreenUi);
 
       document.addEventListener("keydown", (e) => {
         const tag = (e.target && e.target.tagName) || "";
@@ -6934,6 +7021,10 @@
         if (e.key === " ") {
           e.preventDefault();
           setMotionPaused(!window.__gulfMotionPaused);
+        }
+        if (e.key.toLowerCase() === "f") {
+          e.preventDefault();
+          toggleFullscreen();
         }
       });
 
@@ -6954,6 +7045,7 @@
       }
 
       updateTeacherUi();
+      updateFullscreenUi();
     </script>
 
     <script>
