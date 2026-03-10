@@ -199,6 +199,29 @@ export default function StudentLearningHubPage() {
           </div>
         </section>
 
+        <section className="rounded-3xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                Newly Available
+              </div>
+              <div className="mt-1 text-sm font-semibold text-emerald-900">
+                Unit 7: Processes in Plants
+              </div>
+              <div className="text-xs text-emerald-800">
+                Includes a B.12B phenomenon launch and standalone interactive
+                lesson.
+              </div>
+            </div>
+            <Link
+              href="/student/learn/unit-7"
+              className="rounded-xl border border-emerald-200 bg-white px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
+            >
+              Open Unit 7
+            </Link>
+          </div>
+        </section>
+
         <div className="grid gap-3 lg:grid-cols-[1.5fr_1fr]">
           <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="text-sm font-semibold text-slate-900">

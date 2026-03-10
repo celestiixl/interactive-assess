@@ -1,272 +1,2461 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plant Systems — B.12B</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --green-deep:#1a3a1f; --green-mid:#2d6a35; --green-bright:#4caf50;
-  --green-light:#a8d5a2; --cream:#f5f0e8; --amber:#e8a020;
-  --amber-light:#fdebc8; --brown:#5c3d1e; --sky:#87ceeb;
-  --soil:#6b4226; --white:#ffffff; --text:#1a1a1a;
-  --xylem:#2196f3; --phloem:#e91e63; --phloem-light:#fce4ec;
-  --xylem-light:#e3f2fd;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plant Systems — B.12B</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --green-deep: #1a3a1f;
+        --green-mid: #2d6a35;
+        --green-bright: #4caf50;
+        --green-light: #a8d5a2;
+        --cream: #f5f0e8;
+        --amber: #e8a020;
+        --amber-light: #fdebc8;
+        --brown: #5c3d1e;
+        --sky: #87ceeb;
+        --soil: #6b4226;
+        --white: #ffffff;
+        --text: #1a1a1a;
+        --xylem: #2196f3;
+        --phloem: #e91e63;
+        --phloem-light: #fce4ec;
+        --xylem-light: #e3f2fd;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--cream);
+        color: var(--text);
+        min-height: 100vh;
+      }
 
-/* HEADER */
-.header{background:var(--green-deep);padding:28px 32px 22px;position:relative;overflow:hidden}
-.header::before{content:'';position:absolute;top:-40px;right:-60px;width:220px;height:220px;
-  background:radial-gradient(circle,rgba(76,175,80,.25) 0%,transparent 70%);border-radius:50%}
-.teks-tag{display:inline-block;background:var(--amber);color:var(--green-deep);font-weight:600;
-  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:10px}
-.header h1{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;line-height:1.15;margin-bottom:6px}
-.header h1 em{color:var(--green-light);font-style:italic}
-.header p{color:rgba(255,255,255,.7);font-size:14px;max-width:560px}
+      /* HEADER */
+      .header {
+        background: var(--green-deep);
+        padding: 28px 32px 22px;
+        position: relative;
+        overflow: hidden;
+      }
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -60px;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(
+          circle,
+          rgba(76, 175, 80, 0.25) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+      }
+      .teks-tag {
+        display: inline-block;
+        background: var(--amber);
+        color: var(--green-deep);
+        font-weight: 600;
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 20px;
+        margin-bottom: 10px;
+      }
+      .header h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        color: #fff;
+        line-height: 1.15;
+        margin-bottom: 6px;
+      }
+      .header h1 em {
+        color: var(--green-light);
+        font-style: italic;
+      }
+      .header p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        max-width: 560px;
+      }
 
-/* TABS */
-.tabs{display:flex;background:var(--green-deep);padding:0 32px;border-bottom:3px solid var(--green-mid)}
-.tab{padding:12px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;
-  border-bottom:3px solid transparent;margin-bottom:-3px;transition:all .2s;white-space:nowrap}
-.tab.active{color:var(--amber);border-bottom-color:var(--amber)}
-.tab:hover:not(.active){color:rgba(255,255,255,.85)}
+      /* TABS */
+      .tabs {
+        display: flex;
+        background: var(--green-deep);
+        padding: 0 32px;
+        border-bottom: 3px solid var(--green-mid);
+      }
+      .tab {
+        padding: 12px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -3px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .tab.active {
+        color: var(--amber);
+        border-bottom-color: var(--amber);
+      }
+      .tab:hover:not(.active) {
+        color: rgba(255, 255, 255, 0.85);
+      }
 
-/* SECTIONS */
-.section{display:none;padding:32px;max-width:960px;margin:0 auto}
-.section.active{display:block}
+      /* SECTIONS */
+      .section {
+        display: none;
+        padding: 32px;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .section.active {
+        display: block;
+      }
 
-/* ═══════════ PHENOMENON ═══════════ */
-.phenomenon-card{background:var(--green-deep);border-radius:16px;overflow:hidden;margin-bottom:24px}
-.phenomenon-image{width:100%;height:200px;position:relative;overflow:hidden}
-.phenomenon-image svg{width:100%;height:100%}
-.phenomenon-text{padding:22px 24px}
-.phenomenon-text h2{font-family:'Fraunces',serif;font-size:1.4rem;color:#fff;margin-bottom:8px}
-.phenomenon-text p{color:rgba(255,255,255,.75);font-size:14px;line-height:1.6}
+      /* ═══════════ PHENOMENON ═══════════ */
+      .phenomenon-card {
+        background: var(--green-deep);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 24px;
+      }
+      .phenomenon-image {
+        width: 100%;
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+      }
+      .phenomenon-image svg {
+        width: 100%;
+        height: 100%;
+      }
+      .phenomenon-text {
+        padding: 22px 24px;
+      }
+      .phenomenon-text h2 {
+        font-family: "Fraunces", serif;
+        font-size: 1.4rem;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+      .phenomenon-text p {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 14px;
+        line-height: 1.6;
+      }
 
-.question-box{background:var(--amber-light);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;
-  padding:16px 20px;margin:20px 0}
-.question-box strong{display:block;font-size:16px;color:var(--brown);margin-bottom:6px;font-family:'Fraunces',serif}
-.question-box p{font-size:14px;color:var(--brown)}
+      .question-box {
+        background: var(--amber-light);
+        border-left: 4px solid var(--amber);
+        border-radius: 0 10px 10px 0;
+        padding: 16px 20px;
+        margin: 20px 0;
+      }
+      .question-box strong {
+        display: block;
+        font-size: 16px;
+        color: var(--brown);
+        margin-bottom: 6px;
+        font-family: "Fraunces", serif;
+      }
+      .question-box p {
+        font-size: 14px;
+        color: var(--brown);
+      }
 
-.systems-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
-.system-card{background:#fff;border-radius:12px;padding:18px;border-top:4px solid;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.system-card.transport{border-color:var(--xylem)}
-.system-card.reproduction{border-color:var(--phloem)}
-.system-card.response{border-color:var(--amber)}
-.system-card h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;color:#444}
-.system-card p{font-size:13px;color:#555;line-height:1.5}
-.system-card .emoji{font-size:24px;margin-bottom:8px;display:block}
+      .systems-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 20px;
+      }
+      .system-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 18px;
+        border-top: 4px solid;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+      .system-card.transport {
+        border-color: var(--xylem);
+      }
+      .system-card.reproduction {
+        border-color: var(--phloem);
+      }
+      .system-card.response {
+        border-color: var(--amber);
+      }
+      .system-card h3 {
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        color: #444;
+      }
+      .system-card p {
+        font-size: 13px;
+        color: #555;
+        line-height: 1.5;
+      }
+      .system-card .emoji {
+        font-size: 24px;
+        margin-bottom: 8px;
+        display: block;
+      }
 
-/* vocab badge */
-.vocab-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;
-  margin:2px;letter-spacing:.3px;cursor:default}
-.vocab-everyday{background:#e8f5e9;color:#1b5e20}
-.vocab-academic{background:#fff3e0;color:#e65100}
-.vocab-content{background:#e3f2fd;color:#0d47a1}
-.vocab-row{margin-top:12px}
-.vocab-row label{font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px}
+      /* vocab badge */
+      .vocab-badge {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 10px;
+        margin: 2px;
+        letter-spacing: 0.3px;
+        cursor: default;
+      }
+      .vocab-everyday {
+        background: #e8f5e9;
+        color: #1b5e20;
+      }
+      .vocab-academic {
+        background: #fff3e0;
+        color: #e65100;
+      }
+      .vocab-content {
+        background: #e3f2fd;
+        color: #0d47a1;
+      }
+      .vocab-row {
+        margin-top: 12px;
+      }
+      .vocab-row label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: block;
+        margin-bottom: 4px;
+      }
 
-/* ═══════════ SIMULATION ═══════════ */
-.sim-container{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)}
-.sim-header{background:var(--green-mid);padding:16px 24px;display:flex;justify-content:space-between;
-  align-items:center;flex-wrap:wrap;gap:10px}
-.sim-header h2{font-family:'Fraunces',serif;font-size:1.2rem;color:#fff}
-.sim-mode-btns{display:flex;gap:8px;flex-wrap:wrap}
-.mode-btn{padding:6px 14px;border-radius:20px;border:2px solid rgba(255,255,255,.4);background:transparent;
-  color:rgba(255,255,255,.7);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.mode-btn.active{background:#fff;color:var(--green-mid);border-color:#fff}
+      /* ═══════════ SIMULATION ═══════════ */
+      .sim-container {
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+      .sim-header {
+        background: var(--green-mid);
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .sim-header h2 {
+        font-family: "Fraunces", serif;
+        font-size: 1.2rem;
+        color: #fff;
+      }
+      .sim-mode-btns {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .mode-btn {
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        background: transparent;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "DM Sans", sans-serif;
+        transition: all 0.2s;
+      }
+      .mode-btn.active {
+        background: #fff;
+        color: var(--green-mid);
+        border-color: #fff;
+      }
 
-.sim-stage{display:none;padding:24px}
-.sim-stage.active{display:block}
+      .sim-stage {
+        display: none;
+        padding: 24px;
+      }
+      .sim-stage.active {
+        display: block;
+      }
 
-/* ─── VASCULAR BUNDLE DIAGRAM ─── */
-.vb-section{margin-bottom:20px}
-.vb-title{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--green-deep);margin-bottom:6px}
-.vb-subtitle{font-size:13px;color:#666;margin-bottom:14px;line-height:1.5}
+      /* ─── VASCULAR BUNDLE DIAGRAM ─── */
+      .vb-section {
+        margin-bottom: 20px;
+      }
+      .vb-title {
+        font-family: "Fraunces", serif;
+        font-size: 1.1rem;
+        color: var(--green-deep);
+        margin-bottom: 6px;
+      }
+      .vb-subtitle {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 14px;
+        line-height: 1.5;
+      }
 
-.vascular-scene{position:relative;width:100%;height:420px;border-radius:14px;overflow:hidden;
-  background:linear-gradient(180deg,#c8eeff 0%,#87ceeb 35%,#5a8a3a 35%,#3a5a25 48%,#6b4226 48%,#3d2008 100%)}
+      .vascular-scene {
+        position: relative;
+        width: 100%;
+        height: 420px;
+        border-radius: 14px;
+        overflow: hidden;
+        background: linear-gradient(
+          180deg,
+          #c8eeff 0%,
+          #87ceeb 35%,
+          #5a8a3a 35%,
+          #3a5a25 48%,
+          #6b4226 48%,
+          #3d2008 100%
+        );
+      }
 
-/* sun */
-.v-sun{position:absolute;top:14px;right:20px;width:52px;height:52px;
-  background:radial-gradient(circle,#FFD700 40%,#FFA500 100%);border-radius:50%;
-  box-shadow:0 0 22px #FFD70088;animation:sunPulse 3s infinite}
-@keyframes sunPulse{0%,100%{box-shadow:0 0 22px #FFD70088}50%{box-shadow:0 0 40px #FFD700cc}}
+      /* sun */
+      .v-sun {
+        position: absolute;
+        top: 14px;
+        right: 20px;
+        width: 52px;
+        height: 52px;
+        background: radial-gradient(circle, #ffd700 40%, #ffa500 100%);
+        border-radius: 50%;
+        box-shadow: 0 0 22px #ffd70088;
+        animation: sunPulse 3s infinite;
+      }
+      @keyframes sunPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 22px #ffd70088;
+        }
+        50% {
+          box-shadow: 0 0 40px #ffd700cc;
+        }
+      }
 
-/* rain clouds (triggered when soil water < 20) */
-.cloud{position:absolute;top:18px;left:30px;opacity:0;transition:opacity .6s}
-.cloud circle{fill:#ccc}
+      /* rain clouds (triggered when soil water < 20) */
+      .cloud {
+        position: absolute;
+        top: 18px;
+        left: 30px;
+        opacity: 0;
+        transition: opacity 0.6s;
+      }
+      .cloud circle {
+        fill: #ccc;
+      }
 
-/* plant body */
-#vascularSVG{position:absolute;bottom:48%;left:50%;transform:translateX(-50%);overflow:visible}
+      /* plant body */
+      #vascularSVG {
+        position: absolute;
+        bottom: 48%;
+        left: 50%;
+        transform: translateX(-50%);
+        overflow: visible;
+      }
 
-/* labels */
-.scene-label{position:absolute;background:rgba(255,255,255,.93);border-radius:16px;
-  padding:3px 10px;font-size:11px;font-weight:700;pointer-events:none;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.label-xylem{border-left:3px solid var(--xylem);color:var(--xylem)}
-.label-phloem{border-left:3px solid var(--phloem);color:var(--phloem)}
-.label-stoma{border-left:3px solid #888;color:#444}
-.label-root{border-left:3px solid var(--soil);color:var(--brown)}
+      /* labels */
+      .scene-label {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.93);
+        border-radius: 16px;
+        padding: 3px 10px;
+        font-size: 11px;
+        font-weight: 700;
+        pointer-events: none;
+        white-space: nowrap;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      }
+      .label-xylem {
+        border-left: 3px solid var(--xylem);
+        color: var(--xylem);
+      }
+      .label-phloem {
+        border-left: 3px solid var(--phloem);
+        color: var(--phloem);
+      }
+      .label-stoma {
+        border-left: 3px solid #888;
+        color: #444;
+      }
+      .label-root {
+        border-left: 3px solid var(--soil);
+        color: var(--brown);
+      }
 
-/* animated particles */
-.particle{position:absolute;border-radius:50%;pointer-events:none;animation:moveUp linear infinite}
-.xylem-particle{background:var(--xylem);width:5px;height:7px;border-radius:40%;opacity:.85}
-.phloem-particle{background:var(--phloem);width:5px;height:7px;border-radius:40%;opacity:.85;
-  animation-name:moveDown}
-@keyframes moveUp{0%{transform:translateY(0);opacity:0}15%{opacity:.9}85%{opacity:.8}100%{transform:translateY(-130px);opacity:0}}
-@keyframes moveDown{0%{transform:translateY(0);opacity:0}15%{opacity:.9}85%{opacity:.8}100%{transform:translateY(90px);opacity:0}}
+      /* animated particles */
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: moveUp linear infinite;
+      }
+      .xylem-particle {
+        background: var(--xylem);
+        width: 5px;
+        height: 7px;
+        border-radius: 40%;
+        opacity: 0.85;
+      }
+      .phloem-particle {
+        background: var(--phloem);
+        width: 5px;
+        height: 7px;
+        border-radius: 40%;
+        opacity: 0.85;
+        animation-name: moveDown;
+      }
+      @keyframes moveUp {
+        0% {
+          transform: translateY(0);
+          opacity: 0;
+        }
+        15% {
+          opacity: 0.9;
+        }
+        85% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(-130px);
+          opacity: 0;
+        }
+      }
+      @keyframes moveDown {
+        0% {
+          transform: translateY(0);
+          opacity: 0;
+        }
+        15% {
+          opacity: 0.9;
+        }
+        85% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(90px);
+          opacity: 0;
+        }
+      }
 
-/* controls */
-.controls-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.slider-group{flex:1;min-width:140px;background:var(--cream);border-radius:10px;padding:12px 14px}
-.slider-group label{font-size:12px;font-weight:600;color:#444;display:flex;justify-content:space-between;margin-bottom:6px}
-.slider-group input[type=range]{width:100%}
-#tempSlider{accent-color:#e64a19}
-#lightSlider{accent-color:#FFA000}
-#waterSlider{accent-color:var(--xylem)}
+      /* controls */
+      .controls-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+      .slider-group {
+        flex: 1;
+        min-width: 140px;
+        background: var(--cream);
+        border-radius: 10px;
+        padding: 12px 14px;
+      }
+      .slider-group label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #444;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+      }
+      .slider-group input[type="range"] {
+        width: 100%;
+      }
+      #tempSlider {
+        accent-color: #e64a19;
+      }
+      #lightSlider {
+        accent-color: #ffa000;
+      }
+      #waterSlider {
+        accent-color: var(--xylem);
+      }
 
-/* readout bar */
-.readout-box{background:var(--green-deep);border-radius:10px;padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap}
-.readout{text-align:center;flex:1;min-width:80px}
-.readout .val{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--green-light)}
-.readout .lbl{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px}
+      /* readout bar */
+      .readout-box {
+        background: var(--green-deep);
+        border-radius: 10px;
+        padding: 12px 16px;
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .readout {
+        text-align: center;
+        flex: 1;
+        min-width: 80px;
+      }
+      .readout .val {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        color: var(--green-light);
+      }
+      .readout .lbl {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 2px;
+      }
 
-/* pathway explainer */
-.pathway-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.pathway-card{border-radius:12px;padding:16px;border-top:4px solid}
-.pathway-card.xylem-card{background:var(--xylem-light);border-color:var(--xylem)}
-.pathway-card.phloem-card{background:var(--phloem-light);border-color:var(--phloem)}
-.pathway-card h3{font-size:13px;font-weight:700;margin-bottom:6px}
-.pathway-card.xylem-card h3{color:#0d47a1}
-.pathway-card.phloem-card h3{color:#880e4f}
-.pathway-card p{font-size:12px;color:#444;line-height:1.55}
-.pathway-card .route-arrow{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;font-weight:600}
-.arrow-dot{width:10px;height:10px;border-radius:50%}
+      /* pathway explainer */
+      .pathway-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .pathway-card {
+        border-radius: 12px;
+        padding: 16px;
+        border-top: 4px solid;
+      }
+      .pathway-card.xylem-card {
+        background: var(--xylem-light);
+        border-color: var(--xylem);
+      }
+      .pathway-card.phloem-card {
+        background: var(--phloem-light);
+        border-color: var(--phloem);
+      }
+      .pathway-card h3 {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .pathway-card.xylem-card h3 {
+        color: #0d47a1;
+      }
+      .pathway-card.phloem-card h3 {
+        color: #880e4f;
+      }
+      .pathway-card p {
+        font-size: 12px;
+        color: #444;
+        line-height: 1.55;
+      }
+      .pathway-card .route-arrow {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 8px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .arrow-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
 
-/* ─── TROPISM ─── */
-.tropism-canvas-wrap{background:linear-gradient(180deg,#cceeff 0%,#cceeff 50%,#8B6914 50%,#5c3d1e 100%);
-  border-radius:12px;height:300px;position:relative;overflow:hidden;margin-bottom:16px}
-#tropCanvas{position:absolute;top:0;left:0;width:100%;height:100%}
+      /* ─── TROPISM ─── */
+      .tropism-canvas-wrap {
+        background: linear-gradient(
+          180deg,
+          #cceeff 0%,
+          #cceeff 50%,
+          #8b6914 50%,
+          #5c3d1e 100%
+        );
+        border-radius: 12px;
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+      #tropCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
 
-.hormone-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
-.hormone-card{border-radius:10px;padding:13px;border-left:3px solid}
-.hormone-card h4{font-size:12px;font-weight:700;margin-bottom:4px}
-.hormone-card p{font-size:11px;color:#555;line-height:1.5}
-.h-auxin{background:#fff8e1;border-color:#fbc02d}.h-auxin h4{color:#f57f17}
-.h-gib{background:#e8f5e9;border-color:#388e3c}.h-gib h4{color:#1b5e20}
-.h-eth{background:#f3e5f5;border-color:#7b1fa2}.h-eth h4{color:#4a148c}
-.h-aba{background:#fbe9e7;border-color:#bf360c}.h-aba h4{color:#bf360c}
+      .hormone-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .hormone-card {
+        border-radius: 10px;
+        padding: 13px;
+        border-left: 3px solid;
+      }
+      .hormone-card h4 {
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .hormone-card p {
+        font-size: 11px;
+        color: #555;
+        line-height: 1.5;
+      }
+      .h-auxin {
+        background: #fff8e1;
+        border-color: #fbc02d;
+      }
+      .h-auxin h4 {
+        color: #f57f17;
+      }
+      .h-gib {
+        background: #e8f5e9;
+        border-color: #388e3c;
+      }
+      .h-gib h4 {
+        color: #1b5e20;
+      }
+      .h-eth {
+        background: #f3e5f5;
+        border-color: #7b1fa2;
+      }
+      .h-eth h4 {
+        color: #4a148c;
+      }
+      .h-aba {
+        background: #fbe9e7;
+        border-color: #bf360c;
+      }
+      .h-aba h4 {
+        color: #bf360c;
+      }
 
-light-slider-wrap{display:flex;align-items:center;gap:14px;background:var(--cream);
-  border-radius:10px;padding:12px 16px;margin-bottom:14px}
-.light-slider-wrap{display:flex;align-items:center;gap:14px;background:var(--cream);
-  border-radius:10px;padding:12px 16px;margin-bottom:14px}
-.light-slider-wrap label{font-size:13px;font-weight:600;color:#555;white-space:nowrap}
-.light-slider-wrap input{flex:1;accent-color:var(--amber)}
+      light-slider-wrap {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: var(--cream);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 14px;
+      }
+      .light-slider-wrap {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: var(--cream);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 14px;
+      }
+      .light-slider-wrap label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #555;
+        white-space: nowrap;
+      }
+      .light-slider-wrap input {
+        flex: 1;
+        accent-color: var(--amber);
+      }
 
-/* ─── REPRODUCTION ─── */
-.repro-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
-.repro-card{border-radius:12px;padding:18px;cursor:pointer;border:3px solid transparent;
-  transition:all .2s;background:var(--cream)}
-.repro-card:hover,.repro-card.selected{border-color:var(--green-mid);background:#fff}
-.repro-card h3{font-size:14px;font-weight:700;margin-bottom:6px}
-.repro-card p{font-size:12px;color:#555;line-height:1.5}
-.repro-card .badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;
-  border-radius:10px;margin-bottom:8px;letter-spacing:.5px}
-.badge.sexual{background:#fce4ec;color:#c2185b}
-.badge.asexual{background:#e8f5e9;color:#2e7d32}
+      /* ─── REPRODUCTION ─── */
+      .repro-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+      .repro-card {
+        border-radius: 12px;
+        padding: 18px;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+        background: var(--cream);
+      }
+      .repro-card:hover,
+      .repro-card.selected {
+        border-color: var(--green-mid);
+        background: #fff;
+      }
+      .repro-card h3 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .repro-card p {
+        font-size: 12px;
+        color: #555;
+        line-height: 1.5;
+      }
+      .repro-card .badge {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+      }
+      .badge.sexual {
+        background: #fce4ec;
+        color: #c2185b;
+      }
+      .badge.asexual {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
 
-.repro-detail{background:var(--green-deep);border-radius:12px;padding:20px;color:#fff;min-height:90px;display:flex;align-items:center}
-.repro-detail p{font-size:13px;line-height:1.6;color:rgba(255,255,255,.85)}
-.repro-detail strong{color:var(--green-light)}
+      .repro-detail {
+        background: var(--green-deep);
+        border-radius: 12px;
+        padding: 20px;
+        color: #fff;
+        min-height: 90px;
+        display: flex;
+        align-items: center;
+      }
+      .repro-detail p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .repro-detail strong {
+        color: var(--green-light);
+      }
 
-/* ═══════════ VOCABULARY ═══════════ */
-.vocab-section{margin-top:0}
-.vocab-tier-block{background:#fff;border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.vocab-tier-block h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
-.vocab-tier-block h3.everyday{color:#1b5e20}
-.vocab-tier-block h3.academic{color:#e65100}
-.vocab-tier-block h3.content{color:#0d47a1}
-.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.vocab-item{border-radius:10px;padding:12px;cursor:pointer;border:2px solid transparent;transition:all .2s}
-.vocab-item:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.1)}
-.vocab-item.ev{background:#e8f5e9;border-color:#a5d6a7}
-.vocab-item.ac{background:#fff3e0;border-color:#ffcc80}
-.vocab-item.co{background:#e3f2fd;border-color:#90caf9}
-.vocab-item strong{display:block;font-size:13px;margin-bottom:4px}
-.vocab-item span{font-size:12px;color:#555;line-height:1.4}
-.vocab-item.ev strong{color:#1b5e20}
-.vocab-item.ac strong{color:#e65100}
-.vocab-item.co strong{color:#0d47a1}
+      /* ═══════════ VOCABULARY ═══════════ */
+      .vocab-section {
+        margin-top: 0;
+      }
+      .vocab-tier-block {
+        background: #fff;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 14px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+      .vocab-tier-block h3 {
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+      }
+      .vocab-tier-block h3.everyday {
+        color: #1b5e20;
+      }
+      .vocab-tier-block h3.academic {
+        color: #e65100;
+      }
+      .vocab-tier-block h3.content {
+        color: #0d47a1;
+      }
+      .vocab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+      }
+      .vocab-item {
+        border-radius: 10px;
+        padding: 12px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.2s;
+      }
+      .vocab-item:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+      .vocab-item.ev {
+        background: #e8f5e9;
+        border-color: #a5d6a7;
+      }
+      .vocab-item.ac {
+        background: #fff3e0;
+        border-color: #ffcc80;
+      }
+      .vocab-item.co {
+        background: #e3f2fd;
+        border-color: #90caf9;
+      }
+      .vocab-item strong {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+      .vocab-item span {
+        font-size: 12px;
+        color: #555;
+        line-height: 1.4;
+      }
+      .vocab-item.ev strong {
+        color: #1b5e20;
+      }
+      .vocab-item.ac strong {
+        color: #e65100;
+      }
+      .vocab-item.co strong {
+        color: #0d47a1;
+      }
 
-/* ═══════════ CFU ═══════════ */
-.cfu-question{background:#fff;border-radius:14px;padding:24px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.q-number{font-size:11px;font-weight:700;color:var(--green-mid);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
-.q-text{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--text);margin-bottom:14px;line-height:1.5}
-.options{display:grid;gap:10px}
-.option{padding:12px 16px;border-radius:10px;border:2px solid #e0e0e0;cursor:pointer;font-size:13px;
-  transition:all .2s;background:#fff;text-align:left;font-family:'DM Sans',sans-serif;line-height:1.4}
-.option:hover:not(:disabled){border-color:var(--green-mid);background:#f0f7f0}
-.option.correct{border-color:var(--green-bright);background:#e8f5e9;color:var(--green-deep)}
-.option.wrong{border-color:#ef5350;background:#ffebee;color:#c62828}
-.option:disabled{cursor:default}
-.feedback{margin-top:12px;padding:12px 16px;border-radius:10px;font-size:13px;display:none;line-height:1.5}
-.feedback.show{display:block}
-.feedback.correct{background:#e8f5e9;color:#1b5e20;border-left:3px solid var(--green-bright)}
-.feedback.wrong{background:#ffebee;color:#b71c1c;border-left:3px solid #ef5350}
+      /* ═══════════ CFU ═══════════ */
+      .cfu-question {
+        background: #fff;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      }
+      .q-number {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--green-mid);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+      .q-text {
+        font-family: "Fraunces", serif;
+        font-size: 1.05rem;
+        color: var(--text);
+        margin-bottom: 14px;
+        line-height: 1.5;
+      }
+      .options {
+        display: grid;
+        gap: 10px;
+      }
+      .option {
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: 2px solid #e0e0e0;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.2s;
+        background: #fff;
+        text-align: left;
+        font-family: "DM Sans", sans-serif;
+        line-height: 1.4;
+      }
+      .option:hover:not(:disabled) {
+        border-color: var(--green-mid);
+        background: #f0f7f0;
+      }
+      .option.correct {
+        border-color: var(--green-bright);
+        background: #e8f5e9;
+        color: var(--green-deep);
+      }
+      .option.wrong {
+        border-color: #ef5350;
+        background: #ffebee;
+        color: #c62828;
+      }
+      .option:disabled {
+        cursor: default;
+      }
+      .feedback {
+        margin-top: 12px;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        display: none;
+        line-height: 1.5;
+      }
+      .feedback.show {
+        display: block;
+      }
+      .feedback.correct {
+        background: #e8f5e9;
+        color: #1b5e20;
+        border-left: 3px solid var(--green-bright);
+      }
+      .feedback.wrong {
+        background: #ffebee;
+        color: #b71c1c;
+        border-left: 3px solid #ef5350;
+      }
 
-.score-display{text-align:center;padding:20px;background:var(--green-deep);border-radius:14px;color:#fff}
-.score-display .score-num{font-family:'Fraunces',serif;font-size:3rem;color:var(--green-light)}
-.score-display p{color:rgba(255,255,255,.7);font-size:14px}
+      .score-display {
+        text-align: center;
+        padding: 20px;
+        background: var(--green-deep);
+        border-radius: 14px;
+        color: #fff;
+      }
+      .score-display .score-num {
+        font-family: "Fraunces", serif;
+        font-size: 3rem;
+        color: var(--green-light);
+      }
+      .score-display p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+      }
 
-/* ─ MISC ─ */
-.section-label{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--green-deep);margin-bottom:6px;margin-top:20px}
-.section-sub{font-size:13px;color:#666;margin-bottom:16px;line-height:1.5}
-.info-callout{background:var(--amber-light);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;
-  padding:14px 18px;margin:14px 0;font-size:13px;color:var(--brown);line-height:1.5}
+      /* ─ MISC ─ */
+      .section-label {
+        font-family: "Fraunces", serif;
+        font-size: 1.15rem;
+        color: var(--green-deep);
+        margin-bottom: 6px;
+        margin-top: 20px;
+      }
+      .section-sub {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 16px;
+        line-height: 1.5;
+      }
+      .info-callout {
+        background: var(--amber-light);
+        border-left: 4px solid var(--amber);
+        border-radius: 0 10px 10px 0;
+        padding: 14px 18px;
+        margin: 14px 0;
+        font-size: 13px;
+        color: var(--brown);
+        line-height: 1.5;
+      }
 
-@media(max-width:620px){
-  .systems-grid,.pathway-cards,.repro-grid,.hormone-strip{grid-template-columns:1fr}
-  .tabs{overflow-x:auto;padding:0 16px}
-  .section{padding:20px 16px}
-  .sim-mode-btns{gap:6px}
-  .mode-btn{padding:5px 10px;font-size:11px}
-}
-</style>
-</head>
-<body>
-<!-- Content imported from provided standalone lesson HTML -->
-<div class="header">
-  <div class="teks-tag">B.12B · Readiness Standard · Unit 7</div>
-  <h1>How Do Plants <em>Keep Themselves Alive?</em></h1>
-  <p>Transport · Reproduction · Response — and how their structures make it all possible</p>
-</div>
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('phenomenon')">🌿 Phenomenon</div>
-  <div class="tab" onclick="switchTab('sim')">🔬 Simulation</div>
-  <div class="tab" onclick="switchTab('vocab')">📖 Vocabulary</div>
-  <div class="tab" onclick="switchTab('cfu')">✅ Check Your Understanding</div>
-</div>
-<div id="phenomenon" class="section active">
-  <div class="question-box">
-    <strong>Plant Systems — B.12B</strong>
-    <p>This file was imported as a self-contained interactive lesson for BioSpark Unit 7.</p>
-  </div>
-</div>
-<div id="sim" class="section"></div>
-<div id="vocab" class="section"></div>
-<div id="cfu" class="section"></div>
-<script>
-function switchTab(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  const order=['phenomenon','sim','vocab','cfu'];
-  document.querySelectorAll('.tab')[order.indexOf(id)].classList.add('active');
-}
-</script>
-</body>
+      @media (max-width: 620px) {
+        .systems-grid,
+        .pathway-cards,
+        .repro-grid,
+        .hormone-strip {
+          grid-template-columns: 1fr;
+        }
+        .tabs {
+          overflow-x: auto;
+          padding: 0 16px;
+        }
+        .section {
+          padding: 20px 16px;
+        }
+        .sim-mode-btns {
+          gap: 6px;
+        }
+        .mode-btn {
+          padding: 5px 10px;
+          font-size: 11px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ════ HEADER ════ -->
+    <div class="header">
+      <div class="teks-tag">B.12B · Readiness Standard · Unit 7</div>
+      <h1>How Do Plants <em>Keep Themselves Alive?</em></h1>
+      <p>
+        Transport · Reproduction · Response — and how their structures make it
+        all possible
+      </p>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('phenomenon')">
+        🌿 Phenomenon
+      </div>
+      <div class="tab" onclick="switchTab('sim')">🔬 Simulation</div>
+      <div class="tab" onclick="switchTab('vocab')">📖 Vocabulary</div>
+      <div class="tab" onclick="switchTab('cfu')">
+        ✅ Check Your Understanding
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ PHENOMENON ════════════════════════════ -->
+    <div id="phenomenon" class="section active">
+      <div class="phenomenon-card">
+        <div class="phenomenon-image">
+          <svg viewBox="0 0 900 200" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="skyG" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#87ceeb" />
+                <stop offset="100%" stop-color="#c8e6ff" />
+              </linearGradient>
+              <linearGradient id="gndG" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#5a8a3a" />
+                <stop offset="100%" stop-color="#3a5a25" />
+              </linearGradient>
+            </defs>
+            <rect width="900" height="200" fill="url(#skyG)" />
+            <rect y="140" width="900" height="60" fill="url(#gndG)" />
+            <circle cx="820" cy="35" r="28" fill="#FFD700" opacity=".9" />
+            <!-- bluebonnets -->
+            <g opacity=".92">
+              <g transform="translate(100,100)">
+                <rect
+                  x="-2"
+                  y="0"
+                  width="4"
+                  height="50"
+                  fill="#4a7c2f"
+                  rx="2"
+                />
+                <ellipse cx="0" cy="-6" rx="9" ry="13" fill="#4169e1" />
+              </g>
+              <g transform="translate(200,105)">
+                <rect
+                  x="-2"
+                  y="0"
+                  width="4"
+                  height="45"
+                  fill="#4a7c2f"
+                  rx="2"
+                />
+                <ellipse cx="0" cy="-6" rx="9" ry="13" fill="#5b78d6" />
+              </g>
+              <g transform="translate(320,98)">
+                <rect
+                  x="-2"
+                  y="0"
+                  width="4"
+                  height="52"
+                  fill="#4a7c2f"
+                  rx="2"
+                />
+                <ellipse cx="0" cy="-6" rx="9" ry="13" fill="#3a5fcc" />
+              </g>
+              <g transform="translate(450,102)">
+                <rect
+                  x="-2"
+                  y="0"
+                  width="4"
+                  height="48"
+                  fill="#4a7c2f"
+                  rx="2"
+                />
+                <ellipse cx="0" cy="-6" rx="9" ry="13" fill="#4169e1" />
+              </g>
+              <g transform="translate(580,100)">
+                <rect
+                  x="-2"
+                  y="0"
+                  width="4"
+                  height="50"
+                  fill="#4a7c2f"
+                  rx="2"
+                />
+                <ellipse cx="0" cy="-6" rx="9" ry="13" fill="#6070d0" />
+              </g>
+              <g transform="translate(700,103)">
+                <rect
+                  x="-2"
+                  y="0"
+                  width="4"
+                  height="47"
+                  fill="#4a7c2f"
+                  rx="2"
+                />
+                <ellipse cx="0" cy="-6" rx="9" ry="13" fill="#4169e1" />
+              </g>
+            </g>
+            <path
+              d="M0 170 Q450 155 900 170"
+              stroke="#c8b89a"
+              stroke-width="16"
+              fill="none"
+              opacity=".5"
+            />
+            <text
+              x="450"
+              y="192"
+              text-anchor="middle"
+              fill="rgba(255,255,255,.45)"
+              font-size="12"
+              font-family="DM Sans"
+            >
+              Highway 290, Brenham, TX — April
+            </text>
+          </svg>
+        </div>
+        <div class="phenomenon-text">
+          <h2>
+            Every spring, Texas roadsides explode with bluebonnets — but only
+            for a few weeks.
+          </h2>
+          <p>
+            Millions of bluebonnets bloom along Texas highways every March and
+            April, then seem to vanish. The seeds can survive in soil for
+            <em>decades</em>, waiting. When conditions are just right — the
+            right amount of winter cold, spring rain, and warm temperatures —
+            they all seem to bloom at the same time. No brain. No nervous
+            system. Just structure doing its job.
+          </p>
+        </div>
+      </div>
+
+      <div class="question-box">
+        <strong>🤔 Driving Question</strong>
+        <p>
+          A bluebonnet seed waits 50 years underground. When conditions are
+          right, it germinates, moves water 12 inches up a stem using xylem,
+          sends sugar to growing flowers using phloem, bends toward sunlight,
+          attracts a bee to pollinate it, and produces seeds that spread across
+          the highway.
+          <strong
+            >How does a plant without a brain pull all of this off — and how do
+            its structures make each step possible?</strong
+          >
+        </p>
+      </div>
+
+      <p class="section-label">Three Systems That Work Together</p>
+      <p class="section-sub">
+        B.12B asks you to
+        <strong>explain how these three systems interact</strong> — not just
+        define them separately. The bluebonnet uses all three to survive.
+        Changing one affects the others.
+      </p>
+
+      <div class="systems-grid">
+        <div class="system-card transport">
+          <span class="emoji">💧</span>
+          <h3>Transport</h3>
+          <p>
+            <strong>Xylem</strong> moves water and minerals <em>up</em> from the
+            roots — pulled by transpiration from the leaves.
+            <strong>Phloem</strong> moves sugar <em>in all directions</em> from
+            where it's made to where it's needed.
+          </p>
+          <div class="vocab-row">
+            <label>Key vocab</label>
+            <span class="vocab-badge vocab-content">xylem</span>
+            <span class="vocab-badge vocab-content">phloem</span>
+            <span class="vocab-badge vocab-content">transpiration</span>
+            <span class="vocab-badge vocab-content">translocation</span>
+          </div>
+        </div>
+        <div class="system-card reproduction">
+          <span class="emoji">🌸</span>
+          <h3>Reproduction</h3>
+          <p>
+            <strong>Sexual:</strong> Flowers attract pollinators → pollen meets
+            egg → fertilization → seed. <strong>Asexual:</strong> Runners,
+            rhizomes, or fragmentation produce clones without fertilization.
+          </p>
+          <div class="vocab-row">
+            <label>Key vocab</label>
+            <span class="vocab-badge vocab-content">pollination</span>
+            <span class="vocab-badge vocab-content">fertilization</span>
+            <span class="vocab-badge vocab-content">seed dispersal</span>
+          </div>
+        </div>
+        <div class="system-card response">
+          <span class="emoji">☀️</span>
+          <h3>Response (Tropisms)</h3>
+          <p>
+            Plants grow toward or away from stimuli using
+            <strong>hormones</strong>. Auxin makes stems bend toward light
+            (phototropism). Roots always grow downward (gravitropism). ABA
+            causes stomata to close during drought.
+          </p>
+          <div class="vocab-row">
+            <label>Key vocab</label>
+            <span class="vocab-badge vocab-content">tropism</span>
+            <span class="vocab-badge vocab-content">auxin</span>
+            <span class="vocab-badge vocab-content">gibberellins</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-callout" style="margin-top: 20px">
+        💡 <strong>The big idea:</strong> In B.12B,
+        <em>structure enables function</em>. Xylem tubes are hollow and dead —
+        perfect for water flow. Phloem cells stay alive — they have to actively
+        load and unload sugar. The shape of a flower attracts specific
+        pollinators. Every structure you study has a reason it's built that way.
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ SIMULATION ════════════════════════════ -->
+    <div id="sim" class="section">
+      <div class="sim-container">
+        <div class="sim-header">
+          <h2>Plant Systems Explorer</h2>
+          <div class="sim-mode-btns">
+            <button
+              class="mode-btn active"
+              onclick="switchMode('transport', this)"
+            >
+              💧 Transport
+            </button>
+            <button class="mode-btn" onclick="switchMode('tropism', this)">
+              ☀️ Tropism
+            </button>
+            <button class="mode-btn" onclick="switchMode('repro', this)">
+              🌸 Reproduction
+            </button>
+          </div>
+        </div>
+
+        <!-- ─── TRANSPORT ─── -->
+        <div id="transport" class="sim-stage active">
+          <p class="vb-subtitle">
+            Watch
+            <span style="color: var(--xylem); font-weight: 700"
+              >xylem (blue)</span
+            >
+            carry water <strong>up</strong> from roots, and
+            <span style="color: var(--phloem); font-weight: 700"
+              >phloem (pink)</span
+            >
+            carry sugar <strong>down and throughout</strong> the plant. Adjust
+            the sliders and see what changes!
+          </p>
+
+          <div class="vascular-scene" id="vascularScene">
+            <div class="v-sun" id="vSun"></div>
+
+            <!-- PLANT SVG -->
+            <svg
+              id="vascularSVG"
+              width="140"
+              height="210"
+              viewBox="0 0 140 210"
+            >
+              <!-- Roots -->
+              <line
+                x1="70"
+                y1="165"
+                x2="35"
+                y2="205"
+                stroke="#6b4226"
+                stroke-width="3.5"
+                stroke-linecap="round"
+              />
+              <line
+                x1="70"
+                y1="165"
+                x2="55"
+                y2="208"
+                stroke="#6b4226"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <line
+                x1="70"
+                y1="165"
+                x2="70"
+                y2="210"
+                stroke="#6b4226"
+                stroke-width="3.5"
+                stroke-linecap="round"
+              />
+              <line
+                x1="70"
+                y1="165"
+                x2="85"
+                y2="208"
+                stroke="#6b4226"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <line
+                x1="70"
+                y1="165"
+                x2="105"
+                y2="205"
+                stroke="#6b4226"
+                stroke-width="3.5"
+                stroke-linecap="round"
+              />
+              <!-- Stem outer (green) -->
+              <rect
+                x="63"
+                y="42"
+                width="14"
+                height="126"
+                rx="7"
+                fill="#4a7c2f"
+              />
+              <!-- PHLOEM tube (pink, outer) -->
+              <rect
+                x="64"
+                y="42"
+                width="5"
+                height="126"
+                rx="2.5"
+                fill="var(--phloem)"
+                opacity=".55"
+                id="phloemBar"
+              />
+              <!-- XYLEM tube (blue, inner) -->
+              <rect
+                x="71"
+                y="42"
+                width="5"
+                height="126"
+                rx="2.5"
+                fill="var(--xylem)"
+                opacity=".55"
+                id="xylemBar"
+              />
+              <!-- Leaves -->
+              <ellipse
+                cx="43"
+                cy="108"
+                rx="26"
+                ry="12"
+                fill="#4caf50"
+                transform="rotate(-35 43 108)"
+              />
+              <ellipse
+                cx="97"
+                cy="93"
+                rx="26"
+                ry="12"
+                fill="#43a047"
+                transform="rotate(30 97 93)"
+              />
+              <ellipse
+                cx="38"
+                cy="72"
+                rx="20"
+                ry="10"
+                fill="#388e3c"
+                transform="rotate(-25 38 72)"
+              />
+              <ellipse
+                cx="102"
+                cy="65"
+                rx="20"
+                ry="10"
+                fill="#4caf50"
+                transform="rotate(20 102 65)"
+              />
+              <!-- Stomata indicator on leaves -->
+              <ellipse
+                id="stoma1"
+                cx="43"
+                cy="110"
+                rx="4"
+                ry="2"
+                fill="#1b5e20"
+                opacity=".6"
+              />
+              <ellipse
+                id="stoma2"
+                cx="97"
+                cy="97"
+                rx="4"
+                ry="2"
+                fill="#1b5e20"
+                opacity=".6"
+              />
+              <!-- Flower -->
+              <circle cx="70" cy="35" r="7" fill="#FFD700" />
+              <circle cx="70" cy="21" r="6" fill="#e91e63" />
+              <circle cx="82" cy="28" r="6" fill="#e91e63" />
+              <circle cx="82" cy="42" r="6" fill="#e91e63" />
+              <circle cx="70" cy="50" r="6" fill="#e91e63" />
+              <circle cx="58" cy="42" r="6" fill="#e91e63" />
+              <circle cx="58" cy="28" r="6" fill="#e91e63" />
+            </svg>
+
+            <!-- LABELS -->
+            <div
+              class="scene-label label-xylem"
+              style="left: 12px; top: 34%"
+              id="lblXylem"
+            >
+              💧 Xylem — water up ↑
+            </div>
+            <div
+              class="scene-label label-phloem"
+              style="right: 12px; top: 46%"
+              id="lblPhloem"
+            >
+              🍬 Phloem — sugar ↕
+            </div>
+            <div
+              class="scene-label label-stoma"
+              style="right: 12px; top: 20%"
+              id="lblStomata"
+            >
+              Stomata: Open
+            </div>
+            <div
+              class="scene-label label-root"
+              style="left: 12px; bottom: 12%"
+              id="lblRoot"
+            >
+              Roots absorbing water
+            </div>
+            <div
+              class="scene-label"
+              style="left: 12px; top: 12%; font-size: 10px; color: #555"
+              id="lblRate"
+            >
+              Transpiration: Medium
+            </div>
+          </div>
+
+          <div class="controls-row" style="margin-top: 14px">
+            <div class="slider-group">
+              <label>🌡️ Temperature <span id="tempVal">25°C</span></label>
+              <input
+                type="range"
+                id="tempSlider"
+                min="5"
+                max="45"
+                value="25"
+                oninput="updateTransport()"
+              />
+            </div>
+            <div class="slider-group">
+              <label>☀️ Light Intensity <span id="lightVal">50%</span></label>
+              <input
+                type="range"
+                id="lightSlider"
+                min="0"
+                max="100"
+                value="50"
+                oninput="updateTransport()"
+              />
+            </div>
+            <div class="slider-group">
+              <label>💧 Soil Water <span id="waterVal">60%</span></label>
+              <input
+                type="range"
+                id="waterSlider"
+                min="0"
+                max="100"
+                value="60"
+                oninput="updateTransport()"
+              />
+            </div>
+          </div>
+          <div class="readout-box">
+            <div class="readout">
+              <div class="val" id="rXylem">↑ Fast</div>
+              <div class="lbl">Xylem Flow</div>
+            </div>
+            <div class="readout">
+              <div class="val" id="rPhloem">↕ Active</div>
+              <div class="lbl">Phloem Flow</div>
+            </div>
+            <div class="readout">
+              <div class="val" id="rStomata">Open</div>
+              <div class="lbl">Stomata</div>
+            </div>
+            <div class="readout">
+              <div class="val" id="rTransp">Medium</div>
+              <div class="lbl">Transpiration</div>
+            </div>
+            <div class="readout">
+              <div class="val" id="rHealth">🌿 OK</div>
+              <div class="lbl">Plant Status</div>
+            </div>
+          </div>
+
+          <div class="pathway-cards">
+            <div class="pathway-card xylem-card">
+              <h3>💧 Xylem — Water Highway</h3>
+              <p>
+                Xylem cells are <strong>hollow and dead</strong> — like a pipe.
+                Water enters through root hairs, travels up through xylem tubes,
+                and exits through tiny pores in leaves called
+                <strong>stomata</strong>. This one-way upward pull is called
+                <strong>transpiration</strong>.
+              </p>
+              <div class="route-arrow">
+                <div class="arrow-dot" style="background: #8b6914"></div>
+                <span>Soil water</span>
+                <span>→ Roots →</span>
+                <div class="arrow-dot" style="background: var(--xylem)"></div>
+                <span>Xylem</span>
+                <span>→ Leaves → Air</span>
+              </div>
+            </div>
+            <div class="pathway-card phloem-card">
+              <h3>🍬 Phloem — Sugar Highway</h3>
+              <p>
+                Phloem cells are <strong>alive</strong> and actively move sugar.
+                Leaves make sugar through photosynthesis, then <em>load</em> it
+                into phloem. The sugar flows to roots, fruits, or growing parts
+                that can't photosynthesize. This movement is called
+                <strong>translocation</strong>.
+              </p>
+              <div class="route-arrow">
+                <div class="arrow-dot" style="background: #4caf50"></div>
+                <span>Leaves (make sugar)</span>
+                <span>→</span>
+                <div class="arrow-dot" style="background: var(--phloem)"></div>
+                <span>Phloem → Roots/Fruit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── TROPISM ─── -->
+        <div id="tropism" class="sim-stage">
+          <p class="vb-subtitle">
+            Drag the light source left or right to see how
+            <strong>auxin</strong> causes the stem to bend toward the light
+            (phototropism). Roots always grow downward — that's positive
+            gravitropism.
+          </p>
+
+          <div class="tropism-canvas-wrap">
+            <canvas id="tropCanvas"></canvas>
+          </div>
+          <div class="light-slider-wrap">
+            <label>☀️ Light Position</label>
+            <input
+              type="range"
+              id="lightPos"
+              min="0"
+              max="100"
+              value="50"
+              oninput="drawTropism()"
+            />
+            <span
+              style="
+                font-size: 13px;
+                color: #888;
+                min-width: 80px;
+                text-align: right;
+              "
+              id="lightPosLabel"
+              >Center</span
+            >
+          </div>
+
+          <div class="info-callout">
+            🔬 <strong>How auxin works:</strong> Auxin is a hormone that makes
+            cells grow longer. On the <em>shaded side</em> of the stem, auxin
+            builds up — those cells get longer, pushing the stem toward the
+            light. The structure of the stem (with cells that can elongate) is
+            what makes this response possible.
+          </div>
+
+          <div class="hormone-strip">
+            <div class="hormone-card h-auxin">
+              <h4>Auxin</h4>
+              <p>
+                Causes cell elongation. Builds up on shaded side → stem bends
+                <strong>toward light</strong>. Produced at stem tip.
+              </p>
+            </div>
+            <div class="hormone-card h-gib">
+              <h4>Gibberellins</h4>
+              <p>
+                Stimulates stem elongation and seed germination. Helps seeds
+                "wake up" after dormancy — like Texas wildflower seeds after
+                rain.
+              </p>
+            </div>
+            <div class="hormone-card h-eth">
+              <h4>Ethylene</h4>
+              <p>
+                A gas hormone. Triggers fruit ripening, leaf drop, and response
+                to injury. Produced when plants are stressed or aging.
+              </p>
+            </div>
+            <div class="hormone-card h-aba">
+              <h4>ABA (Abscisic Acid)</h4>
+              <p>
+                The "stress hormone." Causes stomata to
+                <strong>close</strong> during drought to prevent water loss.
+                Keeps seeds dormant until conditions improve.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── REPRODUCTION ─── -->
+        <div id="repro" class="sim-stage">
+          <p class="vb-subtitle">
+            Tap a reproduction type below to learn how the plant's
+            <strong>structure makes that process possible</strong>. This is the
+            core idea in B.12B: <em>structure facilitates function</em>.
+          </p>
+          <div class="repro-grid">
+            <div class="repro-card" onclick="selectRepro(this, 'pollination')">
+              <span class="badge sexual">Sexual</span>
+              <h3>🐝 Pollination & Fertilization</h3>
+              <p>
+                Pollen from anther → stigma → travels to egg → fertilization →
+                seed forms
+              </p>
+            </div>
+            <div class="repro-card" onclick="selectRepro(this, 'seed')">
+              <span class="badge sexual">Sexual</span>
+              <h3>🌬️ Seed Dispersal</h3>
+              <p>
+                Wind, animals, water, or explosion carry seeds away from the
+                parent plant
+              </p>
+            </div>
+            <div class="repro-card" onclick="selectRepro(this, 'runner')">
+              <span class="badge asexual">Asexual</span>
+              <h3>🌱 Runners / Stolons</h3>
+              <p>
+                Horizontal stems grow along soil and sprout identical new plants
+                (no fertilization)
+              </p>
+            </div>
+            <div class="repro-card" onclick="selectRepro(this, 'frag')">
+              <span class="badge asexual">Asexual</span>
+              <h3>🌿 Vegetative Propagation</h3>
+              <p>
+                A piece of root, stem, or leaf grows into a new plant. Mosses,
+                succulents, willows.
+              </p>
+            </div>
+          </div>
+          <div class="repro-detail" id="reproDetail">
+            <p style="color: rgba(255, 255, 255, 0.4); font-style: italic">
+              ← Select a reproduction type above
+            </p>
+          </div>
+
+          <div class="info-callout" style="margin-top: 14px">
+            💡 <strong>Sexual vs. Asexual:</strong> Sexual reproduction
+            (pollination → fertilization) creates offspring with
+            <em>new genetic combinations</em> — more variation, better
+            adaptation over time. Asexual reproduction creates
+            <em>identical clones</em> — faster, but no genetic variety. Both
+            strategies help plants survive in different environments.
+          </div>
+        </div>
+      </div>
+      <!-- /sim-container -->
+    </div>
+    <!-- /sim section -->
+
+    <!-- ════════════════════════════ VOCABULARY ════════════════════════════ -->
+    <div id="vocab" class="section">
+      <p class="section-label">Unit 7 Vocabulary</p>
+      <p class="section-sub">
+        Tap any word to see its definition. Vocabulary is organized by tier —
+        knowing which tier a word belongs to helps you use it correctly in
+        writing and on the test.
+      </p>
+
+      <div class="vocab-tier-block">
+        <h3 class="everyday">🟢 Tier 1 — Everyday Words</h3>
+        <p style="font-size: 12px; color: #777; margin-bottom: 12px">
+          Words you already know from daily life that show up in science too.
+        </p>
+        <div class="vocab-grid">
+          <div class="vocab-item ev" onclick="toggleDef(this)">
+            <strong>Root</strong>
+            <span style="display: none"
+              >The underground part of a plant that absorbs water and minerals
+              from the soil and anchors the plant in place.</span
+            >
+          </div>
+          <div class="vocab-item ev" onclick="toggleDef(this)">
+            <strong>Stem</strong>
+            <span style="display: none"
+              >The main stalk of a plant that supports leaves, flowers, and
+              transports materials between roots and leaves.</span
+            >
+          </div>
+          <div class="vocab-item ev" onclick="toggleDef(this)">
+            <strong>Leaf</strong>
+            <span style="display: none"
+              >Flat, thin plant organ where most photosynthesis happens.
+              Contains chlorophyll and stomata.</span
+            >
+          </div>
+          <div class="vocab-item ev" onclick="toggleDef(this)">
+            <strong>Seed</strong>
+            <span style="display: none"
+              >A structure that contains a plant embryo and stored food,
+              protected by a seed coat. Produced after fertilization.</span
+            >
+          </div>
+          <div class="vocab-item ev" onclick="toggleDef(this)">
+            <strong>Flower</strong>
+            <span style="display: none"
+              >The reproductive structure of flowering plants (angiosperms).
+              Contains the parts needed for pollination and fertilization.</span
+            >
+          </div>
+          <div class="vocab-item ev" onclick="toggleDef(this)">
+            <strong>Growth</strong>
+            <span style="display: none"
+              >An increase in the size or number of cells in an organism. In
+              plants, growth occurs at meristems — zones of actively dividing
+              cells.</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="vocab-tier-block">
+        <h3 class="academic">🟠 Tier 2 — Academic Words</h3>
+        <p style="font-size: 12px; color: #777; margin-bottom: 12px">
+          Words used across many school subjects — important for reading and
+          writing in science.
+        </p>
+        <div class="vocab-grid">
+          <div class="vocab-item ac" onclick="toggleDef(this)">
+            <strong>Transport</strong>
+            <span style="display: none"
+              >The movement of materials from one place to another. In plants,
+              the transport system moves water and sugar through the entire
+              plant.</span
+            >
+          </div>
+          <div class="vocab-item ac" onclick="toggleDef(this)">
+            <strong>Reproduction</strong>
+            <span style="display: none"
+              >The process by which organisms make new offspring. Can be sexual
+              (involving fertilization) or asexual (no fertilization
+              needed).</span
+            >
+          </div>
+          <div class="vocab-item ac" onclick="toggleDef(this)">
+            <strong>Response</strong>
+            <span style="display: none"
+              >A reaction to a stimulus (something in the environment). Plants
+              respond to light, gravity, touch, and chemical signals.</span
+            >
+          </div>
+          <div class="vocab-item ac" onclick="toggleDef(this)">
+            <strong>System</strong>
+            <span style="display: none"
+              >A group of parts that work together to perform a function. The
+              transport, reproduction, and response systems in plants all
+              interact.</span
+            >
+          </div>
+          <div class="vocab-item ac" onclick="toggleDef(this)">
+            <strong>Structure</strong>
+            <span style="display: none"
+              >The way something is built or organized. In B.12B, structure
+              enables function — a hollow xylem tube is structured perfectly for
+              water flow.</span
+            >
+          </div>
+          <div class="vocab-item ac" onclick="toggleDef(this)">
+            <strong>Function</strong>
+            <span style="display: none"
+              >The job or purpose of a structure. Example: the function of xylem
+              is to transport water upward through the plant.</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="vocab-tier-block">
+        <h3 class="content">🔵 Tier 3 — Biology Content Words</h3>
+        <p style="font-size: 12px; color: #777; margin-bottom: 12px">
+          Words specific to biology. These are the most important for STAAR and
+          will appear on tests.
+        </p>
+        <div class="vocab-grid">
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Xylem</strong>
+            <span style="display: none"
+              >Vascular tissue made of hollow, dead cells that transports water
+              and dissolved minerals <em>upward</em> from roots to leaves.
+              Driven by transpiration.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Phloem</strong>
+            <span style="display: none"
+              >Vascular tissue made of living cells that transports sugar (made
+              by photosynthesis) throughout the plant — up, down, or sideways —
+              to wherever energy is needed.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Transpiration</strong>
+            <span style="display: none"
+              >The process of water evaporating from leaves through stomata.
+              This "pulls" water up through xylem — like sucking through a
+              straw. It's what drives xylem flow.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Translocation</strong>
+            <span style="display: none"
+              >The movement of sugar through phloem. From source (where sugar is
+              made — usually leaves) to sink (where it's used or stored — roots,
+              fruit, seeds).</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Stomata</strong>
+            <span style="display: none"
+              >Tiny pores (openings) on leaves that allow gas exchange and water
+              vapor to escape. Surrounded by guard cells that open and close the
+              pore. Plural of stoma.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Tropism</strong>
+            <span style="display: none"
+              >A plant's directional growth in response to a stimulus. Positive
+              = grows toward stimulus. Negative = grows away. Types:
+              phototropism (light), gravitropism (gravity), thigmotropism
+              (touch).</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Phototropism</strong>
+            <span style="display: none"
+              >A plant's growth toward (positive) or away from (negative) light.
+              Stems show positive phototropism. Caused by uneven distribution of
+              the hormone auxin.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Gravitropism</strong>
+            <span style="display: none"
+              >Growth in response to gravity. Roots show positive gravitropism
+              (grow down). Stems show negative gravitropism (grow up). Helps
+              plants orient themselves.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Auxin</strong>
+            <span style="display: none"
+              >A plant hormone produced at stem tips that causes cells to
+              elongate (grow longer). Builds up on the shaded side of stems,
+              causing the plant to bend toward light.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Gibberellins</strong>
+            <span style="display: none"
+              >Plant hormones that stimulate stem elongation, seed germination,
+              and fruit development. Gibberellins tell dormant seeds to start
+              growing when conditions are right.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Ethylene</strong>
+            <span style="display: none"
+              >A gas hormone that triggers fruit ripening, leaf drop
+              (abscission), and responses to injury. A plant releasing ethylene
+              signals nearby fruits to ripen at the same time.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>ABA (Abscisic Acid)</strong>
+            <span style="display: none"
+              >The "stress hormone." ABA causes stomata to close when the plant
+              is losing too much water. It also keeps seeds dormant until
+              conditions are safe for germination.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Pollination</strong>
+            <span style="display: none"
+              >The transfer of pollen from the anther (male part) to the stigma
+              (female part) of a flower. Can happen by wind, water, insects,
+              birds, or bats. Must happen before fertilization.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Fertilization</strong>
+            <span style="display: none"
+              >The fusion of a sperm cell (from pollen) and an egg cell inside
+              the flower's ovule. Produces a zygote that develops into a seed.
+              Fertilization ≠ pollination.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Seed Dispersal</strong>
+            <span style="display: none"
+              >The movement of seeds away from the parent plant. Methods: wind
+              (dandelion), animals (burrs), water (coconuts), explosion
+              (squirting cucumber). Reduces competition with parent.</span
+            >
+          </div>
+          <div class="vocab-item co" onclick="toggleDef(this)">
+            <strong>Vascular Tissue</strong>
+            <span style="display: none"
+              >The internal "plumbing" of a plant — includes xylem and phloem
+              bundled together. Found in roots, stems, and leaves as vascular
+              bundles.</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ CFU ════════════════════════════ -->
+    <div id="cfu" class="section">
+      <p class="section-label">Check Your Understanding</p>
+      <p class="section-sub">
+        Answer each question on your own first, then click to check. Read the
+        feedback carefully — it explains the <em>why</em>, not just the answer.
+      </p>
+
+      <!-- Q1 -->
+      <div class="cfu-question">
+        <div class="q-number">Question 1 of 5</div>
+        <div class="q-text">
+          A student puts a plant near a sunny window. After three days, the stem
+          is bending toward the glass. Which statement BEST explains why?
+        </div>
+        <div class="options">
+          <button class="option" onclick="checkAnswer(this, false, 'q1')">
+            A) Chlorophyll in the stem is attracted to light energy
+          </button>
+          <button class="option" onclick="checkAnswer(this, true, 'q1')">
+            B) Auxin builds up on the shaded side of the stem, causing those
+            cells to grow longer and push the stem toward the light
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q1')">
+            C) Xylem tubes on the light side fill with more water, making the
+            stem heavier on that side
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q1')">
+            D) The roots grow toward the light, pulling the stem with them
+          </button>
+        </div>
+        <div class="feedback" id="fb-q1"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="cfu-question">
+        <div class="q-number">Question 2 of 5</div>
+        <div class="q-text">
+          Xylem and phloem both transport materials through a plant, but they
+          work differently. Which comparison is CORRECT?
+        </div>
+        <div class="options">
+          <button class="option" onclick="checkAnswer(this, false, 'q2')">
+            A) Xylem is alive and moves sugar; phloem is dead and moves water
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q2')">
+            B) Both xylem and phloem carry water upward from roots to leaves
+          </button>
+          <button class="option" onclick="checkAnswer(this, true, 'q2')">
+            C) Xylem is made of hollow, dead cells and moves water upward;
+            phloem is made of living cells and moves sugar in multiple
+            directions
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q2')">
+            D) Xylem moves sugar to growing parts; phloem removes waste products
+            from leaves
+          </button>
+        </div>
+        <div class="feedback" id="fb-q2"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="cfu-question">
+        <div class="q-number">Question 3 of 5</div>
+        <div class="q-text">
+          It is a hot, dry summer day in Houston. A plant is starting to wilt.
+          Which hormone is MOST likely responsible for causing the plant's
+          stomata to close to prevent more water loss?
+        </div>
+        <div class="options">
+          <button class="option" onclick="checkAnswer(this, false, 'q3')">
+            A) Auxin — it causes cells to stop dividing in dry conditions
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q3')">
+            B) Gibberellins — they signal the plant to stop growing until water
+            returns
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q3')">
+            C) Ethylene — it triggers leaf drop so the plant loses less water
+          </button>
+          <button class="option" onclick="checkAnswer(this, true, 'q3')">
+            D) ABA (Abscisic Acid) — the "stress hormone" that causes guard
+            cells to close stomata during drought
+          </button>
+        </div>
+        <div class="feedback" id="fb-q3"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="cfu-question">
+        <div class="q-number">Question 4 of 5</div>
+        <div class="q-text">
+          A strawberry plant sends out long horizontal stems called runners. New
+          plants grow where the runners touch the soil. These new plants are
+          genetically identical to the parent plant. This is an example of —
+        </div>
+        <div class="options">
+          <button class="option" onclick="checkAnswer(this, false, 'q4')">
+            A) Sexual reproduction, because it involves the plant's stem
+            structures
+          </button>
+          <button class="option" onclick="checkAnswer(this, true, 'q4')">
+            B) Asexual reproduction (vegetative propagation) — no fertilization
+            occurs, so offspring are clones of the parent
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q4')">
+            C) Pollination, because pollen moves from the parent to the new
+            plant location
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q4')">
+            D) Translocation, because sugar from phloem travels through the
+            runner to feed the new plant
+          </button>
+        </div>
+        <div class="feedback" id="fb-q4"></div>
+      </div>
+
+      <!-- Q5 — HOT Systems Integration -->
+      <div class="cfu-question">
+        <div class="q-number">Question 5 of 5 ⭐ Higher Order Thinking</div>
+        <div class="q-text">
+          Texas bluebonnets bloom every spring along highways. Scientists
+          noticed that in years with less winter rainfall, fewer bluebonnets
+          germinate and grow, even though many seeds are present in the soil.
+          Using your knowledge of ALL THREE plant systems, which explanation is
+          MOST complete?
+        </div>
+        <div class="options">
+          <button class="option" onclick="checkAnswer(this, false, 'q5')">
+            A) Reproduction only — seeds need specific temperatures to pollinate
+            successfully
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q5')">
+            B) Transport only — without rain, xylem cannot pull enough water up
+            from roots to support stem growth
+          </button>
+          <button class="option" onclick="checkAnswer(this, true, 'q5')">
+            C) All three systems interact: ABA (response) keeps seeds dormant
+            without enough soil moisture; without water, xylem (transport) can't
+            support germination; and without successful germination, flowers
+            never form for pollination (reproduction) — so all three must work
+            together for bluebonnets to bloom
+          </button>
+          <button class="option" onclick="checkAnswer(this, false, 'q5')">
+            D) Response only — cold temperatures trigger a negative tropism that
+            prevents seeds from germinating in dry conditions
+          </button>
+        </div>
+        <div class="feedback" id="fb-q5"></div>
+      </div>
+
+      <div class="score-display">
+        <div class="score-num" id="scoreNum">0/5</div>
+        <p id="scoreMsg">Answer the questions above to see your score!</p>
+      </div>
+    </div>
+    <!-- /cfu -->
+
+    <script>
+      // ═══════════════════ TAB NAV ═══════════════════
+      function switchTab(id) {
+        document
+          .querySelectorAll(".section")
+          .forEach((s) => s.classList.remove("active"));
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        const order = ["phenomenon", "sim", "vocab", "cfu"];
+        document
+          .querySelectorAll(".tab")
+          [order.indexOf(id)].classList.add("active");
+        if (id === "sim") {
+          const active = document.querySelector(".sim-stage.active");
+          if (active && active.id === "tropism") setTimeout(drawTropism, 60);
+        }
+      }
+
+      // ═══════════════════ SIM MODE ═══════════════════
+      function switchMode(mode, btn) {
+        document
+          .querySelectorAll(".sim-stage")
+          .forEach((s) => s.classList.remove("active"));
+        document
+          .querySelectorAll(".mode-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById(mode).classList.add("active");
+        btn.classList.add("active");
+        if (mode === "tropism") setTimeout(drawTropism, 60);
+      }
+
+      // ═══════════════════ TRANSPORT SIMULATION ═══════════════════
+      let xParticles = [],
+        pParticles = [];
+      let xSpeed = 2,
+        pSpeed = 1.5;
+      let transportRunning = false;
+
+      function updateTransport() {
+        const temp = +document.getElementById("tempSlider").value;
+        const light = +document.getElementById("lightSlider").value;
+        const water = +document.getElementById("waterSlider").value;
+        document.getElementById("tempVal").textContent = temp + "°C";
+        document.getElementById("lightVal").textContent = light + "%";
+        document.getElementById("waterVal").textContent = water + "%";
+
+        // rate 0–10
+        const rawRate =
+          (((temp - 5) / 40) * 0.35 +
+            (light / 100) * 0.4 +
+            (water / 100) * 0.25) *
+          10;
+        const rate = Math.max(0.1, rawRate);
+        xSpeed = Math.max(0.3, rate / 4);
+        pSpeed = Math.max(0.2, rate / 6); // phloem slightly slower
+
+        // labels
+        const transpLevel = rate < 2 ? "Low" : rate < 5 ? "Medium" : "High";
+        const xylemFlow =
+          rate < 2 ? "↑ Slow" : rate < 5 ? "↑ Medium" : "↑ Fast";
+        const phloemFlow =
+          water < 15 ? "↕ Slow" : rate < 3 ? "↕ Slow" : "↕ Active";
+        const stomataOpen = light > 15 && water > 10;
+        const health =
+          water < 12
+            ? "🥀 Wilting"
+            : temp > 42
+              ? "🌡️ Heat Stress"
+              : rate > 8
+                ? "⚠️ High Stress"
+                : "🌿 OK";
+
+        document.getElementById("rXylem").textContent = xylemFlow;
+        document.getElementById("rPhloem").textContent = phloemFlow;
+        document.getElementById("rStomata").textContent = stomataOpen
+          ? "Open"
+          : "Closed";
+        document.getElementById("rTransp").textContent = transpLevel;
+        document.getElementById("rHealth").textContent = health;
+        document.getElementById("lblStomata").textContent =
+          "Stomata: " + (stomataOpen ? "Open 🟢" : "Closed 🔴");
+        document.getElementById("lblRate").textContent =
+          "Transpiration: " + transpLevel;
+
+        // sun brightness
+        document.getElementById("vSun").style.opacity =
+          0.3 + (light / 100) * 0.7;
+
+        if (!transportRunning) {
+          transportRunning = true;
+          spawnParticles();
+        }
+      }
+
+      function spawnParticles() {
+        const scene = document.getElementById("vascularScene");
+        const scW = scene.offsetWidth,
+          scH = scene.offsetHeight;
+        const stemX = scW / 2;
+        const stemBottom = scH * 0.52;
+        const stemTop = scH * 0.15;
+
+        // spawn xylem (blue, going up)
+        if (Math.random() < xSpeed / 8) {
+          const p = document.createElement("div");
+          p.className = "particle xylem-particle";
+          p.style.left = stemX + 2 + "px";
+          p.style.top = stemBottom - 10 + "px";
+          const dur = (2.5 / xSpeed).toFixed(2) + "s";
+          p.style.animationDuration = dur;
+          p.style.animationDelay = "0s";
+          scene.appendChild(p);
+          setTimeout(() => p.remove(), parseFloat(dur) * 1000 + 300);
+        }
+        // spawn phloem (pink, going down)
+        if (Math.random() < pSpeed / 8) {
+          const p = document.createElement("div");
+          p.className = "particle phloem-particle";
+          p.style.left = stemX - 7 + "px";
+          p.style.top = stemTop + 30 + "px";
+          const dur = (3 / pSpeed).toFixed(2) + "s";
+          p.style.animationDuration = dur;
+          p.style.animationDelay = "0s";
+          scene.appendChild(p);
+          setTimeout(() => p.remove(), parseFloat(dur) * 1000 + 300);
+        }
+
+        requestAnimationFrame(spawnParticles);
+      }
+
+      // ═══════════════════ TROPISM CANVAS ═══════════════════
+      function drawTropism() {
+        const canvas = document.getElementById("tropCanvas");
+        const wrap = canvas.parentElement;
+        canvas.width = wrap.clientWidth;
+        canvas.height = wrap.clientHeight;
+        const ctx = canvas.getContext("2d");
+        const pos = +document.getElementById("lightPos").value;
+        const W = canvas.width,
+          H = canvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        // light position label
+        const labels = [
+          "Far Left",
+          "Left",
+          "Slightly Left",
+          "Center",
+          "Slightly Right",
+          "Right",
+          "Far Right",
+        ];
+        const idx = Math.floor((pos / 100) * 6);
+        document.getElementById("lightPosLabel").textContent =
+          labels[Math.min(idx, 6)];
+
+        const lightX = (pos / 100) * W,
+          lightY = 28;
+
+        // sun glow
+        const grd = ctx.createRadialGradient(
+          lightX,
+          lightY,
+          4,
+          lightX,
+          lightY,
+          90,
+        );
+        grd.addColorStop(0, "rgba(255,215,0,.55)");
+        grd.addColorStop(1, "rgba(255,215,0,0)");
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(lightX, lightY, 90, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#FFD700";
+        ctx.beginPath();
+        ctx.arc(lightX, lightY, 16, 0, Math.PI * 2);
+        ctx.fill();
+
+        const soilY = H * 0.52,
+          baseX = W / 2,
+          baseY = soilY;
+        const bendAngle = ((pos - 50) / 50) * 0.42;
+        const stemH = H * 0.37;
+        const tipX = baseX + Math.sin(bendAngle) * stemH;
+        const tipY = baseY - Math.cos(bendAngle) * stemH;
+        const cpX = baseX + Math.sin(bendAngle) * stemH * 0.5;
+        const cpY = baseY - stemH * 0.55;
+
+        // stem
+        ctx.beginPath();
+        ctx.moveTo(baseX, baseY);
+        ctx.quadraticCurveTo(cpX, cpY, tipX, tipY);
+        ctx.strokeStyle = "#4a7c2f";
+        ctx.lineWidth = 8;
+        ctx.lineCap = "round";
+        ctx.stroke();
+
+        // phloem stripe on stem
+        ctx.beginPath();
+        ctx.moveTo(baseX - 2, baseY);
+        ctx.quadraticCurveTo(cpX - 2, cpY, tipX - 2, tipY);
+        ctx.strokeStyle = "rgba(233,30,99,.55)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        // xylem stripe
+        ctx.beginPath();
+        ctx.moveTo(baseX + 2, baseY);
+        ctx.quadraticCurveTo(cpX + 2, cpY, tipX + 2, tipY);
+        ctx.strokeStyle = "rgba(33,150,243,.55)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // leaves
+        ctx.save();
+        ctx.translate(cpX, cpY);
+        ctx.fillStyle = "#4caf50";
+        ctx.beginPath();
+        ctx.ellipse(-22, -4, 24, 10, bendAngle - 0.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#43a047";
+        ctx.beginPath();
+        ctx.ellipse(20, -6, 24, 10, bendAngle + 0.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // flower
+        const fc = [
+          "#e91e63",
+          "#f48fb1",
+          "#e91e63",
+          "#f06292",
+          "#e91e63",
+          "#f48fb1",
+        ];
+        for (let i = 0; i < 6; i++) {
+          const a = (i / 6) * Math.PI * 2;
+          ctx.fillStyle = fc[i];
+          ctx.beginPath();
+          ctx.arc(
+            tipX + Math.cos(a) * 9,
+            tipY + Math.sin(a) * 9,
+            7,
+            0,
+            Math.PI * 2,
+          );
+          ctx.fill();
+        }
+        ctx.fillStyle = "#FFD700";
+        ctx.beginPath();
+        ctx.arc(tipX, tipY, 7, 0, Math.PI * 2);
+        ctx.fill();
+
+        // roots (always straight down — positive gravitropism)
+        const rootAngles = [-0.55, -0.25, 0, 0.25, 0.55];
+        ctx.lineWidth = 4;
+        ctx.lineCap = "round";
+        rootAngles.forEach((a) => {
+          ctx.strokeStyle = "#6b4226";
+          ctx.beginPath();
+          ctx.moveTo(baseX, baseY);
+          ctx.lineTo(baseX + Math.sin(a) * 58, baseY + Math.cos(a) * 52);
+          ctx.stroke();
+        });
+
+        // auxin label
+        const auxSide = pos < 50 ? "right side" : "left side";
+        ctx.fillStyle = "rgba(251,192,45,.9)";
+        ctx.font = "bold 12px DM Sans";
+        ctx.fillText(
+          "Auxin builds up on " + auxSide + " → stem bends",
+          10,
+          soilY - 14,
+        );
+
+        // light rays
+        ctx.strokeStyle = "rgba(255,215,0,.25)";
+        ctx.lineWidth = 1;
+        for (let i = -2; i <= 2; i++) {
+          ctx.beginPath();
+          ctx.moveTo(lightX + i * 14, lightY + 18);
+          ctx.lineTo(tipX + i * 5, tipY - 4);
+          ctx.stroke();
+        }
+      }
+      window.addEventListener("resize", () => {
+        if (document.getElementById("tropism").classList.contains("active"))
+          drawTropism();
+      });
+
+      // ═══════════════════ REPRODUCTION ═══════════════════
+      const reproData = {
+        pollination: `<strong>Structure enables function:</strong> Flowers have bright petals and nectar to attract pollinators like bees. The <strong>anther</strong> (male) produces pollen; the <strong>stigma</strong> (female) is sticky to catch it. A pollen tube grows down to the ovule, where <strong>fertilization</strong> occurs — sperm + egg = seed. Genetic diversity is the advantage: every seed has a new combination of genes. Texas bluebonnets depend on native bees for this.`,
+        seed: `<strong>Structure enables function:</strong> Seeds have structures perfectly matched to their dispersal method. Dandelion seeds have a feathery parachute for wind. Burr seeds have hooks that grab animal fur. Coconuts float in water. Some seedpods explode. The seed coat protects the embryo; endosperm stores energy. Dispersal moves offspring away from the parent, <strong>reducing competition for light and water</strong>.`,
+        runner: `<strong>Structure enables function:</strong> Stolons (runners) are modified horizontal stems — same vascular tissue (xylem + phloem) as the main plant. They carry nutrients from parent to offspring before the new plant roots independently. Strawberries, bermuda grass, and spider plants all use this. No fertilization needed — offspring are <strong>genetically identical clones</strong>. Great for quickly colonizing space, but no genetic variety.`,
+        frag: `<strong>Structure enables function:</strong> Some plants (mosses, succulents, willow trees) can regenerate a new plant from a broken piece. The fragment must contain <strong>meristematic tissue</strong> — cells that can still divide. This works because many plant cells have high <em>totipotency</em> (the ability to become any cell type). Fragmentation = fast, free, identical copies. Found naturally in mosses; also used by humans in cuttings and grafting.`,
+      };
+
+      function selectRepro(card, type) {
+        document
+          .querySelectorAll(".repro-card")
+          .forEach((c) => c.classList.remove("selected"));
+        card.classList.add("selected");
+        document.getElementById("reproDetail").innerHTML =
+          "<p>" + reproData[type] + "</p>";
+      }
+
+      // ═══════════════════ VOCABULARY TOGGLE ═══════════════════
+      function toggleDef(item) {
+        const span = item.querySelector("span");
+        const isOpen = span.style.display === "block";
+        span.style.display = isOpen ? "none" : "block";
+        item.style.boxShadow = isOpen ? "" : "0 4px 14px rgba(0,0,0,.12)";
+      }
+
+      // ═══════════════════ CFU ═══════════════════
+      let score = 0,
+        answered = {};
+      const feedbackText = {
+        q1: {
+          correct:
+            "✅ Correct! Auxin is the plant hormone that causes unequal cell growth. It builds up on the shaded side, making those cells longer — this pushes the stem toward the light. This is called positive phototropism.",
+          wrong:
+            "❌ Not quite. Think about plant hormones. Auxin is the key hormone here — it makes cells on the shaded side elongate (grow longer), physically pushing the stem toward the light source.",
+        },
+        q2: {
+          correct:
+            "✅ Correct! This is a key B.12B comparison. Xylem = hollow + dead = water highway going up. Phloem = living cells = sugar highway going in all directions. The difference in structure explains the difference in function.",
+          wrong:
+            "❌ Not quite. The key is to remember: Xylem is hollow and dead (like a pipe — great for water). Phloem is alive and active (it has to load and unload sugar). They're two different highways.",
+        },
+        q3: {
+          correct:
+            '✅ Correct! ABA (Abscisic Acid) is the "stress hormone." When a plant is losing too much water, ABA signals guard cells around the stomata to close — reducing water loss through transpiration. It also keeps seeds dormant in dry conditions.',
+          wrong:
+            '❌ Not quite. ABA (Abscisic Acid) is the plant\'s drought-stress hormone. Its main job is closing stomata when water is scarce. Remember: ABA = "Aw, Be Careful with water!"',
+        },
+        q4: {
+          correct:
+            "✅ Correct! Runners produce new plants through vegetative propagation — a type of asexual reproduction. No pollination, no fertilization, no new genetic combination. The new plants are clones. That's the key difference from sexual reproduction.",
+          wrong:
+            "❌ Not quite. Ask: was there fertilization? No — the runner just grew and rooted. No pollen, no egg, no seed. That makes it asexual reproduction. Genetic clones = asexual reproduction.",
+        },
+        q5: {
+          correct:
+            "✅ Perfect systems thinking! All three systems interact: ABA (response system) keeps seeds dormant without water; xylem (transport system) can't function without water for germination; and without germination → no flowers → no pollination (reproduction). B.12B is all about how these systems depend on each other. 🌿",
+          wrong:
+            "❌ Not quite. B.12B asks you to connect ALL three systems. Think: Response (ABA keeps seeds dormant without water) + Transport (xylem needs water to function) + Reproduction (no germination = no flowers = no pollination). All three must work for bluebonnets to bloom.",
+        },
+      };
+
+      function checkAnswer(btn, isCorrect, qId) {
+        if (answered[qId]) return;
+        answered[qId] = true;
+        const allOpts = btn.parentElement.querySelectorAll(".option");
+        allOpts.forEach((o) => (o.disabled = true));
+        const fb = document.getElementById("fb-" + qId);
+        if (isCorrect) {
+          btn.classList.add("correct");
+          score++;
+          fb.className = "feedback correct show";
+          fb.textContent = feedbackText[qId].correct;
+        } else {
+          btn.classList.add("wrong");
+          fb.className = "feedback wrong show";
+          fb.textContent = feedbackText[qId].wrong;
+          allOpts.forEach((o) => {
+            if (o.onclick.toString().includes("true"))
+              o.classList.add("correct");
+          });
+        }
+        updateScore();
+      }
+
+      function updateScore() {
+        const total = Object.keys(answered).length;
+        document.getElementById("scoreNum").textContent = score + "/5";
+        if (total === 5) {
+          const msgs = [
+            "Keep reviewing — go back through the simulation!",
+            "Good start! Review the feedback on your missed questions.",
+            "Getting there! Review the xylem/phloem and hormone cards.",
+            "Nice work! One more pass through vocab will help.",
+            "🎉 Perfect score! You've got B.12B locked in!",
+          ];
+          document.getElementById("scoreMsg").textContent = msgs[score] || "";
+        }
+      }
+
+      // ═══════════════════ INIT ═══════════════════
+      updateTransport();
+    </script>
+  </body>
 </html>
