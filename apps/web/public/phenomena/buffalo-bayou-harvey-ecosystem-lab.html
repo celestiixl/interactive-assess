@@ -1,0 +1,4448 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buffalo Bayou — Harvey Ecosystem Lab</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #080f1a;
+        --surface: #0c1825;
+        --raised: #112030;
+        --card: #152438;
+        --border: rgba(255, 255, 255, 0.07);
+        --border2: rgba(255, 255, 255, 0.12);
+        --teal: #00e5b8;
+        --teal-dim: rgba(0, 229, 184, 0.12);
+        --teal-border: rgba(0, 229, 184, 0.25);
+        --amber: #ffb830;
+        --amber-dim: rgba(255, 184, 48, 0.1);
+        --amber-border: rgba(255, 184, 48, 0.25);
+        --coral: #ff5757;
+        --coral-dim: rgba(255, 87, 87, 0.1);
+        --coral-border: rgba(255, 87, 87, 0.25);
+        --blue: #5eb8ff;
+        --blue-dim: rgba(94, 184, 255, 0.1);
+        --blue-border: rgba(94, 184, 255, 0.25);
+        --green: #3ddc84;
+        --green-dim: rgba(61, 220, 132, 0.1);
+        --text: #dff0e8;
+        --sub: #7a9e90;
+        --muted: #456050;
+        --font-head: "Syne", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        --font-mono: "DM Mono", monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        font-family: var(--font-body);
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── VOCAB TOOLTIP ── */
+      .vt {
+        position: fixed;
+        z-index: 9999;
+        background: #0a1e2e;
+        border: 1px solid var(--teal-border);
+        border-radius: 12px;
+        padding: 11px 14px;
+        max-width: 250px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s;
+        box-shadow:
+          0 12px 40px rgba(0, 0, 0, 0.7),
+          0 0 0 1px rgba(0, 229, 184, 0.05);
+      }
+      .vt.show {
+        opacity: 1;
+      }
+      .vt-word {
+        font-family: var(--font-head);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 5px;
+      }
+      .vt-def {
+        font-family: var(--font-body);
+        font-size: 12px;
+        color: var(--text);
+        line-height: 1.55;
+      }
+      .vt-teks {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 6px;
+        font-style: italic;
+      }
+      .v {
+        color: var(--teal);
+        border-bottom: 1px dashed rgba(0, 229, 184, 0.5);
+        cursor: help;
+        white-space: nowrap;
+      }
+
+      /* ── TOP BAR ── */
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+        background: var(--surface);
+        gap: 12px;
+      }
+      .tb-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .logo {
+        font-family: var(--font-head);
+        font-weight: 900;
+        font-size: 15px;
+        letter-spacing: -0.3px;
+      }
+      .logo span {
+        color: var(--teal);
+      }
+      .divider {
+        width: 1px;
+        height: 20px;
+        background: var(--border2);
+      }
+      .teks-pills {
+        display: flex;
+        gap: 5px;
+      }
+      .teks-pill {
+        font-family: var(--font-mono);
+        font-size: 9.5px;
+        font-weight: 500;
+        padding: 3px 9px;
+        border-radius: 6px;
+        background: var(--blue-dim);
+        border: 1px solid var(--blue-border);
+        color: var(--blue);
+      }
+      .tb-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .health-chip {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-family: var(--font-head);
+        font-size: 11px;
+        font-weight: 700;
+        padding: 5px 13px;
+        border-radius: 20px;
+        transition: all 0.4s;
+      }
+      .hc-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+      .health-healthy {
+        background: var(--green-dim);
+        border: 1px solid rgba(61, 220, 132, 0.3);
+        color: var(--green);
+      }
+      .health-healthy .hc-dot {
+        background: var(--green);
+        box-shadow: 0 0 6px rgba(61, 220, 132, 0.6);
+      }
+      .health-stressed {
+        background: var(--amber-dim);
+        border: 1px solid var(--amber-border);
+        color: var(--amber);
+      }
+      .health-stressed .hc-dot {
+        background: var(--amber);
+        box-shadow: 0 0 6px rgba(255, 184, 48, 0.6);
+        animation: pdot 1.2s infinite;
+      }
+      .health-critical {
+        background: var(--coral-dim);
+        border: 1px solid var(--coral-border);
+        color: var(--coral);
+      }
+      .health-critical .hc-dot {
+        background: var(--coral);
+        box-shadow: 0 0 6px rgba(255, 87, 87, 0.6);
+        animation: pdot 0.7s infinite;
+      }
+      @keyframes pdot {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      /* ── MODE SWITCHER ── */
+      .mode-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 20px;
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+        background: rgba(12, 24, 37, 0.8);
+      }
+      .mode-btn {
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 11px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .mode-btn:hover {
+        color: var(--text);
+        border-color: var(--border2);
+      }
+      .mode-btn.active {
+        background: var(--raised);
+        border-color: var(--border2);
+        color: var(--text);
+      }
+      .mode-locked {
+        opacity: 0.35;
+        cursor: not-allowed !important;
+      }
+      .mode-lock-icon {
+        font-size: 10px;
+      }
+      .unlock-hint {
+        font-size: 10.5px;
+        color: var(--muted);
+        margin-left: 6px;
+        font-style: italic;
+      }
+
+      /* ── STORY MODE ── */
+      .main {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      #storyMode {
+        display: flex;
+        flex: 1;
+        height: 100%;
+        overflow: hidden;
+      }
+      #labMode {
+        display: none;
+        flex: 1;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      /* ── SHARED: SCENE COLUMN ── */
+      .scene-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        border-right: 1px solid var(--border);
+        min-width: 0;
+      }
+      .scene-wrap {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+          180deg,
+          #0d2137 0%,
+          #1a3a5c 46%,
+          #1a5c8a 46%,
+          #0d3a5c 100%
+        );
+      }
+      .scene-wrap svg {
+        width: 100%;
+        height: 100%;
+      }
+      .scene-cap {
+        padding: 9px 16px;
+        font-size: 11.5px;
+        color: var(--sub);
+        line-height: 1.5;
+        border-top: 1px solid var(--border);
+        background: rgba(8, 15, 26, 0.9);
+        min-height: 48px;
+        flex-shrink: 0;
+      }
+      .scene-cap strong {
+        color: var(--text);
+      }
+
+      /* ── STORY: STEP NAV ── */
+      .story-col {
+        width: 320px;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+      }
+      .step-nav {
+        display: flex;
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+      .sn-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 8px 4px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        opacity: 0.35;
+      }
+      .sn-item:hover {
+        opacity: 0.6;
+      }
+      .sn-item.active {
+        opacity: 1;
+        border-bottom-color: var(--teal);
+      }
+      .sn-item.done {
+        opacity: 0.6;
+      }
+      .sn-num {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--raised);
+        border: 1px solid var(--border);
+        font-family: var(--font-mono);
+        font-size: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .sn-item.active .sn-num {
+        background: var(--teal);
+        color: #080f1a;
+        border-color: var(--teal);
+      }
+      .sn-item.done .sn-num {
+        background: rgba(0, 229, 184, 0.15);
+        color: var(--teal);
+        border-color: var(--teal-border);
+      }
+      .sn-label {
+        font-family: var(--font-head);
+        font-size: 9px;
+        font-weight: 700;
+        color: inherit;
+      }
+
+      /* ── STORY: PANES ── */
+      .story-panes {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+      }
+      .story-pane {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .story-pane.active {
+        display: flex;
+      }
+      .sp-body {
+        padding: 18px 18px 0;
+        flex: 1;
+      }
+      .sp-badge {
+        font-family: var(--font-head);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .sp-title {
+        font-family: var(--font-head);
+        font-size: 16px;
+        font-weight: 900;
+        line-height: 1.2;
+        margin-bottom: 10px;
+      }
+      .sp-text {
+        font-size: 12.5px;
+        line-height: 1.7;
+        color: var(--sub);
+        margin-bottom: 12px;
+      }
+      .sp-text p {
+        margin-bottom: 9px;
+      }
+      .sp-text p:last-child {
+        margin-bottom: 0;
+      }
+
+      /* ── DATA CARDS ── */
+      .dc-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        margin-bottom: 12px;
+      }
+      .dc {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 10px 12px;
+      }
+      .dc-label {
+        font-family: var(--font-head);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .dc-val {
+        font-family: var(--font-mono);
+        font-size: 15px;
+        font-weight: 500;
+      }
+      .dc-sub {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      /* ── METRICS ── */
+      .metric {
+        margin-bottom: 8px;
+      }
+      .m-top {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        margin-bottom: 3px;
+      }
+      .m-name {
+        color: var(--sub);
+        font-family: var(--font-body);
+        font-weight: 500;
+      }
+      .m-val {
+        font-family: var(--font-mono);
+        font-size: 11px;
+      }
+      .m-bg {
+        height: 4px;
+        background: var(--raised);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .m-bar {
+        height: 100%;
+        border-radius: 2px;
+        transition:
+          width 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+          background 0.8s ease;
+      }
+
+      /* ── STORM STAGES ── */
+      .sstage {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 11px 12px;
+        margin-bottom: 8px;
+        transition:
+          border-color 0.4s,
+          background 0.4s;
+      }
+      .sstage.active {
+        border-color: var(--amber-border);
+        background: rgba(255, 184, 48, 0.04);
+      }
+      .sstage.done {
+        border-color: rgba(61, 220, 132, 0.2);
+        background: rgba(61, 220, 132, 0.03);
+      }
+      .ss-title {
+        font-family: var(--font-head);
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .ss-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .dot-wait {
+        background: var(--raised);
+        border: 1px solid var(--border);
+      }
+      .dot-active {
+        background: var(--amber);
+        animation: pdot 1s infinite;
+      }
+      .dot-done {
+        background: var(--green);
+      }
+      .ss-text {
+        font-size: 11.5px;
+        color: var(--sub);
+        line-height: 1.55;
+      }
+
+      /* ── COMPARE TABLE ── */
+      .ctable {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11.5px;
+        margin-bottom: 12px;
+      }
+      .ctable th {
+        padding: 6px 9px;
+        text-align: left;
+        font-family: var(--font-head);
+        font-size: 9px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+      }
+      .ctable th.bh {
+        color: var(--teal);
+      }
+      .ctable th.ah {
+        color: var(--coral);
+      }
+      .ctable td {
+        padding: 6px 9px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        color: var(--sub);
+      }
+      .ctable td:first-child {
+        font-family: var(--font-body);
+        font-weight: 600;
+        color: var(--text);
+        font-size: 11px;
+      }
+      .ctable tr:last-child td {
+        border-bottom: none;
+      }
+      .good {
+        color: var(--green);
+      }
+      .bad {
+        color: var(--coral);
+      }
+      .warn {
+        color: var(--amber);
+      }
+
+      /* ── REFLECT ── */
+      .qcard {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 12px;
+        margin-bottom: 9px;
+      }
+      .qnum {
+        font-family: var(--font-head);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 5px;
+      }
+      .qtext {
+        font-size: 12px;
+        color: var(--text);
+        line-height: 1.55;
+        margin-bottom: 8px;
+      }
+      .qtextarea {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        padding: 8px 10px;
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 11.5px;
+        resize: vertical;
+        min-height: 58px;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .qtextarea:focus {
+        border-color: var(--teal-border);
+      }
+      .qtextarea::placeholder {
+        color: var(--muted);
+      }
+      .qhint {
+        font-size: 10.5px;
+        color: var(--muted);
+        margin-top: 4px;
+        font-style: italic;
+      }
+
+      /* ── INFO BOX ── */
+      .infobox {
+        border-radius: 9px;
+        padding: 10px 12px;
+        font-size: 11.5px;
+        line-height: 1.6;
+        margin-bottom: 10px;
+      }
+      .ib-tip {
+        background: var(--blue-dim);
+        border: 1px solid var(--blue-border);
+        color: var(--sub);
+      }
+      .ib-warn {
+        background: var(--amber-dim);
+        border: 1px solid var(--amber-border);
+        color: var(--sub);
+      }
+      .ib-danger {
+        background: var(--coral-dim);
+        border: 1px solid var(--coral-border);
+        color: var(--sub);
+      }
+      .ib-success {
+        background: var(--green-dim);
+        border: 1px solid rgba(61, 220, 132, 0.2);
+        color: var(--sub);
+      }
+
+      /* ── BTN ROW ── */
+      .btn-row {
+        padding: 12px 18px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+      .btn {
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 12px;
+        padding: 8px 18px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-p {
+        background: var(--teal);
+        color: #080f1a;
+      }
+      .btn-p:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+      }
+      .btn-g {
+        background: transparent;
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+      .btn-g:hover {
+        color: var(--text);
+        border-color: var(--border2);
+      }
+      .btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+        transform: none !important;
+        filter: none !important;
+      }
+      .step-counter {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      /* ── COMPLETION SCREEN ── */
+      .completion {
+        padding: 24px 18px;
+        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .comp-icon {
+        font-size: 44px;
+        margin-bottom: 12px;
+      }
+      .comp-title {
+        font-family: var(--font-head);
+        font-size: 19px;
+        font-weight: 900;
+        color: var(--teal);
+        margin-bottom: 6px;
+      }
+      .comp-sub {
+        font-size: 12.5px;
+        color: var(--sub);
+        line-height: 1.65;
+        max-width: 260px;
+      }
+      .comp-vocab {
+        margin-top: 14px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 12px;
+        text-align: left;
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.7;
+        width: 100%;
+      }
+      .comp-vocab strong {
+        font-family: var(--font-head);
+        display: block;
+        font-size: 9px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 6px;
+      }
+
+      /* ══════════════════════════════════════════
+   LAB MODE
+══════════════════════════════════════════ */
+      .lab-layout {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        gap: 0;
+      }
+      .lab-scene {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--border);
+      }
+      .lab-panel {
+        width: 340px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      /* LAB TABS */
+      .lab-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+      .lab-tab {
+        flex: 1;
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 11px;
+        padding: 9px 4px;
+        text-align: center;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+        color: var(--muted);
+        background: transparent;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+      .lab-tab:hover {
+        color: var(--text);
+      }
+      .lab-tab.active {
+        color: var(--teal);
+        border-bottom-color: var(--teal);
+      }
+
+      /* LAB CONTENT */
+      .lab-content {
+        flex: 1;
+        overflow-y: auto;
+      }
+      .lab-pane {
+        display: none;
+        padding: 16px;
+      }
+      .lab-pane.active {
+        display: block;
+      }
+
+      /* TRY THIS CARD */
+      .try-card {
+        background: linear-gradient(
+          135deg,
+          rgba(0, 229, 184, 0.08),
+          rgba(0, 229, 184, 0.03)
+        );
+        border: 1px solid var(--teal-border);
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+      }
+      .try-title {
+        font-family: var(--font-head);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 7px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .try-item {
+        font-size: 11.5px;
+        color: var(--sub);
+        line-height: 1.6;
+        padding-left: 14px;
+        position: relative;
+        margin-bottom: 4px;
+      }
+      .try-item::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--teal);
+        font-size: 11px;
+      }
+      .try-item:last-child {
+        margin-bottom: 0;
+      }
+
+      /* SLIDERS */
+      .sl-section {
+        margin-bottom: 14px;
+      }
+      .sl-head {
+        font-family: var(--font-head);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .sl-row {
+        margin-bottom: 10px;
+      }
+      .sl-label-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+      }
+      .sl-name {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--sub);
+      }
+      .sl-val {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--text);
+      }
+      input[type="range"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 100%;
+        height: 3px;
+        border-radius: 3px;
+        outline: none;
+        cursor: pointer;
+        background: var(--raised);
+      }
+      input[type="range"].sl-imp::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: var(--amber);
+        border: 2px solid var(--bg);
+        box-shadow: 0 0 8px rgba(255, 184, 48, 0.4);
+      }
+      input[type="range"].sl-grn::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: var(--blue);
+        border: 2px solid var(--bg);
+        box-shadow: 0 0 8px rgba(94, 184, 255, 0.4);
+      }
+      input[type="range"].sl-frt::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: var(--coral);
+        border: 2px solid var(--bg);
+        box-shadow: 0 0 8px rgba(255, 87, 87, 0.4);
+      }
+      .linked-note {
+        font-size: 10px;
+        color: var(--muted);
+        font-style: italic;
+        margin-top: -6px;
+        margin-bottom: 10px;
+      }
+
+      /* STORM LAB */
+      .storm-btn {
+        width: 100%;
+        padding: 11px;
+        border-radius: 9px;
+        border: none;
+        font-family: var(--font-head);
+        font-weight: 800;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.25s;
+        margin-bottom: 8px;
+      }
+      .sb-ready {
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        color: white;
+      }
+      .sb-ready:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+      }
+      .sb-go {
+        background: linear-gradient(135deg, #7f1d1d, #dc2626);
+        color: white;
+        animation: pstorm 1s infinite;
+      }
+      .sb-recover {
+        background: var(--raised);
+        color: var(--muted);
+        cursor: default;
+      }
+      @keyframes pstorm {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 0 8px rgba(220, 38, 38, 0);
+        }
+      }
+      .recover-row {
+        margin-bottom: 10px;
+      }
+      .recover-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10.5px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .prog-bg {
+        height: 4px;
+        background: var(--raised);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .prog-bar {
+        height: 100%;
+        border-radius: 2px;
+        transition: width 0.15s;
+      }
+
+      /* FEEDBACK CARD */
+      .feedback-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 11px 13px;
+        margin-bottom: 10px;
+        min-height: 54px;
+        transition:
+          border-color 0.4s,
+          background 0.4s;
+      }
+      .fb-label {
+        font-family: var(--font-head);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 5px;
+      }
+      .fb-text {
+        font-size: 12px;
+        color: var(--sub);
+        line-height: 1.55;
+        transition: all 0.3s;
+      }
+
+      /* ACTION LOG */
+      .action-log {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 11px 13px;
+        margin-top: 6px;
+      }
+      .al-head {
+        font-family: var(--font-head);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 7px;
+      }
+      .al-item {
+        font-size: 10.5px;
+        color: var(--muted);
+        padding: 3px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
+      .al-item:last-child {
+        border: none;
+      }
+      .al-time {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        color: var(--muted);
+        opacity: 0.6;
+        flex-shrink: 0;
+      }
+      .al-empty {
+        font-size: 10.5px;
+        color: var(--muted);
+        opacity: 0.5;
+        font-style: italic;
+      }
+
+      /* BEFORE/AFTER LAB */
+      .ba-compare {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .ba-col {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 10px 12px;
+      }
+      .ba-col-title {
+        font-family: var(--font-head);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .ba-before .ba-col-title {
+        color: var(--teal);
+      }
+      .ba-after .ba-col-title {
+        color: var(--coral);
+      }
+      .ba-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10.5px;
+        padding: 3px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      }
+      .ba-row:last-child {
+        border: none;
+      }
+      .ba-k {
+        color: var(--muted);
+      }
+      .ba-v {
+        font-family: var(--font-mono);
+        font-size: 10px;
+      }
+
+      /* RECOVERY METRICS */
+      .rec-row {
+        margin-bottom: 8px;
+      }
+      .rec-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        margin-bottom: 3px;
+      }
+      .rec-name {
+        color: var(--sub);
+      }
+      .rec-pct {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--amber);
+      }
+      .rec-bg {
+        height: 4px;
+        background: var(--raised);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .rec-bar {
+        height: 100%;
+        border-radius: 2px;
+        background: var(--amber);
+        transition: width 0.8s ease;
+      }
+
+      /* SVG ANIMS */
+      @keyframes fish1 {
+        0% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(65px, 7px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+      @keyframes fish2 {
+        0% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(-50px, -5px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+      @keyframes fish3 {
+        0% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(40px, 11px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+      @keyframes bobble {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+      @keyframes float-dead {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+      @keyframes algae-p {
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 0.72;
+        }
+      }
+      @keyframes rain-f {
+        0% {
+          transform: translateY(-20px);
+          opacity: 0.9;
+        }
+        100% {
+          transform: translateY(500px);
+          opacity: 0;
+        }
+      }
+      @keyframes cloud-d {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(22px);
+        }
+      }
+      @keyframes flow-wave {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-48px);
+        }
+      }
+      @keyframes flow-wave-r {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(38px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- VOCAB TOOLTIP -->
+    <div class="vt" id="vt">
+      <div class="vt-word" id="vt-w"></div>
+      <div class="vt-def" id="vt-d"></div>
+      <div class="vt-teks" id="vt-t"></div>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="tb-left">
+        <span class="logo">Buffalo Bayou <span>Ecosystem Lab</span></span>
+        <div class="divider"></div>
+        <div class="teks-pills">
+          <span class="teks-pill">B.13C</span
+          ><span class="teks-pill">B.13D</span>
+        </div>
+      </div>
+      <div class="tb-right">
+        <div class="health-chip health-healthy" id="healthChip">
+          <div class="hc-dot"></div>
+          <span id="healthText">Ecosystem Healthy</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODE SWITCHER -->
+    <div class="mode-row">
+      <button class="mode-btn active" id="modeStory" onclick="setMode('story')">
+        📖 Guided Story
+      </button>
+      <button
+        class="mode-btn mode-locked"
+        id="modeLab"
+        onclick="setMode('lab')"
+        title="Complete the story first"
+      >
+        🔬 Lab Mode <span class="mode-lock-icon" id="labLock">🔒</span>
+      </button>
+      <span class="unlock-hint" id="unlockHint"
+        >Complete the story to unlock Lab Mode</span
+      >
+    </div>
+
+    <!-- ══ STORY MODE ══ -->
+    <div id="storyMode">
+      <!-- SCENE -->
+      <div class="scene-col">
+        <div class="scene-wrap">
+          <svg
+            id="storySVG"
+            viewBox="0 0 820 500"
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid slice"
+          >
+            <defs>
+              <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+                <stop id="s1" offset="0%" stop-color="#6fb8f3" />
+                <stop id="s2" offset="100%" stop-color="#c6e8ff" />
+              </linearGradient>
+              <linearGradient id="wtG" x1="0" y1="0" x2="0" y2="1">
+                <stop id="w1" offset="0%" stop-color="#1a5c8a" />
+                <stop id="w2" offset="100%" stop-color="#0d3a5c" />
+              </linearGradient>
+              <radialGradient id="algG" cx="50%" cy="0%" r="85%">
+                <stop offset="0%" stop-color="#3ddc84" stop-opacity=".65" />
+                <stop offset="100%" stop-color="#3ddc84" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <!-- SKY -->
+            <rect
+              id="skyR"
+              x="0"
+              y="0"
+              width="820"
+              height="260"
+              fill="url(#skyG)"
+            />
+            <!-- SUN (Gulf style) -->
+            <g id="sunG">
+              <circle cx="684" cy="74" r="44" fill="#fbbf24" opacity=".13" />
+              <circle cx="684" cy="74" r="34" fill="#fbbf24" opacity=".18" />
+              <line x1="684" y1="32" x2="684" y2="20" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" opacity=".85" />
+              <line x1="684" y1="116" x2="684" y2="128" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" opacity=".85" />
+              <line x1="642" y1="74" x2="630" y2="74" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" opacity=".85" />
+              <line x1="726" y1="74" x2="738" y2="74" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" opacity=".85" />
+              <line x1="654" y1="44" x2="646" y2="36" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".65" />
+              <line x1="714" y1="44" x2="722" y2="36" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".65" />
+              <line x1="654" y1="104" x2="646" y2="112" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".65" />
+              <line x1="714" y1="104" x2="722" y2="112" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".65" />
+              <circle cx="684" cy="74" r="28" fill="#fde68a" />
+              <circle cx="684" cy="74" r="24" fill="#fbbf24" />
+              <circle cx="684" cy="74" r="20" fill="#fcd34d" />
+              <ellipse cx="676" cy="66" rx="8" ry="6" fill="#fef3c7" opacity=".55" />
+            </g>
+            <!-- NORMAL CLOUDS -->
+            <g
+              id="nClouds"
+              style="animation: cloud-d 7s ease-in-out infinite alternate"
+            >
+              <ellipse
+                cx="130"
+                cy="44"
+                rx="70"
+                ry="19"
+                fill="#e5f3ff"
+                opacity=".35"
+              />
+              <ellipse
+                cx="172"
+                cy="33"
+                rx="46"
+                ry="15"
+                fill="#e5f3ff"
+                opacity=".35"
+              />
+              <ellipse
+                cx="570"
+                cy="50"
+                rx="80"
+                ry="21"
+                fill="#e5f3ff"
+                opacity=".3"
+              />
+              <ellipse
+                cx="618"
+                cy="38"
+                rx="52"
+                ry="16"
+                fill="#e5f3ff"
+                opacity=".3"
+              />
+            </g>
+            <!-- STORM CLOUDS -->
+            <g id="sClouds" opacity="0" style="transition: opacity 1.5s">
+              <ellipse
+                cx="75"
+                cy="48"
+                rx="95"
+                ry="34"
+                fill="#0d1117"
+                opacity=".97"
+              />
+              <ellipse
+                cx="200"
+                cy="35"
+                rx="110"
+                ry="38"
+                fill="#111827"
+                opacity=".96"
+              />
+              <ellipse
+                cx="365"
+                cy="47"
+                rx="125"
+                ry="40"
+                fill="#0d1117"
+                opacity=".95"
+              />
+              <ellipse
+                cx="535"
+                cy="37"
+                rx="105"
+                ry="35"
+                fill="#111827"
+                opacity=".95"
+              />
+              <ellipse
+                cx="700"
+                cy="50"
+                rx="115"
+                ry="37"
+                fill="#0d1117"
+                opacity=".94"
+              />
+              <ellipse
+                cx="785"
+                cy="33"
+                rx="75"
+                ry="28"
+                fill="#111827"
+                opacity=".93"
+              />
+            </g>
+            <!-- LAND -->
+            <rect x="0" y="260" width="820" height="52" fill="#0e1f0a" />
+            <!-- TREES -->
+            <g id="treesG" style="transition: opacity 1s" transform="translate(0,85)">
+              <rect x="30" y="155" width="5" height="23" fill="#2a4515" />
+              <circle cx="32" cy="149" r="13" fill="#2d5c14" />
+              <rect x="92" y="150" width="5" height="28" fill="#2a4515" />
+              <circle cx="94" cy="142" r="15" fill="#355e18" />
+              <rect x="158" y="158" width="4" height="20" fill="#2a4515" />
+              <circle cx="160" cy="152" r="12" fill="#2d5c14" />
+              <rect x="215" y="153" width="5" height="25" fill="#2a4515" />
+              <circle cx="217" cy="145" r="14" fill="#355e18" />
+            </g>
+            <!-- BUILDINGS -->
+            <g id="bldgsG" opacity=".5" style="transition: opacity 1s" transform="translate(0,85)">
+              <rect x="285" y="127" width="34" height="48" fill="#1e2d3d" />
+              <rect x="328" y="140" width="26" height="35" fill="#243444" />
+              <rect x="364" y="133" width="31" height="42" fill="#1a2535" />
+              <rect x="404" y="146" width="24" height="29" fill="#243444" />
+              <rect x="437" y="125" width="36" height="50" fill="#1e2d3d" />
+              <rect x="482" y="138" width="27" height="37" fill="#1a2535" />
+              <rect
+                x="291"
+                y="134"
+                width="4"
+                height="4"
+                fill="rgba(255,220,100,.15)"
+              />
+              <rect
+                x="300"
+                y="134"
+                width="4"
+                height="4"
+                fill="rgba(255,220,100,.15)"
+              />
+              <rect
+                x="443"
+                y="132"
+                width="4"
+                height="4"
+                fill="rgba(255,220,100,.15)"
+              />
+              <rect
+                x="452"
+                y="132"
+                width="4"
+                height="4"
+                fill="rgba(255,220,100,.15)"
+              />
+            </g>
+            <!-- WATER -->
+            <rect
+              id="waterR"
+              x="0"
+              y="310"
+              width="820"
+              height="190"
+              fill="url(#wtG)"
+            />
+            <g opacity=".18" style="mix-blend-mode: screen">
+              <path
+                d="M0,336 C60,330 120,342 180,336 C240,330 300,342 360,336 C420,330 480,342 540,336 C600,330 660,342 720,336 C760,333 790,338 820,336"
+                fill="none"
+                stroke="#8fd7ff"
+                stroke-width="1.2"
+              >
+                <animate
+                  attributeName="d"
+                  dur="2.1s"
+                  repeatCount="indefinite"
+                  values="M0,336 C60,330 120,342 180,336 C240,330 300,342 360,336 C420,330 480,342 540,336 C600,330 660,342 720,336 C760,333 790,338 820,336;
+                          M0,336 C60,342 120,330 180,336 C240,342 300,330 360,336 C420,342 480,330 540,336 C600,342 660,330 720,336 C760,339 790,334 820,336;
+                          M0,336 C60,330 120,342 180,336 C240,330 300,342 360,336 C420,330 480,342 540,336 C600,330 660,342 720,336 C760,333 790,338 820,336"
+                />
+              </path>
+              <path
+                d="M-20,352 C40,346 100,358 160,352 C220,346 280,358 340,352 C400,346 460,358 520,352 C580,346 640,358 700,352 C750,348 790,355 840,352"
+                fill="none"
+                stroke="#9fdfff"
+                stroke-width=".9"
+                opacity=".8"
+              >
+                <animate
+                  attributeName="d"
+                  dur="2.6s"
+                  repeatCount="indefinite"
+                  values="M-20,352 C40,346 100,358 160,352 C220,346 280,358 340,352 C400,346 460,358 520,352 C580,346 640,358 700,352 C750,348 790,355 840,352;
+                          M-20,352 C40,358 100,346 160,352 C220,358 280,346 340,352 C400,358 460,346 520,352 C580,358 640,346 700,352 C750,355 790,349 840,352;
+                          M-20,352 C40,346 100,358 160,352 C220,346 280,358 340,352 C400,346 460,358 520,352 C580,346 640,358 700,352 C750,348 790,355 840,352"
+                />
+              </path>
+              <path
+                d="M0,310 C55,304 110,316 165,310 C220,304 275,316 330,310 C385,304 440,316 495,310 C550,304 605,316 660,310 C715,304 770,316 820,310"
+                fill="none"
+                stroke="#a8e4ff"
+                stroke-width="1.4"
+                opacity=".9"
+              >
+                <animate
+                  attributeName="d"
+                  dur="1.7s"
+                  repeatCount="indefinite"
+                  values="M0,310 C55,304 110,316 165,310 C220,304 275,316 330,310 C385,304 440,316 495,310 C550,304 605,316 660,310 C715,304 770,316 820,310;
+                          M0,310 C55,316 110,304 165,310 C220,316 275,304 330,310 C385,316 440,304 495,310 C550,316 605,304 660,310 C715,316 770,304 820,310;
+                          M0,310 C55,304 110,316 165,310 C220,304 275,316 330,310 C385,304 440,316 495,310 C550,304 605,316 660,310 C715,304 770,316 820,310"
+                />
+              </path>
+            </g>
+            <!-- SHIMMER -->
+            <g id="shimmerG" opacity=".25" transform="translate(0,85)">
+              <g style="mix-blend-mode: screen">
+                <path
+                  d="M88,236 C110,231 138,231 162,236 C141,240 111,241 88,236"
+                  fill="none"
+                  stroke="#9fdfff"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  opacity=".55"
+                >
+                  <animate attributeName="opacity" values=".35;.65;.35" dur="2.2s" repeatCount="indefinite" />
+                  <animateTransform attributeName="transform" type="translate" values="0 0;7 -1;0 0" dur="4.2s" repeatCount="indefinite" />
+                </path>
+                <path
+                  d="M296,245 C330,239 380,239 418,245 C385,250 332,251 296,245"
+                  fill="none"
+                  stroke="#b7e9ff"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  opacity=".6"
+                >
+                  <animate attributeName="opacity" values=".4;.75;.4" dur="2.8s" repeatCount="indefinite" />
+                  <animateTransform attributeName="transform" type="translate" values="0 0;-10 1;0 0" dur="5.1s" repeatCount="indefinite" />
+                </path>
+                <path
+                  d="M560,238 C588,233 628,233 656,238 C630,243 589,244 560,238"
+                  fill="none"
+                  stroke="#9fdfff"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  opacity=".58"
+                >
+                  <animate attributeName="opacity" values=".38;.7;.38" dur="2.4s" repeatCount="indefinite" />
+                  <animateTransform attributeName="transform" type="translate" values="0 0;9 -1;0 0" dur="4.6s" repeatCount="indefinite" />
+                </path>
+                <circle cx="188" cy="241" r="1.6" fill="#c8efff" opacity=".45">
+                  <animate attributeName="opacity" values=".2;.55;.2" dur="1.9s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="506" cy="247" r="1.5" fill="#c8efff" opacity=".4">
+                  <animate attributeName="opacity" values=".18;.5;.18" dur="2.3s" repeatCount="indefinite" />
+                </circle>
+              </g>
+            </g>
+            <!-- ALGAE -->
+            <rect
+              id="algaeR"
+              x="0"
+              y="310"
+              width="820"
+              height="70"
+              fill="url(#algG)"
+              opacity="0"
+              style="transition: opacity 1.5s; pointer-events: none"
+            />
+            <g id="algCells" opacity="0" style="transition: opacity 1.5s">
+              <circle
+                cx="170"
+                cy="236"
+                r="10"
+                fill="#3ddc84"
+                opacity=".6"
+                style="animation: algae-p 2s infinite"
+              />
+              <circle
+                cx="285"
+                cy="245"
+                r="8"
+                fill="#3ddc84"
+                opacity=".5"
+                style="animation: algae-p 2.5s infinite 0.3s"
+              />
+              <circle
+                cx="420"
+                cy="234"
+                r="12"
+                fill="#3ddc84"
+                opacity=".55"
+                style="animation: algae-p 1.8s infinite 0.7s"
+              />
+              <circle
+                cx="535"
+                cy="244"
+                r="9"
+                fill="#3ddc84"
+                opacity=".6"
+                style="animation: algae-p 2.2s infinite 0.2s"
+              />
+              <circle
+                cx="650"
+                cy="236"
+                r="10"
+                fill="#3ddc84"
+                opacity=".5"
+                style="animation: algae-p 2.7s infinite 0.5s"
+              />
+            </g>
+            <!-- RUNOFF -->
+            <g id="runoffG" opacity="0" style="transition: opacity 0.8s">
+              <circle
+                cx="260"
+                cy="200"
+                r="3"
+                fill="#b45309"
+                style="animation: rain-f 1.8s linear infinite"
+              />
+              <circle
+                cx="325"
+                cy="192"
+                r="2.5"
+                fill="#f59e0b"
+                style="animation: rain-f 2.2s linear infinite 0.3s"
+              />
+              <circle
+                cx="398"
+                cy="204"
+                r="3"
+                fill="#b45309"
+                style="animation: rain-f 1.6s linear infinite 0.6s"
+              />
+              <circle
+                cx="470"
+                cy="194"
+                r="2.5"
+                fill="#f59e0b"
+                style="animation: rain-f 2s linear infinite 0.9s"
+              />
+              <circle
+                cx="522"
+                cy="200"
+                r="3"
+                fill="#b45309"
+                style="animation: rain-f 1.9s linear infinite 0.1s"
+              />
+            </g>
+            <!-- RAIN -->
+            <g id="rainG" opacity="0" style="transition: opacity 0.6s">
+              <line
+                x1="65"
+                y1="0"
+                x2="58"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".7"
+                style="animation: rain-f 0.75s linear infinite"
+              />
+              <line
+                x1="140"
+                y1="0"
+                x2="133"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".6"
+                style="animation: rain-f 0.75s linear infinite 0.08s"
+              />
+              <line
+                x1="215"
+                y1="0"
+                x2="208"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".7"
+                style="animation: rain-f 0.75s linear infinite 0.16s"
+              />
+              <line
+                x1="290"
+                y1="0"
+                x2="283"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".6"
+                style="animation: rain-f 0.75s linear infinite 0.24s"
+              />
+              <line
+                x1="365"
+                y1="0"
+                x2="358"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".7"
+                style="animation: rain-f 0.75s linear infinite 0.32s"
+              />
+              <line
+                x1="440"
+                y1="0"
+                x2="433"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".6"
+                style="animation: rain-f 0.75s linear infinite 0.4s"
+              />
+              <line
+                x1="515"
+                y1="0"
+                x2="508"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".7"
+                style="animation: rain-f 0.75s linear infinite 0.48s"
+              />
+              <line
+                x1="590"
+                y1="0"
+                x2="583"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".6"
+                style="animation: rain-f 0.75s linear infinite 0.56s"
+              />
+              <line
+                x1="665"
+                y1="0"
+                x2="658"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".7"
+                style="animation: rain-f 0.75s linear infinite 0.12s"
+              />
+              <line
+                x1="740"
+                y1="0"
+                x2="733"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1.5"
+                opacity=".6"
+                style="animation: rain-f 0.75s linear infinite 0.2s"
+              />
+              <line
+                x1="103"
+                y1="0"
+                x2="96"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.04s"
+              />
+              <line
+                x1="178"
+                y1="0"
+                x2="171"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.12s"
+              />
+              <line
+                x1="253"
+                y1="0"
+                x2="246"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.2s"
+              />
+              <line
+                x1="328"
+                y1="0"
+                x2="321"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.28s"
+              />
+              <line
+                x1="403"
+                y1="0"
+                x2="396"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.36s"
+              />
+              <line
+                x1="478"
+                y1="0"
+                x2="471"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.44s"
+              />
+              <line
+                x1="553"
+                y1="0"
+                x2="546"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.52s"
+              />
+              <line
+                x1="628"
+                y1="0"
+                x2="621"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.06s"
+              />
+              <line
+                x1="703"
+                y1="0"
+                x2="696"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.14s"
+              />
+              <line
+                x1="778"
+                y1="0"
+                x2="771"
+                y2="26"
+                stroke="#93c5fd"
+                stroke-width="1"
+                opacity=".5"
+                style="animation: rain-f 0.7s linear infinite 0.22s"
+              />
+            </g>
+            <!-- LIVE FISH -->
+            <g id="liveFish" transform="translate(0,85)">
+              <g
+                style="
+                  transform-origin: 190px 280px;
+                  animation: fish1 6s ease-in-out infinite;
+                "
+              >
+                <ellipse cx="190" cy="280" rx="15" ry="6" fill="#64b5f6" />
+                <polygon points="205,280 214,271 214,289" fill="#2979cc" />
+                <path d="M189,274 Q195,266 198,274" fill="#90caf9" stroke="#2979cc" stroke-width=".5" />
+                <path d="M190,286 Q194,291 196,286" fill="#90caf9" stroke="#2979cc" stroke-width=".4" />
+                <path d="M185,274 Q181,280 185,286" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55" />
+                <ellipse cx="189" cy="281" rx="7" ry="2" fill="#bbdefb" opacity=".45" />
+                <circle cx="182" cy="279" r="3" fill="white" />
+                <circle cx="182" cy="279" r="1" fill="#0d2a5e" />
+              </g>
+              <g
+                style="
+                  transform-origin: 465px 305px;
+                  animation: fish2 7s ease-in-out infinite 0.5s;
+                "
+              >
+                <ellipse cx="465" cy="305" rx="12" ry="5" fill="#4fc3f7" />
+                <polygon points="453,305 446,298 446,312" fill="#0288d1" />
+                <path d="M464,300 Q460,293 458,300" fill="#81d4fa" stroke="#0288d1" stroke-width=".5" />
+                <path d="M465,310 Q462,314 460,310" fill="#81d4fa" stroke="#0288d1" stroke-width=".4" />
+                <path d="M469,300 Q472,305 469,310" fill="none" stroke="#0288d1" stroke-width="1" opacity=".55" />
+                <ellipse cx="466" cy="306" rx="6" ry="1" fill="#b3e5fc" opacity=".45" />
+                <circle cx="473" cy="304" r="2" fill="white" />
+                <circle cx="473" cy="304" r="1" fill="#0d2a5e" />
+              </g>
+              <g
+                style="
+                  transform-origin: 315px 328px;
+                  animation: fish3 8s ease-in-out infinite 1s;
+                "
+              >
+                <ellipse cx="315" cy="328" rx="10" ry="4.5" fill="#4fc3f7" />
+                <polygon points="325,328 332,322 332,334" fill="#0288d1" />
+                <path d="M314,323.5 Q318,317 320,323.5" fill="#81d4fa" stroke="#0288d1" stroke-width=".45" />
+                <path d="M315,332.5 Q318,336 319,332.5" fill="#81d4fa" stroke="#0288d1" stroke-width=".35" />
+                <path d="M311,323.5 Q308,328 311,332.5" fill="none" stroke="#0288d1" stroke-width=".9" opacity=".55" />
+                <ellipse cx="314" cy="329" rx="4.8" ry="1" fill="#b3e5fc" opacity=".45" />
+                <circle cx="309" cy="327" r="1.9" fill="white" />
+                <circle cx="309" cy="327" r=".9" fill="#0d2a5e" />
+              </g>
+              <g
+                style="
+                  transform-origin: 630px 292px;
+                  animation: fish1 9s ease-in-out infinite 2s;
+                "
+              >
+                <ellipse cx="630" cy="292" rx="13" ry="5.5" fill="#64b5f6" />
+                <polygon points="643,292 651,284 651,300" fill="#2979cc" />
+                <path d="M629,286.5 Q634,279 637,286.5" fill="#90caf9" stroke="#2979cc" stroke-width=".5" />
+                <path d="M630,297.5 Q634,302 635,297.5" fill="#90caf9" stroke="#2979cc" stroke-width=".4" />
+                <path d="M625,286.5 Q621,292 625,297.5" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55" />
+                <ellipse cx="629" cy="293" rx="6.2" ry="1.6" fill="#bbdefb" opacity=".45" />
+                <circle cx="622" cy="291" r="2.2" fill="white" />
+                <circle cx="622" cy="291" r="1" fill="#0d2a5e" />
+              </g>
+              <g
+                style="
+                  transform-origin: 745px 342px;
+                  animation: fish2 7.5s ease-in-out infinite 3s;
+                "
+              >
+                <ellipse cx="745" cy="342" rx="9" ry="4" fill="#4fc3f7" />
+                <polygon points="736,342 729,336 729,348" fill="#0288d1" />
+                <path d="M744,338 Q741,332.5 739,338" fill="#81d4fa" stroke="#0288d1" stroke-width=".4" />
+                <path d="M745,346 Q742.5,349 741,346" fill="#81d4fa" stroke="#0288d1" stroke-width=".3" />
+                <path d="M748,338 Q751,342 748,346" fill="none" stroke="#0288d1" stroke-width=".8" opacity=".55" />
+                <ellipse cx="746" cy="343" rx="4.4" ry=".9" fill="#b3e5fc" opacity=".45" />
+                <circle cx="752" cy="341" r="1.8" fill="white" />
+                <circle cx="752" cy="341" r=".9" fill="#0d2a5e" />
+              </g>
+            </g>
+            <!-- DEAD FISH -->
+            <g id="deadFish" opacity="0" style="transition: opacity 1.5s" transform="translate(0,85)">
+              <g style="animation: float-dead 4s ease-in-out infinite">
+                <g transform="translate(228,232)">
+                  <g transform="rotate(200)">
+                    <ellipse cx="0" cy="0" rx="12" ry="5" fill="#90a4ae" opacity=".75" />
+                    <polygon points="12,0 20,-7 20,7" fill="#607d8b" opacity=".75" />
+                    <path d="M1,-5 Q4,-10 6,-5" fill="#b0bec5" stroke="#607d8b" stroke-width=".4" />
+                    <path d="M0,5 Q3,8 5,5" fill="#b0bec5" stroke="#607d8b" stroke-width=".35" />
+                    <path d="M-5,-5 Q-8,0 -5,5" fill="none" stroke="#607d8b" stroke-width=".8" opacity=".45" />
+                    <ellipse cx="-1" cy="1" rx="6" ry="1.5" fill="#cfd8dc" opacity=".5" />
+                    <circle cx="-6" cy="-1" r="2" fill="white" />
+                    <circle cx="-6" cy="-1" r=".9" fill="#37474f" />
+                  </g>
+                </g>
+              </g>
+              <g style="animation: float-dead 3.5s ease-in-out infinite 0.8s">
+                <g transform="translate(528,229)">
+                  <g transform="rotate(160)">
+                    <ellipse cx="0" cy="0" rx="10" ry="4.5" fill="#78909c" opacity=".7" />
+                    <polygon points="10,0 17,-6 17,6" fill="#546e7a" opacity=".7" />
+                    <path d="M1,-4 Q4,-9 6,-4" fill="#90a4ae" stroke="#546e7a" stroke-width=".4" />
+                    <path d="M0,4 Q3,7 4,4" fill="#90a4ae" stroke="#546e7a" stroke-width=".35" />
+                    <path d="M-4,-4 Q-7,0 -4,4" fill="none" stroke="#546e7a" stroke-width=".8" opacity=".45" />
+                    <ellipse cx="-1" cy="1" rx="4.8" ry="1.4" fill="#b0bec5" opacity=".5" />
+                    <circle cx="-5" cy="-1" r="1.8" fill="white" />
+                    <circle cx="-5" cy="-1" r=".8" fill="#37474f" />
+                  </g>
+                </g>
+              </g>
+            </g>
+            <!-- O2 WARNING -->
+            <rect
+              id="o2Ov"
+              x="0"
+              y="310"
+              width="820"
+              height="190"
+              fill="#dc2626"
+              opacity="0"
+              style="transition: opacity 0.8s; pointer-events: none"
+            />
+            <g id="o2B" opacity="0" style="transition: opacity 0.8s">
+              <rect
+                x="278"
+                y="332"
+                width="264"
+                height="30"
+                rx="15"
+                fill="rgba(220,38,38,.92)"
+              />
+              <text
+                x="410"
+                y="352"
+                text-anchor="middle"
+                fill="white"
+                font-family="Syne"
+                font-weight="800"
+                font-size="12"
+              >
+                ⚠ HYPOXIC ZONE — Low Oxygen
+              </text>
+            </g>
+            <!-- LABELS -->
+            <text
+              x="10"
+              y="490"
+              fill="rgba(74,96,80,.45)"
+              font-family="Syne"
+              font-weight="700"
+              font-size="8"
+              letter-spacing="2"
+            >
+              BUFFALO BAYOU · HOUSTON, TX
+            </text>
+            <text
+              x="810"
+              y="490"
+              text-anchor="end"
+              fill="rgba(94,184,255,.3)"
+              font-family="Syne"
+              font-weight="700"
+              font-size="8"
+              letter-spacing="2"
+            >
+              GULF OF MEXICO →
+            </text>
+          </svg>
+        </div>
+        <div class="scene-cap" id="storyCap">
+          <strong>Buffalo Bayou, Houston TX</strong> — a 53-mile waterway
+          draining into Galveston Bay and the Gulf of Mexico.
+        </div>
+      </div>
+
+      <!-- STORY COLUMN -->
+      <div class="story-col">
+        <div class="step-nav">
+          <div class="sn-item active" id="sn0" onclick="goStep(0)">
+            <div class="sn-num">1</div>
+            <span class="sn-label">Hook</span>
+          </div>
+          <div class="sn-item" id="sn1" onclick="goStep(1)">
+            <div class="sn-num">2</div>
+            <span class="sn-label">Before</span>
+          </div>
+          <div class="sn-item" id="sn2" onclick="goStep(2)">
+            <div class="sn-num">3</div>
+            <span class="sn-label">Storm</span>
+          </div>
+          <div class="sn-item" id="sn3" onclick="goStep(3)">
+            <div class="sn-num">4</div>
+            <span class="sn-label">After</span>
+          </div>
+          <div class="sn-item" id="sn4" onclick="goStep(4)">
+            <div class="sn-num">5</div>
+            <span class="sn-label">Reflect</span>
+          </div>
+        </div>
+        <div class="story-panes">
+          <!-- PANE 0: HOOK -->
+          <div class="story-pane active" id="p0">
+            <div class="sp-body">
+              <span class="sp-badge" style="color: var(--teal)"
+                >🌊 Step 1 of 5 · Engage</span
+              >
+              <h2 class="sp-title">What happened to Buffalo Bayou?</h2>
+              <div class="sp-text">
+                <p>
+                  In August 2017,
+                  <span
+                    class="v"
+                    data-w="Hurricane Harvey"
+                    data-d="A Category 4 hurricane that stalled over Houston for 5 days, dumping a record 51 inches of rain — the most from any US tropical cyclone in history."
+                    data-t="B.13D — Natural &amp; human impacts on ecosystems"
+                    >Hurricane Harvey</span
+                  >
+                  dropped <strong>51 inches of rain</strong> on Houston in 5
+                  days. Streets flooded. Homes were destroyed. But something
+                  invisible happened too.
+                </p>
+                <p>
+                  Water rushing through Houston's streets picked up
+                  <span
+                    class="v"
+                    data-w="pollutants"
+                    data-d="Harmful substances — fertilizers, sewage, chemicals, sediment — that contaminate water and disrupt living systems."
+                    data-t="B.13D — Human impact on ecosystems"
+                    >pollutants</span
+                  >,
+                  <span
+                    class="v"
+                    data-w="nutrients"
+                    data-d="Chemicals like nitrogen and phosphorus that organisms need to grow. In large amounts they cause out-of-control algae growth."
+                    data-t="B.13C — Ecosystem disruption"
+                    >nutrients</span
+                  >
+                  from fertilizers, and raw sewage — and poured it all directly
+                  into Buffalo Bayou.
+                </p>
+                <p>
+                  Over the next steps, you'll see how that changed the
+                  <span
+                    class="v"
+                    data-w="ecosystem"
+                    data-d="All living organisms (biotic factors) and non-living things (abiotic factors) in an area, plus all their interactions."
+                    data-t="B.13C — Ecosystems"
+                    >ecosystem</span
+                  >
+                  — and why it still hasn't fully recovered.
+                </p>
+              </div>
+              <div class="dc-row">
+                <div class="dc">
+                  <div class="dc-label">Rainfall Total</div>
+                  <div class="dc-val good">51 in</div>
+                  <div class="dc-sub">Over 5 days · Aug 25–31</div>
+                </div>
+                <div class="dc">
+                  <div class="dc-label">US Record</div>
+                  <div class="dc-val bad">⚠ #1</div>
+                  <div class="dc-sub">Most rain ever from a US storm</div>
+                </div>
+              </div>
+              <div class="dc-row">
+                <div class="dc">
+                  <div class="dc-label">Homes Flooded</div>
+                  <div class="dc-val warn">300k+</div>
+                  <div class="dc-sub">Across Harris County</div>
+                </div>
+                <div class="dc">
+                  <div class="dc-label">Sewage Released</div>
+                  <div class="dc-val bad">~60M gal</div>
+                  <div class="dc-sub">Into Houston waterways</div>
+                </div>
+              </div>
+            </div>
+            <div class="btn-row">
+              <span class="step-counter">01 / 05</span>
+              <button class="btn btn-p" onclick="goStep(1)">
+                Next: Before Harvey →
+              </button>
+            </div>
+          </div>
+
+          <!-- PANE 1: BEFORE -->
+          <div class="story-pane" id="p1">
+            <div class="sp-body">
+              <span class="sp-badge" style="color: var(--blue)"
+                >🔬 Step 2 of 5 · Explore</span
+              >
+              <h2 class="sp-title">Buffalo Bayou Before Harvey</h2>
+              <div class="sp-text">
+                <p>
+                  Before Harvey, Buffalo Bayou was stressed but functional.
+                  Houston's concrete landscape meant
+                  <span
+                    class="v"
+                    data-w="runoff"
+                    data-d="Water that flows over land into waterways instead of soaking into the ground. Roads and parking lots increase runoff speed and volume, washing pollutants into bayous."
+                    data-t="B.13D — Human land use impact"
+                    >runoff</span
+                  >
+                  was already high — but
+                  <span
+                    class="v"
+                    data-w="dissolved oxygen"
+                    data-d="O₂ mixed into water. Fish need it to survive, just like we need O₂ in air. Healthy levels are above 5 mg/L."
+                    data-t="B.13C — Abiotic factors"
+                    >dissolved oxygen</span
+                  >
+                  was still acceptable for most aquatic life.
+                </p>
+                <p>
+                  The bayou supported 18 fish species, riparian plants, and a
+                  connected
+                  <span
+                    class="v"
+                    data-w="food web"
+                    data-d="All the feeding relationships in an ecosystem — who eats what. Disruptions at any level ripple through the whole web."
+                    data-t="B.13C — Food webs &amp; disruption"
+                    >food web</span
+                  >
+                  linking insects, birds, turtles, and mammals.
+                </p>
+              </div>
+              <div class="metric">
+                <div class="m-top">
+                  <span class="m-name">Dissolved O₂</span
+                  ><span class="m-val good">7.2 mg/L ✓</span>
+                </div>
+                <div class="m-bg">
+                  <div
+                    class="m-bar"
+                    style="width: 80%; background: var(--green)"
+                  ></div>
+                </div>
+              </div>
+              <div class="metric">
+                <div class="m-top">
+                  <span class="m-name">Turbidity</span
+                  ><span class="m-val warn">38 NTU</span>
+                </div>
+                <div class="m-bg">
+                  <div
+                    class="m-bar"
+                    style="width: 4%; background: var(--amber)"
+                  ></div>
+                </div>
+              </div>
+              <div class="metric">
+                <div class="m-top">
+                  <span class="m-name">Nitrogen Load</span
+                  ><span class="m-val warn">2.1 mg/L</span>
+                </div>
+                <div class="m-bg">
+                  <div
+                    class="m-bar"
+                    style="width: 17%; background: var(--amber)"
+                  ></div>
+                </div>
+              </div>
+              <div class="metric">
+                <div class="m-top">
+                  <span class="m-name">Fish Species</span
+                  ><span class="m-val good">18 species</span>
+                </div>
+                <div class="m-bg">
+                  <div
+                    class="m-bar"
+                    style="width: 100%; background: var(--green)"
+                  ></div>
+                </div>
+              </div>
+              <div class="metric">
+                <div class="m-top">
+                  <span class="m-name"
+                    ><span
+                      class="v"
+                      data-w="Impervious Surface"
+                      data-d="Land water can't soak through — roads, parking lots, rooftops. Houston has ~60% impervious cover, one of the highest of any major US city."
+                      data-t="B.13D — Human land modification"
+                      >Impervious Cover</span
+                    ></span
+                  ><span class="m-val bad">~60%</span>
+                </div>
+                <div class="m-bg">
+                  <div
+                    class="m-bar"
+                    style="width: 60%; background: var(--coral)"
+                  ></div>
+                </div>
+              </div>
+              <div class="infobox ib-tip" style="margin-top: 10px">
+                💡
+                <strong style="color: var(--text)">Think about it:</strong> When
+                60% of a city is concrete and it rains — where does all that
+                water go?
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-g" onclick="goStep(0)">← Back</button>
+              <button class="btn btn-p" onclick="goStep(2)">
+                Next: The Storm →
+              </button>
+            </div>
+          </div>
+
+          <!-- PANE 2: STORM -->
+          <div class="story-pane" id="p2">
+            <div class="sp-body">
+              <span class="sp-badge" style="color: var(--amber)"
+                >⛈️ Step 3 of 5 · Explain</span
+              >
+              <h2 class="sp-title">Harvey Hits Houston</h2>
+              <div class="sp-text">
+                <p>
+                  51 inches on 60% concrete — with nowhere to go.
+                  <span
+                    class="v"
+                    data-w="Runoff"
+                    data-d="Water flowing over land into waterways, picking up and carrying pollutants."
+                    data-t="B.13D — Land use impacts"
+                    >Runoff</span
+                  >
+                  surged into Buffalo Bayou carrying a toxic mix.
+                </p>
+              </div>
+              <div class="sstage active" id="ss0">
+                <div class="ss-title">
+                  <div class="ss-dot dot-active"></div>
+                  Day 1–2: The Flood
+                </div>
+                <div class="ss-text">
+                  Floodwaters overwhelmed storm drains and mixed with raw sewage
+                  from flooded treatment plants.
+                  <span
+                    class="v"
+                    data-w="Turbidity"
+                    data-d="Water cloudiness caused by suspended particles. High turbidity blocks sunlight, preventing aquatic plants from photosynthesizing."
+                    data-t="B.13C — Abiotic factors: light"
+                    >Turbidity</span
+                  >
+                  spiked from 38 → <strong>890 NTU</strong>. Sunlight couldn't
+                  reach underwater plants.
+                </div>
+              </div>
+              <div class="sstage" id="ss1">
+                <div class="ss-title">
+                  <div class="ss-dot dot-wait" id="dot1"></div>
+                  Day 3–4: Nutrient Surge
+                </div>
+                <div class="ss-text">
+                  Floodwaters washed fertilizers from lawns and farms into the
+                  bayou.
+                  <span
+                    class="v"
+                    data-w="Nitrogen"
+                    data-d="A nutrient (N) in fertilizers and waste. Excess nitrogen in waterways triggers explosive algae growth — a key driver of ecosystem disruption."
+                    data-t="B.13C — Nutrient cycling"
+                    >Nitrogen</span
+                  >
+                  jumped 2.1 → <strong>8.7 mg/L</strong>. This fueled a massive
+                  <span
+                    class="v"
+                    data-w="algae bloom"
+                    data-d="Rapid, explosive algae growth from excess nutrients. When the algae die, decomposing bacteria consume enormous amounts of dissolved oxygen — suffocating aquatic life."
+                    data-t="B.13C — Ecosystem disruption"
+                    >algae bloom</span
+                  >.
+                </div>
+              </div>
+              <div class="sstage" id="ss2">
+                <div class="ss-title">
+                  <div class="ss-dot dot-wait" id="dot2"></div>
+                  Day 5+: Oxygen Crash
+                </div>
+                <div class="ss-text">
+                  As the bloom died,
+                  <span
+                    class="v"
+                    data-w="decomposers"
+                    data-d="Bacteria and fungi that break down dead organic matter. During an algae crash, they multiply explosively and consume nearly all dissolved oxygen in the water."
+                    data-t="B.13C — Decomposers in ecosystems"
+                    >decomposers</span
+                  >
+                  consumed nearly all dissolved oxygen.
+                  <span
+                    class="v"
+                    data-w="Hypoxia"
+                    data-d="Water dissolved oxygen below 2 mg/L — too low for most fish and invertebrates to survive. Also called a 'dead zone.'"
+                    data-t="B.13C — Hypoxia &amp; dead zones"
+                    >Hypoxia</span
+                  >
+                  set in — O₂ crashed to <strong>2.1 mg/L</strong>. Fish died.
+                </div>
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-g" onclick="goStep(1)">← Back</button>
+              <button class="btn btn-p" onclick="goStep(3)">
+                Next: After Harvey →
+              </button>
+            </div>
+          </div>
+
+          <!-- PANE 3: AFTER -->
+          <div class="story-pane" id="p3">
+            <div class="sp-body">
+              <span class="sp-badge" style="color: var(--coral)"
+                >📉 Step 4 of 5 · Elaborate</span
+              >
+              <h2 class="sp-title">The Aftermath</h2>
+              <div class="sp-text">
+                <p>
+                  Within days, Buffalo Bayou's
+                  <span
+                    class="v"
+                    data-w="biodiversity"
+                    data-d="The variety of different species in an ecosystem. High biodiversity means a more stable, resilient ecosystem. Low biodiversity signals damage."
+                    data-t="B.13C — Biodiversity as ecosystem indicator"
+                    >biodiversity</span
+                  >
+                  collapsed. Changes to
+                  <span
+                    class="v"
+                    data-w="abiotic factors"
+                    data-d="Non-living components of an ecosystem — temperature, water, light, oxygen, pH, nutrients. Harvey changed nearly every abiotic factor simultaneously."
+                    data-t="B.13C — Abiotic vs biotic factors"
+                    >abiotic factors</span
+                  >
+                  triggered a chain reaction through the entire
+                  <span
+                    class="v"
+                    data-w="food web"
+                    data-d="All feeding relationships in an ecosystem. Disruptions at any level affect every connected organism."
+                    data-t="B.13C — Food webs &amp; disruption"
+                    >food web</span
+                  >.
+                </p>
+              </div>
+              <table class="ctable">
+                <thead>
+                  <tr>
+                    <th>Measure</th>
+                    <th class="bh">Before</th>
+                    <th class="ah">After</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Dissolved O₂</td>
+                    <td class="good">7.2 mg/L</td>
+                    <td class="bad">2.1 mg/L</td>
+                  </tr>
+                  <tr>
+                    <td>Turbidity</td>
+                    <td class="good">38 NTU</td>
+                    <td class="bad">890 NTU</td>
+                  </tr>
+                  <tr>
+                    <td>Nitrogen</td>
+                    <td class="warn">2.1 mg/L</td>
+                    <td class="bad">8.7 mg/L</td>
+                  </tr>
+                  <tr>
+                    <td>Fish Species</td>
+                    <td class="good">18</td>
+                    <td class="bad">4</td>
+                  </tr>
+                  <tr>
+                    <td>Riparian Plants</td>
+                    <td class="good">Dense</td>
+                    <td class="bad">Destroyed</td>
+                  </tr>
+                  <tr>
+                    <td>Coliform Bacteria</td>
+                    <td class="good">Low</td>
+                    <td class="bad">Critical</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="infobox ib-warn">
+                ⚠️ <strong style="color: var(--text)">Six years later</strong>,
+                recovery is only partial.
+                <span
+                  class="v"
+                  data-w="Eutrophication"
+                  data-d="Excess nutrients enter a waterway → explosive algae growth → oxygen depletion → aquatic life dies. A major consequence of urban and agricultural runoff."
+                  data-t="B.13C — Eutrophication; B.13D — human nutrient loading"
+                  >Eutrophication</span
+                >
+                cycles continue because Houston's
+                <span
+                  class="v"
+                  data-w="impervious surface"
+                  data-d="Land water can't soak through — roads, parking lots, rooftops. Houston's 60% impervious cover hasn't changed."
+                  data-t="B.13D — Human land modification"
+                  >impervious surface</span
+                >
+                problem is unchanged.
+              </div>
+              <div class="infobox ib-success">
+                🌱
+                <strong style="color: var(--text)">Recovery work</strong>
+                includes planting native vegetation, green infrastructure to
+                absorb
+                <span
+                  class="v"
+                  data-w="runoff"
+                  data-d="Water flowing over impervious surfaces into waterways, carrying pollutants."
+                  data-t="B.13D"
+                  >runoff</span
+                >, and upgrading sewage plants — addressing both
+                <span
+                  class="v"
+                  data-w="biotic factors"
+                  data-d="The living components of an ecosystem — all plants, animals, fungi, and bacteria."
+                  data-t="B.13C — Biotic vs abiotic factors"
+                  >biotic</span
+                >
+                and
+                <span
+                  class="v"
+                  data-w="abiotic factors"
+                  data-d="Non-living components — temperature, water, light, oxygen, pH, nutrients."
+                  data-t="B.13C — Abiotic vs biotic factors"
+                  >abiotic factors</span
+                >
+                together.
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-g" onclick="goStep(2)">← Back</button>
+              <button class="btn btn-p" onclick="goStep(4)">
+                Next: Reflect →
+              </button>
+            </div>
+          </div>
+
+          <!-- PANE 4: REFLECT -->
+          <div class="story-pane" id="p4">
+            <div class="sp-body">
+              <span class="sp-badge" style="color: var(--green)"
+                >✏️ Step 5 of 5 · Evaluate</span
+              >
+              <h2 class="sp-title">Reflect &amp; Respond</h2>
+              <div class="sp-text">
+                <p>
+                  Answer both questions in your own words.
+                  <strong>Use at least 2 vocab terms</strong> in each response.
+                </p>
+              </div>
+              <div class="qcard">
+                <div class="qnum">Question 1 · B.13C</div>
+                <div class="qtext">
+                  Explain how Harvey caused a
+                  <span
+                    class="v"
+                    data-w="hypoxic zone"
+                    data-d="Water with dissolved oxygen below 2 mg/L — too low for most life. Caused by decomposers breaking down a massive algae bloom crash."
+                    data-t="B.13C — Hypoxia"
+                    >hypoxic zone</span
+                  >
+                  in Buffalo Bayou. Describe the chain of events from
+                  <span
+                    class="v"
+                    data-w="nutrient loading"
+                    data-d="Excess nutrients — nitrogen and phosphorus from fertilizers and sewage — flowing into a waterway. The first step toward eutrophication and hypoxia."
+                    data-t="B.13C — Nutrient loading"
+                    >nutrient loading</span
+                  >
+                  to oxygen crash.
+                </div>
+                <textarea
+                  class="qtextarea"
+                  id="q1"
+                  placeholder="During Hurricane Harvey, nutrient loading caused..."
+                ></textarea>
+                <div class="qhint">
+                  💡 nutrients → algae bloom → decomposers → O₂ ↓ → hypoxia
+                </div>
+              </div>
+              <div class="qcard">
+                <div class="qnum">Question 2 · B.13D</div>
+                <div class="qtext">
+                  How did human changes to the land make Harvey's ecosystem
+                  impact worse? Which
+                  <span
+                    class="v"
+                    data-w="abiotic factors"
+                    data-d="Non-living components — temperature, light, oxygen, pH, nutrients. Harvey changed nearly all of them simultaneously."
+                    data-t="B.13C — Abiotic factors"
+                    >abiotic factors</span
+                  >
+                  were most affected by Houston's
+                  <span
+                    class="v"
+                    data-w="impervious surface"
+                    data-d="Land water can't soak through — concrete, roads, rooftops. Increases runoff volume and speed dramatically."
+                    data-t="B.13D — Land modification"
+                    >impervious surface</span
+                  >
+                  cover?
+                </div>
+                <textarea
+                  class="qtextarea"
+                  id="q2"
+                  placeholder="Houston's impervious surfaces made Harvey's impact worse because..."
+                ></textarea>
+                <div class="qhint">
+                  💡 Think: 60% concrete + 51 inches of rain = ?
+                </div>
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-g" onclick="goStep(3)">← Back</button>
+              <button class="btn btn-p" onclick="finishStory()">
+                ✓ Finish &amp; Unlock Lab →
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- /story-panes -->
+      </div>
+      <!-- /story-col -->
+    </div>
+    <!-- /storyMode -->
+
+    <!-- ══ LAB MODE ══ -->
+    <div id="labMode">
+      <div class="lab-layout">
+        <!-- SCENE (reuses same SVG via JS sync) -->
+        <div class="lab-scene">
+          <div class="scene-wrap">
+            <svg
+              id="labSVG"
+              viewBox="0 0 820 500"
+              xmlns="http://www.w3.org/2000/svg"
+              width="100%"
+              height="100%"
+              preserveAspectRatio="xMidYMid slice"
+            >
+              <defs>
+                <linearGradient id="lskyG" x1="0" y1="0" x2="0" y2="1">
+                  <stop id="ls1" offset="0%" stop-color="#6fb8f3" />
+                  <stop id="ls2" offset="100%" stop-color="#c6e8ff" />
+                </linearGradient>
+                <linearGradient id="lwtG" x1="0" y1="0" x2="0" y2="1">
+                  <stop id="lw1" offset="0%" stop-color="#1a5c8a" />
+                  <stop id="lw2" offset="100%" stop-color="#0d3a5c" />
+                </linearGradient>
+                <radialGradient id="lalgG" cx="50%" cy="0%" r="85%">
+                  <stop offset="0%" stop-color="#3ddc84" stop-opacity=".65" />
+                  <stop offset="100%" stop-color="#3ddc84" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+              <rect
+                id="lskyR"
+                x="0"
+                y="0"
+                width="820"
+                height="260"
+                fill="url(#lskyG)"
+              />
+              <!-- SUN (Gulf style) -->
+              <g id="lsunG">
+                <circle cx="684" cy="74" r="44" fill="#fbbf24" opacity=".13" />
+                <circle cx="684" cy="74" r="34" fill="#fbbf24" opacity=".18" />
+                <line x1="684" y1="32" x2="684" y2="20" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" opacity=".85" />
+                <line x1="684" y1="116" x2="684" y2="128" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" opacity=".85" />
+                <line x1="642" y1="74" x2="630" y2="74" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" opacity=".85" />
+                <line x1="726" y1="74" x2="738" y2="74" stroke="#fbbf24" stroke-width="2.8" stroke-linecap="round" opacity=".85" />
+                <line x1="654" y1="44" x2="646" y2="36" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".65" />
+                <line x1="714" y1="44" x2="722" y2="36" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".65" />
+                <line x1="654" y1="104" x2="646" y2="112" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".65" />
+                <line x1="714" y1="104" x2="722" y2="112" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".65" />
+                <circle cx="684" cy="74" r="28" fill="#fde68a" />
+                <circle cx="684" cy="74" r="24" fill="#fbbf24" />
+                <circle cx="684" cy="74" r="20" fill="#fcd34d" />
+                <ellipse cx="676" cy="66" rx="8" ry="6" fill="#fef3c7" opacity=".55" />
+              </g>
+              <g
+                id="lnClouds"
+                style="animation: cloud-d 7s ease-in-out infinite alternate"
+              >
+                <ellipse
+                  cx="130"
+                  cy="44"
+                  rx="70"
+                  ry="19"
+                  fill="#e5f3ff"
+                  opacity=".35"
+                />
+                <ellipse
+                  cx="172"
+                  cy="33"
+                  rx="46"
+                  ry="15"
+                  fill="#e5f3ff"
+                  opacity=".35"
+                />
+                <ellipse
+                  cx="570"
+                  cy="50"
+                  rx="80"
+                  ry="21"
+                  fill="#e5f3ff"
+                  opacity=".3"
+                />
+                <ellipse
+                  cx="618"
+                  cy="38"
+                  rx="52"
+                  ry="16"
+                  fill="#e5f3ff"
+                  opacity=".3"
+                />
+              </g>
+              <g id="lsClouds" opacity="0" style="transition: opacity 1.5s">
+                <ellipse
+                  cx="75"
+                  cy="48"
+                  rx="95"
+                  ry="34"
+                  fill="#0d1117"
+                  opacity=".97"
+                />
+                <ellipse
+                  cx="200"
+                  cy="35"
+                  rx="110"
+                  ry="38"
+                  fill="#111827"
+                  opacity=".96"
+                />
+                <ellipse
+                  cx="365"
+                  cy="47"
+                  rx="125"
+                  ry="40"
+                  fill="#0d1117"
+                  opacity=".95"
+                />
+                <ellipse
+                  cx="535"
+                  cy="37"
+                  rx="105"
+                  ry="35"
+                  fill="#111827"
+                  opacity=".95"
+                />
+                <ellipse
+                  cx="700"
+                  cy="50"
+                  rx="115"
+                  ry="37"
+                  fill="#0d1117"
+                  opacity=".94"
+                />
+                <ellipse
+                  cx="785"
+                  cy="33"
+                  rx="75"
+                  ry="28"
+                  fill="#111827"
+                  opacity=".93"
+                />
+              </g>
+              <rect x="0" y="260" width="820" height="52" fill="#0e1f0a" />
+              <g id="ltreesG" style="transition: opacity 1s" transform="translate(0,85)">
+                <rect x="30" y="155" width="5" height="23" fill="#2a4515" />
+                <circle cx="32" cy="149" r="13" fill="#2d5c14" />
+                <rect x="92" y="150" width="5" height="28" fill="#2a4515" />
+                <circle cx="94" cy="142" r="15" fill="#355e18" />
+                <rect x="158" y="158" width="4" height="20" fill="#2a4515" />
+                <circle cx="160" cy="152" r="12" fill="#2d5c14" />
+                <rect x="215" y="153" width="5" height="25" fill="#2a4515" />
+                <circle cx="217" cy="145" r="14" fill="#355e18" />
+              </g>
+              <g id="lbldgsG" opacity=".5" style="transition: opacity 1s" transform="translate(0,85)">
+                <rect x="285" y="127" width="34" height="48" fill="#1e2d3d" />
+                <rect x="328" y="140" width="26" height="35" fill="#243444" />
+                <rect x="364" y="133" width="31" height="42" fill="#1a2535" />
+                <rect x="404" y="146" width="24" height="29" fill="#243444" />
+                <rect x="437" y="125" width="36" height="50" fill="#1e2d3d" />
+                <rect x="482" y="138" width="27" height="37" fill="#1a2535" />
+                <rect
+                  x="291"
+                  y="134"
+                  width="4"
+                  height="4"
+                  fill="rgba(255,220,100,.15)"
+                />
+                <rect
+                  x="300"
+                  y="134"
+                  width="4"
+                  height="4"
+                  fill="rgba(255,220,100,.15)"
+                />
+                <rect
+                  x="443"
+                  y="132"
+                  width="4"
+                  height="4"
+                  fill="rgba(255,220,100,.15)"
+                />
+                <rect
+                  x="452"
+                  y="132"
+                  width="4"
+                  height="4"
+                  fill="rgba(255,220,100,.15)"
+                />
+              </g>
+              <rect
+                id="lwaterR"
+                x="0"
+                y="310"
+                width="820"
+                height="190"
+                fill="url(#lwtG)"
+              />
+              <g opacity=".18" style="mix-blend-mode: screen">
+                <path
+                  d="M0,336 C60,330 120,342 180,336 C240,330 300,342 360,336 C420,330 480,342 540,336 C600,330 660,342 720,336 C760,333 790,338 820,336"
+                  fill="none"
+                  stroke="#8fd7ff"
+                  stroke-width="1.2"
+                >
+                  <animate
+                    attributeName="d"
+                    dur="2.1s"
+                    repeatCount="indefinite"
+                    values="M0,336 C60,330 120,342 180,336 C240,330 300,342 360,336 C420,330 480,342 540,336 C600,330 660,342 720,336 C760,333 790,338 820,336;
+                            M0,336 C60,342 120,330 180,336 C240,342 300,330 360,336 C420,342 480,330 540,336 C600,342 660,330 720,336 C760,339 790,334 820,336;
+                            M0,336 C60,330 120,342 180,336 C240,330 300,342 360,336 C420,330 480,342 540,336 C600,330 660,342 720,336 C760,333 790,338 820,336"
+                  />
+                </path>
+                <path
+                  d="M-20,352 C40,346 100,358 160,352 C220,346 280,358 340,352 C400,346 460,358 520,352 C580,346 640,358 700,352 C750,348 790,355 840,352"
+                  fill="none"
+                  stroke="#9fdfff"
+                  stroke-width=".9"
+                  opacity=".8"
+                >
+                  <animate
+                    attributeName="d"
+                    dur="2.6s"
+                    repeatCount="indefinite"
+                    values="M-20,352 C40,346 100,358 160,352 C220,346 280,358 340,352 C400,346 460,358 520,352 C580,346 640,358 700,352 C750,348 790,355 840,352;
+                            M-20,352 C40,358 100,346 160,352 C220,358 280,346 340,352 C400,358 460,346 520,352 C580,358 640,346 700,352 C750,355 790,349 840,352;
+                            M-20,352 C40,346 100,358 160,352 C220,346 280,358 340,352 C400,346 460,358 520,352 C580,346 640,358 700,352 C750,348 790,355 840,352"
+                  />
+                </path>
+                <path
+                  d="M0,310 C55,304 110,316 165,310 C220,304 275,316 330,310 C385,304 440,316 495,310 C550,304 605,316 660,310 C715,304 770,316 820,310"
+                  fill="none"
+                  stroke="#a8e4ff"
+                  stroke-width="1.4"
+                  opacity=".9"
+                >
+                  <animate
+                    attributeName="d"
+                    dur="1.7s"
+                    repeatCount="indefinite"
+                    values="M0,310 C55,304 110,316 165,310 C220,304 275,316 330,310 C385,304 440,316 495,310 C550,304 605,316 660,310 C715,304 770,316 820,310;
+                            M0,310 C55,316 110,304 165,310 C220,316 275,304 330,310 C385,316 440,304 495,310 C550,316 605,304 660,310 C715,316 770,304 820,310;
+                            M0,310 C55,304 110,316 165,310 C220,304 275,316 330,310 C385,304 440,316 495,310 C550,304 605,316 660,310 C715,304 770,316 820,310"
+                  />
+                </path>
+              </g>
+              <g id="lshimmerG" opacity=".25" transform="translate(0,85)">
+                <g style="mix-blend-mode: screen">
+                  <path
+                    d="M88,236 C110,231 138,231 162,236 C141,240 111,241 88,236"
+                    fill="none"
+                    stroke="#9fdfff"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    opacity=".55"
+                  >
+                    <animate attributeName="opacity" values=".35;.65;.35" dur="2.2s" repeatCount="indefinite" />
+                    <animateTransform attributeName="transform" type="translate" values="0 0;7 -1;0 0" dur="4.2s" repeatCount="indefinite" />
+                  </path>
+                  <path
+                    d="M296,245 C330,239 380,239 418,245 C385,250 332,251 296,245"
+                    fill="none"
+                    stroke="#b7e9ff"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    opacity=".6"
+                  >
+                    <animate attributeName="opacity" values=".4;.75;.4" dur="2.8s" repeatCount="indefinite" />
+                    <animateTransform attributeName="transform" type="translate" values="0 0;-10 1;0 0" dur="5.1s" repeatCount="indefinite" />
+                  </path>
+                  <path
+                    d="M560,238 C588,233 628,233 656,238 C630,243 589,244 560,238"
+                    fill="none"
+                    stroke="#9fdfff"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                    opacity=".58"
+                  >
+                    <animate attributeName="opacity" values=".38;.7;.38" dur="2.4s" repeatCount="indefinite" />
+                    <animateTransform attributeName="transform" type="translate" values="0 0;9 -1;0 0" dur="4.6s" repeatCount="indefinite" />
+                  </path>
+                  <circle cx="188" cy="241" r="1.6" fill="#c8efff" opacity=".45">
+                    <animate attributeName="opacity" values=".2;.55;.2" dur="1.9s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="506" cy="247" r="1.5" fill="#c8efff" opacity=".4">
+                    <animate attributeName="opacity" values=".18;.5;.18" dur="2.3s" repeatCount="indefinite" />
+                  </circle>
+                </g>
+              </g>
+              <rect
+                id="lalgaeR"
+                x="0"
+                y="310"
+                width="820"
+                height="70"
+                fill="url(#lalgG)"
+                opacity="0"
+                style="transition: opacity 1.5s; pointer-events: none"
+              />
+              <g id="lalgCells" opacity="0" style="transition: opacity 1.5s">
+                <circle
+                  cx="170"
+                  cy="236"
+                  r="10"
+                  fill="#3ddc84"
+                  opacity=".6"
+                  style="animation: algae-p 2s infinite"
+                />
+                <circle
+                  cx="285"
+                  cy="245"
+                  r="8"
+                  fill="#3ddc84"
+                  opacity=".5"
+                  style="animation: algae-p 2.5s infinite 0.3s"
+                />
+                <circle
+                  cx="420"
+                  cy="234"
+                  r="12"
+                  fill="#3ddc84"
+                  opacity=".55"
+                  style="animation: algae-p 1.8s infinite 0.7s"
+                />
+                <circle
+                  cx="535"
+                  cy="244"
+                  r="9"
+                  fill="#3ddc84"
+                  opacity=".6"
+                  style="animation: algae-p 2.2s infinite 0.2s"
+                />
+                <circle
+                  cx="650"
+                  cy="236"
+                  r="10"
+                  fill="#3ddc84"
+                  opacity=".5"
+                  style="animation: algae-p 2.7s infinite 0.5s"
+                />
+              </g>
+              <g id="lrunoffG" opacity="0" style="transition: opacity 0.8s">
+                <circle
+                  cx="260"
+                  cy="200"
+                  r="3"
+                  fill="#b45309"
+                  style="animation: rain-f 1.8s linear infinite"
+                />
+                <circle
+                  cx="325"
+                  cy="192"
+                  r="2.5"
+                  fill="#f59e0b"
+                  style="animation: rain-f 2.2s linear infinite 0.3s"
+                />
+                <circle
+                  cx="398"
+                  cy="204"
+                  r="3"
+                  fill="#b45309"
+                  style="animation: rain-f 1.6s linear infinite 0.6s"
+                />
+                <circle
+                  cx="470"
+                  cy="194"
+                  r="2.5"
+                  fill="#f59e0b"
+                  style="animation: rain-f 2s linear infinite 0.9s"
+                />
+                <circle
+                  cx="522"
+                  cy="200"
+                  r="3"
+                  fill="#b45309"
+                  style="animation: rain-f 1.9s linear infinite 0.1s"
+                />
+              </g>
+              <g id="lrainG" opacity="0" style="transition: opacity 0.6s">
+                <line
+                  x1="65"
+                  y1="0"
+                  x2="58"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".7"
+                  style="animation: rain-f 0.75s linear infinite"
+                />
+                <line
+                  x1="140"
+                  y1="0"
+                  x2="133"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".6"
+                  style="animation: rain-f 0.75s linear infinite 0.08s"
+                />
+                <line
+                  x1="215"
+                  y1="0"
+                  x2="208"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".7"
+                  style="animation: rain-f 0.75s linear infinite 0.16s"
+                />
+                <line
+                  x1="290"
+                  y1="0"
+                  x2="283"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".6"
+                  style="animation: rain-f 0.75s linear infinite 0.24s"
+                />
+                <line
+                  x1="365"
+                  y1="0"
+                  x2="358"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".7"
+                  style="animation: rain-f 0.75s linear infinite 0.32s"
+                />
+                <line
+                  x1="440"
+                  y1="0"
+                  x2="433"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".6"
+                  style="animation: rain-f 0.75s linear infinite 0.4s"
+                />
+                <line
+                  x1="515"
+                  y1="0"
+                  x2="508"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".7"
+                  style="animation: rain-f 0.75s linear infinite 0.48s"
+                />
+                <line
+                  x1="590"
+                  y1="0"
+                  x2="583"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".6"
+                  style="animation: rain-f 0.75s linear infinite 0.56s"
+                />
+                <line
+                  x1="665"
+                  y1="0"
+                  x2="658"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".7"
+                  style="animation: rain-f 0.75s linear infinite 0.12s"
+                />
+                <line
+                  x1="740"
+                  y1="0"
+                  x2="733"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1.5"
+                  opacity=".6"
+                  style="animation: rain-f 0.75s linear infinite 0.2s"
+                />
+                <line
+                  x1="103"
+                  y1="0"
+                  x2="96"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.04s"
+                />
+                <line
+                  x1="178"
+                  y1="0"
+                  x2="171"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.12s"
+                />
+                <line
+                  x1="253"
+                  y1="0"
+                  x2="246"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.2s"
+                />
+                <line
+                  x1="328"
+                  y1="0"
+                  x2="321"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.28s"
+                />
+                <line
+                  x1="403"
+                  y1="0"
+                  x2="396"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.36s"
+                />
+                <line
+                  x1="478"
+                  y1="0"
+                  x2="471"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.44s"
+                />
+                <line
+                  x1="553"
+                  y1="0"
+                  x2="546"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.52s"
+                />
+                <line
+                  x1="628"
+                  y1="0"
+                  x2="621"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.06s"
+                />
+                <line
+                  x1="703"
+                  y1="0"
+                  x2="696"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.14s"
+                />
+                <line
+                  x1="778"
+                  y1="0"
+                  x2="771"
+                  y2="26"
+                  stroke="#93c5fd"
+                  stroke-width="1"
+                  opacity=".5"
+                  style="animation: rain-f 0.7s linear infinite 0.22s"
+                />
+              </g>
+              <g id="lliveFish" transform="translate(0,85)">
+                <g
+                  style="
+                    transform-origin: 190px 280px;
+                    animation: fish1 6s ease-in-out infinite;
+                  "
+                >
+                  <ellipse cx="190" cy="280" rx="15" ry="6" fill="#64b5f6" />
+                  <polygon points="205,280 214,271 214,289" fill="#2979cc" />
+                  <path d="M189,274 Q195,266 198,274" fill="#90caf9" stroke="#2979cc" stroke-width=".5" />
+                  <path d="M190,286 Q194,291 196,286" fill="#90caf9" stroke="#2979cc" stroke-width=".4" />
+                  <path d="M185,274 Q181,280 185,286" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55" />
+                  <ellipse cx="189" cy="281" rx="7" ry="2" fill="#bbdefb" opacity=".45" />
+                  <circle cx="182" cy="279" r="3" fill="white" />
+                  <circle cx="182" cy="279" r="1" fill="#0d2a5e" />
+                </g>
+                <g
+                  style="
+                    transform-origin: 465px 305px;
+                    animation: fish2 7s ease-in-out infinite 0.5s;
+                  "
+                >
+                  <ellipse cx="465" cy="305" rx="12" ry="5" fill="#4fc3f7" />
+                  <polygon points="453,305 446,298 446,312" fill="#0288d1" />
+                  <path d="M464,300 Q460,293 458,300" fill="#81d4fa" stroke="#0288d1" stroke-width=".5" />
+                  <path d="M465,310 Q462,314 460,310" fill="#81d4fa" stroke="#0288d1" stroke-width=".4" />
+                  <path d="M469,300 Q472,305 469,310" fill="none" stroke="#0288d1" stroke-width="1" opacity=".55" />
+                  <ellipse cx="466" cy="306" rx="6" ry="1" fill="#b3e5fc" opacity=".45" />
+                  <circle cx="473" cy="304" r="2" fill="white" />
+                  <circle cx="473" cy="304" r="1" fill="#0d2a5e" />
+                </g>
+                <g
+                  style="
+                    transform-origin: 315px 328px;
+                    animation: fish3 8s ease-in-out infinite 1s;
+                  "
+                >
+                  <ellipse cx="315" cy="328" rx="10" ry="4.5" fill="#4fc3f7" />
+                  <polygon points="325,328 332,322 332,334" fill="#0288d1" />
+                  <path d="M314,323.5 Q318,317 320,323.5" fill="#81d4fa" stroke="#0288d1" stroke-width=".45" />
+                  <path d="M315,332.5 Q318,336 319,332.5" fill="#81d4fa" stroke="#0288d1" stroke-width=".35" />
+                  <path d="M311,323.5 Q308,328 311,332.5" fill="none" stroke="#0288d1" stroke-width=".9" opacity=".55" />
+                  <ellipse cx="314" cy="329" rx="4.8" ry="1" fill="#b3e5fc" opacity=".45" />
+                  <circle cx="309" cy="327" r="1.9" fill="white" />
+                  <circle cx="309" cy="327" r=".9" fill="#0d2a5e" />
+                </g>
+                <g
+                  style="
+                    transform-origin: 630px 292px;
+                    animation: fish1 9s ease-in-out infinite 2s;
+                  "
+                >
+                  <ellipse cx="630" cy="292" rx="13" ry="5.5" fill="#64b5f6" />
+                  <polygon points="643,292 651,284 651,300" fill="#2979cc" />
+                  <path d="M629,286.5 Q634,279 637,286.5" fill="#90caf9" stroke="#2979cc" stroke-width=".5" />
+                  <path d="M630,297.5 Q634,302 635,297.5" fill="#90caf9" stroke="#2979cc" stroke-width=".4" />
+                  <path d="M625,286.5 Q621,292 625,297.5" fill="none" stroke="#2979cc" stroke-width="1" opacity=".55" />
+                  <ellipse cx="629" cy="293" rx="6.2" ry="1.6" fill="#bbdefb" opacity=".45" />
+                  <circle cx="622" cy="291" r="2.2" fill="white" />
+                  <circle cx="622" cy="291" r="1" fill="#0d2a5e" />
+                </g>
+                <g
+                  style="
+                    transform-origin: 745px 342px;
+                    animation: fish2 7.5s ease-in-out infinite 3s;
+                  "
+                >
+                  <ellipse cx="745" cy="342" rx="9" ry="4" fill="#4fc3f7" />
+                  <polygon points="736,342 729,336 729,348" fill="#0288d1" />
+                  <path d="M744,338 Q741,332.5 739,338" fill="#81d4fa" stroke="#0288d1" stroke-width=".4" />
+                  <path d="M745,346 Q742.5,349 741,346" fill="#81d4fa" stroke="#0288d1" stroke-width=".3" />
+                  <path d="M748,338 Q751,342 748,346" fill="none" stroke="#0288d1" stroke-width=".8" opacity=".55" />
+                  <ellipse cx="746" cy="343" rx="4.4" ry=".9" fill="#b3e5fc" opacity=".45" />
+                  <circle cx="752" cy="341" r="1.8" fill="white" />
+                  <circle cx="752" cy="341" r=".9" fill="#0d2a5e" />
+                </g>
+              </g>
+              <g id="ldeadFish" opacity="0" style="transition: opacity 1.5s" transform="translate(0,85)">
+                <g style="animation: float-dead 4s ease-in-out infinite">
+                  <g transform="translate(228,232)">
+                    <g transform="rotate(200)">
+                      <ellipse cx="0" cy="0" rx="12" ry="5" fill="#90a4ae" opacity=".75" />
+                      <polygon points="12,0 20,-7 20,7" fill="#607d8b" opacity=".75" />
+                      <path d="M1,-5 Q4,-10 6,-5" fill="#b0bec5" stroke="#607d8b" stroke-width=".4" />
+                      <path d="M0,5 Q3,8 5,5" fill="#b0bec5" stroke="#607d8b" stroke-width=".35" />
+                      <path d="M-5,-5 Q-8,0 -5,5" fill="none" stroke="#607d8b" stroke-width=".8" opacity=".45" />
+                      <ellipse cx="-1" cy="1" rx="6" ry="1.5" fill="#cfd8dc" opacity=".5" />
+                      <circle cx="-6" cy="-1" r="2" fill="white" />
+                      <circle cx="-6" cy="-1" r=".9" fill="#37474f" />
+                    </g>
+                  </g>
+                </g>
+                <g style="animation: float-dead 3.5s ease-in-out infinite 0.8s">
+                  <g transform="translate(528,229)">
+                    <g transform="rotate(160)">
+                      <ellipse cx="0" cy="0" rx="10" ry="4.5" fill="#78909c" opacity=".7" />
+                      <polygon points="10,0 17,-6 17,6" fill="#546e7a" opacity=".7" />
+                      <path d="M1,-4 Q4,-9 6,-4" fill="#90a4ae" stroke="#546e7a" stroke-width=".4" />
+                      <path d="M0,4 Q3,7 4,4" fill="#90a4ae" stroke="#546e7a" stroke-width=".35" />
+                      <path d="M-4,-4 Q-7,0 -4,4" fill="none" stroke="#546e7a" stroke-width=".8" opacity=".45" />
+                      <ellipse cx="-1" cy="1" rx="4.8" ry="1.4" fill="#b0bec5" opacity=".5" />
+                      <circle cx="-5" cy="-1" r="1.8" fill="white" />
+                      <circle cx="-5" cy="-1" r=".8" fill="#37474f" />
+                    </g>
+                  </g>
+                </g>
+              </g>
+              <rect
+                id="lo2Ov"
+                x="0"
+                y="310"
+                width="820"
+                height="190"
+                fill="#dc2626"
+                opacity="0"
+                style="transition: opacity 0.8s; pointer-events: none"
+              />
+              <g id="lo2B" opacity="0" style="transition: opacity 0.8s">
+                <rect
+                  x="278"
+                  y="332"
+                  width="264"
+                  height="30"
+                  rx="15"
+                  fill="rgba(220,38,38,.92)"
+                />
+                <text
+                  x="410"
+                  y="352"
+                  text-anchor="middle"
+                  fill="white"
+                  font-family="Syne"
+                  font-weight="800"
+                  font-size="12"
+                >
+                  ⚠ HYPOXIC ZONE — Low Oxygen
+                </text>
+              </g>
+              <text
+                x="10"
+                y="490"
+                fill="rgba(74,96,80,.45)"
+                font-family="Syne"
+                font-weight="700"
+                font-size="8"
+                letter-spacing="2"
+              >
+                BUFFALO BAYOU · HOUSTON, TX
+              </text>
+              <text
+                x="810"
+                y="490"
+                text-anchor="end"
+                fill="rgba(94,184,255,.3)"
+                font-family="Syne"
+                font-weight="700"
+                font-size="8"
+                letter-spacing="2"
+              >
+                GULF OF MEXICO →
+              </text>
+            </svg>
+          </div>
+          <div class="scene-cap" id="labCap">
+            Adjust the controls to explore how land cover and storm events
+            affect Buffalo Bayou's ecosystem.
+          </div>
+        </div>
+
+        <!-- LAB PANEL -->
+        <div class="lab-panel">
+          <div class="lab-tabs">
+            <button class="lab-tab active" onclick="setLabTab(0)">
+              🌿 Land Cover
+            </button>
+            <button class="lab-tab" onclick="setLabTab(1)">⛈️ Storm</button>
+            <button class="lab-tab" onclick="setLabTab(2)">
+              📊 Before/After
+            </button>
+          </div>
+          <div class="lab-content">
+            <!-- LAB TAB 0: LAND COVER -->
+            <div class="lab-pane active" id="lt0">
+              <div class="try-card">
+                <div class="try-title">🎯 Try This</div>
+                <div class="try-item">
+                  Drag <strong>Impervious Surface</strong> to 90% — watch
+                  dissolved O₂ drop
+                </div>
+                <div class="try-item">
+                  Now max out <strong>Fertilizer</strong> — what happens to
+                  nitrogen?
+                </div>
+                <div class="try-item">
+                  Can you find a setting that keeps all metrics in the green?
+                </div>
+              </div>
+
+              <div class="sl-section">
+                <div class="sl-head">Land Cover</div>
+                <div class="sl-row">
+                  <div class="sl-label-row">
+                    <span class="sl-name"
+                      ><span
+                        class="v"
+                        data-w="Impervious Surface"
+                        data-d="Land water can't soak through — roads, parking lots, rooftops. Increases runoff and pollutant loading."
+                        data-t="B.13D"
+                        >Impervious Surface</span
+                      ></span
+                    >
+                    <span class="sl-val" id="lImpVal">45%</span>
+                  </div>
+                  <input
+                    type="range"
+                    class="sl-imp"
+                    id="lImp"
+                    min="0"
+                    max="100"
+                    value="45"
+                    oninput="labUpdate('imp')"
+                  />
+                </div>
+                <div class="linked-note" id="linkedNote">
+                  ↕ Linked: raising concrete lowers green space
+                </div>
+                <div class="sl-row">
+                  <div class="sl-label-row">
+                    <span class="sl-name"
+                      ><span
+                        class="v"
+                        data-w="Green Space"
+                        data-d="Vegetation, parks, wetlands — areas that absorb rainfall, filter nutrients, and prevent runoff. Acts as a natural buffer for waterways."
+                        data-t="B.13D — Land use"
+                        >Green Space</span
+                      ></span
+                    >
+                    <span class="sl-val" id="lGrnVal">45%</span>
+                  </div>
+                  <input
+                    type="range"
+                    class="sl-grn"
+                    id="lGrn"
+                    min="0"
+                    max="100"
+                    value="45"
+                    oninput="labUpdate('grn')"
+                  />
+                </div>
+              </div>
+
+              <div class="sl-section">
+                <div class="sl-head">Pollution Sources</div>
+                <div class="sl-row">
+                  <div class="sl-label-row">
+                    <span class="sl-name"
+                      ><span
+                        class="v"
+                        data-w="Fertilizer Use"
+                        data-d="Fertilizers contain nitrogen and phosphorus. Excess fertilizer washes into waterways during rain events, fueling algae blooms."
+                        data-t="B.13C — Nutrient loading"
+                        >Fertilizer Use</span
+                      ></span
+                    >
+                    <span class="sl-val" id="lFrtVal">25%</span>
+                  </div>
+                  <input
+                    type="range"
+                    class="sl-frt"
+                    id="lFrt"
+                    min="0"
+                    max="100"
+                    value="25"
+                    oninput="labUpdate('frt')"
+                  />
+                </div>
+              </div>
+
+              <div id="labMetrics0"></div>
+              <div class="feedback-card" id="fbLand">
+                <div class="fb-label">Ecosystem Response</div>
+                <div class="fb-text" id="fbLandText">
+                  Adjust the sliders to see how land cover changes affect the
+                  bayou.
+                </div>
+              </div>
+              <div class="action-log" id="alLand">
+                <div class="al-head">📋 Your Changes</div>
+                <div id="alLandItems">
+                  <div class="al-empty">No changes yet — start exploring!</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- LAB TAB 1: STORM -->
+            <div class="lab-pane" id="lt1">
+              <div class="try-card">
+                <div class="try-title">🎯 Try This</div>
+                <div class="try-item">
+                  Trigger the storm — watch each
+                  <span
+                    class="v"
+                    data-w="abiotic factor"
+                    data-d="Non-living components of an ecosystem — light, oxygen, nutrients, temperature."
+                    data-t="B.13C"
+                    >abiotic factor</span
+                  >
+                  change in real-time
+                </div>
+                <div class="try-item">
+                  Watch the recovery bar — how long does it take O₂ to come
+                  back?
+                </div>
+                <div class="try-item">
+                  Go to Land Cover, lower impervious surface, then trigger the
+                  storm again — is the crash less severe?
+                </div>
+              </div>
+
+              <button
+                class="storm-btn sb-ready"
+                id="stormBtn"
+                onclick="triggerStorm()"
+              >
+                ⛈️ Trigger Harvey-Scale Storm
+              </button>
+
+              <div class="recover-row" id="recoverRow" style="display: none">
+                <div class="recover-label">
+                  <span>🌱 Ecosystem recovering...</span
+                  ><span id="recoverPct">0%</span>
+                </div>
+                <div class="prog-bg">
+                  <div
+                    class="prog-bar"
+                    id="recoverBar"
+                    style="width: 0%; background: var(--green)"
+                  ></div>
+                </div>
+              </div>
+
+              <div
+                class="prog-bg"
+                style="margin-bottom: 12px"
+                id="stormProgWrap"
+              >
+                <div
+                  class="prog-bar"
+                  id="stormProg"
+                  style="width: 0%; background: var(--coral)"
+                ></div>
+              </div>
+
+              <div id="labMetrics1"></div>
+              <div class="feedback-card" id="fbStorm">
+                <div class="fb-label">Storm Status</div>
+                <div class="fb-text" id="fbStormText">
+                  Hit the button to simulate Harvey-scale rainfall on Buffalo
+                  Bayou.
+                </div>
+              </div>
+              <div class="action-log">
+                <div class="al-head">📋 Event Log</div>
+                <div id="stormLog">
+                  <div class="al-empty">No events yet.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- LAB TAB 2: BEFORE/AFTER -->
+            <div class="lab-pane" id="lt2">
+              <div class="try-card">
+                <div class="try-title">🎯 Try This</div>
+                <div class="try-item">
+                  Compare
+                  <span
+                    class="v"
+                    data-w="dissolved oxygen"
+                    data-d="O₂ mixed into water. Fish need it to survive. Healthy = above 5 mg/L."
+                    data-t="B.13C"
+                    >dissolved oxygen</span
+                  >
+                  before vs after — what's the percent change?
+                </div>
+                <div class="try-item">
+                  Which
+                  <span
+                    class="v"
+                    data-w="abiotic factors"
+                    data-d="Non-living components — light, oxygen, nutrients, temperature, turbidity."
+                    data-t="B.13C"
+                    >abiotic factors</span
+                  >
+                  changed the most? Which took longest to recover?
+                </div>
+                <div class="try-item">
+                  Look at fish species — how does loss of
+                  <span
+                    class="v"
+                    data-w="biodiversity"
+                    data-d="The variety of species in an ecosystem. Low biodiversity means a fragile, unstable ecosystem."
+                    data-t="B.13C"
+                    >biodiversity</span
+                  >
+                  affect the food web?
+                </div>
+              </div>
+
+              <div class="ba-compare">
+                <div class="ba-col ba-before">
+                  <div class="ba-col-title">Before Harvey</div>
+                  <div class="ba-row">
+                    <span class="ba-k">Dissolved O₂</span
+                    ><span class="ba-v good">7.2 mg/L</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Turbidity</span
+                    ><span class="ba-v good">38 NTU</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Nitrogen</span
+                    ><span class="ba-v warn">2.1 mg/L</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Fish Species</span
+                    ><span class="ba-v good">18</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Vegetation</span
+                    ><span class="ba-v good">Dense</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Coliform</span
+                    ><span class="ba-v good">Low</span>
+                  </div>
+                </div>
+                <div class="ba-col ba-after">
+                  <div class="ba-col-title">After Harvey</div>
+                  <div class="ba-row">
+                    <span class="ba-k">Dissolved O₂</span
+                    ><span class="ba-v bad">2.1 mg/L</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Turbidity</span
+                    ><span class="ba-v bad">890 NTU</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Nitrogen</span
+                    ><span class="ba-v bad">8.7 mg/L</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Fish Species</span
+                    ><span class="ba-v bad">4</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Vegetation</span
+                    ><span class="ba-v bad">Destroyed</span>
+                  </div>
+                  <div class="ba-row">
+                    <span class="ba-k">Coliform</span
+                    ><span class="ba-v bad">Critical</span>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style="
+                  font-family: var(--font-head);
+                  font-size: 9px;
+                  font-weight: 800;
+                  letter-spacing: 1.5px;
+                  text-transform: uppercase;
+                  color: var(--muted);
+                  margin-bottom: 8px;
+                "
+              >
+                6-Year Recovery (2023)
+              </div>
+              <div class="rec-row">
+                <div class="rec-label">
+                  <span class="rec-name">Dissolved O₂</span
+                  ><span class="rec-pct">29% recovered</span>
+                </div>
+                <div class="rec-bg">
+                  <div class="rec-bar" style="width: 29%"></div>
+                </div>
+              </div>
+              <div class="rec-row">
+                <div class="rec-label">
+                  <span class="rec-name">Fish Species</span
+                  ><span class="rec-pct">22% recovered</span>
+                </div>
+                <div class="rec-bg">
+                  <div class="rec-bar" style="width: 22%"></div>
+                </div>
+              </div>
+              <div class="rec-row">
+                <div class="rec-label">
+                  <span class="rec-name">Vegetation</span
+                  ><span class="rec-pct">41% recovered</span>
+                </div>
+                <div class="rec-bg">
+                  <div class="rec-bar" style="width: 41%"></div>
+                </div>
+              </div>
+              <div class="rec-row">
+                <div class="rec-label">
+                  <span class="rec-name">Water Clarity</span
+                  ><span class="rec-pct">18% recovered</span>
+                </div>
+                <div class="rec-bg">
+                  <div class="rec-bar" style="width: 18%"></div>
+                </div>
+              </div>
+              <div class="rec-row">
+                <div class="rec-label">
+                  <span class="rec-name">Overall Health</span
+                  ><span class="rec-pct">35% recovered</span>
+                </div>
+                <div class="rec-bg">
+                  <div class="rec-bar" style="width: 35%"></div>
+                </div>
+              </div>
+
+              <div class="infobox ib-warn" style="margin-top: 12px">
+                💬 <strong style="color: var(--text)">Discussion:</strong> What
+                would need to change about Houston's land use to speed up
+                recovery from the next major storm?
+              </div>
+            </div>
+          </div>
+          <!-- /lab-content -->
+        </div>
+        <!-- /lab-panel -->
+      </div>
+      <!-- /lab-layout -->
+    </div>
+    <!-- /labMode -->
+
+    <script>
+      // ══════════════════════════════════
+      //  VOCAB TOOLTIP
+      // ══════════════════════════════════
+      const vt = document.getElementById("vt");
+      let vtTO;
+      function initVocab(root) {
+        root.querySelectorAll(".v").forEach((el) => {
+          el.addEventListener("mouseenter", (e) => {
+            clearTimeout(vtTO);
+            document.getElementById("vt-w").textContent = el.dataset.w || "";
+            document.getElementById("vt-d").textContent = el.dataset.d || "";
+            document.getElementById("vt-t").textContent = el.dataset.t
+              ? "📌 " + el.dataset.t
+              : "";
+            vt.classList.add("show");
+            posVT(e);
+          });
+          el.addEventListener("mousemove", posVT);
+          el.addEventListener("mouseleave", () => {
+            vtTO = setTimeout(() => vt.classList.remove("show"), 130);
+          });
+        });
+      }
+      function posVT(e) {
+        const W = 256,
+          H = 130,
+          p = 14;
+        let x = e.clientX + p,
+          y = e.clientY + p;
+        if (x + W > window.innerWidth - 8) x = e.clientX - W - p;
+        if (y + H > window.innerHeight - 8) y = e.clientY - H - p;
+        vt.style.left = x + "px";
+        vt.style.top = y + "px";
+      }
+      initVocab(document);
+
+      // ══════════════════════════════════
+      //  STORY MODE
+      // ══════════════════════════════════
+      let curStep = 0;
+      const storyScenes = [
+        {
+          sky1: "#6fb8f3",
+          sky2: "#c6e8ff",
+          sc: 0,
+          wt1: "#1a5c8a",
+          wt2: "#0d3a5c",
+          trees: 1,
+          bldgs: 0.5,
+          algae: 0,
+          algCells: 0,
+          runoff: 0.25,
+          rain: 0,
+          fish: 1,
+          dead: 0,
+          o2ov: 0,
+          o2b: 0,
+          shimmer: 0.25,
+          cap: "<strong>Buffalo Bayou, Houston TX</strong> — a 53-mile waterway draining into Galveston Bay. Before Harvey, it supported 18 fish species and a connected food web.",
+        },
+        {
+          sky1: "#6fb8f3",
+          sky2: "#c6e8ff",
+          sc: 0,
+          wt1: "#1a5c8a",
+          wt2: "#0d3a5c",
+          trees: 0.7,
+          bldgs: 0.8,
+          algae: 0,
+          algCells: 0,
+          runoff: 0.45,
+          rain: 0,
+          fish: 1,
+          dead: 0,
+          o2ov: 0,
+          o2b: 0,
+          shimmer: 0.25,
+          cap: '<strong>Before Harvey:</strong> Dissolved O₂ at 7.2 mg/L supports aquatic life. But Houston\'s 60% concrete cover already generates heavy <span class="v" data-w="runoff" data-d="Water flowing over impervious surfaces into waterways, picking up pollutants." data-t="B.13D">runoff</span>.',
+        },
+        {
+          sky1: "#05080e",
+          sky2: "#09111a",
+          sc: 0.95,
+          wt1: "#16321a",
+          wt2: "#0a1c0e",
+          trees: 0.25,
+          bldgs: 0.6,
+          algae: 0.3,
+          algCells: 0.3,
+          runoff: 0.95,
+          rain: 1,
+          fish: 0.25,
+          dead: 0.35,
+          o2ov: 0.12,
+          o2b: 0,
+          shimmer: 0,
+          cap: '<strong>⛈️ Harvey makes landfall.</strong> 51 inches of rain on 60% concrete. <span class="v" data-w="runoff" data-d="Water flowing over land into waterways, carrying pollutants." data-t="B.13D">Runoff</span> surges into Buffalo Bayou carrying sewage, <span class="v" data-w="nutrients" data-d="Nitrogen and phosphorus from fertilizers — fuel for algae blooms." data-t="B.13C">nutrients</span>, and sediment.',
+        },
+        {
+          sky1: "#5ca8e6",
+          sky2: "#9fd4f7",
+          sc: 0,
+          wt1: "#152e18",
+          wt2: "#0a1a0d",
+          trees: 0.1,
+          bldgs: 0.6,
+          algae: 0.8,
+          algCells: 0.9,
+          runoff: 0.15,
+          rain: 0,
+          fish: 0.1,
+          dead: 0.9,
+          o2ov: 0.2,
+          o2b: 1,
+          shimmer: 0,
+          cap: '<strong>After Harvey:</strong> <span class="v" data-w="Algae bloom" data-d="Explosive algae growth from excess nutrients — then crash consumes all oxygen." data-t="B.13C">Algae bloom</span> blankets the surface. O₂ crashed to 2.1 mg/L — <span class="v" data-w="hypoxia" data-d="Dissolved oxygen below 2 mg/L — too low for most aquatic life to survive." data-t="B.13C">hypoxia</span> kills most aquatic life.',
+        },
+        {
+          sky1: "#74bdf8",
+          sky2: "#c9e9ff",
+          sc: 0,
+          wt1: "#165072",
+          wt2: "#0d2c4c",
+          trees: 0.5,
+          bldgs: 0.6,
+          algae: 0.2,
+          algCells: 0.15,
+          runoff: 0.15,
+          rain: 0,
+          fish: 0.45,
+          dead: 0.12,
+          o2ov: 0.04,
+          o2b: 0,
+          shimmer: 0.15,
+          cap: '<strong>Today — partial recovery.</strong> Some species have returned, but <span class="v" data-w="eutrophication" data-d="Ongoing nutrient → algae → oxygen depletion cycle that continues as long as nutrient loading persists." data-t="B.13C">eutrophication</span> cycles continue. Houston\'s land use hasn\'t changed.',
+        },
+      ];
+
+      function applyStoryScene(idx) {
+        const s = storyScenes[idx];
+        // sky
+        document.getElementById("s1").setAttribute("stop-color", s.sky1);
+        document.getElementById("s2").setAttribute("stop-color", s.sky2);
+        // clouds
+        document.getElementById("sClouds").style.opacity = s.sc;
+        document.getElementById("nClouds").style.opacity = Math.max(
+          0,
+          1 - s.sc * 1.6,
+        );
+        // land
+        document.getElementById("treesG").style.opacity = s.trees;
+        document.getElementById("bldgsG").style.opacity = s.bldgs;
+        // water
+        document.getElementById("w1").setAttribute("stop-color", s.wt1);
+        document.getElementById("w2").setAttribute("stop-color", s.wt2);
+        // algae
+        document
+          .getElementById("algaeR")
+          .setAttribute("opacity", s.algae * 0.6);
+        document.getElementById("algCells").style.opacity = s.algCells;
+        // fx
+        document.getElementById("runoffG").style.opacity = s.runoff;
+        document.getElementById("rainG").style.opacity = s.rain;
+        document.getElementById("shimmerG").style.opacity = s.shimmer;
+        // fish
+        document.getElementById("liveFish").style.opacity = s.fish;
+        document.getElementById("deadFish").style.opacity = s.dead;
+        // o2
+        document.getElementById("o2Ov").setAttribute("opacity", s.o2ov);
+        document.getElementById("o2B").style.opacity = s.o2b;
+        // caption
+        document.getElementById("storyCap").innerHTML = s.cap;
+        initVocab(document.getElementById("storyCap"));
+      }
+
+      function goStep(n) {
+        document.getElementById("p" + curStep).classList.remove("active");
+        document.getElementById("sn" + curStep).classList.remove("active");
+        if (n > curStep)
+          document.getElementById("sn" + curStep).classList.add("done");
+        curStep = n;
+        document.getElementById("p" + n).classList.add("active");
+        document.querySelectorAll(".sn-item").forEach((el, i) => {
+          el.classList.toggle("active", i === n);
+          if (i < n) el.classList.add("done");
+        });
+        applyStoryScene(n);
+        document.querySelector(".story-panes").scrollTop = 0;
+        updateHealthChip(computeHealth(labState));
+      }
+
+      // ══════════════════════════════════
+      //  STORY COMPLETE → UNLOCK LAB
+      // ══════════════════════════════════
+      let storyDone = false;
+      function finishStory() {
+        const q1 = document.getElementById("q1").value.trim();
+        const q2 = document.getElementById("q2").value.trim();
+        if (!q1 || !q2) {
+          alert("Please answer both questions before finishing! ✏️");
+          return;
+        }
+        storyDone = true;
+        document.getElementById("modeLab").classList.remove("mode-locked");
+        document.getElementById("labLock").textContent = "🔓";
+        document.getElementById("unlockHint").textContent =
+          "✓ Lab Mode unlocked — great work!";
+        document.getElementById("unlockHint").style.color = "var(--teal)";
+        // Replace pane content
+        document.getElementById("p4").innerHTML = `
+    <div class="completion">
+      <div class="comp-icon">🎉</div>
+      <div class="comp-title">Story Complete!</div>
+      <div class="comp-sub">You've traced the full Harvey impact chain. <strong>Lab Mode is now unlocked</strong> — go explore how different land cover choices would have changed the outcome.</div>
+      <div class="comp-vocab">
+        <strong>Key Vocab You Used</strong>
+        runoff · dissolved oxygen · turbidity · nutrient loading · nitrogen · algae bloom · decomposers · hypoxia · eutrophication · impervious surface · biodiversity · abiotic &amp; biotic factors · food web
+      </div>
+      <button class="btn btn-p" style="margin-top:16px;" onclick="setMode('lab')">🔬 Open Lab Mode →</button>
+    </div>`;
+      }
+
+      // ══════════════════════════════════
+      //  MODE SWITCHER
+      // ══════════════════════════════════
+      function setMode(m) {
+        if (m === "lab" && !storyDone) return;
+        document.getElementById("storyMode").style.display =
+          m === "story" ? "flex" : "none";
+        document.getElementById("labMode").style.display =
+          m === "lab" ? "flex" : "none";
+        document
+          .getElementById("modeStory")
+          .classList.toggle("active", m === "story");
+        document
+          .getElementById("modeLab")
+          .classList.toggle("active", m === "lab");
+        if (m === "lab") labUpdate("init");
+      }
+
+      // ══════════════════════════════════
+      //  LAB STATE & COMPUTE
+      // ══════════════════════════════════
+      let fishSwimStarted = false;
+      function initFishSwim() {
+        if (fishSwimStarted) return;
+        fishSwimStarted = true;
+
+        const specs = [
+          { cx: 190, cy: 280, r: 24, halfW: 30, speed: 0.034, amp: 3.2, freq: 0.0022, phase: 0.1, xAmp: 2.4, xFreq: 0.0016, baseFacing: -1 },
+          { cx: 465, cy: 305, r: 20, halfW: 24, speed: 0.029, amp: 2.6, freq: 0.0026, phase: 1.4, xAmp: 2.0, xFreq: 0.0019, baseFacing: 1 },
+          { cx: 315, cy: 328, r: 16, halfW: 21, speed: 0.024, amp: 2.2, freq: 0.0029, phase: 2.3, xAmp: 1.8, xFreq: 0.0021, baseFacing: -1 },
+          { cx: 630, cy: 292, r: 22, halfW: 27, speed: 0.031, amp: 2.8, freq: 0.0023, phase: 0.9, xAmp: 2.2, xFreq: 0.0017, baseFacing: -1 },
+          { cx: 745, cy: 342, r: 14, halfW: 18, speed: 0.022, amp: 2.0, freq: 0.0031, phase: 2.8, xAmp: 1.6, xFreq: 0.0022, baseFacing: 1 },
+        ];
+
+        const swimmers = [];
+        ["liveFish", "lliveFish"].forEach((groupId, gi) => {
+          const group = document.getElementById(groupId);
+          if (!group) return;
+          const fishNodes = Array.from(group.children).slice(0, specs.length);
+          fishNodes.forEach((node, i) => {
+            const s = specs[i];
+            node.style.animation = "none";
+            node.style.transformOrigin = `${s.cx}px ${s.cy}px`;
+            node.style.willChange = "transform";
+            swimmers.push({
+              node,
+              cx: s.cx,
+              x: s.cx,
+              r: s.r,
+              halfW: s.halfW,
+              speed: s.speed,
+              amp: s.amp,
+              freq: s.freq,
+              xAmp: s.xAmp,
+              xFreq: s.xFreq,
+              baseFacing: s.baseFacing,
+              phase: s.phase + gi * 0.65,
+              dir: i % 2 === 0 ? 1 : -1,
+            });
+          });
+        });
+
+        let last = performance.now();
+        function tick(now) {
+          const dt = Math.min(40, now - last);
+          last = now;
+            const minWall = 0;
+            const maxWall = 820;
+
+          swimmers.forEach((f) => {
+            f.x += f.dir * f.speed * dt;
+            const minX = minWall + f.halfW + f.xAmp;
+            const maxX = maxWall - f.halfW - f.xAmp;
+            if (f.x <= minX) {
+              f.x = minX;
+              f.dir = 1;
+            } else if (f.x >= maxX) {
+              f.x = maxX;
+              f.dir = -1;
+            }
+
+            const bob = Math.sin(now * f.freq + f.phase) * f.amp;
+            const meanderX = Math.sin(now * f.xFreq + f.phase * 0.7) * f.xAmp;
+            const renderX = Math.max(minX, Math.min(maxX, f.x + meanderX));
+            const dx = renderX - f.cx;
+            const facing = f.baseFacing * f.dir;
+            f.node.style.transform = `translate(${dx.toFixed(2)}px, ${bob.toFixed(2)}px) scaleX(${facing})`;
+          });
+
+          requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+      const labState = { imp: 45, grn: 45, frt: 25, storm: 0 };
+      let stormRunning = false,
+        stormRecovering = false,
+        stormPct = 0,
+        recoverPct = 0;
+      let stormInterval = null,
+        recoverInterval = null;
+      const actionLog = [];
+
+      function computeMetrics(st) {
+        const imp = st.imp / 100,
+          grn = st.grn / 100,
+          frt = st.frt / 100,
+          s = st.storm;
+        const runoff = Math.min(100, imp * 70 + s * 90 - grn * 35);
+        const nitrogen = Math.min(12, 1.4 + frt * 7 + s * 5 + imp * 2.2);
+        const turbidity = Math.min(1000, 12 + imp * 90 + s * 870 + frt * 25);
+        const algae = Math.max(0, (nitrogen - 1.5) / 7.5);
+        const o2 = Math.max(0.3, 8.5 - algae * 5.5 - s * 3.2 - imp * 1.8);
+        const fish = Math.max(
+          0,
+          Math.round(18 - algae * 11 - s * 10 - Math.max(0, (3 - o2) * 3)),
+        );
+        return { runoff, nitrogen, turbidity, algae, o2, fish };
+      }
+
+      function computeHealth(st) {
+        const m = computeMetrics(st);
+        if (m.o2 < 2.5) return "critical";
+        if (m.o2 < 4.5 || m.turbidity > 300) return "stressed";
+        return "healthy";
+      }
+
+      function updateHealthChip(status) {
+        const chip = document.getElementById("healthChip");
+        const txt = document.getElementById("healthText");
+        chip.className = "health-chip health-" + status;
+        txt.textContent =
+          status === "critical"
+            ? "Ecosystem Critical"
+            : status === "stressed"
+              ? "Ecosystem Stressed"
+              : "Ecosystem Healthy";
+      }
+
+      // ── LINKED SLIDERS ──
+      function labUpdate(src) {
+        if (src === "imp") {
+          labState.imp = +document.getElementById("lImp").value;
+          // push green space in opposite direction
+          labState.grn = Math.max(0, Math.min(100, 100 - labState.imp - 10));
+          document.getElementById("lGrn").value = labState.grn;
+        } else if (src === "grn") {
+          labState.grn = +document.getElementById("lGrn").value;
+          labState.imp = Math.max(0, Math.min(100, 100 - labState.grn - 10));
+          document.getElementById("lImp").value = labState.imp;
+        } else if (src === "frt") {
+          labState.frt = +document.getElementById("lFrt").value;
+        }
+        document.getElementById("lImpVal").textContent = labState.imp + "%";
+        document.getElementById("lGrnVal").textContent = labState.grn + "%";
+        document.getElementById("lFrtVal").textContent = labState.frt + "%";
+
+        const m = computeMetrics(labState);
+        renderLabMetrics("labMetrics0", m);
+        renderLabMetrics("labMetrics1", m);
+        renderFeedback(m);
+        applyLabScene(m);
+        updateHealthChip(computeHealth(labState));
+
+        if (src !== "init") logAction(src, m);
+      }
+
+      // ── RENDER METRICS ──
+      function colFor(val, lo, hi, invert) {
+        const n = Math.max(0, Math.min(1, (val - lo) / (hi - lo)));
+        const t = invert ? 1 - n : n;
+        return t > 0.65
+          ? "var(--green)"
+          : t > 0.33
+            ? "var(--amber)"
+            : "var(--coral)";
+      }
+      function renderLabMetrics(id, m) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const rows = [
+          ["Runoff Volume", m.runoff.toFixed(0) + "%", m.runoff, 100, false],
+          ["Nitrogen", m.nitrogen.toFixed(1) + " mg/L", m.nitrogen, 12, false],
+          [
+            "Turbidity",
+            m.turbidity.toFixed(0) + " NTU",
+            m.turbidity,
+            1000,
+            false,
+          ],
+          ["Dissolved O₂", m.o2.toFixed(1) + " mg/L", m.o2, 9, true],
+          ["Fish Species", m.fish + "", m.fish, 18, true],
+        ];
+        el.innerHTML = rows
+          .map(([name, val, raw, max, inv]) => {
+            const c = colFor(raw, 0, max, inv);
+            const w = Math.min(100, (raw / max) * 100).toFixed(1);
+            return `<div class="metric">
+      <div class="m-top"><span class="m-name">${name}</span><span class="m-val" style="color:${c}">${val}</span></div>
+      <div class="m-bg"><div class="m-bar" style="width:${w}%;background:${c}"></div></div>
+    </div>`;
+          })
+          .join("");
+      }
+
+      // ── FEEDBACK TEXT ──
+      const feedbacks = [
+        {
+          test: (m) => m.o2 < 2.5,
+          cls: "coral",
+          icon: "🚨",
+          text: (m) =>
+            `<strong style="color:var(--coral)">Hypoxic zone forming!</strong> Dissolved oxygen at ${m.o2.toFixed(1)} mg/L — below the 2 mg/L threshold for most fish survival. This is what happened to Buffalo Bayou after Harvey.`,
+        },
+        {
+          test: (m) => m.nitrogen > 6,
+          cls: "amber",
+          icon: "⚗️",
+          text: (m) =>
+            `<strong style="color:var(--amber)">Nutrient overload.</strong> Nitrogen at ${m.nitrogen.toFixed(1)} mg/L is fueling an algae bloom. When the bloom crashes, decomposers will consume nearly all dissolved oxygen.`,
+        },
+        {
+          test: (m) => m.turbidity > 400,
+          cls: "amber",
+          icon: "🌊",
+          text: (m) =>
+            `<strong style="color:var(--amber)">High turbidity.</strong> At ${m.turbidity.toFixed(0)} NTU, sunlight can't reach underwater plants — blocking photosynthesis and reducing the oxygen they produce.`,
+        },
+        {
+          test: (m) => m.imp > 75,
+          cls: "amber",
+          icon: "🏗️",
+          text: (m) =>
+            `<strong style="color:var(--amber)">Urban runoff risk.</strong> With ${labState.imp}% impervious cover, most rain becomes immediate runoff — like Houston's 60%+ that made Harvey so catastrophic.`,
+        },
+        {
+          test: (m) => m.fish < 8,
+          cls: "coral",
+          icon: "🐟",
+          text: (m) =>
+            `<strong style="color:var(--coral)">Biodiversity collapse.</strong> Only ${m.fish} fish species remaining. A healthy bayou supports 18+. Loss of species destabilizes the entire food web.`,
+        },
+        {
+          test: (m) => m.grn > 60,
+          cls: "green",
+          icon: "🌿",
+          text: () =>
+            `<strong style="color:var(--green)">Green infrastructure working!</strong> High vegetation coverage is absorbing rainfall, filtering nutrients, and maintaining oxygen levels. This is what restoration efforts aim for.`,
+        },
+        {
+          test: (m) => m.o2 > 6.5 && m.fish >= 16,
+          cls: "green",
+          icon: "✅",
+          text: (m) =>
+            `<strong style="color:var(--green)">Thriving ecosystem!</strong> Dissolved O₂ at ${m.o2.toFixed(1)} mg/L and ${m.fish} fish species — this is what a healthy bayou looks like. Notice what land cover settings made this possible.`,
+        },
+      ];
+      function renderFeedback(m) {
+        const fb = feedbacks.find((f) => f.test(m)) || {
+          icon: "🔬",
+          text: () =>
+            `Current state: O₂ ${m.o2.toFixed(1)} mg/L · ${m.fish} fish species · turbidity ${m.turbidity.toFixed(0)} NTU. Adjust sliders to explore ecosystem changes.`,
+        };
+        const el =
+          document.getElementById("fbLandText") ||
+          document.getElementById("fbStormText");
+        document.getElementById("fbLandText").innerHTML =
+          fb.icon + " " + fb.text(m);
+        document.getElementById("fbStormText").innerHTML =
+          fb.icon + " " + fb.text(m);
+      }
+
+      // ── ACTION LOG ──
+      function logAction(src, m) {
+        const labels = {
+          imp: "Impervious",
+          grn: "Green Space",
+          frt: "Fertilizer",
+        };
+        const vals = {
+          imp: labState.imp + "%",
+          grn: labState.grn + "%",
+          frt: labState.frt + "%",
+        };
+        const now = new Date().toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+        actionLog.unshift({
+          time: now,
+          text: `${labels[src]} → ${vals[src]} · O₂ ${m.o2.toFixed(1)} mg/L · ${m.fish} fish`,
+        });
+        if (actionLog.length > 4) actionLog.pop();
+        const el = document.getElementById("alLandItems");
+        el.innerHTML = actionLog
+          .map(
+            (a) =>
+              `<div class="al-item"><span class="al-time">${a.time}</span><span>${a.text}</span></div>`,
+          )
+          .join("");
+      }
+
+      // ── STORM LOG ──
+      const stormLog = [];
+      function addStormLog(txt) {
+        const now = new Date().toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+        stormLog.unshift({ time: now, text: txt });
+        if (stormLog.length > 5) stormLog.pop();
+        document.getElementById("stormLog").innerHTML = stormLog
+          .map(
+            (a) =>
+              `<div class="al-item"><span class="al-time">${a.time}</span><span>${a.text}</span></div>`,
+          )
+          .join("");
+      }
+
+      // ── STORM TRIGGER ──
+      function triggerStorm() {
+        if (stormRunning || stormRecovering) return;
+        stormRunning = true;
+        stormPct = 0;
+        const btn = document.getElementById("stormBtn");
+        btn.className = "storm-btn sb-go";
+        btn.textContent = "⛈️ Storm In Progress...";
+        document.getElementById("stormProgWrap").style.display = "block";
+        document.getElementById("recoverRow").style.display = "none";
+        addStormLog("⛈️ Harvey-scale storm triggered");
+
+        stormInterval = setInterval(() => {
+          stormPct = Math.min(stormPct + 0.6, 100);
+          document.getElementById("stormProg").style.width = stormPct + "%";
+          labState.storm = Math.sin((stormPct / 100) * Math.PI);
+          const m = computeMetrics(labState);
+          renderLabMetrics("labMetrics1", m);
+          renderFeedback(m);
+          applyLabScene(m);
+          updateHealthChip(computeHealth(labState));
+
+          if (stormPct === 30)
+            addStormLog("🌊 Runoff surge — turbidity spiking");
+          if (stormPct === 55)
+            addStormLog("⚗️ Nitrogen loading — algae bloom starting");
+          if (stormPct === 78)
+            addStormLog("💀 O₂ crash — hypoxia threshold crossed");
+
+          if (stormPct >= 100) {
+            clearInterval(stormInterval);
+            stormRunning = false;
+            labState.storm = 0;
+            btn.className = "storm-btn sb-recover";
+            btn.textContent = "🌱 Recovering...";
+            addStormLog("🌱 Storm over — ecosystem beginning recovery");
+            startRecovery();
+          }
+        }, 70);
+      }
+
+      function startRecovery() {
+        stormRecovering = true;
+        recoverPct = 0;
+        document.getElementById("recoverRow").style.display = "block";
+        recoverInterval = setInterval(() => {
+          recoverPct = Math.min(recoverPct + 1, 100);
+          document.getElementById("recoverBar").style.width = recoverPct + "%";
+          document.getElementById("recoverPct").textContent = recoverPct + "%";
+          // gradually restore metrics visually
+          labState.storm = Math.max(0, labState.storm - 0.01);
+          const m = computeMetrics(labState);
+          applyLabScene(m);
+          updateHealthChip(computeHealth(labState));
+          if (recoverPct >= 100) {
+            clearInterval(recoverInterval);
+            stormRecovering = false;
+            labState.storm = 0;
+            const btn = document.getElementById("stormBtn");
+            btn.className = "storm-btn sb-ready";
+            btn.textContent = "⛈️ Trigger Harvey-Scale Storm";
+            document.getElementById("recoverRow").style.display = "none";
+            addStormLog("✅ Recovery complete — ready for next simulation");
+            const mf = computeMetrics(labState);
+            renderLabMetrics("labMetrics1", mf);
+            renderFeedback(mf);
+          }
+        }, 200);
+      }
+
+      // ── LAB SCENE ──
+      function applyLabScene(m) {
+        const imp = labState.imp / 100,
+          grn = labState.grn / 100,
+          s = labState.storm;
+        const tb = Math.min(m.turbidity / 1000, 1);
+        const alg = Math.min(m.algae, 1);
+        // sky
+        const dk = s > 0.3;
+        document
+          .getElementById("ls1")
+          .setAttribute("stop-color", dk ? "#05080e" : "#6fb8f3");
+        document
+          .getElementById("ls2")
+          .setAttribute("stop-color", dk ? "#09111a" : "#c6e8ff");
+        // clouds
+        document.getElementById("lsClouds").style.opacity = Math.min(
+          s * 1.8,
+          0.97,
+        );
+        document.getElementById("lnClouds").style.opacity = Math.max(
+          0,
+          1 - s * 1.8,
+        );
+        // land
+        document.getElementById("ltreesG").style.opacity = Math.max(
+          0.05,
+          grn * (1 - imp * 0.7),
+        );
+        document.getElementById("lbldgsG").style.opacity = 0.1 + imp * 0.7;
+        // water color
+        const wr = Math.round(20 + tb * 80);
+        const wg = Math.round(88 + alg * 40 - tb * 30);
+        const wb = Math.round(138 - tb * 80);
+        document
+          .getElementById("lw1")
+          .setAttribute("stop-color", `rgb(${wr},${wg},${wb})`);
+        document
+          .getElementById("lw2")
+          .setAttribute(
+            "stop-color",
+            `rgb(${Math.round(wr * 0.6)},${Math.round(wg * 0.5)},${Math.round(wb * 0.7)})`,
+          );
+        // algae
+        document.getElementById("lalgaeR").setAttribute("opacity", alg * 0.6);
+        document.getElementById("lalgCells").style.opacity = alg;
+        // fx
+        document.getElementById("lrunoffG").style.opacity = Math.max(
+          0,
+          (imp - 0.25) * 1.4 + s,
+        );
+        document.getElementById("lrainG").style.opacity =
+          s > 0.15 ? Math.min(s * 2, 1) : 0;
+        document.getElementById("lshimmerG").style.opacity = Math.max(
+          0,
+          0.25 - tb * 0.2,
+        );
+        // fish
+        document.getElementById("lliveFish").style.opacity = Math.max(
+          0,
+          (m.fish / 18) * 0.9,
+        );
+        document.getElementById("ldeadFish").style.opacity =
+          m.o2 < 3 ? Math.min((3 - m.o2) / 2, 0.9) : 0;
+        // o2
+        const o2w = m.o2 < 2.5 ? Math.min(((2.5 - m.o2) / 2) * 0.25, 0.25) : 0;
+        document.getElementById("lo2Ov").setAttribute("opacity", o2w);
+        document.getElementById("lo2B").style.opacity = m.o2 < 2.5 ? 1 : 0;
+        // caption
+        let cap = `<strong>Land Cover:</strong> ${labState.imp}% impervious · ${labState.grn}% green space · O₂: ${m.o2.toFixed(1)} mg/L · ${m.fish} fish species`;
+        if (s > 0.05)
+          cap = `<strong>⛈️ Storm in progress</strong> — runoff surging, nutrients loading. O₂: ${m.o2.toFixed(1)} mg/L`;
+        document.getElementById("labCap").innerHTML = cap;
+      }
+
+      // ── LAB TABS ──
+      let curLabTab = 0;
+      function setLabTab(n) {
+        document
+          .querySelectorAll(".lab-tab")
+          .forEach((t, i) => t.classList.toggle("active", i === n));
+        document
+          .querySelectorAll(".lab-pane")
+          .forEach((p, i) => p.classList.toggle("active", i === n));
+        curLabTab = n;
+        if (n === 1) renderLabMetrics("labMetrics1", computeMetrics(labState));
+      }
+
+      // ── INIT ──
+      applyStoryScene(0);
+      labUpdate("init");
+      initFishSwim();
+    </script>
+  </body>
+</html>

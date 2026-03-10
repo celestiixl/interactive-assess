@@ -13,6 +13,16 @@ const FEATURED_PHENOMENA = [
     tags: ["hypoxia", "water cycle", "biogeochemical cycles"],
   },
   {
+    id: "buffalo-bayou-harvey-ecosystem-lab",
+    title: "Buffalo Bayou - Harvey Ecosystem Lab",
+    href: "/phenomena-studio/buffalo-bayou-harvey-ecosystem-lab",
+    note: "Guided story plus lab mode modeling Hurricane Harvey runoff, hypoxia, and ecosystem recovery in Buffalo Bayou.",
+    previewSrc: "/phenomena-preview-buffalo-bayou.svg",
+    topic: "Ecosystems",
+    unit: "Unit 6",
+    tags: ["harvey", "runoff", "hypoxia", "biodiversity"],
+  },
+  {
     id: "upload-your-own",
     title: "Bring Your Own Phenomenon",
     href: "/phenomena-studio/upload-guide",
@@ -210,6 +220,12 @@ export default function PhenomenaStudioPage({
                 className="rounded-full border border-bs-border bg-bs-raised px-4 py-2 text-xs font-semibold text-bs-text-sub hover:border-bs-teal/55 hover:text-bs-teal"
               >
                 Gulf Dead Zone
+              </Link>
+              <Link
+                href="/phenomena-studio/buffalo-bayou-harvey-ecosystem-lab"
+                className="rounded-full border border-bs-border bg-bs-raised px-4 py-2 text-xs font-semibold text-bs-text-sub hover:border-bs-teal/55 hover:text-bs-teal"
+              >
+                Buffalo Bayou Lab
               </Link>
               <Link
                 href="/simulations"

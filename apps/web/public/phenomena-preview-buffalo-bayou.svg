@@ -1,0 +1,39 @@
+<svg width="960" height="480" viewBox="0 0 960 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Buffalo Bayou Harvey Ecosystem Lab preview">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#071422"/>
+      <stop offset="100%" stop-color="#0a1f33"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a5c8a"/>
+      <stop offset="100%" stop-color="#0d3a5c"/>
+    </linearGradient>
+    <radialGradient id="bloom" cx="35%" cy="10%" r="70%">
+      <stop offset="0%" stop-color="#3ddc84" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#3ddc84" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="960" height="480" fill="url(#bg)"/>
+  <rect y="250" width="960" height="230" fill="url(#water)"/>
+  <rect y="220" width="960" height="38" fill="#0f2d1b" opacity="0.8"/>
+  <rect y="250" width="960" height="80" fill="url(#bloom)" opacity="0.8"/>
+  <g opacity="0.85">
+    <circle cx="180" cy="280" r="14" fill="#3ddc84"/>
+    <circle cx="330" cy="295" r="10" fill="#3ddc84"/>
+    <circle cx="500" cy="284" r="15" fill="#3ddc84"/>
+    <circle cx="680" cy="292" r="11" fill="#3ddc84"/>
+  </g>
+  <g fill="#5eb8ff" opacity="0.85">
+    <ellipse cx="255" cy="360" rx="18" ry="8"/>
+    <ellipse cx="460" cy="380" rx="14" ry="6"/>
+    <ellipse cx="720" cy="355" rx="16" ry="7"/>
+  </g>
+  <g font-family="Syne, Arial, sans-serif" fill="#dff0e8">
+    <text x="48" y="72" font-size="44" font-weight="800">Buffalo Bayou</text>
+    <text x="48" y="112" font-size="28" font-weight="700" fill="#00e5b8">Harvey Ecosystem Lab</text>
+  </g>
+  <g font-family="DM Mono, monospace" font-size="20" font-weight="500" fill="#7dd3fc">
+    <text x="48" y="430">B.13C</text>
+    <text x="130" y="430">B.13D</text>
+  </g>
+</svg>
