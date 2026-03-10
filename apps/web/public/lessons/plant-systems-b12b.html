@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plant Systems — B.12B</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-deep:#1a3a1f; --green-mid:#2d6a35; --green-bright:#4caf50;
+  --green-light:#a8d5a2; --cream:#f5f0e8; --amber:#e8a020;
+  --amber-light:#fdebc8; --brown:#5c3d1e; --sky:#87ceeb;
+  --soil:#6b4226; --white:#ffffff; --text:#1a1a1a;
+  --xylem:#2196f3; --phloem:#e91e63; --phloem-light:#fce4ec;
+  --xylem-light:#e3f2fd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+
+/* HEADER */
+.header{background:var(--green-deep);padding:28px 32px 22px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-40px;right:-60px;width:220px;height:220px;
+  background:radial-gradient(circle,rgba(76,175,80,.25) 0%,transparent 70%);border-radius:50%}
+.teks-tag{display:inline-block;background:var(--amber);color:var(--green-deep);font-weight:600;
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:10px}
+.header h1{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;line-height:1.15;margin-bottom:6px}
+.header h1 em{color:var(--green-light);font-style:italic}
+.header p{color:rgba(255,255,255,.7);font-size:14px;max-width:560px}
+
+/* TABS */
+.tabs{display:flex;background:var(--green-deep);padding:0 32px;border-bottom:3px solid var(--green-mid)}
+.tab{padding:12px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;
+  border-bottom:3px solid transparent;margin-bottom:-3px;transition:all .2s;white-space:nowrap}
+.tab.active{color:var(--amber);border-bottom-color:var(--amber)}
+.tab:hover:not(.active){color:rgba(255,255,255,.85)}
+
+/* SECTIONS */
+.section{display:none;padding:32px;max-width:960px;margin:0 auto}
+.section.active{display:block}
+
+/* ═══════════ PHENOMENON ═══════════ */
+.phenomenon-card{background:var(--green-deep);border-radius:16px;overflow:hidden;margin-bottom:24px}
+.phenomenon-image{width:100%;height:200px;position:relative;overflow:hidden}
+.phenomenon-image svg{width:100%;height:100%}
+.phenomenon-text{padding:22px 24px}
+.phenomenon-text h2{font-family:'Fraunces',serif;font-size:1.4rem;color:#fff;margin-bottom:8px}
+.phenomenon-text p{color:rgba(255,255,255,.75);font-size:14px;line-height:1.6}
+
+.question-box{background:var(--amber-light);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;
+  padding:16px 20px;margin:20px 0}
+.question-box strong{display:block;font-size:16px;color:var(--brown);margin-bottom:6px;font-family:'Fraunces',serif}
+.question-box p{font-size:14px;color:var(--brown)}
+
+.systems-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.system-card{background:#fff;border-radius:12px;padding:18px;border-top:4px solid;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.system-card.transport{border-color:var(--xylem)}
+.system-card.reproduction{border-color:var(--phloem)}
+.system-card.response{border-color:var(--amber)}
+.system-card h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;color:#444}
+.system-card p{font-size:13px;color:#555;line-height:1.5}
+.system-card .emoji{font-size:24px;margin-bottom:8px;display:block}
+
+/* vocab badge */
+.vocab-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;
+  margin:2px;letter-spacing:.3px;cursor:default}
+.vocab-everyday{background:#e8f5e9;color:#1b5e20}
+.vocab-academic{background:#fff3e0;color:#e65100}
+.vocab-content{background:#e3f2fd;color:#0d47a1}
+.vocab-row{margin-top:12px}
+.vocab-row label{font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px}
+
+/* ═══════════ SIMULATION ═══════════ */
+.sim-container{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.sim-header{background:var(--green-mid);padding:16px 24px;display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:10px}
+.sim-header h2{font-family:'Fraunces',serif;font-size:1.2rem;color:#fff}
+.sim-mode-btns{display:flex;gap:8px;flex-wrap:wrap}
+.mode-btn{padding:6px 14px;border-radius:20px;border:2px solid rgba(255,255,255,.4);background:transparent;
+  color:rgba(255,255,255,.7);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.mode-btn.active{background:#fff;color:var(--green-mid);border-color:#fff}
+
+.sim-stage{display:none;padding:24px}
+.sim-stage.active{display:block}
+
+/* ─── VASCULAR BUNDLE DIAGRAM ─── */
+.vb-section{margin-bottom:20px}
+.vb-title{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--green-deep);margin-bottom:6px}
+.vb-subtitle{font-size:13px;color:#666;margin-bottom:14px;line-height:1.5}
+
+.vascular-scene{position:relative;width:100%;height:420px;border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,#c8eeff 0%,#87ceeb 35%,#5a8a3a 35%,#3a5a25 48%,#6b4226 48%,#3d2008 100%)}
+
+/* sun */
+.v-sun{position:absolute;top:14px;right:20px;width:52px;height:52px;
+  background:radial-gradient(circle,#FFD700 40%,#FFA500 100%);border-radius:50%;
+  box-shadow:0 0 22px #FFD70088;animation:sunPulse 3s infinite}
+@keyframes sunPulse{0%,100%{box-shadow:0 0 22px #FFD70088}50%{box-shadow:0 0 40px #FFD700cc}}
+
+/* rain clouds (triggered when soil water < 20) */
+.cloud{position:absolute;top:18px;left:30px;opacity:0;transition:opacity .6s}
+.cloud circle{fill:#ccc}
+
+/* plant body */
+#vascularSVG{position:absolute;bottom:48%;left:50%;transform:translateX(-50%);overflow:visible}
+
+/* labels */
+.scene-label{position:absolute;background:rgba(255,255,255,.93);border-radius:16px;
+  padding:3px 10px;font-size:11px;font-weight:700;pointer-events:none;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.label-xylem{border-left:3px solid var(--xylem);color:var(--xylem)}
+.label-phloem{border-left:3px solid var(--phloem);color:var(--phloem)}
+.label-stoma{border-left:3px solid #888;color:#444}
+.label-root{border-left:3px solid var(--soil);color:var(--brown)}
+
+/* animated particles */
+.particle{position:absolute;border-radius:50%;pointer-events:none;animation:moveUp linear infinite}
+.xylem-particle{background:var(--xylem);width:5px;height:7px;border-radius:40%;opacity:.85}
+.phloem-particle{background:var(--phloem);width:5px;height:7px;border-radius:40%;opacity:.85;
+  animation-name:moveDown}
+@keyframes moveUp{0%{transform:translateY(0);opacity:0}15%{opacity:.9}85%{opacity:.8}100%{transform:translateY(-130px);opacity:0}}
+@keyframes moveDown{0%{transform:translateY(0);opacity:0}15%{opacity:.9}85%{opacity:.8}100%{transform:translateY(90px);opacity:0}}
+
+/* controls */
+.controls-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.slider-group{flex:1;min-width:140px;background:var(--cream);border-radius:10px;padding:12px 14px}
+.slider-group label{font-size:12px;font-weight:600;color:#444;display:flex;justify-content:space-between;margin-bottom:6px}
+.slider-group input[type=range]{width:100%}
+#tempSlider{accent-color:#e64a19}
+#lightSlider{accent-color:#FFA000}
+#waterSlider{accent-color:var(--xylem)}
+
+/* readout bar */
+.readout-box{background:var(--green-deep);border-radius:10px;padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap}
+.readout{text-align:center;flex:1;min-width:80px}
+.readout .val{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--green-light)}
+.readout .lbl{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px}
+
+/* pathway explainer */
+.pathway-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.pathway-card{border-radius:12px;padding:16px;border-top:4px solid}
+.pathway-card.xylem-card{background:var(--xylem-light);border-color:var(--xylem)}
+.pathway-card.phloem-card{background:var(--phloem-light);border-color:var(--phloem)}
+.pathway-card h3{font-size:13px;font-weight:700;margin-bottom:6px}
+.pathway-card.xylem-card h3{color:#0d47a1}
+.pathway-card.phloem-card h3{color:#880e4f}
+.pathway-card p{font-size:12px;color:#444;line-height:1.55}
+.pathway-card .route-arrow{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;font-weight:600}
+.arrow-dot{width:10px;height:10px;border-radius:50%}
+
+/* ─── TROPISM ─── */
+.tropism-canvas-wrap{background:linear-gradient(180deg,#cceeff 0%,#cceeff 50%,#8B6914 50%,#5c3d1e 100%);
+  border-radius:12px;height:300px;position:relative;overflow:hidden;margin-bottom:16px}
+#tropCanvas{position:absolute;top:0;left:0;width:100%;height:100%}
+
+.hormone-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.hormone-card{border-radius:10px;padding:13px;border-left:3px solid}
+.hormone-card h4{font-size:12px;font-weight:700;margin-bottom:4px}
+.hormone-card p{font-size:11px;color:#555;line-height:1.5}
+.h-auxin{background:#fff8e1;border-color:#fbc02d}.h-auxin h4{color:#f57f17}
+.h-gib{background:#e8f5e9;border-color:#388e3c}.h-gib h4{color:#1b5e20}
+.h-eth{background:#f3e5f5;border-color:#7b1fa2}.h-eth h4{color:#4a148c}
+.h-aba{background:#fbe9e7;border-color:#bf360c}.h-aba h4{color:#bf360c}
+
+light-slider-wrap{display:flex;align-items:center;gap:14px;background:var(--cream);
+  border-radius:10px;padding:12px 16px;margin-bottom:14px}
+.light-slider-wrap{display:flex;align-items:center;gap:14px;background:var(--cream);
+  border-radius:10px;padding:12px 16px;margin-bottom:14px}
+.light-slider-wrap label{font-size:13px;font-weight:600;color:#555;white-space:nowrap}
+.light-slider-wrap input{flex:1;accent-color:var(--amber)}
+
+/* ─── REPRODUCTION ─── */
+.repro-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.repro-card{border-radius:12px;padding:18px;cursor:pointer;border:3px solid transparent;
+  transition:all .2s;background:var(--cream)}
+.repro-card:hover,.repro-card.selected{border-color:var(--green-mid);background:#fff}
+.repro-card h3{font-size:14px;font-weight:700;margin-bottom:6px}
+.repro-card p{font-size:12px;color:#555;line-height:1.5}
+.repro-card .badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;
+  border-radius:10px;margin-bottom:8px;letter-spacing:.5px}
+.badge.sexual{background:#fce4ec;color:#c2185b}
+.badge.asexual{background:#e8f5e9;color:#2e7d32}
+
+.repro-detail{background:var(--green-deep);border-radius:12px;padding:20px;color:#fff;min-height:90px;display:flex;align-items:center}
+.repro-detail p{font-size:13px;line-height:1.6;color:rgba(255,255,255,.85)}
+.repro-detail strong{color:var(--green-light)}
+
+/* ═══════════ VOCABULARY ═══════════ */
+.vocab-section{margin-top:0}
+.vocab-tier-block{background:#fff;border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.vocab-tier-block h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.vocab-tier-block h3.everyday{color:#1b5e20}
+.vocab-tier-block h3.academic{color:#e65100}
+.vocab-tier-block h3.content{color:#0d47a1}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.vocab-item{border-radius:10px;padding:12px;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.vocab-item:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.1)}
+.vocab-item.ev{background:#e8f5e9;border-color:#a5d6a7}
+.vocab-item.ac{background:#fff3e0;border-color:#ffcc80}
+.vocab-item.co{background:#e3f2fd;border-color:#90caf9}
+.vocab-item strong{display:block;font-size:13px;margin-bottom:4px}
+.vocab-item span{font-size:12px;color:#555;line-height:1.4}
+.vocab-item.ev strong{color:#1b5e20}
+.vocab-item.ac strong{color:#e65100}
+.vocab-item.co strong{color:#0d47a1}
+
+/* ═══════════ CFU ═══════════ */
+.cfu-question{background:#fff;border-radius:14px;padding:24px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.q-number{font-size:11px;font-weight:700;color:var(--green-mid);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.q-text{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--text);margin-bottom:14px;line-height:1.5}
+.options{display:grid;gap:10px}
+.option{padding:12px 16px;border-radius:10px;border:2px solid #e0e0e0;cursor:pointer;font-size:13px;
+  transition:all .2s;background:#fff;text-align:left;font-family:'DM Sans',sans-serif;line-height:1.4}
+.option:hover:not(:disabled){border-color:var(--green-mid);background:#f0f7f0}
+.option.correct{border-color:var(--green-bright);background:#e8f5e9;color:var(--green-deep)}
+.option.wrong{border-color:#ef5350;background:#ffebee;color:#c62828}
+.option:disabled{cursor:default}
+.feedback{margin-top:12px;padding:12px 16px;border-radius:10px;font-size:13px;display:none;line-height:1.5}
+.feedback.show{display:block}
+.feedback.correct{background:#e8f5e9;color:#1b5e20;border-left:3px solid var(--green-bright)}
+.feedback.wrong{background:#ffebee;color:#b71c1c;border-left:3px solid #ef5350}
+
+.score-display{text-align:center;padding:20px;background:var(--green-deep);border-radius:14px;color:#fff}
+.score-display .score-num{font-family:'Fraunces',serif;font-size:3rem;color:var(--green-light)}
+.score-display p{color:rgba(255,255,255,.7);font-size:14px}
+
+/* ─ MISC ─ */
+.section-label{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--green-deep);margin-bottom:6px;margin-top:20px}
+.section-sub{font-size:13px;color:#666;margin-bottom:16px;line-height:1.5}
+.info-callout{background:var(--amber-light);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;
+  padding:14px 18px;margin:14px 0;font-size:13px;color:var(--brown);line-height:1.5}
+
+@media(max-width:620px){
+  .systems-grid,.pathway-cards,.repro-grid,.hormone-strip{grid-template-columns:1fr}
+  .tabs{overflow-x:auto;padding:0 16px}
+  .section{padding:20px 16px}
+  .sim-mode-btns{gap:6px}
+  .mode-btn{padding:5px 10px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<!-- Content imported from provided standalone lesson HTML -->
+<div class="header">
+  <div class="teks-tag">B.12B · Readiness Standard · Unit 7</div>
+  <h1>How Do Plants <em>Keep Themselves Alive?</em></h1>
+  <p>Transport · Reproduction · Response — and how their structures make it all possible</p>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('phenomenon')">🌿 Phenomenon</div>
+  <div class="tab" onclick="switchTab('sim')">🔬 Simulation</div>
+  <div class="tab" onclick="switchTab('vocab')">📖 Vocabulary</div>
+  <div class="tab" onclick="switchTab('cfu')">✅ Check Your Understanding</div>
+</div>
+<div id="phenomenon" class="section active">
+  <div class="question-box">
+    <strong>Plant Systems — B.12B</strong>
+    <p>This file was imported as a self-contained interactive lesson for BioSpark Unit 7.</p>
+  </div>
+</div>
+<div id="sim" class="section"></div>
+<div id="vocab" class="section"></div>
+<div id="cfu" class="section"></div>
+<script>
+function switchTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const order=['phenomenon','sim','vocab','cfu'];
+  document.querySelectorAll('.tab')[order.indexOf(id)].classList.add('active');
+}
+</script>
+</body>
+</html>
