@@ -124,66 +124,64 @@ interface BottleAssemblySVGProps {
 function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
   const { bottle1Cut, bottle2Cut, assembled, stringThreaded } = assembly;
 
-  // After full assembly: ONE continuous outer silhouette + interior neck detail
+  // After full assembly: wide 2-liter proportions — ONE outer silhouette + interior neck
+  // cx=80, body half=65 (130px total), viewBox 160×330
   if (assembled) {
-    // Outer path: straight walls x=61/x=139, top y=10, Q-base at y=300→316
-    // Interior neck: inverted shoulder+neck+cap traced from outer wall inward
-    // No gap — the 14px gap between old p1/p3 is eliminated
-    const outerPath = "M 61 10 L 61 300 Q 100 316 139 300 L 139 10";
-    // Interior neck geometry mirrors the original inverted shoulder/neck/cap:
-    // starts at outer walls (x=61/x=139) at y=78, traces inward to cap at y=126
+    // Outer: straight walls x=15/x=145, Q-rounded base at y=295→311
+    const outerPath = "M 15 10 L 15 295 Q 80 311 145 295 L 145 10";
+    // Interior neck: fast Q-bezier fan-in from outer walls (x=15/145) at y=105
+    // → neck (x=70/90) at y=128 → cap rect y=140 (20px wide, 16px tall)
     const intNeck =
-      "M 61 78 L 91 100 L 91 116 L 93 116 L 93 126 " +
-      "L 107 126 L 107 116 L 109 116 L 109 100 L 139 78";
+      "M 15 105 Q 15 118 70 128 L 70 140 L 90 140 L 90 128 Q 145 118 145 105";
     return (
-      <svg viewBox="0 0 200 340" width="200" height="340" aria-label="Assembled bottle ecosystem">
+      <svg viewBox="0 0 160 330" width="160" height="330" aria-label="Assembled bottle ecosystem">
         <defs>
           <clipPath id="asse-outer-clip">
             <path d={`${outerPath} Z`} />
           </clipPath>
         </defs>
 
-        {/* ── Zone fills (full-width rects, clipped to outer bottle shape) ── */}
-        {/* Plant air zone: y=10–92 */}
-        <rect x="61" y="10" width="78" height="82" fill="#f0fdf4" clipPath="url(#asse-outer-clip)" />
-        {/* Soil zone: y=92–130 (sides of shoulder area are soil-filled) */}
-        <rect x="61" y="92" width="78" height="38" fill="#b5651d" clipPath="url(#asse-outer-clip)" />
+        {/* ── Zone fills clipped to outer bottle shape ── */}
+        {/* Plant air zone: y=10–90 */}
+        <rect x="15" y="10"  width="130" height="80"  fill="#f0fdf4" clipPath="url(#asse-outer-clip)" />
+        {/* Soil zone: y=90–145 (covers shoulder + neck area) */}
+        <rect x="15" y="90"  width="130" height="55"  fill="#b5651d" clipPath="url(#asse-outer-clip)" />
         {/* Soil surface dome */}
-        <path d="M 62 92 Q 100 78 138 92" fill="none" stroke="#7c2d12" strokeWidth="1.5" clipPath="url(#asse-outer-clip)" />
-        {/* Aquatic air gap: y=140–152 */}
-        <rect x="61" y="140" width="78" height="12" fill="#f0f9ff" clipPath="url(#asse-outer-clip)" />
-        {/* Water zone: y=152–300 */}
-        <rect x="61" y="152" width="78" height="148" fill="#add8e6" clipPath="url(#asse-outer-clip)" />
+        <path d="M 16 90 Q 80 73 144 90" fill="none" stroke="#7c2d12" strokeWidth="1.5" clipPath="url(#asse-outer-clip)" />
+        {/* Aquatic air gap: y=157–169 */}
+        <rect x="15" y="157" width="130" height="12"  fill="#f0f9ff" clipPath="url(#asse-outer-clip)" />
+        {/* Water zone: y=169–295 */}
+        <rect x="15" y="169" width="130" height="126" fill="#add8e6" clipPath="url(#asse-outer-clip)" />
         {/* Gravel ellipses at base */}
-        <ellipse cx="82"  cy="293" rx="11" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
-        <ellipse cx="100" cy="291" rx="13" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
-        <ellipse cx="118" cy="294" rx="10" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
-        <ellipse cx="90"  cy="299" rx="9"  ry="4" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
-        <ellipse cx="111" cy="298" rx="8"  ry="4" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
+        <ellipse cx="45"  cy="286" rx="14" ry="6" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
+        <ellipse cx="80"  cy="284" rx="16" ry="6" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
+        <ellipse cx="116" cy="287" rx="13" ry="6" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
+        <ellipse cx="62"  cy="292" rx="11" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
+        <ellipse cx="100" cy="291" rx="12" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#asse-outer-clip)" />
 
         {/* Cotton string from cap down through water to gravel */}
         {stringThreaded && (
-          <line x1="100" y1="140" x2="100" y2="296" stroke="#e8c84a" strokeWidth="2" strokeDasharray="4,3" />
+          <line x1="80" y1="156" x2="80" y2="288" stroke="#e8c84a" strokeWidth="2" strokeDasharray="4,3" />
         )}
 
-        {/* ── Outer bottle silhouette (single continuous path) ── */}
+        {/* ── Outer silhouette ── */}
         <path d={outerPath} fill="none" stroke="#64748b" strokeWidth="1.8" />
-        {/* Dashed top cut edge (open end of inverted top piece) */}
-        <line x1="61" y1="10" x2="139" y2="10" stroke="#e53e3e" strokeWidth="1.5" strokeDasharray="5,3" />
+        {/* Dashed top cut edge */}
+        <line x1="15" y1="10" x2="145" y2="10" stroke="#e53e3e" strokeWidth="1.5" strokeDasharray="5,3" />
 
-        {/* ── Interior neck detail (inverted shoulder+neck+cap) ── */}
+        {/* ── Interior neck: fast-flaring Q-bezier ── */}
         <path d={intNeck} fill="none" stroke="#64748b" strokeWidth="1.5" />
-        {/* Cap rect: physical bottle cap at the waist */}
-        <rect x="93" y="126" width="14" height="14" fill="#e5e7eb" stroke="#64748b" strokeWidth="1.5" />
+        {/* Cap rect at waist: 20px wide, 16px tall */}
+        <rect x="70" y="140" width="20" height="16" fill="#e5e7eb" stroke="#64748b" strokeWidth="1.5" />
 
         {/* ── Zone labels ── */}
-        <text x="100" y="60"  textAnchor="middle" fontSize="8" fill="#4ade80" fontFamily="Outfit,sans-serif">PLANTS</text>
-        <text x="100" y="112" textAnchor="middle" fontSize="8" fill="#a16207" fontFamily="Outfit,sans-serif">SOIL</text>
-        <text x="100" y="200" textAnchor="middle" fontSize="8" fill="#1e40af" fontFamily="Outfit,sans-serif">AQUATIC</text>
+        <text x="80" y="54"  textAnchor="middle" fontSize="8" fill="#4ade80" fontFamily="Outfit,sans-serif">PLANTS</text>
+        <text x="80" y="118" textAnchor="middle" fontSize="8" fill="#a16207" fontFamily="Outfit,sans-serif">SOIL</text>
+        <text x="80" y="225" textAnchor="middle" fontSize="8" fill="#1e40af" fontFamily="Outfit,sans-serif">AQUATIC</text>
 
         {/* JOINED label */}
-        <rect x="70" y="155" width="60" height="13" rx="6" fill="#00d4aa22" />
-        <text x="100" y="165" textAnchor="middle" fontSize="7" fill="#00d4aa" fontFamily="Outfit,sans-serif" fontWeight="bold">JOINED ✓</text>
+        <rect x="50" y="172" width="60" height="13" rx="6" fill="#00d4aa22" />
+        <text x="80" y="182" textAnchor="middle" fontSize="7" fill="#00d4aa" fontFamily="Outfit,sans-serif" fontWeight="bold">JOINED ✓</text>
       </svg>
     );
   }
@@ -199,34 +197,34 @@ function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
   const CUT = "#e53e3e";  // cut line / arrow colour
   const LBL = "#94a3b8";  // bottle label colour
 
-  // Bottle shape constants (shared by both full bottles)
-  const bty   = 20;   // y where bottle cap starts
-  const cpW   = 10;   // cap half-width   → 20 px total
-  const nkW   = 13;   // neck half-width  → 26 px total
-  const bW    = 35;   // body half-width  → 70 px total
-  const capH  = 8;
-  const neckH = 16;
-  const shH   = 14;   // shoulder taper height
-  const bodyH = 210;
+  // 2-liter bottle shape constants (viewBox per-column: ~100px wide, body=90px)
+  const bty   = 14;   // y where bottle cap starts
+  const cpW   = 11;   // cap half-width   → 22px total
+  const nkW   = 8;    // neck half-width  → 16px total
+  const bW    = 45;   // body half-width  → 90px total
+  const capH  = 10;
+  const neckH = 14;
+  const shH   = 22;   // shoulder height — short so it fans out fast (2-liter shape)
+  const bodyH = 200;
   const baseH = 12;
 
   // Absolute y positions (same for both full bottles)
-  const neckY = bty + capH;         // 28
-  const shY   = neckY + neckH;      // 44
-  const bodyY = shY + shH;          // 58
-  const baseY = bodyY + bodyH;      // 268
-  const btmY  = baseY + baseH;      // 280  (lowest point of bottle)
+  const neckY = bty + capH;         // 24
+  const shY   = neckY + neckH;      // 38  (top of shoulder = bottom of neck)
+  const bodyY = shY + shH;          // 60  (body starts = bottom of shoulder)
+  const baseY = bodyY + bodyH;      // 260
+  const btmY  = baseY + baseH;      // 272  (Q-base lowest point)
 
   // Cut-line absolute y positions
-  const cut1Y = bodyY + Math.round(bodyH * 0.35);  // 132
-  const cut2Y = bodyY + Math.round(bodyH * 0.60);  // 184
+  const cut1Y = bodyY + Math.round(bodyH * 0.35);  // 130
+  const cut2Y = bodyY + Math.round(bodyH * 0.60);  // 180
 
-  // Column centre x values
-  const b1cx = 45;
-  const b2cx = 137;
-  const acx  = 231;
+  // Column centre x values — spaced to fit 90px-wide bodies
+  const b1cx = 50;
+  const b2cx = 150;
+  const acx  = 250;
 
-  // Full-bottle outline path (cap → neck → shoulder → body → curved base)
+  // Full-bottle outline path — fast Q-bezier shoulders for broad 2-liter fan-out
   function bottlePath(cx: number): string {
     const cL = cx - cpW, cR = cx + cpW;
     const nL = cx - nkW, nR = cx + nkW;
@@ -234,38 +232,40 @@ function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
     return (
       `M ${cL} ${bty} L ${cR} ${bty}` +
       ` L ${cR} ${neckY} L ${nR} ${neckY}` +
-      ` L ${nR} ${shY} L ${bR} ${bodyY}` +
+      ` L ${nR} ${shY}` +
+      ` Q ${nR} ${shY + 10} ${bR} ${bodyY}` +   // right shoulder: fast bezier fan-out
       ` L ${bR} ${baseY}` +
       ` Q ${cx} ${btmY} ${bL} ${baseY}` +
-      ` L ${bL} ${bodyY} L ${nL} ${shY}` +
+      ` L ${bL} ${bodyY}` +
+      ` Q ${nL} ${shY + 10} ${nL} ${shY}` +      // left shoulder: mirrors right, going up
       ` L ${nL} ${neckY} L ${cL} ${neckY}` +
       ` Z`
     );
   }
 
-  // Assembly column geometry
-  const topPieceH = cut1Y - bty;       // 112: height of inverted top piece
-  const invBodyH  = cut1Y - bodyY;     // 74:  body portion of top piece
-  const botBodyH  = baseY - cut2Y;     // 84:  body portion of bottom piece
+  // Assembly column geometry (recomputed for 2-liter proportions)
+  const topPieceH = cut1Y - bty;       // 116: height of inverted top piece
+  const invBodyH  = cut1Y - bodyY;     // 70:  body portion of top piece
+  const botBodyH  = baseY - cut2Y;     // 80:  body portion of bottom piece
 
-  const tp_y = bty;  // 20: top of assembled bottle (cut edge)
+  const tp_y = bty;  // 14: top of assembled bottle (cut edge)
 
   // Single assembled bottle in Col 3:
-  // Outer walls straight (bW=35), interior neck at jctShY–jctCpBY
-  const jctShY  = tp_y + invBodyH;           // 94:  shoulder junction
-  const jctNkY  = jctShY + shH;              // 108: neck–shoulder junction
-  const jctCpY  = jctNkY + neckH;            // 124: cap–neck junction
-  const jctCpBY = tp_y  + topPieceH;         // 132: cap bottom / waist
-  const assmBodyEnd = jctCpBY + botBodyH;    // 216: body end
-  const assmBtmY    = assmBodyEnd + baseH;   // 228: Q-base lowest point
-  const assmLabelY  = assmBtmY + 15;         // 243: label y
+  // Outer walls straight (bW=45), interior neck uses Q-bezier fan-in
+  const jctShY  = tp_y + invBodyH;           // 84:  inverted shoulder junction
+  const jctNkY  = jctShY + shH;              // 106: neck–shoulder junction
+  const jctCpY  = jctNkY + neckH;            // 120: cap–neck junction
+  const jctCpBY = tp_y  + topPieceH;         // 130: cap bottom / waist = cut1Y ✓
+  const assmBodyEnd = jctCpBY + botBodyH;    // 210: body end
+  const assmBtmY    = assmBodyEnd + baseH;   // 222: Q-base lowest point
+  const assmLabelY  = assmBtmY + 15;         // 237: label y
 
 
   return (
     <svg
-      viewBox="0 0 280 290"
-      width="280"
-      height="290"
+      viewBox="0 0 300 295"
+      width="300"
+      height="295"
       aria-label="Three-column bottle assembly diagram"
     >
       {/* ── COLUMN 1: Bottle 1 ──────────────────────────────────────────── */}
@@ -341,11 +341,11 @@ function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
         stroke={CUT} strokeWidth="1.5" strokeDasharray="5,3"
       />
 
-      {/* Interior neck detail: inverted shoulder+neck+cap (starts/ends at outer walls) */}
+      {/* Interior neck detail: inverted Q-bezier fan-in from outer walls */}
       <path
         d={
           `M ${acx - bW} ${jctShY}` +
-          ` L ${acx - nkW} ${jctNkY}` +
+          ` Q ${acx - nkW} ${jctShY + 10} ${acx - nkW} ${jctNkY}` +
           ` L ${acx - nkW} ${jctCpY}` +
           ` L ${acx - cpW} ${jctCpY}` +
           ` L ${acx - cpW} ${jctCpBY}` +
@@ -353,7 +353,7 @@ function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
           ` L ${acx + cpW} ${jctCpY}` +
           ` L ${acx + nkW} ${jctCpY}` +
           ` L ${acx + nkW} ${jctNkY}` +
-          ` L ${acx + bW} ${jctShY}`
+          ` Q ${acx + nkW} ${jctShY + 10} ${acx + bW} ${jctShY}`
         }
         fill="none"
         stroke={STR}
@@ -703,18 +703,16 @@ function BottleSVG({ placedOrganisms, activeOrganismIds, cycleType, animating }:
   const aquatic = placed.filter((o) => o.zone === "aquatic");
   const terrestrial = placed.filter((o) => o.zone === "terrestrial");
 
-  // ONE continuous outer silhouette: straight walls x=35/x=185, Q-base at y=358→374
-  // Interior neck shows the inverted shoulder+neck+cap junction at y=180–252
-  // This eliminates the 12px gap that existed between btlP1 (ending y=240) and btlP3 (y=252)
-  const outerPath = "M 35 10 L 35 358 Q 110 374 185 358 L 185 10";
-  // Interior neck: mirrors btlP1 shoulder geometry but as interior-only lines
-  // starts/ends at outer walls (x=35, x=185) at y=180
+  // Wide 2-liter proportions: cx=80, body half=65 (130px total), viewBox 160×360
+  // Outer: straight walls x=15/x=145, Q-rounded base at y=335→351
+  const outerPath = "M 15 10 L 15 335 Q 80 351 145 335 L 145 10";
+  // Interior neck: fast Q-bezier fan-in from outer walls (x=15/145) at y=125
+  // → neck (x=70/90) at y=148 → cap rect y=148 (20px wide, 14px tall)
   const intNeck =
-    "M 35 180 L 96 207 L 96 227 L 100 227 L 100 240 " +
-    "L 120 240 L 120 227 L 124 227 L 124 207 L 185 180";
+    "M 15 125 Q 15 138 70 148 L 70 162 L 90 162 L 90 148 Q 145 138 145 125";
 
   return (
-    <svg viewBox="0 0 220 380" width="220" height="380" aria-label="Bottle ecosystem diagram"
+    <svg viewBox="0 0 160 360" width="160" height="360" aria-label="Bottle ecosystem diagram"
       style={{ filter: "drop-shadow(0 0 24px #00d4aa33)" }}>
       <defs>
         <clipPath id="btl-outer-clip">
@@ -722,32 +720,32 @@ function BottleSVG({ placedOrganisms, activeOrganismIds, cycleType, animating }:
         </clipPath>
       </defs>
 
-      {/* ── Zone fills (full-width, clipped to outer silhouette) ── */}
-      {/* Plant air zone: y=10–145 */}
-      <rect x="35" y="10" width="150" height="135" fill="#f0fdf4" clipPath="url(#btl-outer-clip)" />
-      {/* Soil zone: y=145–248 (sides of shoulder area filled with soil) */}
-      <rect x="35" y="145" width="150" height="103" fill="#b5651d" clipPath="url(#btl-outer-clip)" />
+      {/* ── Zone fills clipped to outer silhouette ── */}
+      {/* Plant air zone: y=10–100 */}
+      <rect x="15" y="10"  width="130" height="90"  fill="#f0fdf4" clipPath="url(#btl-outer-clip)" />
+      {/* Soil zone: y=100–165 (covers shoulder + neck area) */}
+      <rect x="15" y="100" width="130" height="65"  fill="#b5651d" clipPath="url(#btl-outer-clip)" />
       {/* Soil surface dome */}
-      <path d="M 36 145 Q 110 127 184 145" fill="none" stroke="#7c2d12" strokeWidth="1.5" clipPath="url(#btl-outer-clip)" />
-      {/* Aquatic air gap: y=252–264 */}
-      <rect x="35" y="252" width="150" height="12" fill="#f0f9ff" clipPath="url(#btl-outer-clip)" />
-      {/* Water zone: y=264–358 */}
-      <rect x="35" y="264" width="150" height="94" fill="#add8e6" clipPath="url(#btl-outer-clip)" />
+      <path d="M 16 100 Q 80 83 144 100" fill="none" stroke="#7c2d12" strokeWidth="1.5" clipPath="url(#btl-outer-clip)" />
+      {/* Aquatic air gap: y=170–182 */}
+      <rect x="15" y="170" width="130" height="12"  fill="#f0f9ff" clipPath="url(#btl-outer-clip)" />
+      {/* Water zone: y=182–335 */}
+      <rect x="15" y="182" width="130" height="153" fill="#add8e6" clipPath="url(#btl-outer-clip)" />
       {/* Gravel ellipses at base */}
-      <ellipse cx="82"  cy="350" rx="14" ry="6" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
-      <ellipse cx="104" cy="348" rx="16" ry="6" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
-      <ellipse cx="128" cy="351" rx="13" ry="6" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
-      <ellipse cx="94"  cy="357" rx="11" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
-      <ellipse cx="118" cy="356" rx="12" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
+      <ellipse cx="45"  cy="323" rx="14" ry="6" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
+      <ellipse cx="80"  cy="321" rx="16" ry="6" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
+      <ellipse cx="116" cy="324" rx="13" ry="6" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
+      <ellipse cx="62"  cy="330" rx="11" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
+      <ellipse cx="100" cy="329" rx="12" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
 
       {/* ── Zone labels ── */}
-      <text x="110" y="45"  textAnchor="middle" fontSize="9" fill="#4ade80" fontFamily="Outfit,sans-serif">AIR</text>
-      <text x="110" y="190" textAnchor="middle" fontSize="9" fill="#a16207" fontFamily="Outfit,sans-serif">SOIL</text>
-      <text x="110" y="305" textAnchor="middle" fontSize="9" fill="#60a5fa" fontFamily="Outfit,sans-serif">AQUATIC</text>
+      <text x="80" y="58"  textAnchor="middle" fontSize="9" fill="#4ade80" fontFamily="Outfit,sans-serif">AIR</text>
+      <text x="80" y="145" textAnchor="middle" fontSize="9" fill="#a16207" fontFamily="Outfit,sans-serif">SOIL</text>
+      <text x="80" y="265" textAnchor="middle" fontSize="9" fill="#60a5fa" fontFamily="Outfit,sans-serif">AQUATIC</text>
 
       {aquatic.map((org, i) => {
         const isActive = activeOrganismIds.includes(org.id);
-        const cx = 70 + i * 50; const cy = 265;
+        const cx = 45 + i * 50; const cy = 200;
         return (
           <g key={org.id}>
             {isActive && <circle cx={cx} cy={cy} r="18" fill={org.color} opacity="0.18">
@@ -760,7 +758,7 @@ function BottleSVG({ placedOrganisms, activeOrganismIds, cycleType, animating }:
       })}
       {terrestrial.map((org, i) => {
         const isActive = activeOrganismIds.includes(org.id);
-        const cx = 65 + i * 40; const cy = 175;
+        const cx = 35 + i * 40; const cy = 70;
         return (
           <g key={org.id}>
             {isActive && <circle cx={cx} cy={cy} r="16" fill={org.color} opacity="0.18">
@@ -773,84 +771,84 @@ function BottleSVG({ placedOrganisms, activeOrganismIds, cycleType, animating }:
       })}
 
       {/* Cotton string from cap waist down through water to gravel */}
-      <line x1="110" y1="252" x2="110" y2="354" stroke="#e8c84a" strokeWidth="2" strokeDasharray="4,3" />
+      <line x1="80" y1="162" x2="80" y2="327" stroke="#e8c84a" strokeWidth="2" strokeDasharray="4,3" />
 
       {/* ── Single outer silhouette (straight walls, Q-rounded base) ── */}
       <path d={outerPath} fill="none" stroke="#64748b" strokeWidth="2" />
       {/* Dashed top cut edge */}
-      <line x1="35" y1="10" x2="185" y2="10" stroke="#e53e3e" strokeWidth="1.5" strokeDasharray="5,3" />
+      <line x1="15" y1="10" x2="145" y2="10" stroke="#e53e3e" strokeWidth="1.5" strokeDasharray="5,3" />
 
-      {/* ── Interior neck detail (inverted shoulder+neck+cap) ── */}
+      {/* ── Interior neck: fast Q-bezier fan-in ── */}
       <path d={intNeck} fill="none" stroke="#64748b" strokeWidth="1.8" />
-      {/* Cap rect: physical bottle cap at the interior waist */}
-      <rect x="100" y="240" width="20" height="12" fill="#e5e7eb" stroke="#64748b" strokeWidth="1.5" />
+      {/* Cap rect: 20px wide, 14px tall */}
+      <rect x="70" y="148" width="20" height="14" fill="#e5e7eb" stroke="#64748b" strokeWidth="1.5" />
 
       {/* Water cycle animation */}
       {cycleType === "water" && animating && (
         <g>
-          <circle cx="100" cy="220" r="4" fill="#60a5fa" opacity="0.8">
-            <animateMotion dur="2s" repeatCount="indefinite" path="M 0 0 C 0 -80 20 -160 10 -180" />
+          <circle cx="80" cy="170" r="4" fill="#60a5fa" opacity="0.8">
+            <animateMotion dur="2s" repeatCount="indefinite" path="M 0 0 C 0 -70 15 -130 5 -150" />
             <animate attributeName="opacity" values="0.8;0.2;0" dur="2s" repeatCount="indefinite" />
           </circle>
-          <circle cx="130" cy="220" r="3" fill="#60a5fa" opacity="0.7">
-            <animateMotion dur="2.5s" repeatCount="indefinite" begin="0.5s" path="M 0 0 C 10 -70 -10 -140 5 -170" />
+          <circle cx="105" cy="165" r="3" fill="#60a5fa" opacity="0.7">
+            <animateMotion dur="2.5s" repeatCount="indefinite" begin="0.5s" path="M 0 0 C 8 -60 -8 -115 4 -140" />
             <animate attributeName="opacity" values="0.7;0.3;0" dur="2.5s" repeatCount="indefinite" begin="0.5s" />
           </circle>
-          <circle cx="40" cy="80" r="3" fill="#60a5fa" opacity="0.6">
-            <animateMotion dur="3s" repeatCount="indefinite" begin="1s" path="M 0 0 L 0 120" />
+          <circle cx="22" cy="65" r="3" fill="#60a5fa" opacity="0.6">
+            <animateMotion dur="3s" repeatCount="indefinite" begin="1s" path="M 0 0 L 0 100" />
           </circle>
-          <circle cx="180" cy="100" r="3" fill="#60a5fa" opacity="0.6">
-            <animateMotion dur="3.5s" repeatCount="indefinite" begin="1.5s" path="M 0 0 L 0 100" />
+          <circle cx="138" cy="75" r="3" fill="#60a5fa" opacity="0.6">
+            <animateMotion dur="3.5s" repeatCount="indefinite" begin="1.5s" path="M 0 0 L 0 90" />
           </circle>
-          <text x="110" y="130" textAnchor="middle" fontSize="8" fill="#60a5fa" fontFamily="Outfit,sans-serif" opacity="0.8">evaporation ↑</text>
-          <text x="55" y="160" textAnchor="middle" fontSize="7" fill="#60a5fa" fontFamily="Outfit,sans-serif" opacity="0.7">condensation</text>
+          <text x="80" y="95" textAnchor="middle" fontSize="8" fill="#60a5fa" fontFamily="Outfit,sans-serif" opacity="0.8">evaporation ↑</text>
+          <text x="36" y="130" textAnchor="middle" fontSize="7" fill="#60a5fa" fontFamily="Outfit,sans-serif" opacity="0.7">condensation</text>
         </g>
       )}
 
       {/* Carbon cycle animation */}
       {cycleType === "carbon" && animating && (
         <g>
-          <text x="95" y="250" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0">
+          <text x="70" y="175" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0">
             CO₂
             <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" />
-            <animateMotion dur="2s" repeatCount="indefinite" path="M 0 0 L -20 -80" />
+            <animateMotion dur="2s" repeatCount="indefinite" path="M 0 0 L -15 -65" />
           </text>
-          <text x="140" y="160" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0">
+          <text x="110" y="130" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0">
             CO₂
             <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.5s" />
-            <animateMotion dur="2.5s" repeatCount="indefinite" begin="0.5s" path="M 0 0 L -30 -60" />
+            <animateMotion dur="2.5s" repeatCount="indefinite" begin="0.5s" path="M 0 0 L -22 -50" />
           </text>
-          <text x="65" y="150" fontSize="8" fill="#4ade80" fontFamily="Outfit,sans-serif" opacity="0">
+          <text x="42" y="118" fontSize="8" fill="#4ade80" fontFamily="Outfit,sans-serif" opacity="0">
             O₂ →
             <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1s" />
-            <animateMotion dur="2s" repeatCount="indefinite" begin="1s" path="M 0 0 L 0 -40" />
+            <animateMotion dur="2s" repeatCount="indefinite" begin="1s" path="M 0 0 L 0 -35" />
           </text>
-          <text x="110" y="90" textAnchor="middle" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0.8">photosynthesis ↓</text>
-          <text x="110" y="200" textAnchor="middle" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0.7">respiration ↑</text>
+          <text x="80" y="52" textAnchor="middle" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0.8">photosynthesis ↓</text>
+          <text x="80" y="152" textAnchor="middle" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0.7">respiration ↑</text>
         </g>
       )}
 
       {/* Nitrogen cycle animation */}
       {cycleType === "nitrogen" && animating && (
         <g>
-          <circle cx="90" cy="285" r="4" fill="#f59e0b" opacity="0">
+          <circle cx="65" cy="225" r="4" fill="#f59e0b" opacity="0">
             <animate attributeName="opacity" values="0;0.9;0" dur="2s" repeatCount="indefinite" />
-            <animateMotion dur="2s" repeatCount="indefinite" path="M 0 0 L 10 30" />
+            <animateMotion dur="2s" repeatCount="indefinite" path="M 0 0 L 8 25" />
           </circle>
-          <line x1="80" y1="310" x2="80" y2="340" stroke="#f59e0b" strokeWidth="2" opacity="0">
+          <line x1="58" y1="255" x2="58" y2="285" stroke="#f59e0b" strokeWidth="2" opacity="0">
             <animate attributeName="opacity" values="0;0.8;0" dur="2s" repeatCount="indefinite" begin="0.8s" />
           </line>
-          <text x="110" y="285" textAnchor="middle" fontSize="7" fill="#f59e0b" fontFamily="Outfit,sans-serif" opacity="0.8">decomposition</text>
-          <text x="110" y="350" textAnchor="middle" fontSize="7" fill="#f59e0b" fontFamily="Outfit,sans-serif" opacity="0.8">N absorbed by roots</text>
-          <circle cx="100" cy="305" r="5" fill="#f59e0b" opacity="0">
+          <text x="80" y="228" textAnchor="middle" fontSize="7" fill="#f59e0b" fontFamily="Outfit,sans-serif" opacity="0.8">decomposition</text>
+          <text x="80" y="315" textAnchor="middle" fontSize="7" fill="#f59e0b" fontFamily="Outfit,sans-serif" opacity="0.8">N absorbed by roots</text>
+          <circle cx="80" cy="250" r="5" fill="#f59e0b" opacity="0">
             <animate attributeName="opacity" values="0;0.7;0" dur="1.5s" repeatCount="indefinite" begin="0.3s" />
-            <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.3s" path="M 0 0 C 10 5 -5 10 5 15" />
+            <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.3s" path="M 0 0 C 8 4 -4 8 4 12" />
           </circle>
         </g>
       )}
 
-      <rect x="65" y="355" width="90" height="16" rx="8" fill="#132638" />
-      <text x="110" y="367" textAnchor="middle" fontSize="8" fill="#00d4aa" fontFamily="Outfit,sans-serif" fontWeight="bold">
+      <rect x="35" y="344" width="90" height="14" rx="7" fill="#132638" />
+      <text x="80" y="355" textAnchor="middle" fontSize="8" fill="#00d4aa" fontFamily="Outfit,sans-serif" fontWeight="bold">
         BOTTLE ECOSYSTEM
       </text>
     </svg>
