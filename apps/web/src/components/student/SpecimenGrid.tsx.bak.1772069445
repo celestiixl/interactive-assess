@@ -1,4 +1,0 @@
-export const SPECIMENGRID__PATCH_MARKER = "SPECIMENGRID__PATCH_MARKER";
-export default function SpecimenGrid() {
-  return null;
-}
