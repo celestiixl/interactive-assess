@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PageContent, PageBanner, Card, Button } from "@/components/ui";
 import WeeklyDigestCard from "@/components/teacher/WeeklyDigestCard";
+import PeriodMasterySection from "@/components/teacher/PeriodMasterySection";
 
 // If these components exist in your repo, keep them.
 // If your import paths differ, the build will tell us and we can patch paths next.
@@ -174,6 +175,9 @@ export default function TeacherDashboardPage() {
               </Card>
             </div>
           </section>
+
+          {/* Period Mastery Snapshot — per-period TEKS heatmaps */}
+          <PeriodMasterySection />
         </div>
       </PageContent>
     </main>
