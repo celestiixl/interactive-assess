@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
+import { BackLink } from "@/components/nav/BackLink";
 import { PageBanner, PageContent } from "@/components/ui";
 import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import SuccessionPhenomenonBanner from "@/components/student/SuccessionPhenomenonBanner";
@@ -251,22 +251,7 @@ export default function EcologicalSuccessionPage() {
         subtitle="Explore how ecosystems recover after disturbance — TEKS B.6D & B.11A"
       >
         <div className="flex flex-wrap items-center gap-3">
-          <Link
-            href="/student/learn"
-            aria-label="Back to BioSpark Quest"
-            className="rounded-2xl px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:opacity-80"
-            style={{ background: "rgba(255,255,255,0.15)" }}
-          >
-            ← BioSpark Quest
-          </Link>
-          <Link
-            href="/student/dashboard"
-            aria-label="Go to dashboard"
-            className="rounded-2xl px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:opacity-80"
-            style={{ background: "rgba(255,255,255,0.15)" }}
-          >
-            Dashboard
-          </Link>
+          <BackLink href="/student/dashboard" label="Back to dashboard" />
         </div>
       </PageBanner>
 

@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Button, Card, PageContent } from "@/components/ui";
+import { BackLink } from "@/components/nav/BackLink";
 
 type Point = {
   generation: number;
@@ -67,12 +67,7 @@ export default function PopulationGeneticsSimulationPage() {
               </p>
             </div>
 
-            <Link
-              href="/simulations"
-              className="rounded-xl border border-bs-border bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:border-bs-teal/60 hover:text-bs-teal"
-            >
-              Back to Simulations
-            </Link>
+            <BackLink href="/simulations" label="Back to simulations" />
           </div>
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">

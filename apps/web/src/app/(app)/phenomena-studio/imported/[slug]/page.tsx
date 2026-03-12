@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import Link from "next/link";
+import { BackLink } from "@/components/nav/BackLink";
 import { useParams } from "next/navigation";
 import { getImportedPhenomenonBySlug } from "@/lib/phenomenaImports";
 
@@ -21,12 +21,7 @@ export default function ImportedPhenomenonPage() {
           <p className="mt-2 text-sm text-slate-600">
             This imported HTML is missing or still pending approval.
           </p>
-          <Link
-            href="/phenomena-studio"
-            className="mt-4 inline-flex rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            Back to Phenomena Explorer
-          </Link>
+          <BackLink href="/phenomena-studio" label="Back to phenomena" />
         </div>
       </main>
     );
@@ -52,17 +47,7 @@ export default function ImportedPhenomenonPage() {
           background: "var(--bs-surface)",
         }}
       >
-        <Link
-          href="/phenomena-studio"
-          style={{
-            textDecoration: "none",
-            color: "var(--bs-text)",
-            fontSize: 14,
-            fontWeight: 600,
-          }}
-        >
-          {"← Return to Phenomena"}
-        </Link>
+        <BackLink href="/phenomena-studio" label="Back to phenomena" />
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span

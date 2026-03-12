@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { BackLink } from "@/components/nav/BackLink";
 
 export default function GulfDeadZoneLessonPage() {
   return (
@@ -23,17 +23,7 @@ export default function GulfDeadZoneLessonPage() {
           background: "var(--bs-surface)",
         }}
       >
-        <Link
-          href="/phenomena-studio"
-          style={{
-            textDecoration: "none",
-            color: "var(--bs-text)",
-            fontSize: 14,
-            fontWeight: 600,
-          }}
-        >
-          {"← Return to Phenomena"}
-        </Link>
+        <BackLink href="/phenomena-studio" label="Back to phenomena" />
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <a

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { BackLink } from "@/components/nav/BackLink";
 import { WhatsNextRoadmap } from "@/components/roadmap/WhatsNextRoadmap";
 import { PageContent, Card } from "@/components/ui";
 import { useTeacherAuth } from "@/lib/teacherAuth";
@@ -221,12 +222,7 @@ export default function PhenomenaUploadGuidePage() {
               >
                 {isCreatingPr ? "Creating PR..." : "Create GitHub PR"}
               </button>
-              <Link
-                href="/phenomena-studio"
-                className="rounded-xl border border-bs-border bg-bs-raised px-4 py-2 text-xs font-semibold text-bs-text-sub hover:border-bs-teal/55 hover:text-bs-teal"
-              >
-                Back to Explorer
-              </Link>
+              <BackLink href="/phenomena-studio" label="Back to explorer" />
               <span className="text-xs text-bs-text-sub">
                 Requester: {requester}{" "}
                 {isAdmin ? "(site admin)" : "(non-admin)"}
