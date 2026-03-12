@@ -101,6 +101,39 @@ export default function Unit7Page() {
                 </Link>
               </div>
             </article>
+
+            <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Lesson 3 • Simulation • 20 min
+              </div>
+              <h3 className="mt-1 text-base font-semibold text-slate-900">
+                Bottle Ecosystem Cycles Lab
+              </h3>
+              <p className="mt-1 text-sm text-slate-600">
+                Build a sealed bottle ecosystem and observe how water, carbon,
+                and nitrogen cycle through the system. Predict outcomes and
+                complete a CER reflection.
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
+                  B.12A
+                </span>
+                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
+                  B.12B
+                </span>
+                <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2 py-0.5 text-[11px] font-semibold text-cyan-800">
+                  Simulation
+                </span>
+              </div>
+              <div className="mt-3">
+                <Link
+                  href="/student/learn/simulations/bottle-ecosystem-cycles"
+                  className="inline-flex rounded-xl bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800"
+                >
+                  Open Simulation →
+                </Link>
+              </div>
+            </article>
           </div>
         </section>
       </div>
