@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { BackLink } from "@/components/nav/BackLink";
 import { PageContent, PageBanner, Card, Badge } from "@/components/ui";
 import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import {
@@ -271,6 +272,7 @@ function StudentAssignmentsPageContent() {
 
   return (
     <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
+      <BackLink href="/student/dashboard" label="Back to dashboard" />
       <PageBanner
         title="My Assignments"
         subtitle="Track your work, due dates, and scores."
@@ -281,12 +283,6 @@ function StudentAssignmentsPageContent() {
             className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
           >
             Learning Hub
-          </Link>
-          <Link
-            href="/student/dashboard"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
-          >
-            Dashboard
           </Link>
           <Link
             href="/student/profile"

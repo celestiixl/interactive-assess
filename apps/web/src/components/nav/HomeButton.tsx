@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Home } from "lucide-react";
 import { useTeacherAuth } from "@/lib/teacherAuth";
-import type { UserRole } from "@/types/navigation";
 
 const DASHBOARD_PATHS = ["/student/dashboard", "/teacher/dashboard"];
 
@@ -13,22 +11,11 @@ export function HomeButton() {
   const pathname = usePathname();
   const { teacher } = useTeacherAuth();
 
-  // Determine role: teacher if logged in, student otherwise
-  const [role, setRole] = useState<UserRole | null>(null);
-
-  useEffect(() => {
-    setRole(teacher ? "teacher" : "student");
-  }, [teacher]);
-
   // Do not render on dashboard pages
   if (DASHBOARD_PATHS.some((p) => pathname === p)) return null;
 
-  const href =
-    role === "teacher"
-      ? "/teacher/dashboard"
-      : role === "student"
-        ? "/student/dashboard"
-        : "/";
+  // Derive home destination from auth state
+  const href = teacher ? "/teacher/dashboard" : "/student/dashboard";
 
   return (
     <Link
