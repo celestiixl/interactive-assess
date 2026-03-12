@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLessonProgress } from "@/hooks/useLessonProgress";
 import Link from "next/link";
 import type {
   LearningLesson,
@@ -106,6 +107,14 @@ export default function LessonExperience({
   nextLesson,
 }: LessonExperienceProps) {
   const { acc } = useAccommodations();
+  const {
+    completedSections,
+    lastSectionId,
+    markSectionComplete,
+    markLessonComplete: markLessonProgressComplete,
+  } = useLessonProgress(lesson.slug);
+  // Ref map: section heading → article DOM element (for scroll-restore).
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const questions = useMemo(() => buildQuestions(unit, lesson), [lesson, unit]);
   const [language, setLanguage] = useState<"en" | "es">("en");
   const [dyslexiaMode, setDyslexiaMode] = useState(false);
@@ -151,6 +160,20 @@ export default function LessonExperience({
     };
   }, [lesson.id]);
 
+  // Scroll back to where the student left off once the hook has hydrated
+  // and the DOM is fully rendered. requestAnimationFrame ensures refs are
+  // populated before we attempt to scroll.
+  useEffect(() => {
+    if (!lastSectionId) return;
+    const rafId = requestAnimationFrame(() => {
+      const el = sectionRefs.current[lastSectionId];
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, [lastSectionId]);
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem(HOOK_DISMISSED_KEY);
@@ -177,14 +200,30 @@ export default function LessonExperience({
     }
   }
 
+  // Merge the persisted completedSections (from useLessonProgress) with any
+  // local-session sectionChecks overrides so restored state is reflected
+  // reactively without needing a setState-in-effect.
+  // When the user explicitly sets a section (including unchecking), that takes
+  // precedence over the persisted value; otherwise fall back to completedSections.
+  const effectiveSectionChecks = useMemo(() => {
+    const merged: Record<string, boolean> = {};
+    lesson.sections.forEach((section) => {
+      merged[section.heading] =
+        section.heading in sectionChecks
+          ? Boolean(sectionChecks[section.heading])
+          : completedSections.includes(section.heading);
+    });
+    return merged;
+  }, [lesson.sections, sectionChecks, completedSections]);
+
   const readingProgress = useMemo(() => {
     const total = lesson.sections.length;
     if (!total) return 100;
     const done = lesson.sections.filter(
-      (section) => sectionChecks[section.heading],
+      (section) => effectiveSectionChecks[section.heading],
     ).length;
     return Math.round((done / total) * 100);
-  }, [lesson.sections, sectionChecks]);
+  }, [lesson.sections, effectiveSectionChecks]);
 
   useEffect(() => {
     updateLessonProgress(lesson.id, {
@@ -277,6 +316,7 @@ export default function LessonExperience({
       completed: readingProgress === 100 && (score ?? 0) >= 70,
       percent: readingProgress,
     });
+    markLessonProgressComplete();
   }
 
   const phenomenon = getPhenomenonForLesson(lesson.id);
@@ -428,6 +468,9 @@ export default function LessonExperience({
             {lesson.sections.map((section) => (
               <article
                 key={section.heading}
+                ref={(el) => {
+                  sectionRefs.current[section.heading] = el;
+                }}
                 className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
               >
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
@@ -437,13 +480,17 @@ export default function LessonExperience({
                   <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
                     <input
                       type="checkbox"
-                      checked={Boolean(sectionChecks[section.heading])}
-                      onChange={(event) =>
+                      checked={Boolean(effectiveSectionChecks[section.heading])}
+                      onChange={(event) => {
+                        const checked = event.target.checked;
                         setSectionChecks((prev) => ({
                           ...prev,
-                          [section.heading]: event.target.checked,
-                        }))
-                      }
+                          [section.heading]: checked,
+                        }));
+                        if (checked) {
+                          markSectionComplete(section.heading);
+                        }
+                      }}
                     />
                     Mark read
                   </label>
