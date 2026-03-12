@@ -246,13 +246,11 @@ export default function EcologicalSuccessionPage() {
       className="ia-vh-page flex h-dvh flex-col overflow-hidden"
       style={{ background: "#0d1e2c", color: "#e2e8f0" }}
     >
+      <BackLink href="/student/dashboard" label="Back to dashboard" />
       <PageBanner
         title="Ecological Succession Visualizer"
         subtitle="Explore how ecosystems recover after disturbance — TEKS B.6D & B.11A"
       >
-        <div className="flex flex-wrap items-center gap-3">
-          <BackLink href="/student/dashboard" label="Back to dashboard" />
-        </div>
       </PageBanner>
 
       <PageContent className="flex-1 overflow-y-auto py-6">

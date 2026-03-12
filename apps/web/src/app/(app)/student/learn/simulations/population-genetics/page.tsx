@@ -433,13 +433,11 @@ export default function PopulationGeneticsSimPage() {
 
   return (
     <main className="ia-vh-page flex min-h-dvh flex-col text-slate-900 dark:text-slate-100">
+      <BackLink href="/student/dashboard" label="Back to dashboard" />
       <PageBanner
         title="Population Genetics Simulator"
         subtitle="Explore allele frequency dynamics: Hardy-Weinberg, genetic drift, natural selection, and bottleneck events."
       >
-        <div className="flex flex-wrap items-center gap-3">
-          <BackLink href="/student/dashboard" label="Back to dashboard" />
-        </div>
       </PageBanner>
 
       <PageContent className="py-6">

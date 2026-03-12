@@ -1550,13 +1550,11 @@ export default function BottleEcosystemCyclesPage() {
 
   return (
     <main className="ia-vh-page flex h-dvh flex-col overflow-hidden" style={{ background: "#0d1e2c", color: "#e2e8f0" }}>
+      <BackLink href="/student/learn/unit-7" label="Back to unit" />
       <PageBanner
         title="Bottle Ecosystem Cycles Lab"
         subtitle="Build, populate & explore water, carbon & nitrogen cycles — TEKS B.12A & B.12B"
       >
-        <div className="flex flex-wrap items-center gap-3">
-          <BackLink href="/student/learn/unit-7" label="Back to unit" />
-        </div>
       </PageBanner>
 
       <PageContent className="flex-1 overflow-hidden">
