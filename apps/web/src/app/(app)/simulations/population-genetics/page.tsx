@@ -54,6 +54,7 @@ export default function PopulationGeneticsSimulationPage() {
 
   return (
     <main>
+      <BackLink href="/simulations" label="Back to simulations" />
       <PageContent className="py-8">
         <div className="mx-auto max-w-6xl">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
@@ -66,8 +67,6 @@ export default function PopulationGeneticsSimulationPage() {
                 selection.
               </p>
             </div>
-
-            <BackLink href="/simulations" label="Back to simulations" />
           </div>
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">

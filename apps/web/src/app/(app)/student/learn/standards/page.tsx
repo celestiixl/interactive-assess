@@ -18,7 +18,7 @@ export default function StandardsHeatmapPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl p-6 text-slate-900">
-      <BackLink href="/student/learn" label="Back to dashboard" />
+      <BackLink href="/student/learn" label="Back to hub" />
       <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
         <div>
           <h1 className="text-2xl font-bold">Standards Heatmap</h1>
