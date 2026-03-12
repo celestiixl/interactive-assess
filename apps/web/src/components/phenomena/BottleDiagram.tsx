@@ -119,7 +119,16 @@ export function BottleDiagram({ className, width = 200 }: BottleDiagramProps) {
         <rect x="0" y="0" width="260" height="520" fill="#0d1e2c" />
 
         <g>
-          <rect x="91" y="22" width="28" height="14" rx="3" fill="#083a3b" stroke="#00d4aa" strokeWidth="2" />
+          <rect
+            x="91"
+            y="22"
+            width="28"
+            height="14"
+            rx="3"
+            fill="#083a3b"
+            stroke="#00d4aa"
+            strokeWidth="2"
+          />
           <path
             d="M90 42 H120 C122 42 124 44 124 46 V66 C124 73 127 81 132 88 C145 105 150 126 150 150 V427 C150 451 130 470 105 470 C80 470 60 451 60 427 V150 C60 126 65 105 78 88 C83 81 86 73 86 66 V46 C86 44 88 42 90 42 Z"
             fill="none"
@@ -142,20 +151,84 @@ export function BottleDiagram({ className, width = 200 }: BottleDiagramProps) {
             opacity="0.9"
           />
 
-          <line x1="104" y1="243" x2="104" y2="379" stroke="#d4c44a" strokeWidth="2" strokeDasharray="5 4" opacity="0.95" />
+          <line
+            x1="104"
+            y1="243"
+            x2="104"
+            y2="379"
+            stroke="#d4c44a"
+            strokeWidth="2"
+            strokeDasharray="5 4"
+            opacity="0.95"
+          />
 
-          <ellipse cx="86" cy="452" rx="20" ry="8" fill="#4b5a63" opacity="0.9" />
-          <ellipse cx="110" cy="450" rx="19" ry="8" fill="#596974" opacity="0.95" />
-          <ellipse cx="129" cy="454" rx="14" ry="6" fill="#657985" opacity="0.9" />
+          <ellipse
+            cx="86"
+            cy="452"
+            rx="20"
+            ry="8"
+            fill="#4b5a63"
+            opacity="0.9"
+          />
+          <ellipse
+            cx="110"
+            cy="450"
+            rx="19"
+            ry="8"
+            fill="#596974"
+            opacity="0.95"
+          />
+          <ellipse
+            cx="129"
+            cy="454"
+            rx="14"
+            ry="6"
+            fill="#657985"
+            opacity="0.9"
+          />
 
           <g className="plant-sway">
-            <line x1="84" y1="214" x2="84" y2="170" stroke="#4ade80" strokeWidth="2" />
-            <path d="M84 188 C72 182 72 170 84 166" fill="none" stroke="#4ade80" strokeWidth="2" />
-            <path d="M84 176 C97 172 98 160 86 156" fill="none" stroke="#4ade80" strokeWidth="2" />
+            <line
+              x1="84"
+              y1="214"
+              x2="84"
+              y2="170"
+              stroke="#4ade80"
+              strokeWidth="2"
+            />
+            <path
+              d="M84 188 C72 182 72 170 84 166"
+              fill="none"
+              stroke="#4ade80"
+              strokeWidth="2"
+            />
+            <path
+              d="M84 176 C97 172 98 160 86 156"
+              fill="none"
+              stroke="#4ade80"
+              strokeWidth="2"
+            />
 
-            <line x1="101" y1="214" x2="101" y2="162" stroke="#5be38f" strokeWidth="2" />
-            <path d="M101 188 C112 182 113 171 103 165" fill="none" stroke="#5be38f" strokeWidth="2" />
-            <path d="M101 176 C90 171 89 160 99 154" fill="none" stroke="#5be38f" strokeWidth="2" />
+            <line
+              x1="101"
+              y1="214"
+              x2="101"
+              y2="162"
+              stroke="#5be38f"
+              strokeWidth="2"
+            />
+            <path
+              d="M101 188 C112 182 113 171 103 165"
+              fill="none"
+              stroke="#5be38f"
+              strokeWidth="2"
+            />
+            <path
+              d="M101 176 C90 171 89 160 99 154"
+              fill="none"
+              stroke="#5be38f"
+              strokeWidth="2"
+            />
           </g>
 
           <g className="superworm" transform="translate(0,0)">
@@ -172,9 +245,30 @@ export function BottleDiagram({ className, width = 200 }: BottleDiagramProps) {
           <g id="cricket" transform="translate(0,0)">
             <ellipse cx="126" cy="231" rx="6" ry="4" fill="#6e7d2a" />
             <circle cx="132" cy="229" r="2.1" fill="#6e7d2a" />
-            <line x1="122" y1="234" x2="117" y2="240" stroke="#8ea33a" strokeWidth="1.3" />
-            <line x1="128" y1="234" x2="132" y2="241" stroke="#8ea33a" strokeWidth="1.3" />
-            <line x1="133" y1="227" x2="138" y2="222" stroke="#9cb545" strokeWidth="1" />
+            <line
+              x1="122"
+              y1="234"
+              x2="117"
+              y2="240"
+              stroke="#8ea33a"
+              strokeWidth="1.3"
+            />
+            <line
+              x1="128"
+              y1="234"
+              x2="132"
+              y2="241"
+              stroke="#8ea33a"
+              strokeWidth="1.3"
+            />
+            <line
+              x1="133"
+              y1="227"
+              x2="138"
+              y2="222"
+              stroke="#9cb545"
+              strokeWidth="1"
+            />
           </g>
 
           <g className="fish">
@@ -184,21 +278,75 @@ export function BottleDiagram({ className, width = 200 }: BottleDiagramProps) {
           </g>
 
           <g opacity="0.9">
-            <path d="M70 427 C75 420 80 418 84 422" fill="none" stroke="#3ccf8e" strokeWidth="2" />
-            <path d="M121 440 C126 430 132 428 138 432" fill="none" stroke="#3ccf8e" strokeWidth="2" />
-            <path d="M92 438 C97 430 102 428 106 432" fill="none" stroke="#3ccf8e" strokeWidth="2" />
+            <path
+              d="M70 427 C75 420 80 418 84 422"
+              fill="none"
+              stroke="#3ccf8e"
+              strokeWidth="2"
+            />
+            <path
+              d="M121 440 C126 430 132 428 138 432"
+              fill="none"
+              stroke="#3ccf8e"
+              strokeWidth="2"
+            />
+            <path
+              d="M92 438 C97 430 102 428 106 432"
+              fill="none"
+              stroke="#3ccf8e"
+              strokeWidth="2"
+            />
           </g>
 
           <g>
-            <circle className="bubble-1" cx="114" cy="410" r="2.4" fill="#bcecff" />
-            <circle className="bubble-2" cx="121" cy="424" r="1.9" fill="#c7f0ff" />
-            <circle className="bubble-3" cx="88" cy="416" r="2.1" fill="#bcecff" />
+            <circle
+              className="bubble-1"
+              cx="114"
+              cy="410"
+              r="2.4"
+              fill="#bcecff"
+            />
+            <circle
+              className="bubble-2"
+              cx="121"
+              cy="424"
+              r="1.9"
+              fill="#c7f0ff"
+            />
+            <circle
+              className="bubble-3"
+              cx="88"
+              cy="416"
+              r="2.1"
+              fill="#bcecff"
+            />
           </g>
 
           <g>
-            <ellipse className="evap-1" cx="94" cy="336" rx="2.2" ry="3.2" fill="#9ae6ff" />
-            <ellipse className="evap-2" cx="107" cy="338" rx="2" ry="3" fill="#b3ecff" />
-            <ellipse className="evap-3" cx="121" cy="337" rx="1.8" ry="2.8" fill="#9ae6ff" />
+            <ellipse
+              className="evap-1"
+              cx="94"
+              cy="336"
+              rx="2.2"
+              ry="3.2"
+              fill="#9ae6ff"
+            />
+            <ellipse
+              className="evap-2"
+              cx="107"
+              cy="338"
+              rx="2"
+              ry="3"
+              fill="#b3ecff"
+            />
+            <ellipse
+              className="evap-3"
+              cx="121"
+              cy="337"
+              rx="1.8"
+              ry="2.8"
+              fill="#9ae6ff"
+            />
           </g>
         </g>
 
@@ -210,15 +358,39 @@ export function BottleDiagram({ className, width = 200 }: BottleDiagramProps) {
         </g>
 
         <g>
-          <text x="198" y="156" fontSize="12" fill="#4ade80" className="mono">Plants</text>
-          <text x="198" y="234" fontSize="12" fill="#c8841a" className="mono">Soil</text>
-          <text x="198" y="316" fontSize="12" fill="#d4c44a" className="mono">Cotton String</text>
-          <text x="198" y="384" fontSize="12" fill="#38bdf8" className="mono">Water</text>
+          <text x="198" y="156" fontSize="12" fill="#4ade80" className="mono">
+            Plants
+          </text>
+          <text x="198" y="234" fontSize="12" fill="#c8841a" className="mono">
+            Soil
+          </text>
+          <text x="198" y="316" fontSize="12" fill="#d4c44a" className="mono">
+            Cotton String
+          </text>
+          <text x="198" y="384" fontSize="12" fill="#38bdf8" className="mono">
+            Water
+          </text>
         </g>
 
         <g>
-          <rect x="70" y="486" width="114" height="20" rx="10" fill="#0c2f3d" stroke="#00d4aa" strokeWidth="1.5" />
-          <text x="127" y="500" textAnchor="middle" fontSize="10" fill="#7ee9cf" className="mono">
+          <rect
+            x="70"
+            y="486"
+            width="114"
+            height="20"
+            rx="10"
+            fill="#0c2f3d"
+            stroke="#00d4aa"
+            strokeWidth="1.5"
+          />
+          <text
+            x="127"
+            y="500"
+            textAnchor="middle"
+            fontSize="10"
+            fill="#7ee9cf"
+            className="mono"
+          >
             TEKS B.12A · B.12B
           </text>
         </g>
