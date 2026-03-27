@@ -76,6 +76,9 @@ export function computePeriodMastery(
       (e) => e.score < 0.5 || e.attemptCount >= 2,
     ).length;
 
+    // Tier 1: score >= 0.85 (strong mastery — shown as band3 in the heatmap)
+    const tier1Count = teksEntries.filter((e) => e.score >= 0.85).length;
+
     // weakestStudentIds: sort ascending by score, take first 5
     const weakestStudentIds = [...teksEntries]
       .sort((a, b) => a.score - b.score)
@@ -86,6 +89,7 @@ export function computePeriodMastery(
       teks,
       averageScore,
       studentCount,
+      tier1Count,
       tier2Count,
       tier3Count,
       weakestStudentIds,

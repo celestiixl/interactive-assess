@@ -16,6 +16,7 @@ const DEFAULT_PRIORITY_TEKS = [
   "B.7A",
   "B.7B",
   "B.7C",
+  "B.12B",
 ];
 
 // ─── Score band configuration ─────────────────────────────────────────────────
@@ -28,18 +29,18 @@ const SCORE_BANDS = [
 ];
 
 /**
- * Derive approximate per-band student counts from PeriodTEKSAggregate data.
+ * Derive per-band student counts from PeriodTEKSAggregate data.
  *
  * Tier thresholds (must match computePeriodMastery.ts):
  *   Tier 3 → score < 0.5  (danger)
  *   Tier 2 → score < 0.7  (caution)
+ *   Tier 1 → score >= 0.85 (strong)
  *
  * Mapping:
  *   band0 (0–49%)   → tier3Count          (score < 0.5 OR attempts ≥ 2)
  *   band1 (50–69%)  → tier2Count − tier3Count
- *   band2 (70–84%)  → studentCount − tier2Count  (absorbs the ≥70% group)
- *   band3 (85–100%) → 0  (not derivable; requires a `tier1Count` field at the
- *                          0.85 threshold in PeriodTEKSAggregate — TODO)
+ *   band2 (70–84%)  → studentCount − tier2Count − tier1Count
+ *   band3 (85–100%) → tier1Count
  *
  * NOTE: tier3Count includes students with attemptCount ≥ 2 regardless of score,
  * so band0 is an approximation of "below 50%" rather than an exact count.
@@ -47,8 +48,8 @@ const SCORE_BANDS = [
 function deriveBandCounts(agg: PeriodTEKSAggregate) {
   const band0 = agg.tier3Count;
   const band1 = Math.max(0, agg.tier2Count - agg.tier3Count);
-  const band2 = Math.max(0, agg.studentCount - agg.tier2Count);
-  const band3 = 0; // TODO: add tier1Count (score >= 0.85) to PeriodTEKSAggregate
+  const band3 = agg.tier1Count;
+  const band2 = Math.max(0, agg.studentCount - agg.tier2Count - band3);
   return { band0, band1, band2, band3 };
 }
 
@@ -97,6 +98,10 @@ function HeatmapTooltip({
         </span>
       </div>
       <div className="mt-1.5 flex gap-3 text-[11px] text-[#9abcb0]">
+        <span>
+          Mastered:{" "}
+          <span className="font-semibold text-[#00d4aa]">{agg.tier1Count}</span>
+        </span>
         <span>
           Tier 2:{" "}
           <span className="font-semibold text-[#f5a623]">{agg.tier2Count}</span>

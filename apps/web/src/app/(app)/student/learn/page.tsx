@@ -209,8 +209,8 @@ export default function StudentLearningHubPage() {
                 Unit 7: Processes in Plants
               </div>
               <div className="text-xs text-emerald-800">
-                Includes a B.12B phenomenon launch and standalone interactive
-                lesson.
+                4 lessons covering plant transport, reproduction, hormones &amp;
+                tropisms, and systems integration — TEKS B.12B.
               </div>
             </div>
             <Link
