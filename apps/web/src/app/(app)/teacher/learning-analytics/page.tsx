@@ -1,104 +1,186 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
-import { useMemo } from "react";
 import { BackLink } from "@/components/nav/BackLink";
-import { buildLearningFunnel, buildStuckPoints } from "@/lib/learningInsights";
-import { loadLearningProgress } from "@/lib/learningProgress";
-import TeacherNotebookPeek from "@/components/teacher/TeacherNotebookPeek";
-import { loadStudentProfile } from "@/lib/studentProfile";
+import { TabGroup } from "@/components/ui";
+import StatCard from "@/components/ui/StatCard";
+import { LEARNING_UNITS } from "@/lib/learningHubContent";
+import { buildAnalyticsSummary } from "@/lib/analyticsData";
+import type { AnalyticsSummary } from "@/lib/analyticsData";
+import { LessonFunnelTab } from "@/components/teacher/LessonFunnelTab";
+import { StuckPointsTab } from "@/components/teacher/StuckPointsTab";
+import { TeksBreakdownTab } from "@/components/teacher/TeksBreakdownTab";
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+type TabId = "funnel" | "stuck" | "teks";
+
+const TABS: Array<{ value: TabId; label: string; description: string }> = [
+  { value: "funnel", label: "Lesson Funnel",   description: "Completion by lesson" },
+  { value: "stuck",  label: "Stuck Points",    description: "Below mastery threshold" },
+  { value: "teks",   label: "TEKS Breakdown",  description: "Per-standard class avg" },
+];
+
+const PERIOD_OPTIONS = [
+  { value: "all",      label: "All Periods" },
+  { value: "period-1", label: "Period 1" },
+  { value: "period-2", label: "Period 2" },
+  { value: "period-3", label: "Period 3" },
+  { value: "period-4", label: "Period 4" },
+  { value: "period-5", label: "Period 5" },
+];
+
+// ── Shared select styling ────────────────────────────────────────────────────
+
+const selectClass =
+  "rounded-lg border border-[#1e3f5a] bg-[#132638] px-3 py-1.5 text-sm " +
+  "text-[#e8f4f0] focus:outline-none focus:ring-2 focus:ring-[#00d4aa]/50 " +
+  "cursor-pointer";
+
+// ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function TeacherLearningAnalyticsPage() {
-  const progress = useMemo(() => loadLearningProgress(), []);
-  const funnel = useMemo(() => buildLearningFunnel(progress), [progress]);
-  const stuck = useMemo(() => buildStuckPoints(progress, 6), [progress]);
-  const studentId = useMemo(() => {
-    try {
-      const profile = loadStudentProfile();
-      return profile.name || "anonymous";
-    } catch {
-      return "anonymous";
-    }
-  }, []);
+  const [unit, setUnit]     = React.useState<string>("all");
+  const [period, setPeriod] = React.useState<string>("all");
+  const [tab, setTab]       = React.useState<TabId>("funnel");
+  const [data, setData]     = React.useState<AnalyticsSummary | null>(null);
 
-  const startedPct = funnel.totalLessons
-    ? Math.round((funnel.started / funnel.totalLessons) * 100)
-    : 0;
-  const checkedPct = funnel.totalLessons
-    ? Math.round((funnel.checked / funnel.totalLessons) * 100)
-    : 0;
-  const completePct = funnel.totalLessons
-    ? Math.round((funnel.completed / funnel.totalLessons) * 100)
-    : 0;
+  // Recompute analytics whenever filters change.
+  // useEffect (not lazy useState init) per repo convention for client-side
+  // data reads — keeps SSR hydration safe.
+  // TODO: replace buildAnalyticsSummary() with an async fetch to
+  //   /api/mastery?unitId=...&period=... when the API supports period rollups.
+  //   Add error handling and an AbortController to cancel in-flight requests
+  //   when filters change quickly.
+  React.useEffect(() => {
+    setData(buildAnalyticsSummary(unit, period));
+  }, [unit, period]);
+
+  const loading = data === null;
 
   return (
-    <main className="mx-auto w-full max-w-6xl p-6 text-slate-900">
+    <main className="mx-auto w-full max-w-6xl space-y-4 p-6">
+      {/* ── Back link ──────────────────────────────────────────────────────── */}
       <BackLink href="/teacher/dashboard" label="Back to dashboard" />
-      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+
+      {/* ── Page header ────────────────────────────────────────────────────── */}
+      <section className="rounded-2xl border border-[#1e3f5a] bg-[#132638] p-5">
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Learning Analytics</h1>
-            <p className="mt-1 text-sm text-slate-600">
-              Completion funnel, check behavior, and stuck-point analysis.
+            <h1 className="text-2xl font-bold text-[#e8f4f0]">
+              Learning Analytics
+            </h1>
+            <p className="mt-1 text-sm text-[#9abcb0]">
+              Lesson funnel, stuck-point analysis, and TEKS mastery breakdown.
             </p>
           </div>
           <Link
             href="/teacher/learning-analytics/weekly-digest"
-            className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-300 dark:hover:bg-amber-900/40"
+            className="rounded-xl border border-[#f5a623]/40 bg-[#f5a623]/10 px-4 py-2 text-sm font-semibold text-[#f5a623] transition hover:bg-[#f5a623]/20"
           >
-            Weekly Digest
+            Weekly Digest →
           </Link>
         </div>
+
+        {/* ── Filters row ──────────────────────────────────────────────────── */}
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-2 text-sm text-[#9abcb0]">
+            <span className="font-semibold">Unit</span>
+            <select
+              aria-label="Filter by unit"
+              value={unit}
+              onChange={(e) => setUnit(e.target.value)}
+              className={selectClass}
+            >
+              <option value="all">All Units</option>
+              {LEARNING_UNITS.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.title}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex items-center gap-2 text-sm text-[#9abcb0]">
+            <span className="font-semibold">Period</span>
+            <select
+              aria-label="Filter by period"
+              value={period}
+              onChange={(e) => setPeriod(e.target.value)}
+              className={selectClass}
+            >
+              {PERIOD_OPTIONS.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </section>
 
-      <section className="mt-4 grid gap-3 md:grid-cols-4">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="text-xs text-slate-500">Total Lessons</div>
-          <div className="mt-1 text-2xl font-bold">{funnel.totalLessons}</div>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="text-xs text-slate-500">Started</div>
-          <div className="mt-1 text-2xl font-bold">{startedPct}%</div>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="text-xs text-slate-500">Checked</div>
-          <div className="mt-1 text-2xl font-bold">{checkedPct}%</div>
-        </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="text-xs text-slate-500">Completed</div>
-          <div className="mt-1 text-2xl font-bold">{completePct}%</div>
-        </div>
+      {/* ── Metric cards ───────────────────────────────────────────────────── */}
+      <section
+        className="grid gap-3 sm:grid-cols-2 md:grid-cols-4"
+        aria-label="Summary metrics"
+      >
+        <StatCard
+          label="Avg Mastery"
+          value={loading ? "—" : `${data.avgMastery}%`}
+        />
+        <StatCard
+          label="Lessons on Track"
+          value={
+            loading
+              ? "—"
+              : `${data.lessonsComplete} / ${data.lessons.length}`
+          }
+        />
+        <StatCard
+          label="Tier 2 Students"
+          value={loading ? "—" : data.tier2Count}
+        />
+        <StatCard
+          label="Tier 3 Students"
+          value={loading ? "—" : data.tier3Count}
+        />
       </section>
 
-      <section className="mt-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-slate-900">Stuck Points</h2>
-        <div className="mt-3 grid gap-3 md:grid-cols-2">
-          {stuck.length === 0 ? (
-            <div className="text-sm text-slate-500">No stuck points yet.</div>
-          ) : (
-            stuck.map((row) => (
-              <div key={row.lessonId} className="rounded-2xl border border-amber-200 bg-amber-50 p-3">
-                <Link
-                  href={row.href}
-                  className="block hover:underline"
-                >
-                  <div className="text-sm font-semibold text-amber-900">
-                    {row.lessonTitle}
-                  </div>
-                  <div className="text-xs text-amber-800">
-                    Avg score: {row.avgScore}% • Attempts: {row.attempts}
-                  </div>
-                </Link>
-                <TeacherNotebookPeek
-                  studentId={studentId}
-                  lessonSlug={row.lessonSlug}
-                  lessonTitle={row.lessonTitle}
-                />
-              </div>
-            ))
-          )}
-        </div>
+      {/* ── Tab bar ────────────────────────────────────────────────────────── */}
+      <TabGroup<TabId>
+        value={tab}
+        onValueChange={setTab}
+        items={TABS}
+        className="md:grid-cols-3"
+      />
+
+      {/* ── Tab content panel ──────────────────────────────────────────────── */}
+      <section
+        className="rounded-2xl border border-[#1e3f5a] bg-[#132638] p-5"
+        aria-busy={loading}
+        aria-live="polite"
+      >
+        {tab === "funnel" && (
+          <LessonFunnelTab
+            lessons={data?.lessons ?? []}
+            loading={loading}
+          />
+        )}
+        {tab === "stuck" && (
+          <StuckPointsTab
+            students={data?.students ?? []}
+            loading={loading}
+          />
+        )}
+        {tab === "teks" && (
+          <TeksBreakdownTab
+            teksMap={data?.teksMap ?? []}
+            loading={loading}
+          />
+        )}
       </section>
     </main>
   );
 }
+
