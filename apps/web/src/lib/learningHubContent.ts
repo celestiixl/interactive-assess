@@ -18,10 +18,59 @@ export type QuickCheck = {
   correctAnswer: string;
 };
 
-export type LessonSection = {
+/** Default section — heading + paragraphs */
+export type ExplanationSection = {
+  type?: "explanation";
   heading: string;
   body: string[];
 };
+
+/** Step-by-step worked example */
+export type WorkedExampleSection = {
+  type: "worked-example";
+  heading: string;
+  scenario: string;
+  steps: string[];
+  conclusion?: string;
+};
+
+/** Addresses a common misconception */
+export type MisconceptionSpotlightSection = {
+  type: "misconception-spotlight";
+  misconception: string;
+  correction: string;
+  teks?: string;
+};
+
+/** Labelled diagram described in text */
+export type VisualDiagramSection = {
+  type: "visual-diagram";
+  heading: string;
+  description: string;
+  elements: { label: string; detail: string }[];
+};
+
+/** Vocabulary in focus for the section */
+export type VocabularySpotlightSection = {
+  type: "vocabulary-spotlight";
+  terms: { term: string; definition: string; example?: string }[];
+};
+
+/** Short writing / discussion prompt */
+export type ActivitySection = {
+  type: "activity";
+  heading: string;
+  prompt: string;
+  sentenceFrames?: string[];
+};
+
+export type LessonSection =
+  | ExplanationSection
+  | WorkedExampleSection
+  | MisconceptionSpotlightSection
+  | VisualDiagramSection
+  | VocabularySpotlightSection
+  | ActivitySection;
 
 export type LessonHook = {
   headline: string;
@@ -40,6 +89,8 @@ export type LearningLesson = {
   hook?: LessonHook;
   teks?: string[];
   isPriorityTEKS?: boolean;
+  learningIntentions?: string[];
+  lessonMisconceptions?: string[];
   vocabularyTiers?: VocabularyTiers;
   sections: LessonSection[];
   keyTerms: string[];
@@ -55,7 +106,7 @@ export type LearningProgression = {
 
 export type LearningUnit = {
   id: string;
-  unitNumber: 1 | 2 | 3;
+  unitNumber: number;
   gradingPeriod: 1 | 2 | 3 | 4;
   instructionalDays?: number;
   dateRange?: string;
