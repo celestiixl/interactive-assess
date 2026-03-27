@@ -193,4 +193,13 @@ export const TEKS_CATALOG: Record<string, TeksEntry> = {
       "Analyze the significance of chromosome reduction, independent assortment, and crossing-over during meiosis in increasing diversity in sexually reproducing populations.",
     teaPriority: "Content",
   },
+  "B.12B": {
+    id: "B.12B",
+    unit: 7,
+    strand: "Processes in Plants",
+    title: "Plant system interactions facilitated by structures",
+    description:
+      "Explain how the interactions that occur among systems that perform the functions of transport, reproduction, and response in plants are facilitated by their structures.",
+    teaPriority: "Priority Content",
+  },
 };

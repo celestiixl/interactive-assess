@@ -20,6 +20,7 @@ export interface PeriodTEKSAggregate {
   teks: string;
   averageScore: number; // mean of all student scores for this TEKS
   studentCount: number; // how many students have data for this TEKS
+  tier1Count: number; // students with score >= 0.85 (strong mastery)
   tier2Count: number; // students with score < 0.7
   tier3Count: number; // students with score < 0.5 or attemptCount >= 2
   weakestStudentIds: string[]; // up to 5 student IDs with lowest scores

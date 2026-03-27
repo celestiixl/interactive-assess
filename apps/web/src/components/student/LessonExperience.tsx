@@ -4,8 +4,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useLessonProgress } from "@/hooks/useLessonProgress";
 import Link from "next/link";
 import type {
+  ExplanationSection,
   LearningLesson,
   LearningUnit,
+  LessonSection,
   QuickCheck,
 } from "@/lib/learningHubContent";
 import {
@@ -26,6 +28,41 @@ import { speakText, stopSpeaking } from "@/lib/accommodations";
 import { useAccommodations } from "@/lib/useAccommodations";
 
 const HOOK_DISMISSED_KEY = "biospark.hook.dismissed.v1";
+
+/** Returns a stable string key for any LessonSection variant. */
+function getSectionKey(section: LessonSection, index: number): string {
+  if (section.type === "misconception-spotlight")
+    return `misconception-${index}-${section.misconception.slice(0, 20)}`;
+  if (section.type === "vocabulary-spotlight") return `vocab-spotlight-${index}`;
+  if (section.type === "activity") return `activity-${index}-${section.heading}`;
+  if ("heading" in section && section.heading)
+    return `${section.heading}-${index}`;
+  return `section-${index}`;
+}
+
+/** Returns readable plain text from any LessonSection for TTS / read-aloud. */
+function getSectionText(section: LessonSection): string {
+  if (!section.type || section.type === "explanation") {
+    const s = section as ExplanationSection;
+    return `${s.heading}. ${s.body.join(" ")}`;
+  }
+  if (section.type === "worked-example") {
+    return `${section.heading}. ${section.scenario} ${section.steps.join(" ")} ${section.conclusion ?? ""}`;
+  }
+  if (section.type === "misconception-spotlight") {
+    return `Common misconception: ${section.misconception}. Correction: ${section.correction}`;
+  }
+  if (section.type === "visual-diagram") {
+    return `${section.heading}. ${section.description} ${section.elements.map((e) => `${e.label}: ${e.detail}`).join(". ")}`;
+  }
+  if (section.type === "vocabulary-spotlight") {
+    return section.terms.map((t) => `${t.term}: ${t.definition}`).join(". ");
+  }
+  if (section.type === "activity") {
+    return `${section.heading}. ${section.prompt}`;
+  }
+  return "";
+}
 
 type LessonExperienceProps = {
   unit: LearningUnit;
@@ -144,8 +181,9 @@ export default function LessonExperience({
   useEffect(() => {
     const saved = getLessonProgress(lesson.id);
     const baseline: Record<string, boolean> = {};
-    lesson.sections.forEach((section) => {
-      baseline[section.heading] = Boolean(saved?.percent === 100);
+    lesson.sections.forEach((section, idx) => {
+      const key = getSectionKey(section, idx);
+      baseline[key] = Boolean(saved?.percent === 100);
     });
     setSectionChecks(baseline);
     if (typeof saved?.checkScore === "number") {
@@ -207,11 +245,12 @@ export default function LessonExperience({
   // precedence over the persisted value; otherwise fall back to completedSections.
   const effectiveSectionChecks = useMemo(() => {
     const merged: Record<string, boolean> = {};
-    lesson.sections.forEach((section) => {
-      merged[section.heading] =
-        section.heading in sectionChecks
-          ? Boolean(sectionChecks[section.heading])
-          : completedSections.includes(section.heading);
+    lesson.sections.forEach((section, idx) => {
+      const key = getSectionKey(section, idx);
+      merged[key] =
+        key in sectionChecks
+          ? Boolean(sectionChecks[key])
+          : completedSections.includes(key);
     });
     return merged;
   }, [lesson.sections, sectionChecks, completedSections]);
@@ -220,7 +259,7 @@ export default function LessonExperience({
     const total = lesson.sections.length;
     if (!total) return 100;
     const done = lesson.sections.filter(
-      (section) => effectiveSectionChecks[section.heading],
+      (section, idx) => effectiveSectionChecks[getSectionKey(section, idx)],
     ).length;
     return Math.round((done / total) * 100);
   }, [lesson.sections, effectiveSectionChecks]);
@@ -240,7 +279,7 @@ export default function LessonExperience({
     }
 
     const body = lesson.sections
-      .map((section) => `${section.heading}. ${section.body.join(" ")}`)
+      .map((section) => getSectionText(section))
       .join(" ");
     void speakText({
       text: `${lesson.title}. ${lesson.summary}. ${body}`,
@@ -474,54 +513,266 @@ export default function LessonExperience({
 
         <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="space-y-5">
-            {lesson.sections.map((section) => (
-              <article
-                key={section.heading}
-                ref={(el) => {
-                  sectionRefs.current[section.heading] = el;
-                }}
-                className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
-              >
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                  <h2 className="text-lg font-semibold text-slate-900">
-                    {section.heading}
-                  </h2>
-                  <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(effectiveSectionChecks[section.heading])}
-                      onChange={(event) => {
-                        const checked = event.target.checked;
-                        setSectionChecks((prev) => ({
-                          ...prev,
-                          [section.heading]: checked,
-                        }));
-                        if (checked) {
-                          markSectionComplete(section.heading);
-                        }
-                      }}
-                    />
-                    Mark read
-                  </label>
-                </div>
-                <div className="mt-2 space-y-3">
-                  {section.body.map((paragraph) => (
-                    <p
-                      key={paragraph}
-                      className={`text-sm leading-7 text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-                  {language === "es" ? (
-                    <p className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs text-blue-800">
-                      Apoyo en español: resume esta sección con tus propias
-                      palabras antes de continuar.
-                    </p>
-                  ) : null}
-                </div>
-              </article>
-            ))}
+            {lesson.sections.map((section, idx) => {
+              const sectionKey = getSectionKey(section, idx);
+              return (
+                <article
+                  key={sectionKey}
+                  ref={(el) => {
+                    sectionRefs.current[sectionKey] = el;
+                  }}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                >
+                  {/* ── Explanation (default) ── */}
+                  {(!section.type || section.type === "explanation") && (
+                    <>
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                        <h2 className="text-lg font-semibold text-slate-900">
+                          {(section as ExplanationSection).heading}
+                        </h2>
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(effectiveSectionChecks[sectionKey])}
+                            onChange={(event) => {
+                              const checked = event.target.checked;
+                              setSectionChecks((prev) => ({
+                                ...prev,
+                                [sectionKey]: checked,
+                              }));
+                              if (checked) markSectionComplete(sectionKey);
+                            }}
+                          />
+                          Mark read
+                        </label>
+                      </div>
+                      <div className="mt-2 space-y-3">
+                        {(section as ExplanationSection).body.map((paragraph, pIdx) => (
+                          <p
+                            key={pIdx}
+                            className={`text-sm leading-7 text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}
+                          >
+                            {paragraph}
+                          </p>
+                        ))}
+                        {language === "es" ? (
+                          <p className="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs text-blue-800">
+                            Apoyo en español: resume esta sección con tus propias
+                            palabras antes de continuar.
+                          </p>
+                        ) : null}
+                      </div>
+                    </>
+                  )}
+
+                  {/* ── Worked Example ── */}
+                  {section.type === "worked-example" && (
+                    <>
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                        <h2 className="flex items-center gap-2 text-lg font-semibold text-indigo-800">
+                          <span className="rounded-md bg-indigo-100 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-indigo-600">
+                            Worked Example
+                          </span>
+                          {section.heading}
+                        </h2>
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(effectiveSectionChecks[sectionKey])}
+                            onChange={(event) => {
+                              const checked = event.target.checked;
+                              setSectionChecks((prev) => ({ ...prev, [sectionKey]: checked }));
+                              if (checked) markSectionComplete(sectionKey);
+                            }}
+                          />
+                          Mark read
+                        </label>
+                      </div>
+                      <p className={`mb-3 rounded-lg bg-indigo-50 p-3 text-sm text-indigo-900 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                        <span className="font-semibold">Scenario: </span>
+                        {section.scenario}
+                      </p>
+                      <ol className="list-decimal space-y-2 pl-5">
+                        {section.steps.map((step, i) => (
+                          <li key={i} className={`text-sm leading-7 text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                            {step}
+                          </li>
+                        ))}
+                      </ol>
+                      {section.conclusion ? (
+                        <p className={`mt-3 rounded-lg bg-indigo-100 p-3 text-sm font-medium text-indigo-800 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                          <span className="font-bold">Conclusion: </span>
+                          {section.conclusion}
+                        </p>
+                      ) : null}
+                    </>
+                  )}
+
+                  {/* ── Misconception Spotlight ── */}
+                  {section.type === "misconception-spotlight" && (
+                    <>
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                        <h2 className="flex items-center gap-2 text-base font-semibold text-amber-800">
+                          <span className="rounded-md bg-amber-100 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-amber-700">
+                            ⚠ Misconception Spotlight
+                          </span>
+                        </h2>
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(effectiveSectionChecks[sectionKey])}
+                            onChange={(event) => {
+                              const checked = event.target.checked;
+                              setSectionChecks((prev) => ({ ...prev, [sectionKey]: checked }));
+                              if (checked) markSectionComplete(sectionKey);
+                            }}
+                          />
+                          Mark read
+                        </label>
+                      </div>
+                      <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
+                        <p className={`mb-1 text-sm font-semibold text-amber-900 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                          ✗ Common misconception: &ldquo;{section.misconception}&rdquo;
+                        </p>
+                        <p className={`text-sm text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                          <span className="font-semibold text-green-700">✓ Correction: </span>
+                          {section.correction}
+                        </p>
+                        {section.teks ? (
+                          <span className="mt-2 inline-block rounded bg-slate-200 px-2 py-0.5 text-xs text-slate-600">
+                            {section.teks}
+                          </span>
+                        ) : null}
+                      </div>
+                    </>
+                  )}
+
+                  {/* ── Visual Diagram ── */}
+                  {section.type === "visual-diagram" && (
+                    <>
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                        <h2 className="flex items-center gap-2 text-lg font-semibold text-teal-800">
+                          <span className="rounded-md bg-teal-100 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-teal-600">
+                            Visual Diagram
+                          </span>
+                          {section.heading}
+                        </h2>
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(effectiveSectionChecks[sectionKey])}
+                            onChange={(event) => {
+                              const checked = event.target.checked;
+                              setSectionChecks((prev) => ({ ...prev, [sectionKey]: checked }));
+                              if (checked) markSectionComplete(sectionKey);
+                            }}
+                          />
+                          Mark read
+                        </label>
+                      </div>
+                      <p className={`mb-3 text-sm text-slate-600 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                        {section.description}
+                      </p>
+                      <dl className="space-y-2">
+                        {section.elements.map((el) => (
+                          <div key={el.label} className="rounded-lg border border-teal-100 bg-teal-50 px-3 py-2">
+                            <dt className="text-xs font-bold uppercase tracking-wide text-teal-700">
+                              {el.label}
+                            </dt>
+                            <dd className={`mt-0.5 text-sm text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                              {el.detail}
+                            </dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </>
+                  )}
+
+                  {/* ── Vocabulary Spotlight ── */}
+                  {section.type === "vocabulary-spotlight" && (
+                    <>
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                        <h2 className="flex items-center gap-2 text-base font-semibold text-purple-800">
+                          <span className="rounded-md bg-purple-100 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-purple-600">
+                            Vocabulary Spotlight
+                          </span>
+                        </h2>
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(effectiveSectionChecks[sectionKey])}
+                            onChange={(event) => {
+                              const checked = event.target.checked;
+                              setSectionChecks((prev) => ({ ...prev, [sectionKey]: checked }));
+                              if (checked) markSectionComplete(sectionKey);
+                            }}
+                          />
+                          Mark read
+                        </label>
+                      </div>
+                      <dl className="space-y-3">
+                        {section.terms.map((term) => (
+                          <div key={term.term} className="rounded-lg border border-purple-100 bg-purple-50 px-3 py-2">
+                            <dt className="text-sm font-bold text-purple-900">{term.term}</dt>
+                            <dd className={`mt-0.5 text-sm text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                              {term.definition}
+                            </dd>
+                            {term.example ? (
+                              <p className={`mt-1 rounded bg-white/70 px-2 py-1 text-xs italic text-slate-500 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                                Example: {term.example}
+                              </p>
+                            ) : null}
+                          </div>
+                        ))}
+                      </dl>
+                    </>
+                  )}
+
+                  {/* ── Activity ── */}
+                  {section.type === "activity" && (
+                    <>
+                      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                        <h2 className="flex items-center gap-2 text-lg font-semibold text-green-800">
+                          <span className="rounded-md bg-green-100 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-green-600">
+                            Activity
+                          </span>
+                          {section.heading}
+                        </h2>
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(effectiveSectionChecks[sectionKey])}
+                            onChange={(event) => {
+                              const checked = event.target.checked;
+                              setSectionChecks((prev) => ({ ...prev, [sectionKey]: checked }));
+                              if (checked) markSectionComplete(sectionKey);
+                            }}
+                          />
+                          Mark read
+                        </label>
+                      </div>
+                      <p className={`mb-3 text-sm leading-7 text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                        {section.prompt}
+                      </p>
+                      {section.sentenceFrames && section.sentenceFrames.length > 0 ? (
+                        <div className="mt-2 rounded-lg border border-green-200 bg-green-50 p-3">
+                          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-green-700">
+                            Sentence Frames
+                          </p>
+                          <ul className="space-y-2">
+                            {section.sentenceFrames.map((frame, i) => (
+                              <li key={i} className={`rounded bg-white/80 px-3 py-1.5 text-sm italic text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                                {frame}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+                    </>
+                  )}
+                </article>
+              );
+            })}
           </div>
         </section>
 

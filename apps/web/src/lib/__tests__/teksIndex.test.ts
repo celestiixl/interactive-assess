@@ -28,6 +28,13 @@ describe("getTeksEntry", () => {
     expect(entry?.id).toBe("B.11A");
   });
 
+  it("returns an entry for B.12B (Unit 7 — Processes in Plants)", () => {
+    const entry = getTeksEntry("B.12B");
+    expect(entry).not.toBeNull();
+    expect(entry?.id).toBe("B.12B");
+    expect(entry?.teaPriority).toBe("Priority Content");
+  });
+
   it("returns null for an unknown TEKS code", () => {
     expect(getTeksEntry("B.99Z")).toBeNull();
   });

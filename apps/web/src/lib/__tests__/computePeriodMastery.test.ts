@@ -118,4 +118,28 @@ describe("computePeriodMastery", () => {
     const snapshot = computePeriodMastery(entries, "period-1", "Period 1");
     expect(snapshot.teksAggregates[0].tier3Count).toBe(0);
   });
+
+  it("counts tier1 correctly (score >= 0.85)", () => {
+    const entries = [
+      makeEntry({ studentId: "s1", score: 0.85 }),
+      makeEntry({ studentId: "s2", score: 0.9 }),
+      makeEntry({ studentId: "s3", score: 0.84 }),
+      makeEntry({ studentId: "s4", score: 1.0 }),
+    ];
+    const snapshot = computePeriodMastery(entries, "period-1", "Period 1");
+    // s1 (0.85), s2 (0.9), s4 (1.0) qualify; s3 (0.84) does not
+    expect(snapshot.teksAggregates[0].tier1Count).toBe(3);
+  });
+
+  it("boundary: score exactly 0.85 IS tier1 (>= 0.85)", () => {
+    const entries = [makeEntry({ score: 0.85 })];
+    const snapshot = computePeriodMastery(entries, "period-1", "Period 1");
+    expect(snapshot.teksAggregates[0].tier1Count).toBe(1);
+  });
+
+  it("boundary: score 0.8499 is NOT tier1 (< 0.85)", () => {
+    const entries = [makeEntry({ score: 0.8499 })];
+    const snapshot = computePeriodMastery(entries, "period-1", "Period 1");
+    expect(snapshot.teksAggregates[0].tier1Count).toBe(0);
+  });
 });

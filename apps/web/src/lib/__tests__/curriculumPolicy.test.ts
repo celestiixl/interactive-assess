@@ -89,6 +89,10 @@ describe("isPriorityTeks", () => {
     expect(isPriorityTeks("B.3A")).toBe(true);
   });
 
+  it("returns true for B.12B (priority)", () => {
+    expect(isPriorityTeks("B.12B")).toBe(true);
+  });
+
   it("returns false for non-priority B.5C", () => {
     expect(isPriorityTeks("B.5C")).toBe(false);
   });
