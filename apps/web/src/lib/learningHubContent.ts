@@ -137,6 +137,10 @@ export const LESSON_ASSIGNMENT_MAP: Record<string, string> = {
   "u2-l3": "asgn-u2-core",
   "u3-l1": "asgn-u3-core",
   "u3-l2": "asgn-u3-core",
+  "u7-l1": "asgn-u7-core",
+  "u7-l2": "asgn-u7-core",
+  "u7-l3": "asgn-u7-core",
+  "u7-l4": "asgn-u7-core",
 };
 
 export const LEARNING_UNITS: LearningUnit[] = [

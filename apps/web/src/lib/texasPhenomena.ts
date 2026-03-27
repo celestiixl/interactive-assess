@@ -160,6 +160,95 @@ export const PHENOMENON_U2_L3: TexasPhenomenon = {
 };
 
 /**
+ * Unit 7 phenomena — Processes in Plants (B.12B)
+ */
+
+/** Lesson u7-l1: Plant Transport and the Vascular System (B.12B) */
+export const PHENOMENON_U7_L1: TexasPhenomenon = {
+  id: "u7-l1-redwood",
+  title: "Live Oaks of the Texas Hill Country",
+  location: "Texas Hill Country — Kerrville & Fredericksburg, TX",
+  description:
+    "Live oak trees (Quercus virginiana) dominate the Texas Hill Country landscape, " +
+    "surviving on as little as 28 inches of rain per year. During dry spells, their " +
+    "xylem vessels pull water from rocky soil all the way up to leaves 40 feet above — " +
+    "without any pump. When soil moisture drops, stomata close within minutes and leaf " +
+    "water potential shifts, slowing transpiration and triggering drought-response hormones.",
+  drivingQuestion:
+    "How does a live oak tree move hundreds of gallons of water uphill every day without " +
+    "using a single ATP molecule for water transport — and how does it survive Texas droughts?",
+  teks: ["B.12B"],
+  icon: "🌳",
+  funFact:
+    "A mature live oak transpires up to 150 gallons of water per day. During the 2011 Texas drought — the driest year on record — many Hill Country live oaks died because cohesion-tension failed as cavitation bubbles formed in dried-out xylem vessels.",
+};
+
+/** Lesson u7-l2: Plant Reproduction (B.12B) */
+export const PHENOMENON_U7_L2: TexasPhenomenon = {
+  id: "u7-l2-bluebonnet",
+  title: "Texas Bluebonnet Pollinator Partnership",
+  location: "Texas Hill Country — Willow City Loop, Gillespie County, TX",
+  description:
+    "Every spring, the Willow City Loop near Fredericksburg transforms into a carpet of " +
+    "Texas bluebonnets (Lupinus texensis) — the Texas state flower. Bluebonnet flowers have " +
+    "UV-visible nectar guides invisible to humans but clearly seen by native bees. After " +
+    "pollination, the flower's white spot turns pink-red — a visual signal to bees that the " +
+    "flower is already pollinated and no longer rewards with nectar, redirecting pollinators to " +
+    "un-pollinated flowers and maximizing fertilization efficiency.",
+  drivingQuestion:
+    "How does the bluebonnet's flower structure maximize the chance that a bee will " +
+    "transfer pollen to a different flower, and what happens inside the flower after " +
+    "that pollen lands on the stigma?",
+  teks: ["B.12B"],
+  icon: "🌸",
+  funFact:
+    "The white spot on a bluebonnet petal turns red after pollination — a visual signal bees can read. This 'post-pollination color change' evolved to redirect pollinators efficiently, boosting seed set without wasting nectar.",
+};
+
+/** Lesson u7-l3: Plant Hormones and Tropisms (B.12B) */
+export const PHENOMENON_U7_L3: TexasPhenomenon = {
+  id: "u7-l3-pecan",
+  title: "Pecan Trees of the Colorado River Valley",
+  location: "Colorado River Valley — Bastrop to Columbus, TX",
+  description:
+    "The Texas pecan (Carya illinoinensis) is the official state tree of Texas, and the " +
+    "Colorado River valley is lined with massive specimens over 100 years old. These trees " +
+    "respond to shortening fall days using photoperiodism — a hormone-regulated system that " +
+    "times leaf drop (abscission), nut maturation, and dormancy to the exact day length. " +
+    "Ethylene triggers the abscission layer at the leaf base; ABA shuts down growth; and " +
+    "gibberellins dormant in buds wait for spring warming to release.",
+  drivingQuestion:
+    "How does a pecan tree 'know' when to drop its leaves in fall and when to sprout " +
+    "in spring — and which plant hormones coordinate this seasonal response?",
+  teks: ["B.12B"],
+  icon: "🌰",
+  funFact:
+    "Texas produces about 70 million pounds of pecans per year — about 25% of the U.S. crop. The timing of nut development is exquisitely regulated by gibberellin and ethylene levels; a warm winter confuses the hormonal clock and can reduce yields by 40%.",
+};
+
+/** Lesson u7-l4: Plant Systems Integration (B.12B) */
+export const PHENOMENON_U7_L4: TexasPhenomenon = {
+  id: "u7-l4-harvey",
+  title: "Hurricane Harvey's Impact on Houston Vegetation",
+  location: "Buffalo Bayou Watershed — Houston, TX (Harris County)",
+  description:
+    "Hurricane Harvey (August 2017) dumped a record 60.58 inches of rain on the Houston " +
+    "area over four days — the highest rainfall ever recorded from a U.S. tropical storm. " +
+    "Waterlogged soils cut off oxygen to roots, triggering ethylene accumulation in submerged " +
+    "stems. Within days, some trees produced adventitious roots above the waterline while " +
+    "simultaneously suppressing flowering. Pollen viability dropped, pollinator activity " +
+    "plummeted, and the 2017 growing season saw dramatically reduced fruit and seed set " +
+    "across Houston's urban forest — a real-world cascade affecting all three plant systems simultaneously.",
+  drivingQuestion:
+    "How did Hurricane Harvey's record flooding disrupt all three plant systems — transport, " +
+    "reproduction, and response — at the same time, and how did plants try to compensate?",
+  teks: ["B.12B"],
+  icon: "🌧️",
+  funFact:
+    "Hurricane Harvey caused an estimated $125 billion in damage and killed an estimated 10–20% of trees in the Buffalo Bayou watershed. Botanists documented ethylene-driven adventitious root formation in bald cypresses within 10 days of sustained flooding.",
+};
+
+/**
  * All phenomena indexed by lesson id for fast lookup.
  */
 export const TEXAS_PHENOMENA_BY_LESSON: Record<string, TexasPhenomenon> = {
@@ -169,6 +258,10 @@ export const TEXAS_PHENOMENA_BY_LESSON: Record<string, TexasPhenomenon> = {
   "u2-l1": PHENOMENON_U2_L1,
   "u2-l2": PHENOMENON_U2_L2,
   "u2-l3": PHENOMENON_U2_L3,
+  "u7-l1": PHENOMENON_U7_L1,
+  "u7-l2": PHENOMENON_U7_L2,
+  "u7-l3": PHENOMENON_U7_L3,
+  "u7-l4": PHENOMENON_U7_L4,
 };
 
 /**
