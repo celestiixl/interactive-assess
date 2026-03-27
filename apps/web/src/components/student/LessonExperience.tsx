@@ -31,11 +31,11 @@ const HOOK_DISMISSED_KEY = "biospark.hook.dismissed.v1";
 
 /** Returns a stable string key for any LessonSection variant. */
 function getSectionKey(section: LessonSection, index: number): string {
-  if ("heading" in section && section.heading) return section.heading;
   if (section.type === "misconception-spotlight")
     return `misconception-${index}-${section.misconception.slice(0, 20)}`;
   if (section.type === "vocabulary-spotlight") return `vocab-spotlight-${index}`;
   if (section.type === "activity") return `activity-${index}-${section.heading}`;
+  if ("heading" in section && section.heading) return section.heading;
   return `section-${index}`;
 }
 
