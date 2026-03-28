@@ -208,7 +208,7 @@ export default function CERReview({
             <button
               key={comment}
               onClick={() => addQuickComment(comment)}
-              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-slate-300 rounded font-medium transition"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded font-medium transition"
             >
               + {comment}
             </button>

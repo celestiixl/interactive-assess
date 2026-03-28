@@ -97,7 +97,7 @@ const STATUS_TEXT: Record<LessonStatus, string> = {
 
 const BTN_CLS: Record<LessonStatus, string> = {
   not_started:
-    "rounded-full bg-bs-teal px-4 py-1.5 text-xs font-semibold text-white hover:bg-slate-700 transition",
+    "rounded-full bg-bs-teal px-4 py-1.5 text-xs font-semibold text-white hover:bg-[var(--mint)] transition",
   in_progress:
     "rounded-full bg-bs-amber px-4 py-1.5 text-xs font-semibold text-white hover:bg-bs-amber transition",
   complete:

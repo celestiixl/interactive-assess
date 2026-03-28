@@ -228,7 +228,7 @@ export default function DragDrop({
       >
         <div className="flex items-center justify-between border-b border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2">
           <div className="flex items-center gap-2">
-            <span className="inline-block h-2 w-2 rounded-full bg-slate-400" />
+            <span className="inline-block h-2 w-2 rounded-full bg-bs-text-muted" />
             <div className="text-sm font-semibold text-bs-text">
               Word Bank
             </div>
@@ -293,7 +293,7 @@ export default function DragDrop({
             >
               <div className="flex items-center justify-between border-b border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2">
                 <div className="flex items-center gap-2">
-                  <span className="inline-block h-2 w-2 rounded-full bg-slate-400" />
+                  <span className="inline-block h-2 w-2 rounded-full bg-bs-text-muted" />
                   <div className="text-sm font-semibold text-bs-text">
                     {z.label}
                   </div>
