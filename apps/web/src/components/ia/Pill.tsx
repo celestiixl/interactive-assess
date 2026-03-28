@@ -53,12 +53,12 @@ export function IconPill({
   title?: string;
 }) {
   const dot: Record<Tone, string> = {
-    neutral: "bg-[var(--bs-raised)]0",
-    teal: "bg-teal-500",
+    neutral: "bg-bs-text-muted",
+    teal: "bg-bs-teal",
     emerald: "bg-[#4ade80]",
     amber: "bg-bs-amber",
     violet: "bg-violet-500",
-    slate: "bg-[var(--bs-raised)]0",
+    slate: "bg-bs-text-muted",
     white: "bg-bs-surface",
   };
 

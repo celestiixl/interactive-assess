@@ -4,6 +4,47 @@
 @import "@fontsource/syne/600.css";
 @import "@fontsource/syne/700.css";
 
+/* ── BioSpark Design System Tokens ───────────────────────────────── */
+:root {
+  /* Semantic shorthand tokens */
+  --bg:        #080f12;
+  --surface:   #0d1a20;
+  --surface2:  #122330;
+  --teal:      #00d4b4;
+  --teal-dim:  #00a08a;
+  --coral:     #ff5e5b;
+  --amber:     #ffb347;
+  --mint:      #b8f7e8;
+  --text:      #e8f4f0;
+  --muted:     #5a7a72;
+  --border:    rgba(0, 212, 180, 0.12);
+  --glow:      rgba(0, 212, 180, 0.18);
+
+  /* bs-* aliases (used throughout codebase via Tailwind and inline styles) */
+  --bs-bg:           #080f12;
+  --bs-surface:      #0d1a20;
+  --bs-raised:       #122330;
+  --bs-overlay:      #1a3040;
+  --bs-border:       rgba(0, 212, 180, 0.12);
+  --bs-border-soft:  rgba(0, 212, 180, 0.07);
+  --bs-teal:         #00d4b4;
+  --bs-teal-dim:     rgba(0, 212, 180, 0.08);
+  --bs-teal-glow:    0 0 24px rgba(0, 212, 180, 0.25);
+  --bs-amber:        #ffb347;
+  --bs-amber-dim:    rgba(255, 179, 71, 0.08);
+  --bs-coral:        #ff5e5b;
+  --bs-coral-dim:    rgba(255, 94, 91, 0.08);
+  --bs-success:      #4ade80;
+  --bs-warning:      #ffb347;
+  --bs-danger:       #ff5e5b;
+  --bs-info:         #60a5fa;
+  --bs-text:         #e8f4f0;
+  --bs-text-sub:     #9abcb0;
+  --bs-text-muted:   #5a7a72;
+  --bs-font-ui:      'Syne', sans-serif;
+  --bs-font-mono:    'JetBrains Mono', monospace;
+}
+
 @layer base {
   html,
   body {
@@ -11,24 +52,29 @@
   }
 
   body {
-    background-color: rgb(var(--color-bg));
-    color: rgb(var(--color-text));
+    background-color: var(--bg);
+    color: var(--text);
     -webkit-font-smoothing: antialiased;
-    font-family: var(--font-body);
+    font-family: 'DM Sans', sans-serif;
   }
 
   h1,
   h2,
   h3 {
-    font-family: var(--font-display);
+    font-family: 'Syne', sans-serif;
     letter-spacing: -0.015em;
   }
 
   :where(button, a, input, select, textarea):focus-visible {
     outline: 2px solid transparent;
     outline-offset: 2px;
-    box-shadow: 0 0 0 2px rgb(var(--color-surface-1)), 0 0 0 4px rgb(var(--color-brand-purple));
+    box-shadow: 0 0 0 2px var(--bs-raised), 0 0 0 4px var(--teal);
   }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 }
 
 @layer utilities {
@@ -39,4 +85,61 @@
       rgb(var(--color-brand-orange))
     );
   }
+
+  /* Ambient background with slow-drifting radial gradients */
+  .ambient {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .ambient::before {
+    content: '';
+    position: absolute;
+    top: -20%; left: -10%;
+    width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(0, 212, 180, 0.07) 0%, transparent 65%);
+    animation: drift1 14s ease-in-out infinite alternate;
+  }
+  .ambient::after {
+    content: '';
+    position: absolute;
+    bottom: -10%; right: -5%;
+    width: 50vw; height: 50vw;
+    background: radial-gradient(circle, rgba(255, 94, 91, 0.06) 0%, transparent 65%);
+    animation: drift2 18s ease-in-out infinite alternate;
+  }
+  @keyframes drift1 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(4%, 6%) scale(1.08); }
+  }
+  @keyframes drift2 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(-5%, -4%) scale(1.1); }
+  }
+
+  /* Section progress dots (lesson player) */
+  .section-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.1); transition: all 0.3s; }
+  .section-dot.done { background: var(--teal); }
+  .section-dot.current { background: var(--teal); width: 20px; border-radius: 99px; box-shadow: 0 0 8px var(--teal); }
+
+  /* Pulse dot for live/in-progress indicators */
+  .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px rgba(0,212,180,0.2); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(0,212,180,0.2); }
+    50%       { box-shadow: 0 0 0 7px rgba(0,212,180,0.04); }
+  }
+
+  /* Staggered fade-in animation */
+  .fade-in { animation: fadeIn 0.5s ease forwards; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .stagger > * { opacity: 0; animation: fadeIn 0.5s ease forwards; }
+  .stagger > *:nth-child(1) { animation-delay: 0.04s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.1s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.17s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.24s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.31s; }
 }
