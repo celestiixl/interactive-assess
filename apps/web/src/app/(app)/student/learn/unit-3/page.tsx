@@ -10,24 +10,24 @@ export default function Unit3PageStub() {
   if (!unit) notFound();
 
   return (
-    <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-slate-900 sm:px-4 sm:py-4">
+    <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-bs-text sm:px-4 sm:py-4">
       <BackLink href="/student/learn" label="Back to hub" />
       <div className="mx-auto grid w-full max-w-5xl gap-3">
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
           <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
             Grading Period {unit.gradingPeriod}
           </div>
-          <h1 className="mt-1 text-2xl font-bold text-slate-900">
+          <h1 className="mt-1 text-2xl font-bold text-bs-text">
             Unit {unit.unitNumber}: {unit.title}
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-bs-text-sub">
             Objective: {unit.objective}
           </p>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
           <div className="mb-3">
-            <h2 className="text-lg font-semibold text-slate-900">
+            <h2 className="text-lg font-semibold text-bs-text">
               Lessons in this Unit
             </h2>
           </div>
@@ -36,19 +36,19 @@ export default function Unit3PageStub() {
             {unit.lessons.map((lesson, index) => (
               <article
                 key={lesson.id}
-                className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                className="rounded-2xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-4"
               >
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                   Lesson {index + 1} • {lesson.type} • {lesson.minutes} min
                 </div>
-                <h3 className="mt-1 text-base font-semibold text-slate-900">
+                <h3 className="mt-1 text-base font-semibold text-bs-text">
                   {lesson.title}
                 </h3>
-                <p className="mt-1 text-sm text-slate-600">{lesson.summary}</p>
+                <p className="mt-1 text-sm text-bs-text-sub">{lesson.summary}</p>
                 <div className="mt-3">
                   <Link
                     href={`/student/learn/${unit.id}/${lesson.slug}`}
-                    className="inline-flex rounded-xl bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800"
+                    className="inline-flex rounded-xl bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-bs-bg"
                   >
                     Open Lesson
                   </Link>

@@ -66,11 +66,11 @@ export default function ReportingCategoryDonut({
   }
 
   return (
-    <div className="border border-slate-200 p-5 ia-card-soft">
-      <div className="text-lg font-semibold text-slate-900">
+    <div className="border border-[var(--bs-border)] p-5 ia-card-soft">
+      <div className="text-lg font-semibold text-bs-text">
         Mastery by Reporting Category
       </div>
-      <div className="mt-1 text-sm text-slate-600">
+      <div className="mt-1 text-sm text-bs-text-sub">
         Hover a slice to see details.
       </div>
 
@@ -126,11 +126,11 @@ export default function ReportingCategoryDonut({
           </svg>
 
           {hovered ? (
-            <div className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-sm shadow-md">
-              <div className="font-semibold text-slate-900">
+            <div className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 rounded-xl border border-[var(--bs-border)] bg-white/90 px-3 py-2 text-sm shadow-md">
+              <div className="font-semibold text-bs-text">
                 {hovered.id} • {hovered.name}
               </div>
-              <div className="text-slate-700">
+              <div className="text-bs-text-sub">
                 {Math.round(hovered.value * 100)}% mastery
               </div>
             </div>
@@ -141,27 +141,27 @@ export default function ReportingCategoryDonut({
           {data.map((rc) => (
             <div
               key={rc.id}
-              className="rounded-xl border border-slate-200 p-3"
+              className="rounded-xl border border-[var(--bs-border)] p-3"
               onMouseEnter={() => setHoverId(rc.id)}
               onMouseLeave={() => setHoverId(null)}
             >
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="font-semibold text-slate-900">
+                  <div className="font-semibold text-bs-text">
                     {rc.id} • {rc.name}
                   </div>
-                  <div className="mt-1 text-sm text-slate-600">
+                  <div className="mt-1 text-sm text-bs-text-sub">
                     {rc.description}
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
-                  <div className="text-lg font-semibold text-slate-900">
+                  <div className="text-lg font-semibold text-bs-text">
                     {Math.round(rc.value * 100)}%
                   </div>
-                  <div className="text-xs text-slate-600">mastery</div>
+                  <div className="text-xs text-bs-text-sub">mastery</div>
                 </div>
               </div>
-              <div className="mt-2 h-2 w-full rounded-full bg-slate-100">
+              <div className="mt-2 h-2 w-full rounded-full bg-[var(--bs-raised)]">
                 <div
                   className="h-2 rounded-full"
                   style={{

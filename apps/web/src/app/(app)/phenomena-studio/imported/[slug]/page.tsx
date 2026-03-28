@@ -13,12 +13,12 @@ export default function ImportedPhenomenonPage() {
 
   if (!item || item.status !== "approved") {
     return (
-      <main className="mx-auto max-w-4xl p-6 text-slate-900">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h1 className="text-xl font-semibold text-slate-900">
+      <main className="mx-auto max-w-4xl p-6 text-bs-text">
+        <div className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-6 shadow-sm">
+          <h1 className="text-xl font-semibold text-bs-text">
             Imported phenomenon not available
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-bs-text-sub">
             This imported HTML is missing or still pending approval.
           </p>
           <BackLink href="/phenomena-studio" label="Back to phenomena" />

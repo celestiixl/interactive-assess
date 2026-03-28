@@ -51,7 +51,7 @@ export default function StudentFloatingDock() {
   return (
     <FloatingDock
       items={links}
-      desktopClassName="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 border border-slate-200 bg-white/90 shadow-lg backdrop-blur"
+      desktopClassName="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 border border-[var(--bs-border)] bg-white/90 shadow-lg backdrop-blur"
       mobileClassName="fixed right-4 bottom-4 z-40"
     />
   );

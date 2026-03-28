@@ -361,15 +361,15 @@ export default function LessonExperience({
   const phenomenon = getPhenomenonForLesson(lesson.id);
 
   return (
-    <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-slate-900 sm:px-4 sm:py-4">
+    <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-bs-text sm:px-4 sm:py-4">
       <div className="mx-auto grid w-full max-w-4xl gap-3">
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
                 Grading Period {unit.gradingPeriod} • Unit {unit.unitNumber}
               </div>
-              <h1 className="mt-1 text-2xl font-bold text-slate-900">
+              <h1 className="mt-1 text-2xl font-bold text-bs-text">
                 {lesson.title}
               </h1>
               {(lesson.vocabularyTiers?.contentSpecific?.length ?? 0) > 0 && (
@@ -381,7 +381,7 @@ export default function LessonExperience({
                   {lesson.vocabularyTiers?.contentSpecific?.length ?? 0} terms)
                 </Link>
               )}
-              <div className="mt-2 text-sm text-slate-600">
+              <div className="mt-2 text-sm text-bs-text-sub">
                 {lesson.type} • {lesson.minutes} min
               </div>
             </div>
@@ -397,10 +397,10 @@ export default function LessonExperience({
                     : "Enable Read aloud in Supports to use this"
                 }
                 className={[
-                  "rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold",
+                  "rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold",
                   acc.tts
-                    ? "text-slate-700 hover:bg-slate-50"
-                    : "cursor-not-allowed text-slate-400",
+                    ? "text-bs-text-sub hover:bg-[var(--bs-raised)]"
+                    : "cursor-not-allowed text-bs-text-muted",
                 ].join(" ")}
               >
                 Read Aloud
@@ -408,7 +408,7 @@ export default function LessonExperience({
               <button
                 type="button"
                 onClick={() => setDyslexiaMode((value) => !value)}
-                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
               >
                 {dyslexiaMode ? "Standard Font" : "Dyslexia Friendly"}
               </button>
@@ -417,22 +417,22 @@ export default function LessonExperience({
                 onClick={() =>
                   setLanguage((prev) => (prev === "en" ? "es" : "en"))
                 }
-                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
               >
                 {language === "en" ? "ES Support" : "EN Support"}
               </button>
             </div>
           </div>
-          <p className="mt-3 text-sm leading-6 text-slate-700">
+          <p className="mt-3 text-sm leading-6 text-bs-text-sub">
             {lesson.summary}
           </p>
 
-          <div className="mt-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-            <div className="mb-1 flex items-center justify-between text-xs font-semibold text-slate-600">
+          <div className="mt-3 rounded-2xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3">
+            <div className="mb-1 flex items-center justify-between text-xs font-semibold text-bs-text-sub">
               <span>Reading Progress</span>
               <span>{readingProgress}%</span>
             </div>
-            <div className="h-2 rounded-full bg-slate-200">
+            <div className="h-2 rounded-full bg-[var(--bs-overlay)]">
               <div
                 className="h-2 rounded-full bg-blue-600 transition-all"
                 style={{ width: `${readingProgress}%` }}
@@ -444,7 +444,7 @@ export default function LessonExperience({
             {lesson.keyTerms.map((term) => (
               <span
                 key={term}
-                className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
+                className="rounded-full border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-1 text-xs font-semibold text-bs-text-sub"
               >
                 {term}
               </span>
@@ -452,20 +452,20 @@ export default function LessonExperience({
           </div>
 
           {lesson.vocabularyTiers ? (
-            <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <div className="mt-4 rounded-2xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3">
+              <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                 Vocabulary: Everyday to Academic to Content Specific
               </div>
               <div className="mt-2 grid gap-3 md:grid-cols-3">
                 <div>
-                  <div className="text-xs font-semibold text-slate-700">
+                  <div className="text-xs font-semibold text-bs-text-sub">
                     Everyday
                   </div>
                   <div className="mt-1 flex flex-wrap gap-1.5">
                     {lesson.vocabularyTiers.everyday.map((word) => (
                       <span
                         key={`v-e-${word}`}
-                        className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                        className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-2 py-0.5 text-[11px] font-semibold text-bs-text-sub"
                       >
                         {word}
                       </span>
@@ -474,14 +474,14 @@ export default function LessonExperience({
                 </div>
 
                 <div>
-                  <div className="text-xs font-semibold text-slate-700">
+                  <div className="text-xs font-semibold text-bs-text-sub">
                     Academic
                   </div>
                   <div className="mt-1 flex flex-wrap gap-1.5">
                     {lesson.vocabularyTiers.academic.map((word) => (
                       <span
                         key={`v-a-${word}`}
-                        className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                        className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-2 py-0.5 text-[11px] font-semibold text-bs-text-sub"
                       >
                         {word}
                       </span>
@@ -490,14 +490,14 @@ export default function LessonExperience({
                 </div>
 
                 <div>
-                  <div className="text-xs font-semibold text-slate-700">
+                  <div className="text-xs font-semibold text-bs-text-sub">
                     Content Specific
                   </div>
                   <div className="mt-1 flex flex-wrap gap-1.5">
                     {lesson.vocabularyTiers.contentSpecific.map((word) => (
                       <span
                         key={`v-c-${word}`}
-                        className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                        className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-2 py-0.5 text-[11px] font-semibold text-bs-text-sub"
                       >
                         {word}
                       </span>
@@ -511,7 +511,7 @@ export default function LessonExperience({
 
         {phenomenon ? <PhenomenonBanner phenomenon={phenomenon} /> : null}
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
           <div className="space-y-5">
             {lesson.sections.map((section, idx) => {
               const sectionKey = getSectionKey(section, idx);
@@ -521,16 +521,16 @@ export default function LessonExperience({
                   ref={(el) => {
                     sectionRefs.current[sectionKey] = el;
                   }}
-                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                  className="rounded-2xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-4"
                 >
                   {/* ── Explanation (default) ── */}
                   {(!section.type || section.type === "explanation") && (
                     <>
                       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                        <h2 className="text-lg font-semibold text-slate-900">
+                        <h2 className="text-lg font-semibold text-bs-text">
                           {(section as ExplanationSection).heading}
                         </h2>
-                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-bs-text-sub">
                           <input
                             type="checkbox"
                             checked={Boolean(effectiveSectionChecks[sectionKey])}
@@ -550,7 +550,7 @@ export default function LessonExperience({
                         {(section as ExplanationSection).body.map((paragraph, pIdx) => (
                           <p
                             key={pIdx}
-                            className={`text-sm leading-7 text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}
+                            className={`text-sm leading-7 text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}
                           >
                             {paragraph}
                           </p>
@@ -575,7 +575,7 @@ export default function LessonExperience({
                           </span>
                           {section.heading}
                         </h2>
-                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-bs-text-sub">
                           <input
                             type="checkbox"
                             checked={Boolean(effectiveSectionChecks[sectionKey])}
@@ -594,7 +594,7 @@ export default function LessonExperience({
                       </p>
                       <ol className="list-decimal space-y-2 pl-5">
                         {section.steps.map((step, i) => (
-                          <li key={i} className={`text-sm leading-7 text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                          <li key={i} className={`text-sm leading-7 text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
                             {step}
                           </li>
                         ))}
@@ -617,7 +617,7 @@ export default function LessonExperience({
                             ⚠ Misconception Spotlight
                           </span>
                         </h2>
-                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-bs-text-sub">
                           <input
                             type="checkbox"
                             checked={Boolean(effectiveSectionChecks[sectionKey])}
@@ -634,12 +634,12 @@ export default function LessonExperience({
                         <p className={`mb-1 text-sm font-semibold text-amber-900 ${dyslexiaMode ? "tracking-wide" : ""}`}>
                           ✗ Common misconception: &ldquo;{section.misconception}&rdquo;
                         </p>
-                        <p className={`text-sm text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                        <p className={`text-sm text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
                           <span className="font-semibold text-green-700">✓ Correction: </span>
                           {section.correction}
                         </p>
                         {section.teks ? (
-                          <span className="mt-2 inline-block rounded bg-slate-200 px-2 py-0.5 text-xs text-slate-600">
+                          <span className="mt-2 inline-block rounded bg-[var(--bs-overlay)] px-2 py-0.5 text-xs text-bs-text-sub">
                             {section.teks}
                           </span>
                         ) : null}
@@ -657,7 +657,7 @@ export default function LessonExperience({
                           </span>
                           {section.heading}
                         </h2>
-                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-bs-text-sub">
                           <input
                             type="checkbox"
                             checked={Boolean(effectiveSectionChecks[sectionKey])}
@@ -670,7 +670,7 @@ export default function LessonExperience({
                           Mark read
                         </label>
                       </div>
-                      <p className={`mb-3 text-sm text-slate-600 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                      <p className={`mb-3 text-sm text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
                         {section.description}
                       </p>
                       <dl className="space-y-2">
@@ -679,7 +679,7 @@ export default function LessonExperience({
                             <dt className="text-xs font-bold uppercase tracking-wide text-teal-700">
                               {el.label}
                             </dt>
-                            <dd className={`mt-0.5 text-sm text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                            <dd className={`mt-0.5 text-sm text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
                               {el.detail}
                             </dd>
                           </div>
@@ -697,7 +697,7 @@ export default function LessonExperience({
                             Vocabulary Spotlight
                           </span>
                         </h2>
-                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-bs-text-sub">
                           <input
                             type="checkbox"
                             checked={Boolean(effectiveSectionChecks[sectionKey])}
@@ -714,11 +714,11 @@ export default function LessonExperience({
                         {section.terms.map((term) => (
                           <div key={term.term} className="rounded-lg border border-purple-100 bg-purple-50 px-3 py-2">
                             <dt className="text-sm font-bold text-purple-900">{term.term}</dt>
-                            <dd className={`mt-0.5 text-sm text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                            <dd className={`mt-0.5 text-sm text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
                               {term.definition}
                             </dd>
                             {term.example ? (
-                              <p className={`mt-1 rounded bg-white/70 px-2 py-1 text-xs italic text-slate-500 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                              <p className={`mt-1 rounded bg-white/70 px-2 py-1 text-xs italic text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
                                 Example: {term.example}
                               </p>
                             ) : null}
@@ -738,7 +738,7 @@ export default function LessonExperience({
                           </span>
                           {section.heading}
                         </h2>
-                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700">
+                        <label className="inline-flex items-center gap-2 text-xs font-semibold text-bs-text-sub">
                           <input
                             type="checkbox"
                             checked={Boolean(effectiveSectionChecks[sectionKey])}
@@ -751,7 +751,7 @@ export default function LessonExperience({
                           Mark read
                         </label>
                       </div>
-                      <p className={`mb-3 text-sm leading-7 text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                      <p className={`mb-3 text-sm leading-7 text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
                         {section.prompt}
                       </p>
                       {section.sentenceFrames && section.sentenceFrames.length > 0 ? (
@@ -761,7 +761,7 @@ export default function LessonExperience({
                           </p>
                           <ul className="space-y-2">
                             {section.sentenceFrames.map((frame, i) => (
-                              <li key={i} className={`rounded bg-white/80 px-3 py-1.5 text-sm italic text-slate-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                              <li key={i} className={`rounded bg-white/80 px-3 py-1.5 text-sm italic text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
                                 {frame}
                               </li>
                             ))}
@@ -779,35 +779,35 @@ export default function LessonExperience({
         {/* Lab Notebook — between lesson content and quick-checks */}
         <LessonNotebook lessonSlug={lesson.slug} studentId={studentId} />
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="text-sm font-semibold text-slate-900">
+        <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
+          <div className="text-sm font-semibold text-bs-text">
             Quick Check
           </div>
-          <p className="mt-1 text-xs text-slate-600">
+          <p className="mt-1 text-xs text-bs-text-sub">
             Score at least 70% to unlock the next lesson on the mastery path.
           </p>
           <div className="mt-3 space-y-4">
             {questions.map((question, index) => (
               <div
                 key={question.id}
-                className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                className="rounded-2xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-4"
               >
                 <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700">
+                  <span className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-2.5 py-1 text-[11px] font-semibold text-bs-text-sub">
                     TEKS {question.teks}
                   </span>
                   <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-700">
                     {question.learningLevel}
                   </span>
                 </div>
-                <div className="text-sm font-semibold text-slate-900">
+                <div className="text-sm font-semibold text-bs-text">
                   {index + 1}. {question.question}
                 </div>
                 <div className="mt-2 space-y-2">
                   {question.options.map((choice, optionIndex) => (
                     <label
                       key={choice}
-                      className="flex items-center gap-2 text-sm text-slate-700"
+                      className="flex items-center gap-2 text-sm text-bs-text-sub"
                     >
                       <input
                         type="radio"
@@ -851,7 +851,7 @@ export default function LessonExperience({
               type="button"
               onClick={handleSubmitCheck}
               aria-label="Submit quick check"
-              className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              className="rounded-xl bg-bs-bg px-4 py-2 text-sm font-semibold text-white hover:bg-bs-bg"
             >
               Submit Check
             </button>
@@ -859,7 +859,7 @@ export default function LessonExperience({
               type="button"
               onClick={markComplete}
               aria-label="Mark lesson complete"
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-[var(--bs-raised)]"
             >
               Mark Lesson Complete
             </button>
@@ -902,18 +902,18 @@ export default function LessonExperience({
           ) : null}
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+        <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex gap-2">
               <Link
                 href="/student/learn"
-                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
               >
                 Hub
               </Link>
               <Link
                 href={`/student/learn/${unit.id}`}
-                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
               >
                 Unit
               </Link>
@@ -923,7 +923,7 @@ export default function LessonExperience({
               {previousLesson ? (
                 <Link
                   href={`/student/learn/${unit.id}/${previousLesson.slug}`}
-                  className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                  className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
                 >
                   ← Previous
                 </Link>
@@ -931,7 +931,7 @@ export default function LessonExperience({
               {nextLesson ? (
                 <Link
                   href={`/student/learn/${unit.id}/${nextLesson.slug}`}
-                  className="rounded-xl bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800"
+                  className="rounded-xl bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-bs-bg"
                 >
                   Next →
                 </Link>

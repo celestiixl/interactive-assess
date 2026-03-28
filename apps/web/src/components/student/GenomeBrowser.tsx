@@ -255,13 +255,13 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
       {/* ── Controls ──────────────────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-2">
         {/* Pan/Zoom */}
-        <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+        <div className="flex items-center gap-1 rounded-xl border border-[var(--bs-border)] bg-bs-surface p-1 shadow-sm">
           <button
             type="button"
             aria-label="Pan left"
             disabled={viewStart <= 1}
             onClick={panLeft}
-            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40"
+            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)] disabled:opacity-40"
           >
             ◀ Pan
           </button>
@@ -270,19 +270,19 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
             aria-label="Pan right"
             disabled={viewEnd >= seqLen}
             onClick={panRight}
-            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40"
+            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)] disabled:opacity-40"
           >
             Pan ▶
           </button>
         </div>
 
-        <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+        <div className="flex items-center gap-1 rounded-xl border border-[var(--bs-border)] bg-bs-surface p-1 shadow-sm">
           <button
             type="button"
             aria-label="Zoom in"
             disabled={bpVisible <= MIN_BP_VISIBLE}
             onClick={zoomIn}
-            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40"
+            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)] disabled:opacity-40"
           >
             🔍+
           </button>
@@ -291,7 +291,7 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
             aria-label="Zoom out"
             disabled={bpVisible >= seqLen}
             onClick={zoomOut}
-            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40"
+            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)] disabled:opacity-40"
           >
             🔍−
           </button>
@@ -300,7 +300,7 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
         <button
           type="button"
           onClick={resetView}
-          className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+          className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-1.5 text-sm font-semibold text-bs-text-sub shadow-sm hover:bg-[var(--bs-raised)]"
         >
           Reset
         </button>
@@ -311,14 +311,14 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
           className={`rounded-xl border px-3 py-1.5 text-sm font-semibold shadow-sm transition ${
             showComplement
               ? "border-indigo-300 bg-indigo-50 text-indigo-800"
-              : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+              : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"
           }`}
         >
           {showComplement ? "Hide" : "Show"} Complement
         </button>
 
         {/* Position indicator */}
-        <div className="ml-auto rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-mono text-slate-600">
+        <div className="ml-auto rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-1.5 text-xs font-mono text-bs-text-sub">
           Viewing bp {viewStart}–{viewEnd} &nbsp;|&nbsp; {bpVisible} bp &nbsp;|&nbsp; {pixelsPerBp.toFixed(1)} px/bp
         </div>
       </div>
@@ -326,17 +326,17 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
       {/* ── Track area ────────────────────────────────────────────────────── */}
       <div
         ref={containerRef}
-        className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm"
+        className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface overflow-hidden shadow-sm"
       >
         {/* Ruler row */}
         <div className="flex" style={{ height: RULER_HEIGHT }}>
           <div
-            className="shrink-0 flex items-center justify-end pr-2 text-[10px] font-semibold text-slate-400 border-r border-slate-200"
+            className="shrink-0 flex items-center justify-end pr-2 text-[10px] font-semibold text-bs-text-muted border-r border-[var(--bs-border)]"
             style={{ width: TRACK_LABEL_W }}
           >
             Position
           </div>
-          <div className="relative flex-1 bg-slate-50 border-b border-slate-200 overflow-hidden">
+          <div className="relative flex-1 bg-[var(--bs-raised)] border-b border-[var(--bs-border)] overflow-hidden">
             {/* Tick marks */}
             {Array.from({ length: Math.ceil(bpVisible / tickInterval) + 1 }).map((_, i) => {
               const pos =
@@ -346,7 +346,7 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
               return (
                 <div key={pos} className="absolute top-0 flex flex-col items-center" style={{ left: x }}>
                   <div className="w-px h-2 bg-slate-400" />
-                  <span className="text-[9px] font-mono text-slate-500 mt-0.5 whitespace-nowrap">
+                  <span className="text-[9px] font-mono text-bs-text-sub mt-0.5 whitespace-nowrap">
                     {pos}
                   </span>
                 </div>
@@ -358,7 +358,7 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
         {/* Sense strand row */}
         <div className="flex">
           <div
-            className="shrink-0 flex items-center justify-end pr-2 text-[10px] font-semibold text-slate-400 border-r border-slate-200"
+            className="shrink-0 flex items-center justify-end pr-2 text-[10px] font-semibold text-bs-text-muted border-r border-[var(--bs-border)]"
             style={{ width: TRACK_LABEL_W, minHeight: SEQ_TRACK_HEIGHT }}
           >
             5′→3′
@@ -377,9 +377,9 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
 
         {/* Complement strand row */}
         {showComplement && (
-          <div className="flex border-t border-slate-100">
+          <div className="flex border-t border-[var(--bs-border)]">
             <div
-              className="shrink-0 flex items-center justify-end pr-2 text-[10px] font-semibold text-slate-400 border-r border-slate-200"
+              className="shrink-0 flex items-center justify-end pr-2 text-[10px] font-semibold text-bs-text-muted border-r border-[var(--bs-border)]"
               style={{ width: TRACK_LABEL_W, minHeight: SEQ_TRACK_HEIGHT }}
             >
               3′←5′
@@ -398,9 +398,9 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
         )}
 
         {/* Annotation tracks */}
-        <div className="flex border-t border-slate-100">
+        <div className="flex border-t border-[var(--bs-border)]">
           <div
-            className="shrink-0 flex items-start justify-end pr-2 pt-2 text-[10px] font-semibold text-slate-400 border-r border-slate-200"
+            className="shrink-0 flex items-start justify-end pr-2 pt-2 text-[10px] font-semibold text-bs-text-muted border-r border-[var(--bs-border)]"
             style={{ width: TRACK_LABEL_W, minHeight: annotationAreaHeight }}
           >
             Features
@@ -421,7 +421,7 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
               />
             ))}
             {laidOut.length === 0 && (
-              <div className="flex h-full items-center justify-center text-xs text-slate-400 italic">
+              <div className="flex h-full items-center justify-center text-xs text-bs-text-muted italic">
                 No features in view — pan or zoom out to see annotations
               </div>
             )}
@@ -431,14 +431,14 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
 
       {/* ── Type filter pills ─────────────────────────────────────────────── */}
       <div className="flex flex-wrap gap-2 items-center">
-        <span className="text-xs font-semibold text-slate-500">Filter:</span>
+        <span className="text-xs font-semibold text-bs-text-sub">Filter:</span>
         <button
           type="button"
           onClick={() => setActiveTypeFilter("all")}
           className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
             activeTypeFilter === "all"
-              ? "bg-slate-900 border-slate-900 text-white"
-              : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+              ? "bg-bs-bg border-slate-900 text-white"
+              : "bg-bs-surface border-[var(--bs-border)] text-bs-text-sub hover:bg-[var(--bs-raised)]"
           }`}
         >
           All ({sequence.annotations.length})
@@ -471,7 +471,7 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
                 className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
                   activeTypeFilter === t
                     ? "ring-1 ring-current"
-                    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+                    : "bg-bs-surface border-[var(--bs-border)] text-bs-text-sub hover:bg-[var(--bs-raised)]"
                 }`}
                 style={
                   activeTypeFilter === t
@@ -507,11 +507,11 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
                 >
                   {ANNOTATION_LABEL[selectedAnn.type]}
                 </span>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-bold text-bs-text">
                   {selectedAnn.label}
                 </h3>
               </div>
-              <p className="mt-1 text-xs font-mono text-slate-500">
+              <p className="mt-1 text-xs font-mono text-bs-text-sub">
                 Position {selectedAnn.start}–{selectedAnn.end} &nbsp;·&nbsp;
                 {selectedAnn.end - selectedAnn.start + 1} bp &nbsp;·&nbsp;
                 Strand {selectedAnn.strand}
@@ -521,13 +521,13 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
               type="button"
               aria-label="Close detail panel"
               onClick={() => setSelectedAnn(null)}
-              className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+              className="rounded-lg p-1 text-bs-text-muted hover:bg-[var(--bs-raised)] hover:text-bs-text-sub"
             >
               ✕
             </button>
           </div>
 
-          <p className="mt-3 text-sm text-slate-700 leading-relaxed">
+          <p className="mt-3 text-sm text-bs-text-sub leading-relaxed">
             {selectedAnn.description}
           </p>
 
@@ -535,7 +535,7 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
             {selectedAnn.teks.map((t) => (
               <span
                 key={t}
-                className="rounded-full border border-slate-200 bg-white px-2.5 py-0.5 text-xs font-mono text-slate-700"
+                className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-2.5 py-0.5 text-xs font-mono text-bs-text-sub"
               >
                 {t}
               </span>
@@ -543,7 +543,7 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
             <button
               type="button"
               onClick={() => jumpToAnnotation(selectedAnn)}
-              className="ml-auto rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+              className="ml-auto rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-1.5 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
             >
               Jump to Feature ↗
             </button>
@@ -551,8 +551,8 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
 
           {/* Sequence excerpt */}
           {selectedAnn.end - selectedAnn.start <= 50 && (
-            <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3">
-              <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400 mb-1.5">
+            <div className="mt-3 rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3">
+              <div className="text-[10px] font-semibold uppercase tracking-wide text-bs-text-muted mb-1.5">
                 Sequence ({selectedAnn.end - selectedAnn.start + 1} bp)
               </div>
               <div className="flex flex-wrap gap-0.5 font-mono text-xs">
@@ -573,24 +573,24 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
           )}
         </div>
       ) : (
-        <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-500 text-center">
+        <div className="rounded-2xl border border-dashed border-[var(--bs-border)] bg-[var(--bs-raised)] px-5 py-4 text-sm text-bs-text-sub text-center">
           Click any annotation bar above to see its biological description and TEKS alignment.
         </div>
       )}
 
       {/* ── Feature index ─────────────────────────────────────────────────── */}
-      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-        <div className="px-5 py-3 border-b border-slate-100 flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-900">All Features</h3>
-          <span className="text-xs text-slate-400">{sequence.annotations.length} annotations</span>
+      <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface shadow-sm overflow-hidden">
+        <div className="px-5 py-3 border-b border-[var(--bs-border)] flex items-center justify-between">
+          <h3 className="text-sm font-bold text-bs-text">All Features</h3>
+          <span className="text-xs text-bs-text-muted">{sequence.annotations.length} annotations</span>
         </div>
         <div className="divide-y divide-slate-100 max-h-56 overflow-y-auto">
           {sequence.annotations.map((ann) => (
             <button
               key={ann.id}
               type="button"
-              className={`w-full flex items-center gap-3 px-5 py-2.5 text-left hover:bg-slate-50 transition ${
-                selectedAnn?.id === ann.id ? "bg-slate-50" : ""
+              className={`w-full flex items-center gap-3 px-5 py-2.5 text-left hover:bg-[var(--bs-raised)] transition ${
+                selectedAnn?.id === ann.id ? "bg-[var(--bs-raised)]" : ""
               }`}
               onClick={() => jumpToAnnotation(ann)}
             >
@@ -598,10 +598,10 @@ export default function GenomeBrowser({ sequence }: { sequence: DemoSequence }) 
                 className="shrink-0 h-3 w-3 rounded-full"
                 style={{ backgroundColor: ANNOTATION_COLORS[ann.type] }}
               />
-              <span className="flex-1 text-xs font-semibold text-slate-800 truncate">
+              <span className="flex-1 text-xs font-semibold text-bs-text truncate">
                 {ann.label}
               </span>
-              <span className="text-[10px] font-mono text-slate-400 shrink-0">
+              <span className="text-[10px] font-mono text-bs-text-muted shrink-0">
                 {ann.start}–{ann.end}
               </span>
               <span

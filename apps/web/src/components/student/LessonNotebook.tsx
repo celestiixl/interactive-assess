@@ -167,8 +167,8 @@ function SketchCanvas({ initialDataUrl, onChange }: SketchCanvasProps) {
           onClick={() => setTool("pen")}
           className={`rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors ${
             tool === "pen"
-              ? "border-slate-700 bg-slate-800 text-white"
-              : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+              ? "border-slate-700 bg-bs-bg text-white"
+              : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"
           }`}
         >
           ✏️ Pen
@@ -180,8 +180,8 @@ function SketchCanvas({ initialDataUrl, onChange }: SketchCanvasProps) {
           onClick={() => setTool("eraser")}
           className={`rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors ${
             tool === "eraser"
-              ? "border-slate-700 bg-slate-800 text-white"
-              : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+              ? "border-slate-700 bg-bs-bg text-white"
+              : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"
           }`}
         >
           🧹 Eraser
@@ -198,12 +198,12 @@ function SketchCanvas({ initialDataUrl, onChange }: SketchCanvasProps) {
               onClick={() => setStrokeWidth(w)}
               className={`flex h-7 w-7 items-center justify-center rounded-full border transition-colors ${
                 strokeWidth === w
-                  ? "border-slate-700 bg-slate-800"
-                  : "border-slate-200 bg-white hover:bg-slate-50"
+                  ? "border-slate-700 bg-bs-bg"
+                  : "border-[var(--bs-border)] bg-bs-surface hover:bg-[var(--bs-raised)]"
               }`}
             >
               <span
-                className={`block rounded-full ${strokeWidth === w ? "bg-white" : "bg-slate-700"}`}
+                className={`block rounded-full ${strokeWidth === w ? "bg-bs-surface" : "bg-slate-700"}`}
                 style={{ width: w + 2, height: w + 2 }}
               />
             </button>
@@ -237,7 +237,7 @@ function SketchCanvas({ initialDataUrl, onChange }: SketchCanvasProps) {
           <button
             type="button"
             onClick={handleExport}
-            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+            className="rounded-lg border border-[var(--bs-border)] bg-bs-surface px-2.5 py-1 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
             aria-label="Export sketch as PNG"
           >
             Export PNG
@@ -248,7 +248,7 @@ function SketchCanvas({ initialDataUrl, onChange }: SketchCanvasProps) {
             className={`rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors ${
               confirmClear
                 ? "border-red-300 bg-red-50 text-red-700 hover:bg-red-100"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"
             }`}
             aria-label={confirmClear ? "Confirm clear sketch" : "Clear sketch"}
           >
@@ -272,7 +272,7 @@ function SketchCanvas({ initialDataUrl, onChange }: SketchCanvasProps) {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
-        className="w-full touch-none rounded-xl border border-slate-200"
+        className="w-full touch-none rounded-xl border border-[var(--bs-border)]"
         style={{ cursor: tool === "eraser" ? "cell" : "crosshair", background: "#fafaf9" }}
         aria-label="Sketch canvas"
       />
@@ -395,7 +395,7 @@ export default function LessonNotebook({ lessonSlug, studentId }: Props) {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="notebook-panel"
-          className="rounded-xl border border-amber-200 bg-white/70 px-3 py-1.5 text-xs font-semibold text-amber-800 hover:bg-white dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-300 dark:hover:bg-amber-900/50"
+          className="rounded-xl border border-amber-200 bg-white/70 px-3 py-1.5 text-xs font-semibold text-amber-800 hover:bg-bs-surface dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-300 dark:hover:bg-amber-900/50"
         >
           {open ? "Close" : "Open notebook"}
         </button>
@@ -446,7 +446,7 @@ export default function LessonNotebook({ lessonSlug, studentId }: Props) {
                 value={notebook.notes}
                 onChange={(e) => handleNotesChange(e.target.value)}
                 rows={8}
-                className="w-full resize-y rounded-xl border border-amber-200 bg-white/80 p-3 text-sm leading-6 text-slate-800 outline-none placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100 dark:placeholder:text-amber-600"
+                className="w-full resize-y rounded-xl border border-amber-200 bg-white/80 p-3 text-sm leading-6 text-bs-text outline-none placeholder:text-bs-text-muted focus:border-amber-400 focus:ring-2 focus:ring-amber-200 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100 dark:placeholder:text-amber-600"
                 placeholder="Write anything — questions, ideas, things that don't make sense yet."
                 aria-label="Lesson notes"
               />
@@ -470,7 +470,7 @@ export default function LessonNotebook({ lessonSlug, studentId }: Props) {
                   value={newObservationText}
                   onChange={(e) => setNewObservationText(e.target.value)}
                   rows={2}
-                  className="flex-1 resize-none rounded-xl border border-amber-200 bg-white/80 p-2.5 text-sm leading-6 text-slate-800 outline-none placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100 dark:placeholder:text-amber-600"
+                  className="flex-1 resize-none rounded-xl border border-amber-200 bg-white/80 p-2.5 text-sm leading-6 text-bs-text outline-none placeholder:text-bs-text-muted focus:border-amber-400 focus:ring-2 focus:ring-amber-200 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100 dark:placeholder:text-amber-600"
                   placeholder="What do you notice?"
                   aria-label="New observation text"
                   onKeyDown={(e) => {
@@ -521,13 +521,13 @@ export default function LessonNotebook({ lessonSlug, studentId }: Props) {
                         <button
                           type="button"
                           onClick={() => removeObservation(obs.id)}
-                          className="rounded text-xs text-slate-400 hover:text-red-500"
+                          className="rounded text-xs text-bs-text-muted hover:text-red-500"
                           aria-label="Remove observation"
                         >
                           ✕
                         </button>
                       </div>
-                      <p className="text-sm leading-6 text-slate-800 dark:text-amber-100">
+                      <p className="text-sm leading-6 text-bs-text dark:text-amber-100">
                         {obs.text}
                       </p>
                     </li>
