@@ -12,13 +12,13 @@ export default function QuestRankingsPage() {
   const weeklyChallenge = CHALLENGES.find((c) => c.difficulty === 3) ?? CHALLENGES[dayIndex];
 
   return (
-    <main className="ia-vh-page relative h-dvh overflow-hidden px-3 py-3 text-slate-900 sm:px-4 sm:py-4">
+    <main className="ia-vh-page relative h-dvh overflow-hidden px-3 py-3 text-bs-text sm:px-4 sm:py-4">
       <BackLink href="/student/learn" label="Back to missions" />
       <div className="ia-vh-grid grid h-full min-h-0 grid-rows-[auto_1fr] gap-3">
-        <section className="ia-vh-tight rounded-2xl border border-slate-200 bg-white p-4">
+        <section className="ia-vh-tight rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4">
           <div>
-            <h1 className="text-xl font-extrabold text-slate-900">BioSpark Quest Rankings</h1>
-            <p className="mt-1 text-sm text-slate-600">
+            <h1 className="text-xl font-extrabold text-bs-text">BioSpark Quest Rankings</h1>
+            <p className="mt-1 text-sm text-bs-text-sub">
               Full rankings view with Quest Leagues and Hall of Fame.
             </p>
           </div>

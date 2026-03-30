@@ -2,7 +2,7 @@ import Skeleton from "@/components/ui/Skeleton";
 
 export default function StudentAssessmentLoading() {
   return (
-    <main className="min-h-dvh text-slate-900">
+    <main className="min-h-dvh text-bs-text">
       <div className="mx-auto max-w-6xl px-6 py-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-xl flex flex-col gap-3">

@@ -28,7 +28,7 @@ export default function HotQuestionCard() {
         <div>
           <div className="font-semibold text-sm">Hot Question of the Day</div>
           {q.teks && (
-            <div className="text-xs text-slate-500">
+            <div className="text-xs text-bs-text-sub">
               TEKS: <TeksTooltip code={q.teks} />
             </div>
           )}
@@ -55,14 +55,14 @@ export default function HotQuestionCard() {
       </div>
 
       <button
-        className="mt-4 bg-slate-900 text-white rounded-xl px-3 py-2 text-sm"
+        className="mt-4 bg-bs-teal text-white rounded-xl px-3 py-2 text-sm"
         onClick={() => setShow((v) => !v)}
       >
         {show ? "Hide answer" : "Reveal answer"}
       </button>
 
       {show && (
-        <div className="mt-3 text-sm text-slate-700">
+        <div className="mt-3 text-sm text-bs-text-sub">
           <b>Answer:</b> {answer}
           <br />
           {q.explanation}

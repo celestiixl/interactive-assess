@@ -60,17 +60,17 @@ export default function TeacherLoginPage() {
           <div className="mb-8 text-center">
             <BlurText
               text="Teacher Sign In"
-              className="text-3xl font-semibold tracking-tight text-slate-900"
+              className="text-3xl font-semibold tracking-tight text-bs-text"
               delay={80}
               animateBy="words"
             />
-            <p className="mt-2 text-slate-600">
+            <p className="mt-2 text-bs-text-sub">
               Access your dashboard, item bank, and AI grading tools.
             </p>
           </div>
 
           <SpotlightCard
-            className="rounded-3xl border border-slate-200 bg-white p-8 shadow-lg"
+            className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-8 shadow-lg"
             spotlightColor="rgba(14,165,233,0.14)"
           >
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -150,7 +150,7 @@ export default function TeacherLoginPage() {
             </div>
           </SpotlightCard>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
+          <p className="mt-6 text-center text-sm text-bs-text-sub">
             Student?{" "}
             <Link
               href="/student/login"

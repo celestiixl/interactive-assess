@@ -3,7 +3,7 @@ import Skeleton from "@/components/ui/Skeleton";
 
 export default function StudentDashboardLoading() {
   return (
-    <main className="min-h-dvh text-slate-900">
+    <main className="min-h-dvh text-bs-text">
       {/* Header band skeleton */}
       <div className="bg-linear-to-r from-sky-500 via-blue-600 to-indigo-600">
         <div className="mx-auto max-w-6xl px-6 py-8">
@@ -38,7 +38,7 @@ export default function StudentDashboardLoading() {
           {/* Bottom cards skeleton */}
           <section className="mt-5 grid gap-4 md:grid-cols-3">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="rounded-2xl border bg-white p-5 shadow-sm flex flex-col gap-2">
+              <div key={i} className="rounded-2xl border bg-bs-surface p-5 shadow-sm flex flex-col gap-2">
                 <Skeleton className="h-4 w-32" />
                 <Skeleton className="h-4 w-48" />
                 <div className="mt-2 flex gap-2">

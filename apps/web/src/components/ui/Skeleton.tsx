@@ -12,7 +12,7 @@ export default function Skeleton({
   return (
     <div
       className={cx(
-        "animate-pulse rounded-xl bg-slate-200",
+        "animate-pulse rounded-xl bg-[var(--bs-overlay)]",
         className,
       )}
     />

@@ -17,19 +17,19 @@ export default function StandardsHeatmapPage() {
   const weakest = useMemo(() => getWeakestTeks(progress, 3), [progress]);
 
   return (
-    <main className="mx-auto w-full max-w-6xl p-6 text-slate-900">
+    <main className="mx-auto w-full max-w-6xl p-6 text-bs-text">
       <BackLink href="/student/learn" label="Back to hub" />
-      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
         <div>
           <h1 className="text-2xl font-bold">Standards Heatmap</h1>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="mt-1 text-sm text-bs-text-sub">
             Track TEKS-level mastery and target weak standards first.
           </p>
         </div>
       </section>
 
-      <section className="mt-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-slate-900">
+      <section className="mt-4 rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
+        <h2 className="text-sm font-semibold text-bs-text">
           Weakest 3 Standards
         </h2>
         <div className="mt-3 grid gap-3 md:grid-cols-3">
@@ -46,11 +46,11 @@ export default function StandardsHeatmapPage() {
         </div>
       </section>
 
-      <section className="mt-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <section className="mt-4 rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-500">
+              <tr className="border-b border-[var(--bs-border)] text-left text-xs uppercase tracking-wide text-bs-text-sub">
                 <th className="py-2 pr-3">TEKS</th>
                 <th className="py-2 pr-3">Lessons</th>
                 <th className="py-2 pr-3">Avg Check</th>
@@ -60,7 +60,7 @@ export default function StandardsHeatmapPage() {
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.teks} className="border-b border-slate-100">
+                <tr key={row.teks} className="border-b border-[var(--bs-border)]">
                   <td className="py-2 pr-3 font-semibold">{row.teks}</td>
                   <td className="py-2 pr-3">{row.lessons}</td>
                   <td className="py-2 pr-3">{row.avgCheck}%</td>

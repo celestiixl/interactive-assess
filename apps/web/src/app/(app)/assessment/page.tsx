@@ -31,7 +31,7 @@ function ActionCard({
           ? "bg-violet-500"
           : accent === "emerald"
             ? "bg-emerald-500"
-            : "bg-slate-500";
+            : "bg-[var(--bs-raised)]0";
 
   const accentWash =
     accent === "teal"
@@ -79,12 +79,12 @@ function ActionCard({
 
         <div className="flex items-start justify-between gap-6">
           <div>
-            <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+            <h2 className="text-lg font-semibold tracking-tight text-bs-text">
               {title}
             </h2>
-            <p className="mt-2 text-sm text-slate-700">{desc}</p>
+            <p className="mt-2 text-sm text-bs-text-sub">{desc}</p>
           </div>
-          <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white/70 text-lg text-slate-900 transition group-hover:bg-white">
+          <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[var(--bs-border)] bg-white/70 text-lg text-bs-text transition group-hover:bg-bs-surface">
             →
           </div>
         </div>
@@ -108,10 +108,10 @@ export default function AssessmentDashboardEntry() {
   return (
     <AppShell activeKey="assessment">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
+        <h1 className="text-3xl font-semibold tracking-tight text-bs-text">
           Assessment
         </h1>
-        <p className="mt-2 max-w-2xl text-sm text-slate-700">
+        <p className="mt-2 max-w-2xl text-sm text-bs-text-sub">
           Choose your view. Student is the practice + item sandbox. Teacher is
           building, managing, and analytics.
         </p>
@@ -138,10 +138,10 @@ export default function AssessmentDashboardEntry() {
         <Surface className="xl:col-span-2 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm font-semibold text-slate-900">
+              <div className="text-sm font-semibold text-bs-text">
                 Quick actions
               </div>
-              <div className="mt-1 text-xs text-slate-600">
+              <div className="mt-1 text-xs text-bs-text-sub">
                 Handy jumps while you’re building and testing.
               </div>
             </div>

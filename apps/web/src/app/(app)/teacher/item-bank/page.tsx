@@ -18,7 +18,7 @@ export default async function TeacherItemBankPage() {
         <div className="flex shrink-0 items-center gap-2">
           <Link
             href="/teacher/builder"
-            className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
+            className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text shadow-sm hover:bg-[var(--bs-raised)]"
           >
             + New Item
           </Link>

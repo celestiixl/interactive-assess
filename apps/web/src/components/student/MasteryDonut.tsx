@@ -321,7 +321,7 @@ export default function MasteryDonut({
     <div className="grid gap-4 lg:grid-cols-[380px_1fr]">
       <div className="flex flex-col items-center">
         <div className="w-full max-w-85">
-          <div className="h-3 overflow-hidden rounded-full bg-slate-200">
+          <div className="h-3 overflow-hidden rounded-full bg-white/5">
             <div className="flex h-full w-full">
               <div
                 className="bg-cyan-500"
@@ -332,12 +332,12 @@ export default function MasteryDonut({
                 style={{ width: `${learnedWidth}%` }}
               />
               <div
-                className="bg-slate-300"
+                className="bg-bs-text-muted"
                 style={{ width: `${remainingWidth}%` }}
               />
             </div>
           </div>
-          <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-slate-600">
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-bs-text-sub">
             <span>Mastered: {masteredCount}</span>
             <span>Learned: {learnedCount}</span>
             <span>Remaining: {remainingCount}</span>
@@ -372,16 +372,16 @@ export default function MasteryDonut({
           </text>
         </svg>
 
-        <div className="-mt-4 text-center text-sm text-slate-600">
+        <div className="-mt-4 text-center text-sm text-bs-text-sub">
           {hoverText(hoverKey)}
         </div>
-        <div className="mt-1 text-center text-xs text-slate-500">
+        <div className="mt-1 text-center text-xs text-bs-text-sub">
           Arc width = TEKS count, radial length = mastery
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-3">
-        <div className="mb-2 text-sm font-semibold text-slate-900">
+      <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3">
+        <div className="mb-2 text-sm font-semibold text-bs-text">
           Color key by unit + TEKS
         </div>
         <div className="max-h-90 space-y-2 overflow-y-auto pr-1">
@@ -395,8 +395,8 @@ export default function MasteryDonut({
                 onMouseLeave={() => setHoverKey(null)}
                 className={`w-full rounded-xl border px-3 py-2 text-left transition ${
                   isHover
-                    ? "border-slate-400 bg-slate-50"
-                    : "border-slate-200 bg-white hover:bg-slate-50"
+                    ? "border-[var(--bs-border)] bg-[var(--bs-raised)]"
+                    : "border-[var(--bs-border)] bg-bs-surface hover:bg-[var(--bs-raised)]"
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -405,20 +405,20 @@ export default function MasteryDonut({
                       className="inline-block h-3 w-3 shrink-0 rounded-full"
                       style={{ backgroundColor: unit.color }}
                     />
-                    <span className="truncate text-sm font-semibold text-slate-800">
+                    <span className="truncate text-sm font-semibold text-bs-text">
                       {unit.label}
                     </span>
                   </div>
-                  <span className="text-xs font-bold text-slate-700">
+                  <span className="text-xs font-bold text-bs-text-sub">
                     {unit.masteryPct}%
                   </span>
                 </div>
-                <div className="mt-1 text-[11px] text-slate-500">
+                <div className="mt-1 text-[11px] text-bs-text-sub">
                   {unit.teksCount} TEKS • {unit.masteredCount} mastered •{" "}
                   {unit.remainingCount} need support
                 </div>
                 {unit.weakestTeks.length > 0 ? (
-                  <div className="mt-1 text-[11px] text-slate-600">
+                  <div className="mt-1 text-[11px] text-bs-text-sub">
                     Focus: {unit.weakestTeks.join(" • ")}
                   </div>
                 ) : null}

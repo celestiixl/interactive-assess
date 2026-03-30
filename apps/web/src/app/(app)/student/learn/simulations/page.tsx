@@ -33,12 +33,12 @@ const SIMULATIONS = [
 
 export default function SimulationsPage() {
   return (
-    <main className="min-h-screen bg-white pb-28 dark:bg-[#0d1117]">
+    <main className="min-h-screen bg-bs-surface pb-28 dark:bg-[#0d1117]">
       <div className="mx-auto max-w-3xl px-4 py-10">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+        <h1 className="text-2xl font-bold text-bs-text dark:text-slate-100">
           🔬 Simulations
         </h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-1 text-sm text-bs-text-sub dark:text-slate-400">
           Interactive labs and simulations aligned to FBISD Biology TEKS.
         </p>
 
@@ -46,20 +46,20 @@ export default function SimulationsPage() {
           {SIMULATIONS.map((sim) => (
             <article
               key={sim.slug}
-              className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-[#1e3a52] dark:bg-[#0f1e2c]"
+              className="rounded-2xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-5 dark:border-[#1e3a52] dark:bg-[#0f1e2c]"
             >
               <div className="flex items-start gap-4">
                 <span className="text-3xl" aria-hidden>
                   {sim.icon}
                 </span>
                 <div className="flex-1">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub dark:text-slate-400">
                     Simulation • {sim.duration}
                   </div>
-                  <h2 className="mt-0.5 text-base font-semibold text-slate-900 dark:text-slate-100">
+                  <h2 className="mt-0.5 text-base font-semibold text-bs-text dark:text-slate-100">
                     {sim.title}
                   </h2>
-                  <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                  <p className="mt-1 text-sm text-bs-text-sub dark:text-slate-400">
                     {sim.description}
                   </p>
                   <div className="mt-2 flex flex-wrap gap-2">
@@ -75,7 +75,7 @@ export default function SimulationsPage() {
                   <div className="mt-3">
                     <Link
                       href={`/student/learn/simulations/${sim.slug}`}
-                      className="inline-flex rounded-xl bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700 dark:bg-[#00d4aa] dark:text-[#0d1117] dark:hover:bg-[#00bfa0]"
+                      className="inline-flex rounded-xl bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700 dark:bg-[#00d4aa] dark:text-[#0d1117] dark:hover:bg-[#00bfa0]"
                     >
                       Open Simulation →
                     </Link>

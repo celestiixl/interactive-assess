@@ -26,13 +26,13 @@ export default function TeksTooltip({ code }: { code: string }) {
       </span>
 
       {open && (
-        <div className="absolute z-50 w-80 left-1/2 -translate-x-1/2 mt-2 rounded-lg border bg-white p-3 text-sm text-slate-900 shadow-lg">
+        <div className="absolute z-50 w-80 left-1/2 -translate-x-1/2 mt-2 rounded-lg border bg-bs-surface p-3 text-sm text-bs-text shadow-lg">
           <div className="font-semibold">{label}</div>
           {entry?.strand && (
-            <div className="mt-1 text-xs text-slate-500">{entry.strand}</div>
+            <div className="mt-1 text-xs text-bs-text-sub">{entry.strand}</div>
           )}
           {entry?.description && (
-            <div className="mt-2 text-xs text-slate-700">
+            <div className="mt-2 text-xs text-bs-text-sub">
               {entry.description}
             </div>
           )}

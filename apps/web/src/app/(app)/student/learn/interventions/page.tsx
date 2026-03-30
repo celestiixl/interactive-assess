@@ -11,12 +11,12 @@ export default function InterventionQueuePage() {
   const queue = useMemo(() => buildInterventionQueue(progress), [progress]);
 
   return (
-    <main className="mx-auto w-full max-w-5xl p-6 text-slate-900">
+    <main className="mx-auto w-full max-w-5xl p-6 text-bs-text">
       <BackLink href="/student/learn" label="Back to hub" />
-      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
         <div>
           <h1 className="text-2xl font-bold">Intervention Queue</h1>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="mt-1 text-sm text-bs-text-sub">
             Priority lessons that need re-teach or targeted support.
           </p>
         </div>
@@ -51,7 +51,7 @@ export default function InterventionQueuePage() {
               <div className="mt-3">
                 <Link
                   href={item.href}
-                  className="rounded-xl bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800"
+                  className="rounded-xl bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-bs-bg"
                 >
                   Open Lesson
                 </Link>

@@ -26,10 +26,10 @@ export default function NotFound() {
             404
           </div>
 
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-bs-text">
             Specimen not found
           </h1>
-          <p className="mt-3 text-sm text-slate-600">
+          <p className="mt-3 text-sm text-bs-text-sub">
             This page doesn&apos;t exist in the BioSpark ecosystem. It may have
             been moved, deleted, or you may have followed a broken link.
           </p>

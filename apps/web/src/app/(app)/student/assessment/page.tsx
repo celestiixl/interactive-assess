@@ -16,7 +16,7 @@ function LinkCard({
   tone?: "slate" | "teal" | "amber" | "green" | "purple";
 }) {
   const tones: Record<string, string> = {
-    slate: "border-slate-200 bg-white/75 backdrop-blur-sm",
+    slate: "border-[var(--bs-border)] bg-white/75 backdrop-blur-sm",
     teal: "border-teal-200 bg-teal-50/40",
     amber: "border-amber-200 bg-amber-50/40",
     green: "border-green-200 bg-green-50/40",
@@ -34,14 +34,14 @@ function LinkCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <div className="text-sm font-semibold text-slate-900">{title}</div>
+            <div className="text-sm font-semibold text-bs-text">{title}</div>
             {badge ? (
-              <span className="rounded-full border bg-white/70 backdrop-blur-sm px-2 py-0.5 text-xs text-slate-600">
+              <span className="rounded-full border bg-white/70 backdrop-blur-sm px-2 py-0.5 text-xs text-bs-text-sub">
                 {badge}
               </span>
             ) : null}
           </div>
-          <div className="mt-1 text-sm text-slate-600">{desc}</div>
+          <div className="mt-1 text-sm text-bs-text-sub">{desc}</div>
         </div>
         <div className="text-lg opacity-70 group-hover:opacity-100">→</div>
       </div>
@@ -51,7 +51,7 @@ function LinkCard({
 
 export default function StudentAssessmentLabPage() {
   return (
-    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
+    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-bs-text">
       <PageContent className="flex-1 min-h-0 py-4">
         <div className="ia-vh-scroll h-full min-h-0 overflow-y-auto pr-1">
           <div className="ia-vh-grid flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
@@ -59,13 +59,13 @@ export default function StudentAssessmentLabPage() {
             <h1 className="text-3xl font-semibold tracking-tight">
               Assessment Lab
             </h1>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-bs-text-sub">
               Quick entry points for student-facing practice and interactive
               item testing.
             </p>
 
             <div className="mt-4 rounded-2xl border bg-white/95 p-4 shadow-sm">
-              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                 Quick links
               </div>
               <div className="mt-2 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -109,7 +109,7 @@ export default function StudentAssessmentLabPage() {
                 />
               </div>
 
-              <div className="mt-3 text-xs text-slate-500">
+              <div className="mt-3 text-xs text-bs-text-sub">
                 Tip: Use this page as your “sandbox hub” while you build.
               </div>
             </div>
@@ -119,42 +119,42 @@ export default function StudentAssessmentLabPage() {
             <div className="p-4 ia-card-soft">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="text-sm font-semibold text-slate-900">
+                  <div className="text-sm font-semibold text-bs-text">
                     Student Assessment Lab
                   </div>
-                  <div className="mt-1 text-sm text-slate-600">
+                  <div className="mt-1 text-sm text-bs-text-sub">
                     Sandbox screen to verify item rendering, pills, attempts,
                     and check behavior.
                   </div>
-                  <div className="mt-3 text-xs text-slate-500">
+                  <div className="mt-3 text-xs text-bs-text-sub">
                     (We&apos;ll wire real test data next.)
                   </div>
                 </div>
-                <div className="text-sm text-slate-500 tabular-nums">v0.1</div>
+                <div className="text-sm text-bs-text-sub tabular-nums">v0.1</div>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link
                   href="/student/assessment/items"
-                  className="rounded-2xl border bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                  className="rounded-2xl border bg-bs-bg px-4 py-3 text-sm font-semibold text-white hover:bg-bs-bg"
                 >
                   Open Items Test →
                 </Link>
                 <Link
                   href="/student/dashboard"
-                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-bs-text hover:bg-[var(--bs-raised)]"
                 >
                   Go to Dashboard →
                 </Link>
                 <Link
                   href="/student/learn"
-                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-bs-text hover:bg-[var(--bs-raised)]"
                 >
                   Open BioSpark Quest →
                 </Link>
                 <Link
                   href="/student/profile"
-                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-bs-text hover:bg-[var(--bs-raised)]"
                 >
                   Open My Profile →
                 </Link>
@@ -162,10 +162,10 @@ export default function StudentAssessmentLabPage() {
             </div>
 
             <div className="mt-4 p-4 ia-card-soft">
-              <div className="text-sm font-semibold text-slate-900">
+              <div className="text-sm font-semibold text-bs-text">
                 What this page is for
               </div>
-              <ul className="mt-3 space-y-2 text-sm text-slate-600">
+              <ul className="mt-3 space-y-2 text-sm text-bs-text-sub">
                 <li>
                   • Validate interactive items render correctly across screens.
                 </li>

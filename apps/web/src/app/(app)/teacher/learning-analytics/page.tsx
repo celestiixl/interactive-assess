@@ -32,13 +32,13 @@ export default function TeacherLearningAnalyticsPage() {
     : 0;
 
   return (
-    <main className="mx-auto w-full max-w-6xl p-6 text-slate-900">
+    <main className="mx-auto w-full max-w-6xl p-6 text-bs-text">
       <BackLink href="/teacher/dashboard" label="Back to dashboard" />
-      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold">Learning Analytics</h1>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-bs-text-sub">
               Completion funnel, check behavior, and stuck-point analysis.
             </p>
           </div>
@@ -52,29 +52,29 @@ export default function TeacherLearningAnalyticsPage() {
       </section>
 
       <section className="mt-4 grid gap-3 md:grid-cols-4">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="text-xs text-slate-500">Total Lessons</div>
+        <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm">
+          <div className="text-xs text-bs-text-sub">Total Lessons</div>
           <div className="mt-1 text-2xl font-bold">{funnel.totalLessons}</div>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="text-xs text-slate-500">Started</div>
+        <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm">
+          <div className="text-xs text-bs-text-sub">Started</div>
           <div className="mt-1 text-2xl font-bold">{startedPct}%</div>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="text-xs text-slate-500">Checked</div>
+        <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm">
+          <div className="text-xs text-bs-text-sub">Checked</div>
           <div className="mt-1 text-2xl font-bold">{checkedPct}%</div>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="text-xs text-slate-500">Completed</div>
+        <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm">
+          <div className="text-xs text-bs-text-sub">Completed</div>
           <div className="mt-1 text-2xl font-bold">{completePct}%</div>
         </div>
       </section>
 
-      <section className="mt-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-slate-900">Stuck Points</h2>
+      <section className="mt-4 rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
+        <h2 className="text-sm font-semibold text-bs-text">Stuck Points</h2>
         <div className="mt-3 grid gap-3 md:grid-cols-2">
           {stuck.length === 0 ? (
-            <div className="text-sm text-slate-500">No stuck points yet.</div>
+            <div className="text-sm text-bs-text-sub">No stuck points yet.</div>
           ) : (
             stuck.map((row) => (
               <div key={row.lessonId} className="rounded-2xl border border-amber-200 bg-amber-50 p-3">

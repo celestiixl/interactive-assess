@@ -23,8 +23,8 @@ const STATUS_CONFIG: Record<
 > = {
   not_started: {
     label: "Not Started",
-    color: "text-slate-600 bg-slate-100 border-slate-200",
-    dot: "bg-slate-400",
+    color: "text-bs-text-sub bg-bs-raised border-[var(--bs-border)]",
+    dot: "bg-bs-text-muted",
   },
   in_progress: {
     label: "In Progress",
@@ -82,7 +82,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
   const isPastDue = isDue && a.status !== "submitted" && a.status !== "graded";
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
+    <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm transition hover:shadow-md">
       {/* Header row */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -108,10 +108,10 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
               </span>
             )}
           </div>
-          <div className="mt-2 text-sm font-semibold text-slate-900">
+          <div className="mt-2 text-sm font-semibold text-bs-text">
             {a.title}
           </div>
-          <div className="mt-0.5 text-xs text-slate-500">{a.subject}</div>
+          <div className="mt-0.5 text-xs text-bs-text-sub">{a.subject}</div>
         </div>
 
         {/* Score */}
@@ -122,7 +122,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
             >
               {a.score}%
             </div>
-            <div className="text-xs text-slate-500">Score</div>
+            <div className="text-xs text-bs-text-sub">Score</div>
           </div>
         )}
       </div>
@@ -132,7 +132,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
         {a.teks.map((t) => (
           <span
             key={t}
-            className="rounded-full border border-slate-100 bg-slate-50 px-2 py-0.5 text-[10px] font-mono text-slate-600"
+            className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-2 py-0.5 text-[10px] font-mono text-bs-text-sub"
           >
             {t}
           </span>
@@ -142,13 +142,13 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
       {/* Progress bar (for in-progress) */}
       {(a.status === "in_progress" || a.status === "submitted") && (
         <div className="mt-2.5">
-          <div className="mb-1 flex items-center justify-between text-[10px] text-slate-500">
+          <div className="mb-1 flex items-center justify-between text-[10px] text-bs-text-sub">
             <span>
               {a.completedItems}/{a.totalItems} items
             </span>
             <span>{pct}%</span>
           </div>
-          <div className="h-1.5 w-full rounded-full bg-slate-100">
+          <div className="h-1.5 w-full rounded-full bg-bs-raised">
             <div
               className="h-1.5 rounded-full bg-amber-400 transition-all"
               style={{ width: `${pct}%` }}
@@ -159,7 +159,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
 
       {/* Footer row */}
       <div className="mt-3 flex items-center justify-between gap-3">
-        <div className="text-xs text-slate-500">
+        <div className="text-xs text-bs-text-sub">
           {a.status === "graded" || a.status === "submitted"
             ? `Submitted ${formatDate(a.submittedAt)}`
             : a.dueDate
@@ -170,7 +170,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
           {(a.status === "graded" || a.status === "submitted") && (
             <Link
               href={practiceHref(a)}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+              className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-1.5 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
             >
               Review topics
             </Link>
@@ -186,7 +186,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
           {a.status === "not_started" && (
             <Link
               href={`/practice?focus=${encodeURIComponent(a.teks[0] ?? "")}`}
-              className="rounded-xl bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
+              className="rounded-xl bg-bs-bg px-4 py-1.5 text-xs font-semibold text-white hover:bg-bs-bg"
             >
               Start →
             </Link>
@@ -271,7 +271,7 @@ function StudentAssignmentsPageContent() {
       : null;
 
   return (
-    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
+    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-bs-text">
       <BackLink href="/student/dashboard" label="Back to dashboard" />
       <PageBanner
         title="My Assignments"
@@ -280,13 +280,13 @@ function StudentAssignmentsPageContent() {
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href="/student/learn"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
           >
             Learning Hub
           </Link>
           <Link
             href="/student/profile"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
           >
             My Profile
           </Link>
@@ -301,17 +301,17 @@ function StudentAssignmentsPageContent() {
               {
                 label: "Active",
                 value: active.length,
-                color: "text-slate-900",
+                color: "text-bs-text",
               },
               {
                 label: "Due Today",
                 value: dueToday,
-                color: dueToday > 0 ? "text-amber-600" : "text-slate-900",
+                color: dueToday > 0 ? "text-amber-600" : "text-bs-text",
               },
               {
                 label: "Past Due",
                 value: pastDue,
-                color: pastDue > 0 ? "text-red-600" : "text-slate-900",
+                color: pastDue > 0 ? "text-red-600" : "text-bs-text",
               },
               {
                 label: "Coming Up",
@@ -321,12 +321,12 @@ function StudentAssignmentsPageContent() {
             ].map((s) => (
               <div
                 key={s.label}
-                className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm"
+                className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 text-center shadow-sm"
               >
                 <div className={`text-2xl font-bold tabular-nums ${s.color}`}>
                   {s.value}
                 </div>
-                <div className="mt-1 text-xs text-slate-500">{s.label}</div>
+                <div className="mt-1 text-xs text-bs-text-sub">{s.label}</div>
               </div>
             ))}
           </div>
@@ -340,8 +340,8 @@ function StudentAssignmentsPageContent() {
                 onClick={() => setTab(t)}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   tab === t
-                    ? "bg-slate-900 text-white"
-                    : "bg-white text-slate-700 hover:bg-slate-50"
+                    ? "bg-bs-bg text-white"
+                    : "bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
                 }`}
               >
                 {t === "active"
@@ -356,8 +356,8 @@ function StudentAssignmentsPageContent() {
               href="/student/assignments?kind=assignment"
               className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                 kindFilter === "assignment"
-                  ? "border-slate-900 bg-slate-900 text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  ? "border-[var(--bs-border)] bg-bs-bg text-white"
+                  : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
               }`}
             >
               Assignments
@@ -366,8 +366,8 @@ function StudentAssignmentsPageContent() {
               href="/student/assignments?kind=assessment"
               className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                 kindFilter === "assessment"
-                  ? "border-slate-900 bg-slate-900 text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  ? "border-[var(--bs-border)] bg-bs-bg text-white"
+                  : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
               }`}
             >
               Quizzes
@@ -381,8 +381,8 @@ function StudentAssignmentsPageContent() {
                 onClick={() => setDueFilter("all")}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                   dueFilter === "all"
-                    ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    ? "border-[var(--bs-border)] bg-bs-bg text-white"
+                    : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
                 }`}
               >
                 All active
@@ -392,8 +392,8 @@ function StudentAssignmentsPageContent() {
                 onClick={() => setDueFilter("due")}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                   dueFilter === "due"
-                    ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    ? "border-[var(--bs-border)] bg-bs-bg text-white"
+                    : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
                 }`}
               >
                 Due today ({dueToday})
@@ -403,8 +403,8 @@ function StudentAssignmentsPageContent() {
                 onClick={() => setDueFilter("past_due")}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                   dueFilter === "past_due"
-                    ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    ? "border-[var(--bs-border)] bg-bs-bg text-white"
+                    : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
                 }`}
               >
                 Past due ({pastDue})
@@ -414,8 +414,8 @@ function StudentAssignmentsPageContent() {
                 onClick={() => setDueFilter("coming_up")}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                   dueFilter === "coming_up"
-                    ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    ? "border-[var(--bs-border)] bg-bs-bg text-white"
+                    : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
                 }`}
               >
                 Coming up ({comingUp})
@@ -425,8 +425,8 @@ function StudentAssignmentsPageContent() {
 
           {/* Assignment list */}
           {displayed.length === 0 ? (
-            <div className="rounded-2xl border border-slate-100 bg-slate-50 px-6 py-12 text-center">
-              <div className="text-slate-500">
+            <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface px-6 py-12 text-center">
+              <div className="text-bs-text-sub">
                 {tab === "active"
                   ? "No active assignments right now. 🎉"
                   : "No completed assignments yet."}
@@ -434,7 +434,7 @@ function StudentAssignmentsPageContent() {
               {tab === "active" && (
                 <Link
                   href="/student/learn"
-                  className="mt-4 inline-block rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+                  className="mt-4 inline-block rounded-xl bg-bs-bg px-4 py-2 text-sm font-semibold text-white"
                 >
                   Go to Learning Hub →
                 </Link>
@@ -479,7 +479,7 @@ export default function StudentAssignmentsPage() {
   return (
     <Suspense
       fallback={
-        <main className="p-6 text-slate-900">Loading assignments...</main>
+        <main className="p-6 text-bs-text">Loading assignments...</main>
       }
     >
       <StudentAssignmentsPageContent />

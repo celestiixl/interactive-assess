@@ -28,9 +28,9 @@ function uid(prefix: string) {
 function SectionTitle(props: { title: string; subtitle?: string }) {
   return (
     <div className="space-y-0.5">
-      <div className="text-sm font-semibold text-slate-900">{props.title}</div>
+      <div className="text-sm font-semibold text-bs-text">{props.title}</div>
       {props.subtitle ? (
-        <div className="text-xs text-slate-500">{props.subtitle}</div>
+        <div className="text-xs text-bs-text-sub">{props.subtitle}</div>
       ) : null}
     </div>
   );
@@ -38,7 +38,7 @@ function SectionTitle(props: { title: string; subtitle?: string }) {
 
 function Pill(props: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">
+    <span className="inline-flex items-center rounded-full bg-bs-raised px-2 py-1 text-xs font-medium text-bs-text-sub">
       {props.children}
     </span>
   );
@@ -325,10 +325,10 @@ export default function TeacherBuilderPage() {
       <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">
+            <h1 className="text-2xl font-bold text-bs-text">
               Teacher Question Builder
             </h1>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-sm text-bs-text-sub">
               Build items quickly, tag TEKS, and preview exactly what students
               will see.
             </p>
@@ -336,7 +336,7 @@ export default function TeacherBuilderPage() {
 
           <div className="flex items-center gap-2">
             <button
-              className="rounded-xl border bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
+              className="rounded-xl border bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
               onClick={() => setShowSavePanel((v) => !v)}
               type="button"
             >
@@ -355,7 +355,7 @@ export default function TeacherBuilderPage() {
         <div className="grid gap-6 xl:gap-8 xl:grid-cols-[1.15fr_0.85fr]">
           {/* LEFT: Builder */}
           <div className="space-y-6">
-            <div className="rounded-3xl border bg-white p-5 shadow-sm">
+            <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
               {/* Item type segmented control */}
               <SectionTitle
                 title="Item type"
@@ -376,7 +376,7 @@ export default function TeacherBuilderPage() {
                   subtitle="Student-facing directions. Keep it short and visual when possible."
                 />
                 <textarea
-                  className="mt-2 w-full border border-slate-200 p-3 text-sm text-slate-900 focus:border-slate-300 focus:outline-none ia-card-soft "
+                  className="mt-2 w-full border border-[var(--bs-border)] p-3 text-sm text-bs-text focus:border-bs-teal focus:outline-none ia-card-soft "
                   rows={4}
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
@@ -384,7 +384,7 @@ export default function TeacherBuilderPage() {
                 />
               </div>
 
-              <div className="mt-6 rounded-2xl border bg-white p-4">
+              <div className="mt-6 rounded-2xl border bg-bs-surface p-4">
                 <SectionTitle
                   title="Glossary"
                   subtitle="To link a word in the passage, wrap it like [[word|key=wordKey]]."
@@ -392,31 +392,31 @@ export default function TeacherBuilderPage() {
 
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
                   <input
-                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    className="w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft"
                     value={glossarySurface}
                     onChange={(e) => setGlossarySurface(e.target.value)}
                     placeholder="In-passage term (e.g., photosynthesis)"
                   />
                   <input
-                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    className="w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft"
                     value={glossaryEsSurface}
                     onChange={(e) => setGlossaryEsSurface(e.target.value)}
                     placeholder="Spanish term shown in popover (optional)"
                   />
                   <input
-                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    className="w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft"
                     value={glossaryPos}
                     onChange={(e) => setGlossaryPos(e.target.value)}
                     placeholder="Part of speech (optional)"
                   />
                   <input
-                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    className="w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft"
                     value={glossaryEs}
                     onChange={(e) => setGlossaryEs(e.target.value)}
                     placeholder="Spanish meaning/definition"
                   />
                   <input
-                    className="w-full border border-slate-200 p-2 text-sm ia-card-soft"
+                    className="w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft"
                     value={glossaryEn}
                     onChange={(e) => setGlossaryEn(e.target.value)}
                     placeholder="English meaning/translation"
@@ -443,23 +443,23 @@ export default function TeacherBuilderPage() {
                     {glossary.map((g) => (
                       <div
                         key={g.key}
-                        className="rounded-xl border border-slate-200 bg-slate-50 p-3"
+                        className="rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3"
                       >
                         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                          <div className="text-xs font-semibold text-slate-600">
+                          <div className="text-xs font-semibold text-bs-text-sub">
                             key: {g.key}
                           </div>
                           <div className="flex gap-2">
                             <button
                               type="button"
-                              className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                              className="rounded-lg border border-[var(--bs-border)] bg-bs-surface px-2 py-1 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                               onClick={() => insertGlossaryToken(g)}
                             >
                               Insert token
                             </button>
                             <button
                               type="button"
-                              className="rounded-lg border border-rose-200 bg-white px-2 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
+                              className="rounded-lg border border-rose-200 bg-bs-surface px-2 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
                               onClick={() => removeGlossary(g.key)}
                             >
                               Remove
@@ -469,7 +469,7 @@ export default function TeacherBuilderPage() {
 
                         <div className="grid gap-2 sm:grid-cols-2">
                           <input
-                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            className="w-full border border-[var(--bs-border)] p-2 text-sm bg-bs-surface"
                             value={g.surface}
                             onChange={(e) =>
                               patchGlossary(g.key, { surface: e.target.value })
@@ -477,7 +477,7 @@ export default function TeacherBuilderPage() {
                             placeholder="In-passage term"
                           />
                           <input
-                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            className="w-full border border-[var(--bs-border)] p-2 text-sm bg-bs-surface"
                             value={g.esSurface ?? ""}
                             onChange={(e) =>
                               patchGlossary(g.key, {
@@ -487,7 +487,7 @@ export default function TeacherBuilderPage() {
                             placeholder="Spanish term"
                           />
                           <input
-                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            className="w-full border border-[var(--bs-border)] p-2 text-sm bg-bs-surface"
                             value={g.partOfSpeech ?? ""}
                             onChange={(e) =>
                               patchGlossary(g.key, {
@@ -497,7 +497,7 @@ export default function TeacherBuilderPage() {
                             placeholder="Part of speech"
                           />
                           <input
-                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            className="w-full border border-[var(--bs-border)] p-2 text-sm bg-bs-surface"
                             value={g.es}
                             onChange={(e) =>
                               patchGlossary(g.key, { es: e.target.value })
@@ -505,7 +505,7 @@ export default function TeacherBuilderPage() {
                             placeholder="Spanish"
                           />
                           <input
-                            className="w-full border border-slate-200 p-2 text-sm bg-white"
+                            className="w-full border border-[var(--bs-border)] p-2 text-sm bg-bs-surface"
                             value={g.en}
                             onChange={(e) =>
                               patchGlossary(g.key, { en: e.target.value })
@@ -521,7 +521,7 @@ export default function TeacherBuilderPage() {
             </div>
 
             {/* TEKS tagging */}
-            <div className="rounded-3xl border bg-white p-5 shadow-sm">
+            <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
               <SectionTitle
                 title="TEKS tags"
                 subtitle="Primary TEKS is required. Secondary is optional for search/reporting."
@@ -529,11 +529,11 @@ export default function TeacherBuilderPage() {
 
               <div className="mt-4 grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="text-xs font-semibold text-slate-700">
+                  <label className="text-xs font-semibold text-bs-text-sub">
                     Primary TEKS
                   </label>
                   <select
-                    className="mt-1 w-full border border-slate-200 p-2 text-sm ia-card-soft "
+                    className="mt-1 w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft "
                     value={primaryTeks}
                     onChange={(e) => setPrimaryTeks(e.target.value)}
                   >
@@ -543,17 +543,17 @@ export default function TeacherBuilderPage() {
                       </option>
                     ))}
                   </select>
-                  <div className="mt-1 text-xs text-slate-500">
+                  <div className="mt-1 text-xs text-bs-text-sub">
                     <TeksTooltip code={primaryTeks} />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-slate-700">
+                  <label className="text-xs font-semibold text-bs-text-sub">
                     Secondary TEKS (optional)
                   </label>
                   <select
-                    className="mt-1 w-full border border-slate-200 p-2 text-sm ia-card-soft "
+                    className="mt-1 w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft "
                     value={secondaryTeks}
                     onChange={(e) => setSecondaryTeks(e.target.value)}
                   >
@@ -564,7 +564,7 @@ export default function TeacherBuilderPage() {
                       </option>
                     ))}
                   </select>
-                  <div className="mt-1 text-xs text-slate-500">
+                  <div className="mt-1 text-xs text-bs-text-sub">
                     {secondaryTeks ? <TeksTooltip code={secondaryTeks} /> : "—"}
                   </div>
                 </div>
@@ -579,7 +579,7 @@ export default function TeacherBuilderPage() {
 
             {/* Type-specific builder */}
             {type === "mcq" ? (
-              <div className="rounded-3xl border bg-white p-5 shadow-sm">
+              <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
                 <SectionTitle
                   title="Answer choices"
                   subtitle="Pick the correct answer. Students see A/B/C/D style choices."
@@ -595,7 +595,7 @@ export default function TeacherBuilderPage() {
                         aria-label={`Mark choice ${i + 1} correct`}
                       />
                       <input
-                        className="w-full border border-slate-200 p-2 text-sm focus:border-slate-300 focus:outline-none ia-card-soft "
+                        className="w-full border border-[var(--bs-border)] p-2 text-sm focus:border-[var(--bs-border)] focus:outline-none ia-card-soft "
                         value={c.text}
                         onChange={(e) =>
                           setMcqChoices((prev) =>
@@ -610,7 +610,7 @@ export default function TeacherBuilderPage() {
                       />
                       <button
                         type="button"
-                        className="rounded-xl border bg-white px-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                        className="rounded-xl border bg-bs-surface px-2 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                         onClick={() => {
                           setMcqChoices((prev) => {
                             if (prev.length <= 2) return prev;
@@ -630,7 +630,7 @@ export default function TeacherBuilderPage() {
                 <div className="mt-3">
                   <button
                     type="button"
-                    className="rounded-xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    className="rounded-xl border bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                     onClick={() =>
                       setMcqChoices((prev) => [
                         ...prev,
@@ -655,14 +655,14 @@ export default function TeacherBuilderPage() {
                     {buckets.map((b) => (
                       <div key={b.id} className="flex items-center gap-2">
                         <input
-                          className="w-full border border-slate-200 p-2 text-sm ia-card-soft "
+                          className="w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft "
                           value={b.label}
                           onChange={(e) => setBucketLabel(b.id, e.target.value)}
                           placeholder="Category name"
                         />
                         <button
                           type="button"
-                          className="rounded-xl border bg-white px-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                          className="rounded-xl border bg-bs-surface px-2 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                           onClick={() => {
                             setBuckets((prev) =>
                               prev.filter((x) => x.id !== b.id),
@@ -689,7 +689,7 @@ export default function TeacherBuilderPage() {
                   </div>
                   <button
                     type="button"
-                    className="mt-3 rounded-xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    className="mt-3 rounded-xl border bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                     onClick={() =>
                       setBuckets((prev) => [
                         ...prev,
@@ -713,14 +713,14 @@ export default function TeacherBuilderPage() {
                         className="grid grid-cols-1 gap-2 md:grid-cols-[1fr,220px,90px]"
                       >
                         <input
-                          className="w-full border border-slate-200 p-2 text-sm ia-card-soft "
+                          className="w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft "
                           value={c.text}
                           onChange={(e) => setCardText(c.id, e.target.value)}
                           placeholder="Card text (keep it short)"
                         />
 
                         <select
-                          className="w-full border border-slate-200 p-2 text-sm ia-card-soft "
+                          className="w-full border border-[var(--bs-border)] p-2 text-sm ia-card-soft "
                           value={answerKey[c.id] ?? ""}
                           onChange={(e) => setCardBucket(c.id, e.target.value)}
                         >
@@ -734,7 +734,7 @@ export default function TeacherBuilderPage() {
 
                         <button
                           type="button"
-                          className="rounded-xl border bg-white px-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                          className="rounded-xl border bg-bs-surface px-2 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                           onClick={() => {
                             setCards((prev) =>
                               prev.filter((x) => x.id !== c.id),
@@ -760,7 +760,7 @@ export default function TeacherBuilderPage() {
 
                   <button
                     type="button"
-                    className="mt-3 rounded-xl border bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    className="mt-3 rounded-xl border bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                     onClick={() =>
                       setCards((prev) => [...prev, { id: uid("c"), text: "" }])
                     }
@@ -768,7 +768,7 @@ export default function TeacherBuilderPage() {
                     + Add card
                   </button>
 
-                  <div className="mt-3 text-xs text-slate-500">
+                  <div className="mt-3 text-xs text-bs-text-sub">
                     Tip: The “Answer key” dropdown is what makes this
                     auto-gradeable.
                   </div>
@@ -777,7 +777,7 @@ export default function TeacherBuilderPage() {
             ) : null}
 
             {type === "inline_choice" ? (
-              <div className="rounded-3xl border bg-white p-5 shadow-sm">
+              <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
                 <SectionTitle
                   title="Inline Choice Builder"
                   subtitle="Write passage text with [[blankId]] markers, then define options per blank."
@@ -802,7 +802,7 @@ export default function TeacherBuilderPage() {
             ) : null}
 
             {type === "hotspot" ? (
-              <div className="rounded-3xl border bg-white p-5 shadow-sm">
+              <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
                 <SectionTitle
                   title="Hotspot image"
                   subtitle="Upload a local image OR paste a URL. (Local upload stays in your browser session unless you later add saving.)"
@@ -810,8 +810,8 @@ export default function TeacherBuilderPage() {
 
                 <div className="mt-3 grid gap-3 md:grid-cols-2">
                   {/* Local file upload */}
-                  <div className="rounded-2xl border bg-white p-3 shadow-sm">
-                    <label className="text-xs font-semibold text-slate-700">
+                  <div className="rounded-2xl border bg-bs-surface p-3 shadow-sm">
+                    <label className="text-xs font-semibold text-bs-text-sub">
                       Upload image (local file)
                     </label>
                     <input
@@ -836,12 +836,12 @@ export default function TeacherBuilderPage() {
                     />
                     <label
                       htmlFor="hotspotFileInput"
-                      className="mt-2 inline-flex cursor-pointer items-center justify-center rounded-xl border bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
+                      className="mt-2 inline-flex cursor-pointer items-center justify-center rounded-xl border bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
                     >
                       Choose file
                     </label>
 
-                    <div className="mt-2 text-xs text-slate-600">
+                    <div className="mt-2 text-xs text-bs-text-sub">
                       {hotspotLocalUrl ? (
                         <>
                           Using local file:{" "}
@@ -850,7 +850,7 @@ export default function TeacherBuilderPage() {
                           </span>{" "}
                           <button
                             type="button"
-                            className="ml-2 rounded-lg border bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                            className="ml-2 rounded-lg border bg-bs-surface px-2 py-1 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                             onClick={() => {
                               setHotspotLocalUrl((prev) => {
                                 if (prev) URL.revokeObjectURL(prev);
@@ -871,17 +871,17 @@ export default function TeacherBuilderPage() {
                   </div>
 
                   {/* URL input */}
-                  <div className="rounded-2xl border bg-white p-3 shadow-sm">
-                    <label className="text-xs font-semibold text-slate-700">
+                  <div className="rounded-2xl border bg-bs-surface p-3 shadow-sm">
+                    <label className="text-xs font-semibold text-bs-text-sub">
                       Or paste image URL
                     </label>
                     <input
-                      className="mt-2 w-full rounded-2xl border border-slate-200 bg-white p-2 text-sm shadow-sm focus:border-slate-300 focus:outline-none"
+                      className="mt-2 w-full rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-2 text-sm shadow-sm focus:border-[var(--bs-border)] focus:outline-none"
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
                       placeholder="Example: https://... or /images/cell.png"
                     />
-                    <div className="mt-2 text-xs text-slate-600">
+                    <div className="mt-2 text-xs text-bs-text-sub">
                       Tip: If you upload a local file, it overrides the URL
                       preview.
                     </div>
@@ -890,10 +890,10 @@ export default function TeacherBuilderPage() {
 
                 {/* Preview */}
                 <div className="mt-4">
-                  <div className="text-xs font-semibold text-slate-700">
+                  <div className="text-xs font-semibold text-bs-text-sub">
                     Preview
                   </div>
-                  <div className="mt-2 aspect-video w-full overflow-hidden rounded-2xl border bg-white shadow-sm">
+                  <div className="mt-2 aspect-video w-full overflow-hidden rounded-2xl border bg-bs-surface shadow-sm">
                     {hotspotImage ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -902,13 +902,13 @@ export default function TeacherBuilderPage() {
                         className="h-full w-full object-contain"
                       />
                     ) : (
-                      <div className="grid h-full place-items-center text-xs text-slate-500">
+                      <div className="grid h-full place-items-center text-xs text-bs-text-sub">
                         Add an image to preview here
                       </div>
                     )}
                   </div>
 
-                  <div className="mt-2 text-xs text-slate-500">
+                  <div className="mt-2 text-xs text-bs-text-sub">
                     Next step (we can patch next): click-to-place hotspots on
                     the image and auto-generate region coords.
                   </div>
@@ -918,7 +918,7 @@ export default function TeacherBuilderPage() {
 
             {/* CER Builder */}
             {type === "cer" ? (
-              <div className="rounded-3xl border bg-white p-5 shadow-sm">
+              <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
                 <SectionTitle
                   title="CER Item Builder"
                   subtitle="Configure the Claim-Evidence-Reasoning item type."
@@ -935,13 +935,13 @@ export default function TeacherBuilderPage() {
             ) : null}
 
             {/* Supports */}
-            <div className="rounded-3xl border bg-white p-5 shadow-sm">
+            <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
               <SectionTitle
                 title="EB supports"
                 subtitle="Sentence stems appear under the question for students who enable supports."
               />
               <textarea
-                className="mt-3 w-full rounded-2xl border border-slate-200 bg-white p-3 text-sm shadow-sm focus:border-slate-300 focus:outline-none"
+                className="mt-3 w-full rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3 text-sm shadow-sm focus:border-[var(--bs-border)] focus:outline-none"
                 rows={4}
                 value={sentenceStems}
                 onChange={(e) => setSentenceStems(e.target.value)}
@@ -953,13 +953,13 @@ export default function TeacherBuilderPage() {
 
             {/* Save/Copy panel */}
             {showSavePanel ? (
-              <div className="rounded-3xl border bg-white p-5 shadow-sm">
+              <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
                 <SectionTitle
                   title="Save / Copy Item (for now)"
                   subtitle="You don't have a teacher database yet, so copying JSON is how you move items into your item bank."
                 />
                 <textarea
-                  className="mt-3 w-full border border-slate-200 p-3 font-mono text-xs ia-card-soft "
+                  className="mt-3 w-full border border-[var(--bs-border)] p-3 font-mono text-xs ia-card-soft "
                   rows={12}
                   readOnly
                   value={JSON.stringify(itemJson, null, 2)}
@@ -970,12 +970,12 @@ export default function TeacherBuilderPage() {
 
           {/* RIGHT: Live Preview */}
           <div className="h-fit xl:sticky xl:top-6">
-            <div className="rounded-3xl border bg-white p-5 shadow-sm">
+            <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
               <div className="mb-3 flex items-center justify-between">
-                <div className="text-sm font-semibold text-slate-900">
+                <div className="text-sm font-semibold text-bs-text">
                   Live preview
                 </div>
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-bs-text-sub">
                   Updates as you type
                 </span>
               </div>
@@ -989,7 +989,7 @@ export default function TeacherBuilderPage() {
                     {secondaryTeks ? <Pill>{secondaryTeks}</Pill> : null}
                   </div>
 
-                  <div className="mt-3 text-base font-semibold text-slate-900">
+                  <div className="mt-3 text-base font-semibold text-bs-text">
                     {prompt.trim() ? (
                       <GlossaryText
                         text={prompt}
@@ -998,14 +998,14 @@ export default function TeacherBuilderPage() {
                         showSupport={false}
                       />
                     ) : (
-                      <span className="text-slate-400">Prompt preview…</span>
+                      <span className="text-bs-text-muted">Prompt preview…</span>
                     )}
                   </div>
                 </PreviewCard>
 
                 {type === "mcq" ? (
                   <PreviewCard>
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-sm font-semibold text-bs-text">
                       Choices
                     </div>
                     <div className="mt-3 space-y-2">
@@ -1018,17 +1018,17 @@ export default function TeacherBuilderPage() {
                               "flex items-start gap-3 rounded-2xl border p-3",
                               correct
                                 ? "border-emerald-300 bg-emerald-50"
-                                : "border-slate-200 bg-white/0",
+                                : "border-[var(--bs-border)] bg-bs-surface/0",
                             ].join(" ")}
                           >
-                            <div className="mt-1 text-xs font-semibold text-slate-600 w-5">
+                            <div className="mt-1 text-xs font-semibold text-bs-text-sub w-5">
                               {String.fromCharCode(65 + i)}.
                             </div>
-                            <div className="flex-1 text-sm text-slate-900">
+                            <div className="flex-1 text-sm text-bs-text">
                               {c.text.trim() ? (
                                 c.text
                               ) : (
-                                <span className="text-slate-400">Choice…</span>
+                                <span className="text-bs-text-muted">Choice…</span>
                               )}
                             </div>
                           </div>
@@ -1040,20 +1040,20 @@ export default function TeacherBuilderPage() {
 
                 {type === "dragdrop" ? (
                   <PreviewCard>
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-sm font-semibold text-bs-text">
                       Card Sort preview
                     </div>
 
                     {/* WORD BANK (top) */}
                     <div className="mt-3 overflow-hidden ia-card-soft ">
-                      <div className="flex items-center justify-between bg-slate-100 px-3 py-2 border-b">
+                      <div className="flex items-center justify-between bg-bs-raised px-3 py-2 border-b">
                         <div className="flex items-center gap-2">
-                          <span className="inline-block h-2 w-2 rounded-full bg-slate-400" />
-                          <div className="text-sm font-semibold text-slate-800">
+                          <span className="inline-block h-2 w-2 rounded-full bg-bs-text-muted" />
+                          <div className="text-sm font-semibold text-bs-text">
                             Word Bank
                           </div>
                         </div>
-                        <div className="text-xs text-slate-500">drag cards</div>
+                        <div className="text-xs text-bs-text-sub">drag cards</div>
                       </div>
 
                       <div className="p-3">
@@ -1061,13 +1061,13 @@ export default function TeacherBuilderPage() {
                           {cards.map((c) => (
                             <div
                               key={c.id}
-                              className="rounded-xl border bg-white px-3 py-2 text-sm shadow-sm text-slate-900"
+                              className="rounded-xl border bg-bs-surface px-3 py-2 text-sm shadow-sm text-bs-text"
                             >
                               {c.text.trim() ? c.text : "Card…"}
                             </div>
                           ))}
                           {cards.length === 0 ? (
-                            <div className="text-sm text-slate-500">
+                            <div className="text-sm text-bs-text-sub">
                               Add cards to populate the word bank.
                             </div>
                           ) : null}
@@ -1077,7 +1077,7 @@ export default function TeacherBuilderPage() {
 
                     {/* CATEGORIES (bottom) */}
                     <div className="mt-4">
-                      <div className="text-xs font-semibold text-slate-700 mb-2">
+                      <div className="text-xs font-semibold text-bs-text-sub mb-2">
                         Categories
                       </div>
 
@@ -1087,22 +1087,22 @@ export default function TeacherBuilderPage() {
                             key={b.id}
                             className="overflow-hidden min-h-42.5 ia-card-soft "
                           >
-                            <div className="flex items-center justify-between bg-slate-100 px-3 py-2 border-b">
+                            <div className="flex items-center justify-between bg-bs-raised px-3 py-2 border-b">
                               <div className="flex items-center gap-2">
-                                <span className="inline-block h-2 w-2 rounded-full bg-slate-400" />
-                                <div className="text-sm font-semibold text-slate-800">
+                                <span className="inline-block h-2 w-2 rounded-full bg-bs-text-muted" />
+                                <div className="text-sm font-semibold text-bs-text">
                                   {b.label || "Category…"}
                                 </div>
                               </div>
-                              <div className="text-xs text-slate-500">
+                              <div className="text-xs text-bs-text-sub">
                                 drop zone
                               </div>
                             </div>
 
                             {/* Drop space */}
                             <div className="p-3">
-                              <div className="min-h-27.5 rounded-xl border border-dashed border-slate-300 p-3">
-                                <div className="text-sm text-slate-500">
+                              <div className="min-h-27.5 rounded-xl border border-dashed border-[var(--bs-border)] p-3">
+                                <div className="text-sm text-bs-text-sub">
                                   Drop cards here.
                                 </div>
                                 {/* show what WOULD be inside based on answerKey */}
@@ -1112,7 +1112,7 @@ export default function TeacherBuilderPage() {
                                     .map((c) => (
                                       <div
                                         key={c.id}
-                                        className="w-full rounded-xl border bg-white px-3 py-2 text-sm shadow-sm text-slate-900"
+                                        className="w-full rounded-xl border bg-bs-surface px-3 py-2 text-sm shadow-sm text-bs-text"
                                       >
                                         {c.text.trim() ? c.text : "Card…"}
                                       </div>
@@ -1125,7 +1125,7 @@ export default function TeacherBuilderPage() {
                       </div>
 
                       {buckets.length === 0 ? (
-                        <div className="text-sm text-slate-500">
+                        <div className="text-sm text-bs-text-sub">
                           Add categories to preview the drop zones.
                         </div>
                       ) : null}
@@ -1135,18 +1135,18 @@ export default function TeacherBuilderPage() {
 
                 {type === "hotspot" ? (
                   <PreviewCard>
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-sm font-semibold text-bs-text">
                       Hotspot
                     </div>
-                    <div className="mt-2 text-xs text-slate-600">
+                    <div className="mt-2 text-xs text-bs-text-sub">
                       Image:{" "}
                       {imageUrl.trim() ? (
                         imageUrl
                       ) : (
-                        <span className="text-slate-400">none</span>
+                        <span className="text-bs-text-muted">none</span>
                       )}
                     </div>
-                    <div className="mt-3 aspect-video w-full rounded-2xl border grid place-items-center text-xs text-slate-500">
+                    <div className="mt-3 aspect-video w-full rounded-2xl border grid place-items-center text-xs text-bs-text-sub">
                       Image preview (hotspot placement later)
                     </div>
                   </PreviewCard>
@@ -1154,15 +1154,15 @@ export default function TeacherBuilderPage() {
 
                 {type === "inline_choice" ? (
                   <PreviewCard>
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-sm font-semibold text-bs-text">
                       Inline Choice preview
                     </div>
-                    <div className="mt-3 text-sm text-slate-600">
+                    <div className="mt-3 text-sm text-bs-text-sub">
                       Blanks: {Object.keys(clozeOptions).length}
                     </div>
-                    <div className="mt-2 whitespace-pre-wrap text-sm text-slate-900">
+                    <div className="mt-2 whitespace-pre-wrap text-sm text-bs-text">
                       {clozeText.trim() || (
-                        <span className="text-slate-400">
+                        <span className="text-bs-text-muted">
                           Cloze text preview…
                         </span>
                       )}
@@ -1172,27 +1172,27 @@ export default function TeacherBuilderPage() {
 
                 {type === "cer" ? (
                   <PreviewCard>
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-sm font-semibold text-bs-text">
                       CER Configuration
                     </div>
                     <div className="mt-3 space-y-2 text-xs">
                       <div>
-                        <span className="text-slate-600">Mode:</span>
+                        <span className="text-bs-text-sub">Mode:</span>
                         <span className="ml-2 font-semibold">
                           {cerItem?.mode || "open"}
                         </span>
                       </div>
                       <div>
-                        <span className="text-slate-600">Evidence items:</span>
+                        <span className="text-bs-text-sub">Evidence items:</span>
                         <span className="ml-2 font-semibold">
                           {(cerItem?.evidenceBank || []).length}
                         </span>
                       </div>
                       <div className="mt-2">
-                        <span className="text-slate-600 block mb-1">
+                        <span className="text-bs-text-sub block mb-1">
                           Constraints:
                         </span>
-                        <ul className="text-slate-700 space-y-1 pl-2">
+                        <ul className="text-bs-text-sub space-y-1 pl-2">
                           <li>
                             Min Evidence:{" "}
                             {cerItem?.constraints?.minEvidence ?? 1}
@@ -1214,10 +1214,10 @@ export default function TeacherBuilderPage() {
 
                 {supports?.sentenceStems?.length ? (
                   <PreviewCard>
-                    <div className="text-sm font-semibold text-slate-900">
+                    <div className="text-sm font-semibold text-bs-text">
                       Sentence stems
                     </div>
-                    <ul className="mt-2 list-disc pl-5 text-sm text-slate-800 space-y-1">
+                    <ul className="mt-2 list-disc pl-5 text-sm text-bs-text space-y-1">
                       {supports.sentenceStems.map((s, i) => (
                         <li key={i}>{s}</li>
                       ))}

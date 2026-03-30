@@ -194,8 +194,8 @@ export default function DragDrop({
         <div className="font-semibold">Drag & Drop item is missing data</div>
         <div className="mt-1 text-sm">
           Expected either{" "}
-          <code className="rounded bg-white/60 px-1">tokens/buckets</code> or{" "}
-          <code className="rounded bg-white/60 px-1">cards/zones</code>.
+          <code className="rounded bg-bs-surface px-1">tokens/buckets</code> or{" "}
+          <code className="rounded bg-bs-surface px-1">cards/zones</code>.
         </div>
       </div>
     );
@@ -218,7 +218,7 @@ export default function DragDrop({
 
       {/* Word Bank */}
       <div
-        className="sticky top-2 z-10 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm sm:static"
+        className="sticky top-2 z-10 overflow-hidden rounded-2xl border border-[var(--bs-border)] bg-bs-surface shadow-sm sm:static"
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -226,21 +226,21 @@ export default function DragDrop({
           if (id) dropToWordBank(id);
         }}
       >
-        <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-3 py-2">
+        <div className="flex items-center justify-between border-b border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2">
           <div className="flex items-center gap-2">
-            <span className="inline-block h-2 w-2 rounded-full bg-slate-400" />
-            <div className="text-sm font-semibold text-slate-800">
+            <span className="inline-block h-2 w-2 rounded-full bg-bs-text-muted" />
+            <div className="text-sm font-semibold text-bs-text">
               Word Bank
             </div>
           </div>
-          <div className="text-xs text-slate-500">
+          <div className="text-xs text-bs-text-sub">
             Drag cards into a category
           </div>
         </div>
 
-        <div className="bg-white p-3">
+        <div className="bg-bs-surface p-3">
           {bank.length === 0 ? (
-            <div className="text-sm text-slate-500">All cards placed.</div>
+            <div className="text-sm text-bs-text-sub">All cards placed.</div>
           ) : (
             <div className="flex flex-wrap gap-2">
               {bank.map((id) => {
@@ -253,8 +253,8 @@ export default function DragDrop({
                     onDragStart={(e) => startCardDrag(e, id, c.text)}
                     onDragEnd={() => setDragId(null)}
                     className={[
-                      "inline-flex max-w-full cursor-grab select-none rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm",
-                      "hover:bg-slate-50 active:cursor-grabbing",
+                      "inline-flex max-w-full cursor-grab select-none rounded-full border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-medium text-bs-text-sub shadow-sm",
+                      "hover:bg-[var(--bs-raised)] active:cursor-grabbing",
                       dragId === id ? "ring-2 ring-emerald-300" : "",
                     ].join(" ")}
                   >
@@ -274,8 +274,8 @@ export default function DragDrop({
       </div>
 
       {/* Categories */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
-        <div className="text-xs font-semibold text-slate-700 mb-2">
+      <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3 shadow-sm">
+        <div className="text-xs font-semibold text-bs-text-sub mb-2">
           Categories
         </div>
 
@@ -283,7 +283,7 @@ export default function DragDrop({
           {safe.zones.map((z) => (
             <div
               key={z.id}
-              className="min-h-47.5 overflow-hidden rounded-2xl border border-slate-200 bg-white"
+              className="min-h-47.5 overflow-hidden rounded-2xl border border-[var(--bs-border)] bg-bs-surface"
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => {
                 e.preventDefault();
@@ -291,23 +291,23 @@ export default function DragDrop({
                 if (id) dropToZone(z.id, id);
               }}
             >
-              <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-3 py-2">
+              <div className="flex items-center justify-between border-b border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2">
                 <div className="flex items-center gap-2">
-                  <span className="inline-block h-2 w-2 rounded-full bg-slate-400" />
-                  <div className="text-sm font-semibold text-slate-800">
+                  <span className="inline-block h-2 w-2 rounded-full bg-bs-text-muted" />
+                  <div className="text-sm font-semibold text-bs-text">
                     {z.label}
                   </div>
                 </div>
-                <div className="text-xs text-slate-500">
+                <div className="text-xs text-bs-text-sub">
                   {(placement[z.id] ?? []).length} card
                   {(placement[z.id] ?? []).length === 1 ? "" : "s"}
                 </div>
               </div>
 
               <div className="p-3">
-                <div className="min-h-30 rounded-xl border border-dashed border-slate-300 bg-slate-50/40 p-3">
+                <div className="min-h-30 rounded-xl border border-dashed border-[var(--bs-border)] bg-[var(--bs-raised)]/40 p-3">
                   {(placement[z.id] ?? []).length === 0 ? (
-                    <div className="text-sm text-slate-500">
+                    <div className="text-sm text-bs-text-sub">
                       Drop cards here.
                     </div>
                   ) : (
@@ -322,8 +322,8 @@ export default function DragDrop({
                             onDragStart={(e) => startCardDrag(e, id, c.text)}
                             onDragEnd={() => setDragId(null)}
                             className={[
-                              "inline-flex max-w-full cursor-grab select-none rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm",
-                              "hover:bg-slate-50 active:cursor-grabbing",
+                              "inline-flex max-w-full cursor-grab select-none rounded-full border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-medium text-bs-text-sub shadow-sm",
+                              "hover:bg-[var(--bs-raised)] active:cursor-grabbing",
                               dragId === id ? "ring-2 ring-emerald-300" : "",
                             ].join(" ")}
                           >

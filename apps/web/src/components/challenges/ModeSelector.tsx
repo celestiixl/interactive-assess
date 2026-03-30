@@ -15,8 +15,8 @@ const MODE_META: Array<{ mode: ChallengeMode; label: string; icon: string }> = [
 
 export default function ModeSelector({ selectedMode, availableModes, onSelect }: Props) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-3">
-      <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
+    <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3">
+      <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
         Choose mission style
       </div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -33,8 +33,8 @@ export default function ModeSelector({ selectedMode, availableModes, onSelect }:
                 active
                   ? "border-violet-400 bg-violet-50 text-violet-800"
                   : enabled
-                    ? "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                    : "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400"
+                    ? "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"
+                    : "cursor-not-allowed border-[var(--bs-border)] bg-[var(--bs-raised)] text-bs-text-muted"
               }`}
             >
               <span className="mr-1">{item.icon}</span>

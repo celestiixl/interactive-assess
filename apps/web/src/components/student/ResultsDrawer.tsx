@@ -49,27 +49,27 @@ export default function ResultsDrawer({
       {/* Scrim */}
       <button
         aria-label="Close results"
-        className="absolute inset-0 bg-slate-900/45"
+        className="absolute inset-0 bg-bs-teal/45"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <aside className="relative z-10 w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
-        <div className="border-b border-slate-200 px-5 py-4">
+      <aside className="relative z-10 w-full max-w-2xl overflow-hidden rounded-2xl border border-[var(--bs-border)] bg-bs-surface shadow-xl">
+        <div className="border-b border-[var(--bs-border)] px-5 py-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                 Check result
               </div>
-              <div className="mt-1 text-lg font-semibold text-slate-900">
+              <div className="mt-1 text-lg font-semibold text-bs-text">
                 {summary}
               </div>
             </div>
             <span
               className={`rounded-full px-3 py-1 text-xs font-semibold ${
                 correct
-                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                  : "bg-amber-50 text-amber-700 border border-amber-200"
+                  ? "bg-[rgba(74,222,128,0.06)] text-emerald-700 border border-emerald-200"
+                  : "bg-[rgba(245,166,35,0.06)] text-bs-amber border border-[rgba(245,166,35,0.25)]"
               }`}
             >
               {correct ? "Correct" : "Needs review"}
@@ -79,52 +79,52 @@ export default function ResultsDrawer({
 
         <div className="space-y-4 p-5">
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-              <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            <div className="rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2">
+              <div className="text-[11px] font-semibold uppercase tracking-wide text-bs-text-sub">
                 Score
               </div>
-              <div className="mt-1 text-base font-semibold text-slate-900">
+              <div className="mt-1 text-base font-semibold text-bs-text">
                 {score}/{max}
               </div>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-              <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            <div className="rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2">
+              <div className="text-[11px] font-semibold uppercase tracking-wide text-bs-text-sub">
                 Time
               </div>
-              <div className="mt-1 text-base font-semibold text-slate-900">
+              <div className="mt-1 text-base font-semibold text-bs-text">
                 {Math.max(0, timeSeconds)}s
               </div>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-              <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+            <div className="rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2">
+              <div className="text-[11px] font-semibold uppercase tracking-wide text-bs-text-sub">
                 Attempts left
               </div>
-              <div className="mt-1 text-base font-semibold text-slate-900">
+              <div className="mt-1 text-base font-semibold text-bs-text">
                 {attemptsLeft == null ? "—" : String(attemptsLeft)}
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 p-4">
-            <div className="text-sm font-semibold text-slate-900">
+          <div className="rounded-2xl border border-[var(--bs-border)] p-4">
+            <div className="text-sm font-semibold text-bs-text">
               Explanation
             </div>
             {explanation ? (
-              <div className="mt-2 whitespace-pre-wrap text-sm text-slate-700">
+              <div className="mt-2 whitespace-pre-wrap text-sm text-bs-text-sub">
                 {explanation}
               </div>
             ) : (
-              <div className="mt-2 text-sm text-slate-500">
+              <div className="mt-2 text-sm text-bs-text-sub">
                 Explanation is locked until you use your attempts.
               </div>
             )}
           </div>
 
-          <div className="flex flex-wrap justify-end gap-2 border-t border-slate-200 pt-4">
+          <div className="flex flex-wrap justify-end gap-2 border-t border-[var(--bs-border)] pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              className="rounded-xl border border-[var(--bs-border)] bg-transparent px-4 py-2 text-sm font-semibold text-bs-text hover:bg-[var(--glow)]"
             >
               Close
             </button>
@@ -132,7 +132,7 @@ export default function ResultsDrawer({
               <button
                 type="button"
                 onClick={onNext}
-                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+                className="rounded-xl bg-bs-teal px-4 py-2 text-sm font-semibold text-[#080f12] hover:bg-[var(--mint)]"
               >
                 Next question →
               </button>

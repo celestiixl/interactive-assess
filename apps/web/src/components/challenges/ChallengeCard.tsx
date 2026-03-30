@@ -131,20 +131,20 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
   }
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
+    <section className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3 sm:p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
           {challenge.topic} • Difficulty {challenge.difficulty} • {challenge.realWorldTag}
         </div>
-        <div className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
+        <div className="rounded-full border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-1 text-xs font-semibold text-bs-text-sub">
           ⏱ {Math.floor(secondsLeft / 60)}:{String(secondsLeft % 60).padStart(2, "0")}
         </div>
       </div>
 
-      <div className="mt-2 text-lg font-bold text-slate-900">Micro Mission</div>
+      <div className="mt-2 text-lg font-bold text-bs-text">Micro Mission</div>
 
       {resolvedMode === "video" && challenge.modes.video && (
-        <div className="mt-2 overflow-hidden rounded-xl border border-slate-200">
+        <div className="mt-2 overflow-hidden rounded-xl border border-[var(--bs-border)]">
           <iframe
             src={challenge.modes.video.url}
             title="Mission video"
@@ -153,14 +153,14 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           />
-          <div className="border-t border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
+          <div className="border-t border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2 text-xs text-bs-text-sub">
             {challenge.modes.video.caption}
           </div>
         </div>
       )}
 
       {resolvedMode === "visual" && challenge.modes.visual && (
-        <div className="mt-2 overflow-hidden rounded-xl border border-slate-200">
+        <div className="mt-2 overflow-hidden rounded-xl border border-[var(--bs-border)]">
           <img
             src={challenge.modes.visual.imageUrl}
             alt={challenge.modes.visual.altText}
@@ -170,8 +170,8 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
       )}
 
       {resolvedMode === "interactive" && interactiveType === "clickable" && clickableData && (
-        <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5">
-          <div className="text-sm font-semibold text-slate-800">{clickableData.prompt}</div>
+        <div className="mt-3 rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-2.5">
+          <div className="text-sm font-semibold text-bs-text">{clickableData.prompt}</div>
           <div className="mt-2 grid gap-2 sm:grid-cols-3">
             {clickableData.hotspots.map((spot) => (
               <button
@@ -182,7 +182,7 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
                 className={`rounded-lg border px-3 py-2 text-sm font-semibold ${
                   selectedHotspot === spot.id
                     ? "border-violet-400 bg-violet-100 text-violet-900"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+                    : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"
                 }`}
               >
                 {spot.label}
@@ -193,11 +193,11 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
       )}
 
       {resolvedMode === "interactive" && interactiveType === "drag-drop" && dragDropData && (
-        <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5">
-          <div className="text-sm font-semibold text-slate-800">{dragDropData.prompt}</div>
+        <div className="mt-3 rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-2.5">
+          <div className="text-sm font-semibold text-bs-text">{dragDropData.prompt}</div>
           <div className="mt-2 grid gap-2">
             {dragDropData.targets.map((target) => (
-              <label key={target} className="grid gap-1 text-sm text-slate-700 sm:grid-cols-[1fr_220px] sm:items-center">
+              <label key={target} className="grid gap-1 text-sm text-bs-text-sub sm:grid-cols-[1fr_220px] sm:items-center">
                 <span>{target}</span>
                 <select
                   value={dragAnswers[target] ?? ""}
@@ -208,7 +208,7 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
                       [target]: e.target.value,
                     }))
                   }
-                  className="rounded-md border border-slate-300 bg-white px-2 py-2 text-sm"
+                  className="rounded-md border border-[var(--bs-border)] bg-bs-surface px-2 py-2 text-sm"
                 >
                   <option value="">Select label</option>
                   {dragDropData.labels.map((label) => (
@@ -225,7 +225,7 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
 
       {(resolvedMode === "text" || resolvedMode === "video" || resolvedMode === "visual") && (
         <div className="mt-3">
-          <h4 className="text-base font-semibold text-slate-900">{challenge.modes.text.question}</h4>
+          <h4 className="text-base font-semibold text-bs-text">{challenge.modes.text.question}</h4>
           <div className="mt-2 grid gap-2">
             {choiceSubset.map((choice) => (
               <button
@@ -236,7 +236,7 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
                 className={`rounded-lg border px-3 py-2 text-left text-sm font-semibold transition ${
                   selectedChoice === choice.index
                     ? "border-violet-400 bg-violet-100 text-violet-900"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"
                 }`}
               >
                 {choice.label}
@@ -256,7 +256,7 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
             {showHint ? "Hide hint" : "Show hint"}
           </button>
           {showHint && (
-            <p className="mt-1 text-xs text-slate-600">
+            <p className="mt-1 text-xs text-bs-text-sub">
               Hint: Focus on the key process words in the prompt before selecting an answer.
             </p>
           )}
@@ -268,7 +268,7 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
           type="button"
           onClick={handleSubmit}
           disabled={submitted}
-          className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-xl bg-bs-teal px-4 py-2 text-sm font-semibold text-[#080f12] hover:bg-[var(--mint)] disabled:cursor-not-allowed disabled:opacity-60"
         >
           Check answer
         </button>
@@ -276,7 +276,7 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
           <button
             type="button"
             onClick={onNext}
-            className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            className="rounded-xl border border-[var(--bs-border)] bg-transparent px-4 py-2 text-sm font-semibold text-bs-text hover:bg-[var(--glow)]"
           >
             Next mission
           </button>
@@ -287,13 +287,13 @@ export default function ChallengeCard({ challenge, mode, whyMatters, onResult, o
         <div
           className={`mt-3 rounded-xl border p-2.5 text-sm transition-all duration-300 ${
             feedback.correct
-              ? "ia-feedback-pop border-emerald-200 bg-emerald-50 text-emerald-900"
+              ? "ia-feedback-pop border-emerald-200 bg-[rgba(74,222,128,0.06)] text-[#4ade80]"
               : "ia-feedback-pop border-rose-200 bg-rose-50 text-rose-900"
           }`}
         >
           <div className="font-semibold">{feedback.correct ? "✅ Correct" : "❌ Incorrect"}</div>
           <p className="mt-1">{feedback.message}</p>
-          <div className="mt-2 rounded-lg bg-white/80 px-3 py-2 text-xs text-slate-700">
+          <div className="mt-2 rounded-lg bg-bs-surface px-3 py-2 text-xs text-bs-text-sub">
             <span className="font-semibold">Why this matters:</span> {whyMatters}
           </div>
         </div>

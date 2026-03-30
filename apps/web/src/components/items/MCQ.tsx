@@ -215,11 +215,11 @@ export default function MCQ({
           <button
             type="button"
             onClick={toggleReadAloud}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+            className="rounded-md border border-[var(--bs-border)] bg-bs-surface px-3 py-1.5 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
           >
             {speaking ? "Stop read aloud" : "Read prompt aloud"}
           </button>
-          <span className="text-sm text-slate-600">
+          <span className="text-sm text-bs-text-sub">
             Reads the prompt and visible answer choices.
           </span>
         </div>
@@ -228,7 +228,7 @@ export default function MCQ({
       {acc.reduceChoices === 2 &&
       !isMulti &&
       item.choices.length > visibleChoices.length ? (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+        <div className="rounded-lg border border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.06)] px-3 py-2 text-sm text-bs-amber">
           Reduced choices enabled: showing {visibleChoices.length} of{" "}
           {item.choices.length} options.
         </div>

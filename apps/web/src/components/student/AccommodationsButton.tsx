@@ -31,18 +31,18 @@ function ToggleRow({
     <button
       type="button"
       onClick={() => onChange(!checked)}
-      className="flex w-full items-start justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left"
+      className="flex w-full items-start justify-between gap-4 rounded-2xl border border-[var(--bs-border)] bg-bs-surface px-4 py-3 text-left"
     >
       <div>
-        <div className="text-sm font-semibold text-slate-900">{title}</div>
+        <div className="text-sm font-semibold text-bs-text">{title}</div>
         {desc ? (
-          <div className="mt-1 text-xs text-slate-600">{desc}</div>
+          <div className="mt-1 text-xs text-bs-text-sub">{desc}</div>
         ) : null}
       </div>
       <div
         className={[
           "h-6 w-11 rounded-full border transition",
-          checked ? "bg-slate-900" : "bg-slate-200",
+          checked ? "bg-bs-teal" : "bg-[var(--bs-overlay)]",
         ].join(" ")}
       >
         <div
@@ -119,7 +119,7 @@ export default function SupportsButton({
         <svg
           aria-hidden="true"
           viewBox="0 0 24 24"
-          className="h-4 w-4 text-slate-700"
+          className="h-4 w-4 text-bs-text-sub"
         >
           <path
             fill="currentColor"
@@ -132,13 +132,13 @@ export default function SupportsButton({
       {open && mounted
         ? createPortal(
             <div className="fixed inset-0 z-9999 flex items-end justify-center overflow-y-auto overscroll-contain bg-black/40 p-2 sm:items-center sm:p-4">
-              <div className="my-2 w-full max-w-xl max-h-[92dvh] overflow-y-auto rounded-3xl border border-slate-200 bg-white p-5 shadow-xl">
+              <div className="my-2 w-full max-w-xl max-h-[92dvh] overflow-y-auto rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-xl">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="text-base font-semibold text-slate-900">
+                    <div className="text-base font-semibold text-bs-text">
                       Supports
                     </div>
-                    <div className="mt-1 text-xs text-slate-600">
+                    <div className="mt-1 text-xs text-bs-text-sub">
                       These are optional supports you can turn on for yourself.
                     </div>
                   </div>
@@ -152,8 +152,8 @@ export default function SupportsButton({
                 </div>
 
                 <div className="mt-4 grid gap-3">
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                    <div className="text-xs font-semibold text-slate-800">
+                  <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4">
+                    <div className="text-xs font-semibold text-bs-text">
                       Language
                     </div>
                     <div className="mt-2 flex flex-wrap gap-2">
@@ -163,8 +163,8 @@ export default function SupportsButton({
                         className={[
                           "rounded-full border px-3 py-1.5 text-sm font-semibold",
                           acc.lang === "en"
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900",
+                            ? "bg-bs-teal text-white"
+                            : "bg-bs-surface text-bs-text",
                         ].join(" ")}
                       >
                         English
@@ -175,8 +175,8 @@ export default function SupportsButton({
                         className={[
                           "rounded-full border px-3 py-1.5 text-sm font-semibold",
                           acc.lang === "es"
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900",
+                            ? "bg-bs-teal text-white"
+                            : "bg-bs-surface text-bs-text",
                         ].join(" ")}
                       >
                         Español
@@ -210,11 +210,11 @@ export default function SupportsButton({
                     onChange={(v) => setAcc((p) => ({ ...p, tts: v }))}
                   />
 
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                    <div className="text-sm font-semibold text-slate-900">
+                  <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4">
+                    <div className="text-sm font-semibold text-bs-text">
                       Read aloud voice
                     </div>
-                    <div className="mt-1 text-xs text-slate-600">
+                    <div className="mt-1 text-xs text-bs-text-sub">
                       Choose voice style for text-to-speech.
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
@@ -226,8 +226,8 @@ export default function SupportsButton({
                         className={[
                           "rounded-full border px-3 py-1.5 text-sm font-semibold",
                           acc.ttsVoice === "auto"
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900",
+                            ? "bg-bs-teal text-white"
+                            : "bg-bs-surface text-bs-text",
                         ].join(" ")}
                       >
                         Auto
@@ -240,8 +240,8 @@ export default function SupportsButton({
                         className={[
                           "rounded-full border px-3 py-1.5 text-sm font-semibold",
                           acc.ttsVoice === "female"
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900",
+                            ? "bg-bs-teal text-white"
+                            : "bg-bs-surface text-bs-text",
                         ].join(" ")}
                       >
                         Natural female
@@ -254,8 +254,8 @@ export default function SupportsButton({
                         className={[
                           "rounded-full border px-3 py-1.5 text-sm font-semibold",
                           acc.ttsVoice === "male"
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900",
+                            ? "bg-bs-teal text-white"
+                            : "bg-bs-surface text-bs-text",
                         ].join(" ")}
                       >
                         Natural male
@@ -263,11 +263,11 @@ export default function SupportsButton({
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                    <div className="text-sm font-semibold text-slate-900">
+                  <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4">
+                    <div className="text-sm font-semibold text-bs-text">
                       Read aloud speed
                     </div>
-                    <div className="mt-1 text-xs text-slate-600">
+                    <div className="mt-1 text-xs text-bs-text-sub">
                       Slower speed can improve clarity for dense passages.
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
@@ -279,8 +279,8 @@ export default function SupportsButton({
                         className={[
                           "rounded-full border px-3 py-1.5 text-sm font-semibold",
                           acc.ttsSpeed === "normal"
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900",
+                            ? "bg-bs-teal text-white"
+                            : "bg-bs-surface text-bs-text",
                         ].join(" ")}
                       >
                         Normal
@@ -293,8 +293,8 @@ export default function SupportsButton({
                         className={[
                           "rounded-full border px-3 py-1.5 text-sm font-semibold",
                           acc.ttsSpeed === "slow"
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900",
+                            ? "bg-bs-teal text-white"
+                            : "bg-bs-surface text-bs-text",
                         ].join(" ")}
                       >
                         Slower
@@ -302,11 +302,11 @@ export default function SupportsButton({
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                    <div className="text-sm font-semibold text-slate-900">
+                  <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4">
+                    <div className="text-sm font-semibold text-bs-text">
                       Reduce answer choices
                     </div>
-                    <div className="mt-1 text-xs text-slate-600">
+                    <div className="mt-1 text-xs text-bs-text-sub">
                       Hide two distractors on supported multiple-choice
                       questions.
                     </div>
@@ -319,8 +319,8 @@ export default function SupportsButton({
                         className={[
                           "rounded-full border px-3 py-1.5 text-sm font-semibold",
                           acc.reduceChoices === 0
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900",
+                            ? "bg-bs-teal text-white"
+                            : "bg-bs-surface text-bs-text",
                         ].join(" ")}
                       >
                         Standard
@@ -333,8 +333,8 @@ export default function SupportsButton({
                         className={[
                           "rounded-full border px-3 py-1.5 text-sm font-semibold",
                           acc.reduceChoices === 2
-                            ? "bg-slate-900 text-white"
-                            : "bg-white text-slate-900",
+                            ? "bg-bs-teal text-white"
+                            : "bg-bs-surface text-bs-text",
                         ].join(" ")}
                       >
                         Reduce by 2
@@ -345,13 +345,13 @@ export default function SupportsButton({
                   <button
                     type="button"
                     onClick={() => setAcc(DEFAULT_ACC)}
-                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold"
+                    className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface px-4 py-3 text-sm font-semibold"
                   >
                     Reset accommodations
                   </button>
                 </div>
 
-                <div className="mt-4 text-xs text-slate-500">
+                <div className="mt-4 text-xs text-bs-text-sub">
                   Note: This is not an official IEP/504 manager; it’s
                   student-facing supports you can toggle on/off.
                 </div>

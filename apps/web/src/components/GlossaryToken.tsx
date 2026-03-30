@@ -130,17 +130,17 @@ export default function GlossaryToken({
         <span
           id={`glossary-${entry.key}`}
           role="dialog"
-          className="absolute z-50 mt-1 block w-64 rounded-lg bg-white p-4 shadow-lg"
+          className="absolute z-50 mt-1 block w-64 rounded-lg bg-bs-surface p-4 shadow-lg"
             onMouseEnter={cancelScheduledClose}
             onMouseLeave={scheduleClose}
         >
-            <span className="block font-semibold text-slate-900">{englishTerm}</span>
+            <span className="block font-semibold text-bs-text">{englishTerm}</span>
             {showSpanishTerm ? (
-              <span className="mt-0.5 block text-xs text-slate-500 italic">
+              <span className="mt-0.5 block text-xs text-bs-text-sub italic">
                 {spanishTerm}
               </span>
             ) : null}
-            <span className="mt-2 block text-sm text-slate-700">
+            <span className="mt-2 block text-sm text-bs-text-sub">
               {showSupport && lang === "es"
                 ? spanishDefinition
                 : englishDefinition}
@@ -148,7 +148,7 @@ export default function GlossaryToken({
             {showSupport ? (
               <button
                 type="button"
-                className="mt-2 text-xs text-slate-500"
+                className="mt-2 text-xs text-bs-text-sub"
                 onClick={toggleLang}
               >
                 {lang === "es"
@@ -157,7 +157,7 @@ export default function GlossaryToken({
               </button>
             ) : null}
           {entry.partOfSpeech && (
-              <span className="mt-1 block text-xs text-slate-500 italic">
+              <span className="mt-1 block text-xs text-bs-text-sub italic">
               {entry.partOfSpeech}
               </span>
           )}

@@ -65,7 +65,7 @@ export default function TeacherDashboardPage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-xl font-semibold">Recent Assessments</h2>
-                  <p className="mt-1 text-slate-600">
+                  <p className="mt-1 text-bs-text-sub">
                     Your latest drafts and published assessments.
                   </p>
                 </div>
@@ -79,8 +79,8 @@ export default function TeacherDashboardPage() {
                 </Button>
               </div>
 
-              <div className="mt-4 rounded-2xl border border-slate-200 p-4">
-                <div className="text-slate-600">No assessments yet.</div>
+              <div className="mt-4 rounded-2xl border border-[var(--bs-border)] p-4">
+                <div className="text-bs-text-sub">No assessments yet.</div>
 
                 <div className="mt-5 flex justify-end gap-3">
                   <Button
@@ -105,9 +105,9 @@ export default function TeacherDashboardPage() {
             <div className="grid gap-6">
               <Card className="p-5">
                 <h2 className="text-xl font-semibold">My Classes</h2>
-                <div className="mt-4 rounded-2xl border border-slate-200 p-4">
+                <div className="mt-4 rounded-2xl border border-[var(--bs-border)] p-4">
                   <div className="text-lg font-semibold">Biology Period —</div>
-                  <div className="text-slate-600">Code: BIO-—</div>
+                  <div className="text-bs-text-sub">Code: BIO-—</div>
                 </div>
               </Card>
 
@@ -137,31 +137,31 @@ export default function TeacherDashboardPage() {
 
               <Card className="p-5">
                 <h2 className="text-xl font-semibold">Learning Hub Admin</h2>
-                <p className="mt-2 text-slate-600">
+                <p className="mt-2 text-bs-text-sub">
                   Manage visibility, playlists, curriculum quality, and imports.
                 </p>
                 <div className="mt-4 grid gap-2 sm:grid-cols-2">
                   <Link
                     href="/teacher/learning-controls"
-                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
                   >
                     Learning Controls
                   </Link>
                   <Link
                     href="/teacher/content-quality"
-                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
                   >
                     Content Quality
                   </Link>
                   <Link
                     href="/teacher/import-curriculum"
-                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
                   >
                     Import Validator
                   </Link>
                   <Link
                     href="/teacher/learning-analytics"
-                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
                   >
                     Learning Analytics
                   </Link>

@@ -8,8 +8,8 @@ export default function LangToggle() {
 
   const active = (v: "en" | "es") =>
     v === lang
-      ? "border-slate-900/20 bg-slate-900/5 text-slate-900"
-      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50";
+      ? "border-[var(--bs-border)] bg-[var(--bs-raised)] text-bs-text"
+      : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]";
 
   return (
     <div className="flex items-center gap-2">

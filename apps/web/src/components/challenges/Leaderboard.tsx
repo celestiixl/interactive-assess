@@ -38,21 +38,21 @@ export default function Leaderboard({ rows, weeklyChallenge, fitHeight = false }
 
   return (
     <section className={`grid gap-4 lg:grid-cols-[1.1fr_1fr] ${fitHeight ? "h-full min-h-0" : ""}`}>
-      <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${fitHeight ? "flex min-h-0 flex-col" : ""}`}>
+      <div className={`rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 ${fitHeight ? "flex min-h-0 flex-col" : ""}`}>
         <div className="mb-3 flex items-center justify-between gap-2">
-          <h3 className="text-sm font-bold uppercase tracking-wide text-slate-700">Quest Leagues</h3>
-          <div className="flex rounded-lg border border-slate-200 bg-slate-50 p-1 text-xs font-semibold">
+          <h3 className="text-sm font-bold uppercase tracking-wide text-bs-text-sub">Quest Leagues</h3>
+          <div className="flex rounded-lg border border-[var(--bs-border)] bg-[var(--bs-raised)] p-1 text-xs font-semibold">
             <button
               type="button"
               onClick={() => setMode("class")}
-              className={`rounded-md px-2 py-1 ${mode === "class" ? "bg-white text-slate-900" : "text-slate-600"}`}
+              className={`rounded-md px-2 py-1 ${mode === "class" ? "bg-bs-surface text-bs-text" : "text-bs-text-sub"}`}
             >
               Class vs Class
             </button>
             <button
               type="button"
               onClick={() => setMode("team")}
-              className={`rounded-md px-2 py-1 ${mode === "team" ? "bg-white text-slate-900" : "text-slate-600"}`}
+              className={`rounded-md px-2 py-1 ${mode === "team" ? "bg-bs-surface text-bs-text" : "text-bs-text-sub"}`}
             >
               Team A/B
             </button>
@@ -62,8 +62,8 @@ export default function Leaderboard({ rows, weeklyChallenge, fitHeight = false }
         {mode === "class" ? (
           <div className={`space-y-2 ${fitHeight ? "min-h-0 overflow-y-auto pr-1" : ""}`}>
             {classTotals.map(([classCode, xp], index) => (
-              <div key={classCode} className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-sm">
-                <span className="font-semibold text-slate-800">#{index + 1} {classCode}</span>
+              <div key={classCode} className="flex items-center justify-between rounded-lg border border-[var(--bs-border)] px-3 py-2 text-sm">
+                <span className="font-semibold text-bs-text">#{index + 1} {classCode}</span>
                 <span className="font-bold text-violet-700">{xp} XP</span>
               </div>
             ))}
@@ -81,22 +81,22 @@ export default function Leaderboard({ rows, weeklyChallenge, fitHeight = false }
           </div>
         )}
 
-        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Boss Challenge • High XP</div>
-          <div className="mt-1 text-sm font-semibold text-slate-900">{weeklyChallenge.modes.text.question}</div>
-          <div className="mt-1 text-xs text-slate-600">Reward: {weeklyChallenge.xpReward * 2} XP • {weeklyChallenge.realWorldTag}</div>
+        <div className="mt-4 rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3">
+          <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">Boss Challenge • High XP</div>
+          <div className="mt-1 text-sm font-semibold text-bs-text">{weeklyChallenge.modes.text.question}</div>
+          <div className="mt-1 text-xs text-bs-text-sub">Reward: {weeklyChallenge.xpReward * 2} XP • {weeklyChallenge.realWorldTag}</div>
         </div>
       </div>
 
-      <div className={`rounded-2xl border border-slate-200 bg-white p-4 ${fitHeight ? "flex min-h-0 flex-col" : ""}`}>
-        <h3 className="text-sm font-bold uppercase tracking-wide text-slate-700">Top 10 Hall of Fame</h3>
+      <div className={`rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 ${fitHeight ? "flex min-h-0 flex-col" : ""}`}>
+        <h3 className="text-sm font-bold uppercase tracking-wide text-bs-text-sub">Top 10 Hall of Fame</h3>
         <div className={`mt-3 space-y-2 ${fitHeight ? "min-h-0 overflow-y-auto pr-1" : ""}`}>
           {top10.map((row, index) => (
-            <div key={`${row.name}-${index}`} className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
-              <div className="text-sm text-slate-800">
+            <div key={`${row.name}-${index}`} className="flex items-center justify-between rounded-lg border border-[var(--bs-border)] px-3 py-2">
+              <div className="text-sm text-bs-text">
                 <span className="mr-2 text-base">{row.avatar}</span>
                 <span className="font-semibold">#{index + 1} {row.name}</span>
-                <span className="ml-2 text-xs text-slate-500">({row.classCode})</span>
+                <span className="ml-2 text-xs text-bs-text-sub">({row.classCode})</span>
               </div>
               <span className="text-sm font-bold text-violet-700">{row.xp}</span>
             </div>

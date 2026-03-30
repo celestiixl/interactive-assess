@@ -199,7 +199,7 @@ export default function StudentDashboard() {
   );
 
   return (
-    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
+    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-bs-text">
       <PageBanner
         title="Student Dashboard"
         subtitle="Your personal mastery tracker."
@@ -214,44 +214,44 @@ export default function StudentDashboard() {
               });
               location.reload();
             }}
-            className="rounded-full bg-white/20 px-4 py-2 text-xs font-semibold text-white hover:bg-white/25"
+            className="rounded-full bg-bs-surface/20 px-4 py-2 text-xs font-semibold text-white hover:bg-bs-raised/25"
           >
             Reset Specimen Unlocks
           </button>
           <Link
             href="/student/assessment"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
           >
             Back to Assessment Lab
           </Link>
           <Link
             href="/student/learn"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
           >
             Open BioSpark Quest
           </Link>
           <Link
             href="/student/profile"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
           >
             My Profile
           </Link>
           <Link
             href="/student/genome-browser"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
           >
             🧬 Genome Browser
           </Link>
           <Link
             href="/student/bioart-demo"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
           >
             🎨 Icon Registry Demo
           </Link>
           <button
             type="button"
             onClick={() => router.push("/simulations")}
-            className="rounded-full bg-white px-4 py-2 text-xs font-semibold text-slate-900 shadow-sm hover:bg-slate-100"
+            className="rounded-full bg-bs-surface px-4 py-2 text-xs font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
             aria-label="Open simulations"
           >
             Simulations
@@ -259,7 +259,7 @@ export default function StudentDashboard() {
           <button
             type="button"
             onClick={() => router.push("/phenomena-studio")}
-            className="rounded-full bg-white px-4 py-2 text-xs font-semibold text-slate-900 shadow-sm hover:bg-slate-100"
+            className="rounded-full bg-bs-surface px-4 py-2 text-xs font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
             aria-label="Open phenomenon exploration"
           >
             SparkScope
@@ -283,7 +283,7 @@ export default function StudentDashboard() {
                   </span>
                 </div>
                 <div className="mt-1 text-sm text-white/90">{biome.desc}</div>
-                <div className="mt-3 inline-flex items-center rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-semibold text-white">
+                <div className="mt-3 inline-flex items-center rounded-full border border-white/30 bg-bs-surface/20 px-3 py-1 text-xs font-semibold text-white">
                   segments passed: {segments.length}
                 </div>
               </div>
@@ -295,7 +295,7 @@ export default function StudentDashboard() {
                       ? `/practice?focus=${encodeURIComponent(nextSegment.key)}`
                       : "/practice"
                   }
-                  className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800"
+                  className="inline-flex items-center gap-2 rounded-full bg-bs-bg px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-bg"
                 >
                   {nextSegment
                     ? `Next: practice ${nextSegment.label}`
@@ -323,8 +323,8 @@ export default function StudentDashboard() {
                 }}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   tab === "overview"
-                    ? "bg-slate-900 text-white"
-                    : "bg-white text-slate-900 hover:bg-slate-50"
+                    ? "bg-bs-bg text-white"
+                    : "bg-bs-surface text-bs-text hover:bg-bs-raised"
                 }`}
               >
                 Overview
@@ -346,8 +346,8 @@ export default function StudentDashboard() {
                 }}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   tab === "specimens"
-                    ? "bg-slate-900 text-white"
-                    : "bg-white text-slate-900 hover:bg-slate-50"
+                    ? "bg-bs-bg text-white"
+                    : "bg-bs-surface text-bs-text hover:bg-bs-raised"
                 }`}
               >
                 Specimens
@@ -363,7 +363,7 @@ export default function StudentDashboard() {
                   }
                   router.push("/student/learning-hub");
                 }}
-                className="rounded-full border bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+                className="rounded-full border bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text transition hover:bg-bs-raised"
               >
                 Learning Hub
               </button>
@@ -377,7 +377,7 @@ export default function StudentDashboard() {
                 </>
               ) : tab === "specimens" ? (
                 <>
-                  <div className="mb-4 text-sm text-slate-600">
+                  <div className="mb-4 text-sm text-bs-text-sub">
                     Collect organisms by mastering TEKS segments (75%+ unlock).
                   </div>
                   <SpecimenGrid segments={segments} />
@@ -386,26 +386,26 @@ export default function StudentDashboard() {
             </Section>
 
             {/* Bottom cards */}
-            <section className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
+            <section className="mt-5 rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <div className="text-sm font-semibold text-slate-800">
+                  <div className="text-sm font-semibold text-bs-text">
                     Assigned work
                   </div>
-                  <div className="mt-1 text-xs text-slate-600">
+                  <div className="mt-1 text-xs text-bs-text-sub">
                     Open your teacher-assigned work and quizzes.
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Link
                     href="/student/assignments"
-                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                    className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
                   >
                     Assignments
                   </Link>
                   <Link
                     href="/student/assignments?kind=assessment"
-                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                    className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
                   >
                     Quizzes
                   </Link>
@@ -435,10 +435,10 @@ export default function StudentDashboard() {
 
             <section className="mt-5 grid gap-4 md:grid-cols-3">
               <Card variant="sm">
-                <div className="text-sm font-semibold text-slate-800">
+                <div className="text-sm font-semibold text-bs-text">
                   Next best step
                 </div>
-                <div className="mt-2 text-sm text-slate-600">
+                <div className="mt-2 text-sm text-bs-text-sub">
                   {weakestSegment
                     ? `Focus on ${weakestSegment.key} (${weakestSegment.label}) to raise your lowest mastery segment.`
                     : "Focus on your lowest mastery segment."}
@@ -467,24 +467,24 @@ export default function StudentDashboard() {
 
               <Card variant="sm">
                 <div
-                  className="text-sm font-semibold text-slate-800"
+                  className="text-sm font-semibold text-bs-text"
                   data-focus-hide="1"
                 >
                   Streak
                 </div>
                 <div className="mt-2 text-2xl font-semibold">3 days</div>
-                <div className="mt-1 text-sm text-slate-600">Keep going.</div>
+                <div className="mt-1 text-sm text-bs-text-sub">Keep going.</div>
               </Card>
 
               <Card variant="sm">
                 <div
-                  className="text-sm font-semibold text-slate-800"
+                  className="text-sm font-semibold text-bs-text"
                   data-focus-hide="1"
                 >
                   Accuracy
                 </div>
                 <div className="mt-2 text-2xl font-semibold">74%</div>
-                <div className="mt-1 text-sm text-slate-600">
+                <div className="mt-1 text-sm text-bs-text-sub">
                   Last 20 checks (demo).
                 </div>
               </Card>

@@ -10,9 +10,9 @@ import type {
 function ProgressBarInline({ percent }: { percent: number }) {
   const p = Math.round(percent * 100);
   return (
-    <div className="w-full bg-slate-100 h-2 rounded overflow-hidden">
+    <div className="w-full bg-[var(--bs-raised)] h-2 rounded overflow-hidden">
       <div
-        className="h-2 bg-emerald-500"
+        className="h-2 bg-[#4ade80]"
         style={{ width: `${p}%` }}
         aria-hidden
       />
@@ -91,11 +91,11 @@ export default function AssignmentSummaryClient({
       )}
       <header className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-bs-text">
             {overallStats.assignmentTitle ||
               `Assignment ${overallStats.assignmentId}`}
           </h1>
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-bs-text-sub">
             Items: {overallStats.totalItems} • Students:{" "}
             {overallStats.totalStudents}
             {overallStats.dateRange?.startDate && (
@@ -122,7 +122,7 @@ export default function AssignmentSummaryClient({
 
       <section className="grid grid-cols-3 gap-4">
         <div className="ia-card-soft p-4">
-          <div className="text-sm font-medium text-slate-600">
+          <div className="text-sm font-medium text-bs-text-sub">
             Overall Accuracy
           </div>
           <div className="text-xl font-semibold">
@@ -134,13 +134,13 @@ export default function AssignmentSummaryClient({
         </div>
 
         <div className="ia-card-soft p-4">
-          <div className="text-sm font-medium text-slate-600">
+          <div className="text-sm font-medium text-bs-text-sub">
             Lowest Tag Accuracy
           </div>
           <div className="text-lg font-semibold text-rose-600">
             {summary.lowestTags?.[0]?.tag || "—"}
           </div>
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-bs-text-sub">
             {summary.lowestTags?.[0]
               ? `${Math.round(summary.lowestTags[0].accuracy * 100)}%`
               : "—"}
@@ -148,13 +148,13 @@ export default function AssignmentSummaryClient({
         </div>
 
         <div className="ia-card-soft p-4">
-          <div className="text-sm font-medium text-slate-600">
+          <div className="text-sm font-medium text-bs-text-sub">
             Highest Tag Accuracy
           </div>
           <div className="text-lg font-semibold text-emerald-600">
             {summary.highestTags?.[0]?.tag || "—"}
           </div>
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-bs-text-sub">
             {summary.highestTags?.[0]
               ? `${Math.round(summary.highestTags[0].accuracy * 100)}%`
               : "—"}
@@ -165,7 +165,7 @@ export default function AssignmentSummaryClient({
       <section className="space-y-2">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Misconception Heatmap</h2>
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-bs-text-sub">
             Showing{" "}
             {showAllTags
               ? tagSummaries.length
@@ -176,7 +176,7 @@ export default function AssignmentSummaryClient({
 
         <div className="ia-card-soft overflow-x-auto">
           <table className="w-full table-auto">
-            <thead className="text-sm text-slate-600">
+            <thead className="text-sm text-bs-text-sub">
               <tr>
                 <th className="text-left p-3">Tag</th>
                 <th className="text-left p-3">Accuracy</th>
@@ -204,7 +204,7 @@ export default function AssignmentSummaryClient({
                     <td className="p-3 align-top">{t.itemCount}</td>
                     <td className="p-3 align-top">
                       <details>
-                        <summary className="text-sm text-slate-600 underline cursor-pointer">
+                        <summary className="text-sm text-bs-text-sub underline cursor-pointer">
                           View items
                         </summary>
                         <ul className="mt-2 ml-4 list-disc">
@@ -254,7 +254,7 @@ export default function AssignmentSummaryClient({
         <h2 className="text-lg font-semibold mb-2">Item Performance</h2>
         <div className="ia-card-soft overflow-x-auto">
           <table className="w-full table-auto">
-            <thead className="text-sm text-slate-600">
+            <thead className="text-sm text-bs-text-sub">
               <tr>
                 <th className="text-left p-3">Item</th>
                 <th className="text-left p-3">Accuracy</th>
@@ -297,7 +297,7 @@ export default function AssignmentSummaryClient({
             <div className="flex justify-between items-start">
               <div>
                 <div className="text-sm font-medium">Reteach</div>
-                <div className="text-xs text-slate-500">
+                <div className="text-xs text-bs-text-sub">
                   {groups.reteach.length} students
                 </div>
               </div>
@@ -315,7 +315,7 @@ export default function AssignmentSummaryClient({
                 <li key={s.studentId} className="text-sm">
                   {s.studentId}
                   {s.name ? ` — ${s.name}` : ""}{" "}
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-bs-text-sub">
                     ({Math.round(s.accuracy * 100)}%)
                   </span>
                 </li>
@@ -327,7 +327,7 @@ export default function AssignmentSummaryClient({
             <div className="flex justify-between items-start">
               <div>
                 <div className="text-sm font-medium">Practice</div>
-                <div className="text-xs text-slate-500">
+                <div className="text-xs text-bs-text-sub">
                   {groups.practice.length} students
                 </div>
               </div>
@@ -345,7 +345,7 @@ export default function AssignmentSummaryClient({
                 <li key={s.studentId} className="text-sm">
                   {s.studentId}
                   {s.name ? ` — ${s.name}` : ""}{" "}
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-bs-text-sub">
                     ({Math.round(s.accuracy * 100)}%)
                   </span>
                 </li>
@@ -357,7 +357,7 @@ export default function AssignmentSummaryClient({
             <div className="flex justify-between items-start">
               <div>
                 <div className="text-sm font-medium">Extend</div>
-                <div className="text-xs text-slate-500">
+                <div className="text-xs text-bs-text-sub">
                   {groups.extend.length} students
                 </div>
               </div>
@@ -375,7 +375,7 @@ export default function AssignmentSummaryClient({
                 <li key={s.studentId} className="text-sm">
                   {s.studentId}
                   {s.name ? ` — ${s.name}` : ""}{" "}
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-bs-text-sub">
                     ({Math.round(s.accuracy * 100)}%)
                   </span>
                 </li>
