@@ -251,7 +251,11 @@ export async function POST(req: NextRequest) {
             chunk.type === "content_block_delta" &&
             chunk.delta.type === "text_delta"
           ) {
-            controller.enqueue(encoder.encode(chunk.delta.text));
+            // Strip any em dashes (U+2014) that the model emits despite the
+            // system-prompt instruction — replace with " - " so the sentence
+            // still reads naturally.
+            const sanitised = chunk.delta.text.replace(/\u2014/g, " - ");
+            controller.enqueue(encoder.encode(sanitised));
           }
         }
 
