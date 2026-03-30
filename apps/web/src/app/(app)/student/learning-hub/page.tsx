@@ -8,7 +8,7 @@ import { BackLink } from "@/components/nav/BackLink";
 
 export default function StudentLearningHubStandalonePage() {
   return (
-    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
+    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-bs-text">
       <BackLink href="/student/dashboard" label="Back to dashboard" />
       <PageBanner
         title="Learning Hub"

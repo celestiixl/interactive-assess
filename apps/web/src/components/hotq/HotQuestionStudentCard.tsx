@@ -47,10 +47,10 @@ export default function HotQuestionStudentCard() {
     <div className="p-5 ia-card-soft">
       <div className="mb-2 flex items-start justify-between gap-3">
         <div>
-          <div className="text-sm font-semibold text-slate-900">
+          <div className="text-sm font-semibold text-bs-text">
             Hot Question of the Day
           </div>
-          <div className="text-xs text-slate-500">
+          <div className="text-xs text-bs-text-sub">
             {dateLabel}
             {q.teks ? (
               <span>
@@ -62,7 +62,7 @@ export default function HotQuestionStudentCard() {
         </div>
       </div>
 
-      <div className="text-sm text-slate-900">{q.prompt}</div>
+      <div className="text-sm text-bs-text">{q.prompt}</div>
 
       <div className="mt-3 space-y-2">
         {q.choices.map((c, i) => {
@@ -76,13 +76,13 @@ export default function HotQuestionStudentCard() {
               }}
               className={[
                 "w-full rounded-2xl border px-3 py-2 text-left text-sm",
-                active ? "border-slate-900" : "border-slate-200",
+                active ? "border-bs-text" : "border-[var(--bs-border)]",
                 submitted
                   ? "opacity-70 cursor-not-allowed"
-                  : "hover:border-slate-400",
+                  : "hover:border-[var(--bs-border)]",
               ].join(" ")}
             >
-              <span className="mr-2 font-semibold text-slate-700">
+              <span className="mr-2 font-semibold text-bs-text-sub">
                 {String.fromCharCode(65 + i)}.
               </span>
               {c}
@@ -99,17 +99,17 @@ export default function HotQuestionStudentCard() {
           className={[
             "rounded-xl px-3 py-2 text-sm",
             submitted || selected === null
-              ? "bg-slate-200 text-slate-500"
-              : "bg-slate-900 text-white",
+              ? "bg-[var(--bs-overlay)] text-bs-text-muted"
+              : "bg-bs-teal text-white",
           ].join(" ")}
         >
           {submitted ? "Submitted" : "Submit"}
         </button>
 
         {submitted ? (
-          <div className="text-sm text-slate-700">Locked for today.</div>
+          <div className="text-sm text-bs-text-sub">Locked for today.</div>
         ) : (
-          <div className="text-sm text-slate-400">Pick an answer.</div>
+          <div className="text-sm text-bs-text-muted">Pick an answer.</div>
         )}
       </div>
     </div>

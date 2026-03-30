@@ -250,7 +250,7 @@ export default function CERBuilder({
               className={`p-3 rounded-lg border-2 text-left text-sm font-medium transition ${
                 editingMode === mode
                   ? "border-blue-600 bg-blue-50"
-                  : "border-slate-200 hover:border-slate-300"
+                  : "border-[var(--bs-border)] hover:border-[var(--bs-border)]"
               }`}
             >
               <div className="font-semibold">
@@ -260,7 +260,7 @@ export default function CERBuilder({
                     ? "Claim Given"
                     : "Claim Evaluate"}
               </div>
-              <div className="text-xs text-slate-600 mt-1">
+              <div className="text-xs text-bs-text-sub mt-1">
                 {mode === "open"
                   ? "Students write claim, select evidence, write reasoning"
                   : mode === "claim-given"
@@ -317,7 +317,7 @@ export default function CERBuilder({
           {evidenceBank.map((evidence, idx) => (
             <div
               key={evidence.id}
-              className="p-3 border rounded-lg space-y-2 bg-slate-50"
+              className="p-3 border rounded-lg space-y-2 bg-[var(--bs-raised)]"
             >
               <div className="grid grid-cols-12 gap-2">
                 <input
@@ -496,7 +496,7 @@ export default function CERBuilder({
               onClick={() =>
                 addStem(stemEnClaim, setStemEnClaim, "New stem...")
               }
-              className="px-2 py-1 text-xs bg-slate-200 hover:bg-slate-300 rounded"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded"
             >
               + Add
             </button>
@@ -534,7 +534,7 @@ export default function CERBuilder({
               onClick={() =>
                 addStem(stemEnEvidence, setStemEnEvidence, "New stem...")
               }
-              className="px-2 py-1 text-xs bg-slate-200 hover:bg-slate-300 rounded"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded"
             >
               + Add
             </button>
@@ -579,7 +579,7 @@ export default function CERBuilder({
               onClick={() =>
                 addStem(stemEnReasoning, setStemEnReasoning, "New stem...")
               }
-              className="px-2 py-1 text-xs bg-slate-200 hover:bg-slate-300 rounded"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded"
             >
               + Add
             </button>
@@ -629,7 +629,7 @@ export default function CERBuilder({
               onClick={() =>
                 addStem(stemEsClaim, setStemEsClaim, "New stem...")
               }
-              className="px-2 py-1 text-xs bg-slate-200 hover:bg-slate-300 rounded"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded"
             >
               + Add
             </button>
@@ -667,7 +667,7 @@ export default function CERBuilder({
               onClick={() =>
                 addStem(stemEsEvidence, setStemEsEvidence, "New stem...")
               }
-              className="px-2 py-1 text-xs bg-slate-200 hover:bg-slate-300 rounded"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded"
             >
               + Add
             </button>
@@ -712,7 +712,7 @@ export default function CERBuilder({
               onClick={() =>
                 addStem(stemEsReasoning, setStemEsReasoning, "New stem...")
               }
-              className="px-2 py-1 text-xs bg-slate-200 hover:bg-slate-300 rounded"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded"
             >
               + Add
             </button>
@@ -760,7 +760,7 @@ export default function CERBuilder({
             <button
               type="button"
               onClick={() => addWordBank(wordBankEn, setWordBankEn)}
-              className="px-2 py-1 text-xs bg-slate-200 hover:bg-slate-300 rounded"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded"
             >
               + Add word
             </button>
@@ -796,7 +796,7 @@ export default function CERBuilder({
             <button
               type="button"
               onClick={() => addWordBank(wordBankEs, setWordBankEs)}
-              className="px-2 py-1 text-xs bg-slate-200 hover:bg-slate-300 rounded"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded"
             >
               + Add word
             </button>

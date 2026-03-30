@@ -30,7 +30,7 @@ export default function GenomeBrowserPage() {
     DEMO_SEQUENCES.find((s) => s.id === activeId) ?? DEMO_SEQUENCES[0];
 
   return (
-    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-slate-900">
+    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-bs-text">
       <BackLink href="/student/dashboard" label="Back to dashboard" />
       <PageBanner
         title="🧬 Genome Browser"
@@ -60,7 +60,7 @@ export default function GenomeBrowserPage() {
                   className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
                     activeId === s.id
                       ? "bg-indigo-600 border-indigo-600 text-white shadow"
-                      : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+                      : "bg-bs-surface border-[var(--bs-border)] text-bs-text-sub hover:bg-[var(--bs-raised)]"
                   }`}
                 >
                   {s.name}
@@ -105,11 +105,11 @@ export default function GenomeBrowserPage() {
           <GenomeBrowser sequence={activeSeq} />
 
           {/* ── Educational context ────────────────────────────────────── */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-            <h2 className="text-base font-bold text-slate-900">
+          <section className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-6 shadow-sm space-y-4">
+            <h2 className="text-base font-bold text-bs-text">
               About Genome Browsers
             </h2>
-            <p className="text-sm text-slate-700 leading-relaxed">
+            <p className="text-sm text-bs-text-sub leading-relaxed">
               A <strong>genome browser</strong> is a bioinformatics tool that lets scientists
               navigate and visualize genomic sequences and their annotations. Professional
               browsers like the{" "}
@@ -118,9 +118,9 @@ export default function GenomeBrowserPage() {
               genome (~3.2 billion bp) with thousands of annotation tracks.
             </p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                <div className="text-sm font-bold text-slate-900 mb-2">🧬 TEKS B.7A Connection</div>
-                <p className="text-xs text-slate-700 leading-relaxed">
+              <div className="rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-4">
+                <div className="text-sm font-bold text-bs-text mb-2">🧬 TEKS B.7A Connection</div>
+                <p className="text-xs text-bs-text-sub leading-relaxed">
                   The sequence displayed here shows how{" "}
                   <strong>nucleotide order specifies traits</strong>. The ATG start codon,
                   coding exons, and TAA stop codon together define the protein sequence.
@@ -128,9 +128,9 @@ export default function GenomeBrowserPage() {
                   nucleotide sequence specifies traits.
                 </p>
               </div>
-              <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                <div className="text-sm font-bold text-slate-900 mb-2">🔬 TEKS B.7C Connection</div>
-                <p className="text-xs text-slate-700 leading-relaxed">
+              <div className="rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-4">
+                <div className="text-sm font-bold text-bs-text mb-2">🔬 TEKS B.7C Connection</div>
+                <p className="text-xs text-bs-text-sub leading-relaxed">
                   The <strong>pink mutation markers</strong> in the browser show examples
                   of a point mutation (single nucleotide substitution) and a missense
                   mutation. Click them to see how{" "}

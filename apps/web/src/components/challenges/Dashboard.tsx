@@ -26,11 +26,11 @@ export default function Dashboard({
 
   return (
     <section className="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
-      <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
+      <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3 sm:p-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900">BioSpark Quest</h1>
-            <p className="mt-1 text-sm text-slate-600">Bite-sized missions. Instant feedback. Real-world biology.</p>
+            <h1 className="text-2xl font-extrabold text-bs-text">BioSpark Quest</h1>
+            <p className="mt-1 text-sm text-bs-text-sub">Bite-sized missions. Instant feedback. Real-world biology.</p>
             <div className="mt-2">
               <ImagesBadge
                 text="Your active biology mission feed"
@@ -54,8 +54,8 @@ export default function Dashboard({
 
         <div className="mt-3">
           <NoiseBackground
-            containerClassName="rounded-xl border border-slate-200 p-1.5"
-            className="rounded-lg bg-white/88 p-2.5"
+            containerClassName="rounded-xl border border-[var(--bs-border)] p-1.5"
+            className="rounded-lg bg-bs-surface p-2.5"
             gradientColors={[
               "rgb(99, 102, 241)",
               "rgb(16, 185, 129)",
@@ -64,26 +64,26 @@ export default function Dashboard({
             noiseIntensity={0.12}
             speed={0.06}
           >
-            <div className="text-xs font-semibold uppercase tracking-wide text-slate-700">Today’s Hook</div>
-            <p className="mt-1 text-sm text-slate-900">{dailyHook}</p>
+            <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">Today’s Hook</div>
+            <p className="mt-1 text-sm text-bs-text">{dailyHook}</p>
           </NoiseBackground>
         </div>
 
-        <div className="mt-3 rounded-xl border border-slate-200 p-2.5">
-          <div className="flex items-center justify-between text-sm font-semibold text-slate-800">
+        <div className="mt-3 rounded-xl border border-[var(--bs-border)] p-2.5">
+          <div className="flex items-center justify-between text-sm font-semibold text-bs-text">
             <span>XP Progress</span>
             <span>{xpInLevel}/{xpToNextLevel}</span>
           </div>
-          <div className="mt-2 h-3 overflow-hidden rounded-full bg-slate-200">
+          <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/5">
             <div className="ia-xp-fill h-full rounded-full bg-linear-to-r from-violet-500 to-emerald-400" style={{ width: `${pct}%` }} />
           </div>
-          <div className="mt-2 text-xs text-slate-600">Level {profile.level}: {levelTitle}</div>
+          <div className="mt-2 text-xs text-bs-text-sub">Level {profile.level}: {levelTitle}</div>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
-        <h2 className="text-sm font-bold uppercase tracking-wide text-slate-700">Explorer Profile</h2>
-        <div className="mt-3 text-sm text-slate-800">
+      <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3 sm:p-4">
+        <h2 className="text-sm font-bold uppercase tracking-wide text-bs-text-sub">Explorer Profile</h2>
+        <div className="mt-3 text-sm text-bs-text">
           <div><span className="font-semibold">Name:</span> {profile.name || "New Explorer"}</div>
           <div><span className="font-semibold">Class Code:</span> {profile.classCode}</div>
           <div><span className="font-semibold">Total XP:</span> {profile.xp}</div>
@@ -91,11 +91,11 @@ export default function Dashboard({
         </div>
 
         <div className="mt-3">
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">Topic Mastery</div>
+          <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">Topic Mastery</div>
           <div className="mt-2 grid gap-1.5">
             {topicMastery.map((row) => (
-              <div key={row.topic} className="rounded-lg border border-slate-200 p-1.5 text-xs">
-                <div className="mb-1 flex items-center justify-between text-slate-700">
+              <div key={row.topic} className="rounded-lg border border-[var(--bs-border)] p-1.5 text-xs">
+                <div className="mb-1 flex items-center justify-between text-bs-text-sub">
                   <TooltipCard
                     content={`Mastery for ${row.topic}. Keep answering mission checks correctly to raise this percentage.`}
                   >
@@ -105,7 +105,7 @@ export default function Dashboard({
                   </TooltipCard>
                   <span>{row.percent}%</span>
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-slate-200">
+                <div className="h-2 overflow-hidden rounded-full bg-white/5">
                   <div className="h-full rounded-full bg-violet-500 transition-all duration-500" style={{ width: `${row.percent}%` }} />
                 </div>
               </div>

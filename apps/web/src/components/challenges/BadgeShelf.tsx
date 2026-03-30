@@ -7,8 +7,8 @@ type Props = {
 
 export default function BadgeShelf({ earnedBadges }: Props) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-3">
-      <h3 className="text-sm font-bold text-slate-900">Trophy Vault</h3>
+    <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3">
+      <h3 className="text-sm font-bold text-bs-text">Trophy Vault</h3>
       <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
         {BADGE_MILESTONES.map((badge) => {
           const unlocked = earnedBadges.includes(badge.key);
@@ -17,7 +17,7 @@ export default function BadgeShelf({ earnedBadges }: Props) {
               key={badge.key}
               content={
                 <div>
-                  <div className="font-semibold text-slate-900 dark:text-slate-100">
+                  <div className="font-semibold text-bs-text dark:text-bs-text">
                     {badge.label}
                   </div>
                   <p className="mt-1 text-xs">{badge.description}</p>
@@ -30,14 +30,14 @@ export default function BadgeShelf({ earnedBadges }: Props) {
               <div
                 className={`cursor-help rounded-xl border p-2.5 transition ${
                   unlocked
-                    ? "border-emerald-200 bg-emerald-50"
-                    : "border-slate-200 bg-slate-50"
+                    ? "border-emerald-200 bg-[rgba(74,222,128,0.06)]"
+                    : "border-[var(--bs-border)] bg-[var(--bs-raised)]"
                 }`}
               >
-                <div className="text-sm font-semibold text-slate-900">
+                <div className="text-sm font-semibold text-bs-text">
                   {unlocked ? "🏅" : "🔒"} {badge.label}
                 </div>
-                <p className="mt-1 text-xs text-slate-600">{badge.description}</p>
+                <p className="mt-1 text-xs text-bs-text-sub">{badge.description}</p>
               </div>
             </TooltipCard>
           );

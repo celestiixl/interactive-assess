@@ -122,7 +122,7 @@ export default function TeacherAssessmentsPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="font-medium">{a.title || a.id}</div>
-                      <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                      <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-bs-text-sub">
                         <span>
                           {a.updatedAt
                             ? new Date(a.updatedAt).toLocaleString()
@@ -140,7 +140,7 @@ export default function TeacherAssessmentsPage() {
                           </span>
                         )}
                         {getMeta(a).dueDate ? (
-                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 font-semibold text-slate-700">
+                          <span className="rounded-full border border-[var(--bs-border)] bg-[var(--bs-raised)] px-2 py-0.5 font-semibold text-bs-text-sub">
                             Due{" "}
                             {new Date(
                               getMeta(a).dueDate as string,
@@ -174,7 +174,7 @@ export default function TeacherAssessmentsPage() {
                         onClick={() =>
                           setExpandedId((prev) => (prev === a.id ? null : a.id))
                         }
-                        className="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                        className="rounded-md border border-[var(--bs-border)] bg-bs-surface px-3 py-1.5 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
                       >
                         Publishing Settings
                       </button>
@@ -189,12 +189,12 @@ export default function TeacherAssessmentsPage() {
                   </div>
 
                   {expandedId === a.id ? (
-                    <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
-                      <div className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <div className="mt-3 rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                         Publish Assignment
                       </div>
 
-                      <label className="mt-2 block text-xs font-semibold text-slate-600">
+                      <label className="mt-2 block text-xs font-semibold text-bs-text-sub">
                         Due Date
                         <input
                           type="date"
@@ -204,12 +204,12 @@ export default function TeacherAssessmentsPage() {
                               dueDate: event.target.value || null,
                             })
                           }
-                          className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm"
+                          className="mt-1 w-full rounded-lg border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm"
                         />
                       </label>
 
                       <div className="mt-3">
-                        <div className="text-xs font-semibold text-slate-600">
+                        <div className="text-xs font-semibold text-bs-text-sub">
                           Class Filters
                         </div>
                         <div className="mt-2 flex flex-wrap gap-2">
@@ -225,7 +225,7 @@ export default function TeacherAssessmentsPage() {
                                   "rounded-full border px-3 py-1 text-xs font-semibold",
                                   selected
                                     ? "border-blue-300 bg-blue-100 text-blue-800"
-                                    : "border-slate-200 bg-white text-slate-700",
+                                    : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub",
                                 ].join(" ")}
                               >
                                 {period}
@@ -249,7 +249,7 @@ export default function TeacherAssessmentsPage() {
             </div>
           ) : (
             <div>
-              <div className="text-slate-700">No assessments found.</div>
+              <div className="text-bs-text-sub">No assessments found.</div>
               <div className="mt-4">
                 <Link href="/teacher/builder" className="ia-btn">
                   Create an assessment

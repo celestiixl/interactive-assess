@@ -3,12 +3,12 @@ import { BackLink } from "@/components/nav/BackLink";
 
 export default function TeacherContentQualityPage() {
   return (
-    <main className="mx-auto w-full max-w-6xl p-6 text-slate-900">
+    <main className="mx-auto w-full max-w-6xl p-6 text-bs-text">
       <BackLink href="/teacher/dashboard" label="Back to dashboard" />
-      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
         <div>
           <h1 className="text-2xl font-bold">Content Quality Workflow</h1>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="mt-1 text-sm text-bs-text-sub">
             Track versions, approval status, and curriculum change logs.
           </p>
         </div>
@@ -18,19 +18,19 @@ export default function TeacherContentQualityPage() {
         {LEARNING_UNITS.map((unit) => (
           <article
             key={unit.id}
-            className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+            className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                   GP {unit.gradingPeriod} • Unit {unit.unitNumber}
                 </div>
-                <h2 className="mt-1 text-lg font-semibold text-slate-900">
+                <h2 className="mt-1 text-lg font-semibold text-bs-text">
                   {unit.title}
                 </h2>
               </div>
               <div className="flex items-center gap-2">
-                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-semibold text-slate-700">
+                <span className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-2 py-0.5 text-xs font-semibold text-bs-text-sub">
                   {unit.contentVersion}
                 </span>
                 <span
@@ -48,7 +48,7 @@ export default function TeacherContentQualityPage() {
               {unit.changeLog.map((row) => (
                 <div
                   key={`${unit.id}-${row.date}-${row.note}`}
-                  className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700"
+                  className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm text-bs-text-sub"
                 >
                   <span className="font-semibold">{row.date}</span> — {row.note}
                 </div>

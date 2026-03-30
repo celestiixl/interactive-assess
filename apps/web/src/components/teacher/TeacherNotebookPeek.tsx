@@ -41,34 +41,34 @@ export default function TeacherNotebookPeek({
   }
 
   return (
-    <div className="mt-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+    <div className="mt-2 rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3 text-sm">
       <button
         type="button"
         onClick={handleOpen}
         aria-expanded={open}
-        className="flex w-full items-center justify-between text-xs font-semibold text-slate-600 hover:text-slate-900"
+        className="flex w-full items-center justify-between text-xs font-semibold text-bs-text-sub hover:text-bs-text"
       >
         <span>
           📓 View student notes
           {lessonTitle ? ` — ${lessonTitle}` : ""}
         </span>
-        <span className="text-slate-400">{open ? "▲" : "▼"}</span>
+        <span className="text-bs-text-muted">{open ? "▲" : "▼"}</span>
       </button>
 
       {open && (
         <div className="mt-3 space-y-3">
           {loaded && !hasContent ? (
-            <p className="text-xs text-slate-500 italic">
+            <p className="text-xs text-bs-text-sub italic">
               This student has no notebook entries for this lesson yet.
             </p>
           ) : null}
 
           {notes.trim() ? (
             <div>
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                 Notes
               </div>
-              <p className="whitespace-pre-wrap rounded-lg border border-slate-200 bg-white p-2.5 text-xs leading-5 text-slate-700">
+              <p className="whitespace-pre-wrap rounded-lg border border-[var(--bs-border)] bg-bs-surface p-2.5 text-xs leading-5 text-bs-text-sub">
                 {notes}
               </p>
             </div>
@@ -76,18 +76,18 @@ export default function TeacherNotebookPeek({
 
           {observations.length > 0 ? (
             <div>
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                 Observations
               </div>
               <ol className="space-y-1.5">
                 {observations.map((obs) => (
                   <li
                     key={obs.id}
-                    className="rounded-lg border border-slate-200 bg-white p-2.5"
+                    className="rounded-lg border border-[var(--bs-border)] bg-bs-surface p-2.5"
                   >
                     <time
                       dateTime={obs.timestamp}
-                      className="block text-xs font-semibold text-slate-500"
+                      className="block text-xs font-semibold text-bs-text-sub"
                     >
                       {new Date(obs.timestamp).toLocaleString([], {
                         month: "short",
@@ -96,7 +96,7 @@ export default function TeacherNotebookPeek({
                         minute: "2-digit",
                       })}
                     </time>
-                    <p className="mt-0.5 text-xs leading-5 text-slate-700">
+                    <p className="mt-0.5 text-xs leading-5 text-bs-text-sub">
                       {obs.text}
                     </p>
                   </li>
@@ -107,14 +107,14 @@ export default function TeacherNotebookPeek({
 
           {sketchUrl ? (
             <div>
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                 Sketch
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={sketchUrl}
                 alt="Student sketch"
-                className="max-h-64 w-full rounded-lg border border-slate-200 object-contain bg-white"
+                className="max-h-64 w-full rounded-lg border border-[var(--bs-border)] object-contain bg-bs-surface"
               />
             </div>
           ) : null}

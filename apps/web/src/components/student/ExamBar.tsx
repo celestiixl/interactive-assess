@@ -20,15 +20,15 @@ export function ExamBar({
   flagged?: boolean;
 }) {
   return (
-    <div className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur">
+    <div className="sticky top-0 z-30 border-b border-[var(--bs-border)] bg-bs-surface/85 backdrop-blur">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex flex-wrap items-center justify-between gap-3 py-3">
           <div className="min-w-0">
-            <div className="truncate text-sm font-semibold text-slate-900">
+            <div className="truncate text-sm font-semibold text-bs-text">
               {title}
             </div>
             {metaLeft ? (
-              <div className="text-xs text-slate-500">{metaLeft}</div>
+              <div className="text-xs text-bs-text-sub">{metaLeft}</div>
             ) : null}
           </div>
 
@@ -55,14 +55,14 @@ function ModeToggle({
   onChange?: (m: "learn" | "exam") => void;
 }) {
   return (
-    <div className="flex rounded-xl border border-slate-200 bg-white/70 p-1">
+    <div className="flex rounded-xl border border-[var(--bs-border)] bg-bs-surface p-1">
       <button
         onClick={() => onChange?.("learn")}
         className={[
           "rounded-lg px-3 py-1.5 text-xs",
           mode === "learn"
-            ? "bg-slate-100 text-slate-900"
-            : "text-slate-600 hover:bg-slate-50",
+            ? "bg-[var(--bs-raised)] text-bs-text"
+            : "text-bs-text-sub hover:bg-[var(--bs-raised)]",
         ].join(" ")}
       >
         Learn
@@ -72,8 +72,8 @@ function ModeToggle({
         className={[
           "rounded-lg px-3 py-1.5 text-xs",
           mode === "exam"
-            ? "bg-slate-100 text-slate-900"
-            : "text-slate-600 hover:bg-slate-50",
+            ? "bg-[var(--bs-raised)] text-bs-text"
+            : "text-bs-text-sub hover:bg-[var(--bs-raised)]",
         ].join(" ")}
       >
         Exam
@@ -95,10 +95,10 @@ function ToolButton({
     <button
       onClick={onClick}
       className={[
-        "rounded-xl border px-3 py-2 text-xs hover:bg-slate-50",
+        "rounded-xl border px-3 py-2 text-xs hover:bg-[var(--bs-raised)]",
         active
-          ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-          : "border-slate-200 bg-white/70 text-slate-700",
+          ? "border-emerald-300 bg-[rgba(74,222,128,0.06)] text-[#4ade80]"
+          : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub",
       ].join(" ")}
     >
       {label}

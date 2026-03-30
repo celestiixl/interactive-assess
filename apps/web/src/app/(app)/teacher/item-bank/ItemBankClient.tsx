@@ -33,7 +33,7 @@ const TYPE_META: Record<string, { label: string; color: string }> = {
   },
   numeric_response: {
     label: "Numeric",
-    color: "border-slate-300 bg-slate-100 text-slate-600",
+    color: "border-[var(--bs-border)] bg-[var(--bs-raised)] text-bs-text-sub",
   },
 };
 
@@ -87,11 +87,11 @@ function FilterSelect({
 }) {
   return (
     <label className="flex items-center gap-1.5 text-xs whitespace-nowrap">
-      <span className="font-medium text-slate-500">{label}</span>
+      <span className="font-medium text-bs-text-sub">{label}</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+        className="rounded-lg border border-[var(--bs-border)] bg-bs-surface px-2 py-1.5 text-xs font-medium text-bs-text focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
       >
         <option value="">All</option>
         {options.map((o) => (
@@ -119,16 +119,16 @@ function AnswerBreakdown({ item }: { item: Item }) {
           return (
             <div
               key={c.id}
-              className={`flex items-start gap-2.5 rounded-lg border px-3 py-2 text-sm transition-colors ${correct ? "border-emerald-200 bg-emerald-50" : "border-slate-100 bg-slate-50"}`}
+              className={`flex items-start gap-2.5 rounded-lg border px-3 py-2 text-sm transition-colors ${correct ? "border-emerald-200 bg-emerald-50" : "border-[var(--bs-border)] bg-[var(--bs-raised)]"}`}
             >
               <span
-                className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold ${correct ? "border-emerald-500 bg-emerald-500 text-white" : "border-slate-300 text-slate-500"}`}
+                className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold ${correct ? "border-emerald-500 bg-emerald-500 text-white" : "border-[var(--bs-border)] text-bs-text-sub"}`}
               >
                 {c.id}
               </span>
               <span
                 className={
-                  correct ? "font-medium text-emerald-900" : "text-slate-700"
+                  correct ? "font-medium text-emerald-900" : "text-bs-text-sub"
                 }
               >
                 {c.label}
@@ -170,9 +170,9 @@ function AnswerBreakdown({ item }: { item: Item }) {
           return (
             <div
               key={col.id}
-              className="rounded-lg border border-slate-200 bg-slate-50 p-3"
+              className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3"
             >
-              <div className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-600">
+              <div className="mb-2 text-xs font-bold uppercase tracking-wide text-bs-text-sub">
                 {col.label}
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -201,10 +201,10 @@ function AnswerBreakdown({ item }: { item: Item }) {
         {answer.blanks.map((b, i) => (
           <div
             key={b.id}
-            className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs"
+            className="flex items-center gap-2 rounded-lg border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2 text-xs"
           >
-            <span className="font-semibold text-slate-500">Box {i + 1}</span>
-            <span className="text-slate-400">→</span>
+            <span className="font-semibold text-bs-text-sub">Box {i + 1}</span>
+            <span className="text-bs-text-muted">→</span>
             <span className="rounded border border-emerald-200 bg-emerald-50 px-2 py-0.5 font-semibold text-emerald-800">
               {optMap[b.correctOptionId]}
             </span>
@@ -225,10 +225,10 @@ function AnswerBreakdown({ item }: { item: Item }) {
           return (
             <div
               key={c.id}
-              className={`flex items-center gap-2.5 rounded-lg border px-3 py-2 text-sm ${isA ? "border-teal-200 bg-teal-50" : isB ? "border-violet-200 bg-violet-50" : "border-slate-100 bg-slate-50"}`}
+              className={`flex items-center gap-2.5 rounded-lg border px-3 py-2 text-sm ${isA ? "border-teal-200 bg-teal-50" : isB ? "border-violet-200 bg-violet-50" : "border-[var(--bs-border)] bg-[var(--bs-raised)]"}`}
             >
               <span
-                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold ${isA ? "border-teal-500 bg-teal-500 text-white" : isB ? "border-violet-500 bg-violet-500 text-white" : "border-slate-300 text-slate-500"}`}
+                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold ${isA ? "border-teal-500 bg-teal-500 text-white" : isB ? "border-violet-500 bg-violet-500 text-white" : "border-[var(--bs-border)] text-bs-text-sub"}`}
               >
                 {c.id}
               </span>
@@ -238,7 +238,7 @@ function AnswerBreakdown({ item }: { item: Item }) {
                     ? "font-medium text-teal-900"
                     : isB
                       ? "font-medium text-violet-900"
-                      : "text-slate-700"
+                      : "text-bs-text-sub"
                 }
               >
                 {c.label}
@@ -280,11 +280,11 @@ function ItemCard({
 
   const type = TYPE_META[item.itemType] ?? {
     label: item.itemType,
-    color: "border-slate-200 bg-slate-100 text-slate-600",
+    color: "border-[var(--bs-border)] bg-[var(--bs-raised)] text-bs-text-sub",
   };
   const diff = DIFF_META[item.difficulty] ?? {
     label: item.difficulty,
-    color: "border-slate-200 bg-slate-100 text-slate-600",
+    color: "border-[var(--bs-border)] bg-[var(--bs-raised)] text-bs-text-sub",
     bar: "bg-slate-400",
   };
 
@@ -304,7 +304,7 @@ function ItemCard({
 
   return (
     <div
-      className={`rounded-2xl border bg-white transition-all ${inDraft ? "border-emerald-300 shadow-[0_0_0_3px_rgba(16,185,129,0.12)]" : "border-slate-200 shadow-sm hover:shadow-md"}`}
+      className={`rounded-2xl border bg-bs-surface transition-all ${inDraft ? "border-emerald-300 shadow-[0_0_0_3px_rgba(16,185,129,0.12)]" : "border-[var(--bs-border)] shadow-sm hover:shadow-md"}`}
     >
       <div className="p-4">
         <div className="flex items-start gap-3">
@@ -312,7 +312,7 @@ function ItemCard({
           <button
             type="button"
             onClick={() => onToggleDraft(item.id)}
-            className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition ${inDraft ? "border-emerald-500 bg-emerald-500 text-white" : "border-slate-300 hover:border-emerald-400 hover:bg-emerald-50"}`}
+            className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition ${inDraft ? "border-emerald-500 bg-emerald-500 text-white" : "border-[var(--bs-border)] hover:border-emerald-400 hover:bg-emerald-50"}`}
             aria-label={inDraft ? "Remove from draft" : "Add to draft"}
           >
             {inDraft && (
@@ -333,7 +333,7 @@ function ItemCard({
           <div className="min-w-0 flex-1">
             {/* Title + badges */}
             <div className="flex flex-wrap items-start justify-between gap-2">
-              <div className="font-semibold text-slate-900 leading-snug">
+              <div className="font-semibold text-bs-text leading-snug">
                 {item.title}
               </div>
               <div className="flex shrink-0 flex-wrap items-center gap-1.5">
@@ -354,16 +354,16 @@ function ItemCard({
                 <Badge
                   key={t}
                   label={<TeksTooltip code={t} />}
-                  className="border-slate-200 bg-slate-100 text-slate-600"
+                  className="border-[var(--bs-border)] bg-[var(--bs-raised)] text-bs-text-sub"
                 />
               ))}
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-bs-text-sub">
                 {item.topic} · {item.gradeBand}
               </span>
             </div>
 
             {/* Prompt preview */}
-            <p className="mt-2 text-sm text-slate-700 line-clamp-2">
+            <p className="mt-2 text-sm text-bs-text-sub line-clamp-2">
               {item.glossary?.length ? (
                 <GlossaryText
                   text={item.prompt}
@@ -378,7 +378,7 @@ function ItemCard({
 
             {/* Bottom row */}
             <div className="mt-2.5 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3 text-xs text-slate-500">
+              <div className="flex items-center gap-3 text-xs text-bs-text-sub">
                 <span>{answerSummary}</span>
                 {item.misconceptionTags?.length ? (
                   <span className="font-medium text-rose-600">
@@ -408,21 +408,21 @@ function ItemCard({
 
       {/* Expanded detail panel */}
       {expanded && (
-        <div className="border-t border-slate-100 px-4 pb-4 pt-3 space-y-4">
+        <div className="border-t border-[var(--bs-border)] px-4 pb-4 pt-3 space-y-4">
           <div className="grid gap-4 lg:grid-cols-2">
             {/* Question */}
             <div>
-              <div className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-400">
+              <div className="mb-2 text-xs font-bold uppercase tracking-wide text-bs-text-muted">
                 Question
               </div>
               {item.stimulus.kind !== "none" && (
-                <div className="mb-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm italic text-slate-600">
+                <div className="mb-2 rounded-lg border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2 text-sm italic text-bs-text-sub">
                   {item.stimulus.kind === "text"
                     ? item.stimulus.text
                     : `[${item.stimulus.kind} stimulus]`}
                 </div>
               )}
-              <p className="text-sm font-medium leading-relaxed text-slate-900 whitespace-pre-line">
+              <p className="text-sm font-medium leading-relaxed text-bs-text whitespace-pre-line">
                 {item.glossary?.length ? (
                   <GlossaryText
                     text={item.prompt}
@@ -438,7 +438,7 @@ function ItemCard({
 
             {/* Answer key */}
             <div>
-              <div className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-400">
+              <div className="mb-2 text-xs font-bold uppercase tracking-wide text-bs-text-muted">
                 Answer Key
               </div>
               <AnswerBreakdown item={item} />
@@ -447,8 +447,8 @@ function ItemCard({
 
           {/* Misconceptions */}
           {item.misconceptionTags?.length ? (
-            <div className="border-t border-slate-100 pt-3">
-              <div className="mb-1.5 text-xs font-bold uppercase tracking-wide text-slate-400">
+            <div className="border-t border-[var(--bs-border)] pt-3">
+              <div className="mb-1.5 text-xs font-bold uppercase tracking-wide text-bs-text-muted">
                 Common Misconceptions
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -465,8 +465,8 @@ function ItemCard({
           ) : null}
 
           {/* Item ID */}
-          <div className="border-t border-slate-100 pt-2">
-            <span className="font-mono text-[10px] text-slate-400">
+          <div className="border-t border-[var(--bs-border)] pt-2">
+            <span className="font-mono text-[10px] text-bs-text-muted">
               {item.id}
             </span>
           </div>
@@ -492,14 +492,14 @@ function StatTile({
   barColor?: string;
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-      <div className="text-2xl font-bold tabular-nums text-slate-900">
+    <div className="rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3 shadow-sm">
+      <div className="text-2xl font-bold tabular-nums text-bs-text">
         {value}
       </div>
-      <div className="mt-0.5 text-xs font-medium text-slate-500">{label}</div>
-      {sub && <div className="text-[11px] text-slate-400">{sub}</div>}
+      <div className="mt-0.5 text-xs font-medium text-bs-text-sub">{label}</div>
+      {sub && <div className="text-[11px] text-bs-text-muted">{sub}</div>}
       {bar != null && (
-        <div className="mt-2 h-1 w-full rounded-full bg-slate-100">
+        <div className="mt-2 h-1 w-full rounded-full bg-[var(--bs-raised)]">
           <div
             className={`h-1 rounded-full transition-all ${barColor ?? "bg-emerald-400"}`}
             style={{ width: `${bar}%` }}
@@ -661,11 +661,11 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
       </div>
 
       {/* Search + filter bar */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-3">
+      <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm space-y-3">
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
             <svg
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-bs-text-muted"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -682,10 +682,10 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search by title, prompt, TEKS, topic, misconception…"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-4 text-sm focus:border-emerald-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-200"
+              className="w-full rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] py-2 pl-9 pr-4 text-sm focus:border-emerald-400 focus:bg-bs-surface focus:outline-none focus:ring-2 focus:ring-emerald-200"
             />
           </div>
-          <label className="flex cursor-pointer items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium hover:bg-slate-50 select-none">
+          <label className="flex cursor-pointer items-center gap-1.5 rounded-xl border border-[var(--bs-border)] px-3 py-2 text-xs font-medium hover:bg-[var(--bs-raised)] select-none">
             <input
               type="checkbox"
               checked={staarOnly}
@@ -728,7 +728,7 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
           <button
             type="button"
             onClick={() => supports.setShowSupport(!supports.state.showSupport)}
-            className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ${supports.state.showSupport ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}
+            className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ${supports.state.showSupport ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"}`}
             title="Toggle bilingual glossary support"
           >
             Support: {supports.state.showSupport ? "On" : "Off"}
@@ -736,20 +736,20 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
           <select
             value={supports.state.supportLanguage}
             onChange={(e) => supports.setSupportLanguage(e.target.value as any)}
-            className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium text-slate-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="rounded-lg border border-[var(--bs-border)] bg-bs-surface px-2 py-1.5 text-xs font-medium text-bs-text focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
             title="Support language"
           >
             <option value="en">EN</option>
             <option value="es">ES</option>
           </select>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-bs-text-muted">
             Glossary: {glossarySupportOn ? "Spanish definitions" : "English definitions"}
           </span>
           {hasFilter && (
             <button
               type="button"
               onClick={clearFilters}
-              className="text-xs text-slate-400 underline hover:text-slate-700"
+              className="text-xs text-bs-text-muted underline hover:text-bs-text-sub"
             >
               Clear filters
             </button>
@@ -759,8 +759,8 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
 
       {/* Result count */}
       <div className="flex items-center justify-between text-sm">
-        <span className="text-slate-500">
-          Showing <strong className="text-slate-900">{filtered.length}</strong>
+        <span className="text-bs-text-sub">
+          Showing <strong className="text-bs-text">{filtered.length}</strong>
           {hasFilter && ` of ${items.length}`} items
         </span>
         {draft.length > 0 && (
@@ -772,9 +772,9 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
 
       {/* Item list */}
       {filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-8 py-14 text-center">
-          <div className="text-3xl text-slate-300 mb-3">🔍</div>
-          <div className="font-semibold text-slate-600">
+        <div className="rounded-2xl border border-dashed border-[var(--bs-border)] bg-bs-surface px-8 py-14 text-center">
+          <div className="text-3xl text-bs-text-muted mb-3">🔍</div>
+          <div className="font-semibold text-bs-text-sub">
             No items match your filters
           </div>
           <button
@@ -805,7 +805,7 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
           <div className="mx-auto max-w-6xl px-6 py-3">
             <div className="flex items-center gap-4">
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-bold text-slate-900">
+                <div className="text-sm font-bold text-bs-text">
                   {draft.length} item{draft.length > 1 ? "s" : ""} in draft
                 </div>
                 <div className="mt-1 flex flex-wrap gap-1.5">
@@ -832,7 +832,7 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
                 <button
                   type="button"
                   onClick={() => setDraft([])}
-                  className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                  className="rounded-xl border border-[var(--bs-border)] px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
                 >
                   Clear
                 </button>

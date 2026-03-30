@@ -81,7 +81,6 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["Outfit", "sans-serif"],
-        mono: ["JetBrains Mono", "monospace"],
         display: ["var(--font-display)", "sans-serif"],
         ui:   ["var(--bs-font-ui)", "sans-serif"],
         mono: ["var(--bs-font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],

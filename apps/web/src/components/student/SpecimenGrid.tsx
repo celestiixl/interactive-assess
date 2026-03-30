@@ -150,7 +150,7 @@ export default function SpecimenGrid({ segments }: Props) {
         </div>
       ) : null}
 
-      <div className="mb-2 text-sm font-semibold text-slate-900">Specimens</div>
+      <div className="mb-2 text-sm font-semibold text-bs-text">Specimens</div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
         {specimens.map((s, i) => {
@@ -165,8 +165,8 @@ export default function SpecimenGrid({ segments }: Props) {
             state === "unlocked"
               ? "bg-gradient-to-br from-emerald-50 to-cyan-50 ring-2 ring-emerald-300 shadow-md"
               : state === "growing"
-                ? "bg-white shadow-sm"
-                : "bg-slate-100 opacity-50";
+                ? "bg-bs-surface shadow-sm"
+                : "bg-[var(--bs-raised)] opacity-50";
 
           const barColor =
             state === "unlocked"
@@ -185,8 +185,8 @@ export default function SpecimenGrid({ segments }: Props) {
             state === "unlocked"
               ? "text-emerald-700"
               : state === "growing"
-                ? "text-slate-700"
-                : "text-slate-500";
+                ? "text-bs-text-sub"
+                : "text-bs-text-sub";
 
           return (
             <div
@@ -230,12 +230,12 @@ export default function SpecimenGrid({ segments }: Props) {
                 <span className="text-3xl">{s.organism.icon}</span>
               </div>
 
-              <div className="mt-2 text-sm font-semibold text-slate-900">
+              <div className="mt-2 text-sm font-semibold text-bs-text">
                 {s.organism.name}
               </div>
-              <div className="mt-1 text-xs text-slate-500">{s.pct}%</div>
+              <div className="mt-1 text-xs text-bs-text-sub">{s.pct}%</div>
 
-              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-[var(--bs-overlay)]">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${barColor}`}
                   style={{

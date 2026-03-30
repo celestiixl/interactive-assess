@@ -42,21 +42,21 @@ export default function PracticeXPHeader() {
     <div className="mb-4 p-4 ia-card-soft">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
             Practice Progress
           </div>
-          <div className="mt-1 text-lg font-semibold text-slate-900">
+          <div className="mt-1 text-lg font-semibold text-bs-text">
             Level {meta.level}
-            <span className="ml-2 text-sm font-semibold text-slate-600">
+            <span className="ml-2 text-sm font-semibold text-bs-text-sub">
               ({xp} XP)
             </span>
           </div>
-          <div className="mt-1 text-sm text-slate-600">Streak: {streak}</div>
+          <div className="mt-1 text-sm text-bs-text-sub">Streak: {streak}</div>
         </div>
 
         <div className="flex items-center gap-3">
           {toast ? (
-            <div className="rounded-full border bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
+            <div className="rounded-full border bg-bs-teal px-3 py-1 text-sm font-semibold text-[#080f12]">
               {toast}
             </div>
           ) : null}
@@ -70,16 +70,16 @@ export default function PracticeXPHeader() {
               setToast("Reset");
               window.setTimeout(() => setToast(null), 900);
             }}
-            className="rounded-full border bg-white/80 px-3 py-1 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+            className="rounded-full border bg-bs-surface px-3 py-1 text-sm font-semibold text-bs-text hover:bg-[var(--bs-raised)]"
           >
             Reset XP
           </button>
         </div>
       </div>
 
-      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/5">
         <div
-          className="h-full rounded-full bg-emerald-400 transition-all duration-500"
+          className="h-full rounded-full bg-gradient-to-r from-[var(--teal-dim)] to-[var(--teal)] transition-all duration-500"
           style={{
             width:
               `${Math.max(0, Math.min(100, (meta.into / meta.next) * 100))}` +
@@ -87,7 +87,7 @@ export default function PracticeXPHeader() {
           }}
         />
       </div>
-      <div className="mt-2 text-xs text-slate-500">
+      <div className="mt-2 text-xs text-bs-text-sub">
         {meta.into}/{meta.next} XP to next level
       </div>
     </div>

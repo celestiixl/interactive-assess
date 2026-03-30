@@ -25,7 +25,7 @@ function EntryRow({ entry }: { entry: DigestEntry }) {
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="flex items-center gap-2">
           <span
-            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-bs-amber dark:bg-amber-900/30 dark:text-amber-300"
             aria-label={`Rank ${entry.rank}`}
           >
             {entry.rank}
@@ -70,7 +70,7 @@ function EntryRow({ entry }: { entry: DigestEntry }) {
 
       {expanded && (
         <div
-          className="mt-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200"
+          className="mt-2 rounded-xl border border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.06)] p-3 text-sm text-bs-amber dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200"
           role="note"
           aria-label="Suggested talking point"
         >

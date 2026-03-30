@@ -2,7 +2,7 @@ export type ReportingCategory = "RC1" | "RC2" | "RC3" | "RC4";
 
 export type TeksEntry = {
   id: string; // e.g., "B.5A"
-  unit: 1 | 2 | 3;
+  unit: 1 | 2 | 3 | 7;
   strand: string;
   title: string;
   description: string;

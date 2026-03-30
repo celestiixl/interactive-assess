@@ -62,7 +62,7 @@ export function QuestionShell({
         </button>
 
         {!unlimited && (
-          <span className="text-sm text-slate-500">
+          <span className="text-sm text-bs-text-sub">
             Attempts left: {attemptsLeft}
           </span>
         )}
@@ -76,7 +76,7 @@ export function QuestionShell({
 
       {unlimited && explanation && !showExplanation && (
         <button
-          className="text-sm text-slate-600 underline"
+          className="text-sm text-bs-text-sub underline"
           onClick={() => setShowExplanation(true)}
         >
           Show explanation

@@ -84,8 +84,8 @@ const STATUS_LABEL: Record<LessonStatus, string> = {
 };
 
 const STATUS_BADGE: Record<LessonStatus, string> = {
-  not_started: "bg-slate-100 text-slate-600",
-  in_progress: "bg-amber-100 text-amber-800",
+  not_started: "bg-[var(--bs-raised)] text-bs-text-sub",
+  in_progress: "bg-amber-100 text-bs-amber",
   complete: "bg-green-100 text-green-800",
 };
 
@@ -97,11 +97,11 @@ const STATUS_TEXT: Record<LessonStatus, string> = {
 
 const BTN_CLS: Record<LessonStatus, string> = {
   not_started:
-    "rounded-full bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white hover:bg-slate-700 transition",
+    "rounded-full bg-bs-teal px-4 py-1.5 text-xs font-semibold text-white hover:bg-[var(--mint)] transition",
   in_progress:
-    "rounded-full bg-amber-500 px-4 py-1.5 text-xs font-semibold text-white hover:bg-amber-400 transition",
+    "rounded-full bg-bs-amber px-4 py-1.5 text-xs font-semibold text-white hover:bg-bs-amber transition",
   complete:
-    "rounded-full border border-slate-300 bg-white px-4 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition",
+    "rounded-full border border-[var(--bs-border)] bg-bs-surface px-4 py-1.5 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)] transition",
 };
 
 type FilterKey = "all" | "in_progress" | "not_started" | "complete";
@@ -208,36 +208,36 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
       {/* Header row */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-slate-900">Learning Hub</h2>
-          <p className="mt-0.5 text-sm text-slate-500">
+          <h2 className="text-xl font-semibold text-bs-text">Learning Hub</h2>
+          <p className="mt-0.5 text-sm text-bs-text-sub">
             Structured readings, lectures, and notes with linked learning
             assignments.
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="rounded-xl border bg-white px-4 py-2 text-center shadow-sm">
-            <div className="text-2xl font-bold text-slate-900">{streak}</div>
-            <div className="text-xs text-slate-500">day streak 🔥</div>
+          <div className="rounded-xl border bg-bs-surface px-4 py-2 text-center shadow-sm">
+            <div className="text-2xl font-bold text-bs-text">{streak}</div>
+            <div className="text-xs text-bs-text-sub">day streak 🔥</div>
           </div>
-          <div className="rounded-xl border bg-white px-4 py-2 text-center shadow-sm">
-            <div className="text-2xl font-bold text-slate-900">{accuracy}%</div>
-            <div className="text-xs text-slate-500">accuracy</div>
+          <div className="rounded-xl border bg-bs-surface px-4 py-2 text-center shadow-sm">
+            <div className="text-2xl font-bold text-bs-text">{accuracy}%</div>
+            <div className="text-xs text-bs-text-sub">accuracy</div>
           </div>
         </div>
       </div>
 
       {/* Overall progress */}
-      <div className="rounded-2xl border bg-white p-5 shadow-sm">
+      <div className="rounded-2xl border bg-bs-surface p-5 shadow-sm">
         <div className="mb-3 flex items-center justify-between">
-          <span className="text-sm font-semibold text-slate-800">
+          <span className="text-sm font-semibold text-bs-text">
             Overall learning progress
           </span>
-          <span className="text-sm text-slate-500">
+          <span className="text-sm text-bs-text-sub">
             {completedCount}/{lessons.length} complete
           </span>
         </div>
         <ProgressBar percent={overallProgress} label="" />
-        <div className="mt-2 text-xs text-slate-500">
+        <div className="mt-2 text-xs text-bs-text-sub">
           {learningAssignments.length} linked learning assignment
           {learningAssignments.length === 1 ? "" : "s"}
         </div>
@@ -252,8 +252,8 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
             onClick={() => setFilter(f.key)}
             className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors hover:scale-100 ${
               filter === f.key
-                ? "bg-slate-900 text-white border-slate-900"
-                : "bg-white text-slate-700 hover:bg-slate-50"
+                ? "bg-bs-teal text-white border-bs-text"
+                : "bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"
             }`}
           >
             {f.label}
@@ -263,7 +263,7 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
 
       {/* Microlesson cards */}
       {visible.length === 0 ? (
-        <p className="py-8 text-center text-sm text-slate-400">
+        <p className="py-8 text-center text-sm text-bs-text-muted">
           No lessons match this filter.
         </p>
       ) : (
@@ -271,7 +271,7 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
           {visible.map((lesson) => (
             <div
               key={lesson.id}
-              className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+              className="flex flex-col rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm"
             >
               {/* Top row: TEKS + status badge */}
               <div className="mb-3 flex items-center justify-between gap-2">
@@ -285,14 +285,14 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
                 </span>
               </div>
 
-              <div className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              <div className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-bs-text-sub">
                 {lesson.lessonType} • {lesson.unitTitle}
               </div>
 
-              <h3 className="text-sm font-semibold text-slate-900">
+              <h3 className="text-sm font-semibold text-bs-text">
                 {lesson.title}
               </h3>
-              <p className="mt-1 grow text-sm text-slate-500">
+              <p className="mt-1 grow text-sm text-bs-text-sub">
                 {lesson.description}
               </p>
 
@@ -301,11 +301,11 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
                   <div className="text-[11px] font-semibold uppercase tracking-wide text-sky-700">
                     Linked Assignment
                   </div>
-                  <div className="text-xs font-semibold text-slate-800">
+                  <div className="text-xs font-semibold text-bs-text">
                     {lesson.assignmentTitle}
                   </div>
                   {lesson.dueDateLabel ? (
-                    <div className="text-[11px] text-slate-500">
+                    <div className="text-[11px] text-bs-text-sub">
                       {lesson.dueDateLabel}
                     </div>
                   ) : null}
@@ -313,7 +313,7 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
               ) : null}
 
               {/* Duration */}
-              <div className="mt-3 text-xs text-slate-400">
+              <div className="mt-3 text-xs text-bs-text-muted">
                 ⏱ {lesson.durationMin} min
               </div>
 
@@ -338,10 +338,10 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
           <div className="text-xs font-semibold uppercase tracking-wide text-indigo-500">
             Need Practice After Reading?
           </div>
-          <div className="mt-1 text-sm font-semibold text-slate-900">
+          <div className="mt-1 text-sm font-semibold text-bs-text">
             Open your assigned lessons and continue progress.
           </div>
-          <div className="mt-0.5 text-xs text-slate-500">
+          <div className="mt-0.5 text-xs text-bs-text-sub">
             Synced from teacher assignments
           </div>
         </div>

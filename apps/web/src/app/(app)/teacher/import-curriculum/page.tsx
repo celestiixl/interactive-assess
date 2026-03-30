@@ -71,12 +71,12 @@ export default function TeacherImportCurriculumPage() {
   }, [parsed]);
 
   return (
-    <main className="mx-auto w-full max-w-6xl p-6 text-slate-900">
+    <main className="mx-auto w-full max-w-6xl p-6 text-bs-text">
       <BackLink href="/teacher/dashboard" label="Back to dashboard" />
-      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
         <div>
           <h1 className="text-2xl font-bold">Curriculum Import Validator</h1>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="mt-1 text-sm text-bs-text-sub">
             Paste structured curriculum JSON to preview and validate before
             publishing.
           </p>
@@ -86,21 +86,21 @@ export default function TeacherImportCurriculumPage() {
         </div>
       </section>
 
-      <section className="mt-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-        <label className="text-sm font-semibold text-slate-900">
+      <section className="mt-4 rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
+        <label className="text-sm font-semibold text-bs-text">
           Import payload (JSON)
         </label>
         <textarea
           value={payload}
           onChange={(event) => setPayload(event.target.value)}
           rows={14}
-          className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 font-mono text-xs"
+          className="mt-2 w-full rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3 font-mono text-xs"
         />
       </section>
 
       <section className="mt-4 grid gap-3 md:grid-cols-2">
-        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-900">Validation</h2>
+        <div className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
+          <h2 className="text-sm font-semibold text-bs-text">Validation</h2>
           <div className="mt-2 space-y-2 text-sm">
             {errors.length === 0 ? (
               <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-800">
@@ -119,21 +119,21 @@ export default function TeacherImportCurriculumPage() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-900">Preview</h2>
-          <div className="mt-2 space-y-2 text-sm text-slate-700">
+        <div className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
+          <h2 className="text-sm font-semibold text-bs-text">Preview</h2>
+          <div className="mt-2 space-y-2 text-sm text-bs-text-sub">
             {parsed.rows.slice(0, 8).map((unit) => (
               <div
                 key={unit.id}
-                className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2"
+                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2"
               >
                 <div className="font-semibold">
                   {unit.id} • {unit.title}
                 </div>
-                <div className="text-xs text-slate-500">
+                <div className="text-xs text-bs-text-sub">
                   TEKS: {(unit.teks || []).join(", ") || "—"}
                 </div>
-                <div className="text-xs text-slate-500">
+                <div className="text-xs text-bs-text-sub">
                   Lessons: {unit.lessons?.length ?? 0}
                 </div>
               </div>

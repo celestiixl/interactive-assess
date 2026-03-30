@@ -103,29 +103,29 @@ export default function StudentLearningHubPage() {
   );
 
   return (
-    <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-slate-900 sm:px-4 sm:py-4">
+    <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-bs-text sm:px-4 sm:py-4">
       <div className="mx-auto grid w-full max-w-6xl gap-3">
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
                 Learning Hub
               </div>
-              <h1 className="mt-1 text-2xl font-bold text-slate-900">
+              <h1 className="mt-1 text-2xl font-bold text-bs-text">
                 Curriculum Roadmap
               </h1>
-              <p className="mt-2 text-sm text-slate-600">
+              <p className="mt-2 text-sm text-bs-text-sub">
                 Readings, lectures, and notes with mastery pathing and
                 assignment-linked pacing for Units 1-3.
               </p>
-              <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-slate-600">
-                <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1">
+              <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-bs-text-sub">
+                <span className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-3 py-1">
                   {allVisibleUnits.length} Visible Units
                 </span>
-                <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1">
+                <span className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-3 py-1">
                   {completedLessons}/{totalLessons} Lessons Complete
                 </span>
-                <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1">
+                <span className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-3 py-1">
                   {interventions.length} Intervention Flags
                 </span>
               </div>
@@ -134,19 +134,19 @@ export default function StudentLearningHubPage() {
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/student/learn/standards"
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
               >
                 Standards Heatmap
               </Link>
               <Link
                 href="/student/learn/interventions"
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
               >
                 Interventions
               </Link>
               <Link
                 href="/student/guardian"
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
               >
                 Guardian Snapshot
               </Link>
@@ -161,18 +161,18 @@ export default function StudentLearningHubPage() {
                 <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
                   Continue where you left off
                 </div>
-                <div className="mt-1 text-sm font-semibold text-slate-900">
+                <div className="mt-1 text-sm font-semibold text-bs-text">
                   Unit {continueLesson.unit.unitNumber}:{" "}
                   {continueLesson.lesson.title}
                 </div>
-                <div className="text-xs text-slate-600">
+                <div className="text-xs text-bs-text-sub">
                   Last saved progress:{" "}
                   {progress[continueLesson.lesson.id]?.percent ?? 0}%
                 </div>
               </div>
               <Link
                 href={`/student/learn/${continueLesson.unit.id}/${continueLesson.lesson.slug}`}
-                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+                className="rounded-xl bg-bs-bg px-4 py-2 text-sm font-semibold text-white hover:bg-bs-bg"
               >
                 Resume Lesson
               </Link>
@@ -180,7 +180,7 @@ export default function StudentLearningHubPage() {
           </section>
         ) : null}
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+        <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm">
           <div className="flex flex-wrap gap-2">
             {([0, 1, 2, 3, 4] as const).map((gp) => (
               <button
@@ -189,8 +189,8 @@ export default function StudentLearningHubPage() {
                 onClick={() => setGradingPeriodFilter(gp)}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
                   gradingPeriodFilter === gp
-                    ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    ? "border-[var(--bs-border)] bg-bs-bg text-white"
+                    : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
                 }`}
               >
                 {gp === 0 ? "All Periods" : `GP ${gp}`}
@@ -215,7 +215,7 @@ export default function StudentLearningHubPage() {
             </div>
             <Link
               href="/student/learn/unit-7"
-              className="rounded-xl border border-emerald-200 bg-white px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
+              className="rounded-xl border border-emerald-200 bg-bs-surface px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
             >
               Open Unit 7
             </Link>
@@ -223,8 +223,8 @@ export default function StudentLearningHubPage() {
         </section>
 
         <div className="grid gap-3 lg:grid-cols-[1.5fr_1fr]">
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="text-sm font-semibold text-slate-900">
+          <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
+            <div className="text-sm font-semibold text-bs-text">
               Unit Roadmap
             </div>
             <div className="mt-3 space-y-3">
@@ -239,24 +239,24 @@ export default function StudentLearningHubPage() {
                 return (
                   <article
                     key={unit.id}
-                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                    className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4"
                   >
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
-                        <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                           GP {unit.gradingPeriod} • Unit {unit.unitNumber}
                         </div>
-                        <h2 className="mt-1 text-base font-semibold text-slate-900">
+                        <h2 className="mt-1 text-base font-semibold text-bs-text">
                           {unit.title}
                         </h2>
-                        <p className="mt-1 text-sm text-slate-600">
+                        <p className="mt-1 text-sm text-bs-text-sub">
                           {unit.objective}
                         </p>
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           {unit.teks.map((teks) => (
                             <span
                               key={teks}
-                              className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-semibold text-slate-600"
+                              className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-2 py-0.5 text-[10px] font-semibold text-bs-text-sub"
                             >
                               {teks}
                             </span>
@@ -265,19 +265,19 @@ export default function StudentLearningHubPage() {
                       </div>
                       <Link
                         href={`/student/learn/${unit.id}`}
-                        className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                        className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                       >
                         Open Unit
                       </Link>
                     </div>
 
-                    <div className="mt-3 h-2 rounded-full bg-slate-200">
+                    <div className="mt-3 h-2 rounded-full bg-bs-raised">
                       <div
                         className="h-2 rounded-full bg-blue-600 transition-all"
                         style={{ width: `${unitPct}%` }}
                       />
                     </div>
-                    <div className="mt-1 text-xs text-slate-500">
+                    <div className="mt-1 text-xs text-bs-text-sub">
                       {unitCompleted}/{unit.lessons.length} lessons complete
                     </div>
 
@@ -299,8 +299,8 @@ export default function StudentLearningHubPage() {
                             aria-disabled={!unlocked}
                             className={`rounded-xl border px-3 py-2 text-xs font-semibold ${
                               unlocked
-                                ? "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                                : "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400"
+                                ? "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
+                                : "cursor-not-allowed border-[var(--bs-border)] bg-bs-raised text-bs-text-muted"
                             }`}
                           >
                             {unlocked ? "Open" : "Locked"} • {lesson.title}
@@ -315,20 +315,20 @@ export default function StudentLearningHubPage() {
           </section>
 
           <aside className="space-y-3">
-            <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
-              <div className="text-sm font-semibold text-slate-900">
+            <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm">
+              <div className="text-sm font-semibold text-bs-text">
                 Weakest Standards
               </div>
               <div className="mt-2 space-y-2">
                 {weakestTeks.map((row) => (
                   <div
                     key={row.teks}
-                    className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs"
+                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs"
                   >
-                    <div className="font-semibold text-slate-800">
+                    <div className="font-semibold text-bs-text">
                       {row.teks}
                     </div>
-                    <div className="text-slate-600">
+                    <div className="text-bs-text-sub">
                       Avg check: {row.avgCheck}% • Completion:{" "}
                       {row.completionPct}%
                     </div>
@@ -337,8 +337,8 @@ export default function StudentLearningHubPage() {
               </div>
             </section>
 
-            <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
-              <div className="text-sm font-semibold text-slate-900">
+            <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm">
+              <div className="text-sm font-semibold text-bs-text">
                 Intervention Queue
               </div>
               <div className="mt-2 space-y-2">
@@ -355,7 +355,7 @@ export default function StudentLearningHubPage() {
                   </Link>
                 ))}
                 {interventions.length === 0 ? (
-                  <div className="text-xs text-slate-500">
+                  <div className="text-xs text-bs-text-sub">
                     No interventions right now.
                   </div>
                 ) : null}

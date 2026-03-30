@@ -14,17 +14,17 @@ export default function AnswerFeedback({ show, correct, item }: Props) {
 
   return (
     <div
-      className={`mt-4 rounded-2xl border p-4 ${correct ? "bg-emerald-50" : "bg-amber-50"}`}
+      className={`mt-4 rounded-2xl border p-4 ${correct ? "bg-[rgba(74,222,128,0.06)]" : "bg-[rgba(245,166,35,0.06)]"}`}
     >
-      <div className="text-sm font-semibold text-slate-900">
+      <div className="text-sm font-semibold text-bs-text">
         {correct === null ? "Feedback" : correct ? "Correct ✅" : "Not yet"}
       </div>
-      <div className="mt-2 text-sm text-slate-700">
+      <div className="mt-2 text-sm text-bs-text-sub">
         {explanation ? (
           explanation
         ) : (
           <>
-            <div className="font-semibold text-slate-800">
+            <div className="font-semibold text-bs-text">
               Why this matters:
             </div>
             <div className="mt-1">

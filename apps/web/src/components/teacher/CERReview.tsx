@@ -62,11 +62,11 @@ export default function CERReview({
   );
 
   return (
-    <div className="space-y-4 rounded-2xl border bg-white p-4">
+    <div className="space-y-4 rounded-2xl border bg-bs-surface p-4">
       <div className="text-sm font-semibold">Review Student CER Response</div>
 
       {/* Display mode info */}
-      <div className="text-xs text-slate-600 bg-slate-50 p-2 rounded">
+      <div className="text-xs text-bs-text-sub bg-[var(--bs-raised)] p-2 rounded">
         Mode: <span className="font-semibold">{item.mode}</span>
       </div>
 
@@ -74,7 +74,7 @@ export default function CERReview({
       {item.mode === "open" && response.claimText && (
         <div className="border-t pt-3">
           <div className="font-semibold text-sm mb-2">Claim</div>
-          <div className="p-3 rounded-lg bg-slate-100 text-sm text-slate-900 mb-3">
+          <div className="p-3 rounded-lg bg-[var(--bs-raised)] text-sm text-bs-text mb-3">
             {response.claimText}
           </div>
           <div className="grid grid-cols-2 gap-2 items-center">
@@ -90,7 +90,7 @@ export default function CERReview({
                 }
                 className="w-16 border rounded px-2 py-1 text-sm"
               />
-              <span className="text-xs text-slate-600">/ {maxClaimPoints}</span>
+              <span className="text-xs text-bs-text-sub">/ {maxClaimPoints}</span>
             </div>
           </div>
         </div>
@@ -100,7 +100,7 @@ export default function CERReview({
       {item.mode === "claim-evaluate" && response.claimEvaluation && (
         <div className="border-t pt-3">
           <div className="font-semibold text-sm mb-2">Claim Evaluation</div>
-          <div className="p-3 rounded-lg bg-slate-100 text-sm text-slate-900 mb-3">
+          <div className="p-3 rounded-lg bg-[var(--bs-raised)] text-sm text-bs-text mb-3">
             {response.claimEvaluation === "supported"
               ? "Supported"
               : "Not Supported"}
@@ -165,7 +165,7 @@ export default function CERReview({
               }
               className="w-16 border rounded px-2 py-1 text-sm"
             />
-            <span className="text-xs text-slate-600">
+            <span className="text-xs text-bs-text-sub">
               / {maxEvidencePoints}
             </span>
           </div>
@@ -175,7 +175,7 @@ export default function CERReview({
       {/* REASONING SECTION */}
       <div className="border-t pt-3">
         <div className="font-semibold text-sm mb-2">Reasoning</div>
-        <div className="p-3 rounded-lg bg-slate-100 text-sm text-slate-900 mb-3 whitespace-pre-wrap">
+        <div className="p-3 rounded-lg bg-[var(--bs-raised)] text-sm text-bs-text mb-3 whitespace-pre-wrap">
           {response.reasoningText}
         </div>
         <div className="grid grid-cols-2 gap-2 items-center mb-3">
@@ -191,7 +191,7 @@ export default function CERReview({
               }
               className="w-16 border rounded px-2 py-1 text-sm"
             />
-            <span className="text-xs text-slate-600">
+            <span className="text-xs text-bs-text-sub">
               / {maxReasoningPoints}
             </span>
           </div>
@@ -208,7 +208,7 @@ export default function CERReview({
             <button
               key={comment}
               onClick={() => addQuickComment(comment)}
-              className="px-2 py-1 text-xs bg-slate-200 hover:bg-slate-300 rounded font-medium transition"
+              className="px-2 py-1 text-xs bg-[var(--bs-overlay)] hover:bg-[var(--bs-overlay)] rounded font-medium transition"
             >
               + {comment}
             </button>
@@ -224,33 +224,33 @@ export default function CERReview({
       </div>
 
       {/* TOTALS */}
-      <div className="border-t pt-3 bg-slate-50 p-3 rounded-lg">
-        <div className="text-xs font-semibold text-slate-900 mb-2">
+      <div className="border-t pt-3 bg-[var(--bs-raised)] p-3 rounded-lg">
+        <div className="text-xs font-semibold text-bs-text mb-2">
           Total Score
         </div>
         <div className="grid grid-cols-2 gap-2">
           {item.mode === "open" && (
             <div className="text-xs">
-              <span className="text-slate-600">Claim: </span>
+              <span className="text-bs-text-sub">Claim: </span>
               <span className="font-semibold">
                 {claimScore}/{maxClaimPoints}
               </span>
             </div>
           )}
           <div className="text-xs">
-            <span className="text-slate-600">Evidence: </span>
+            <span className="text-bs-text-sub">Evidence: </span>
             <span className="font-semibold">
               {evidenceScore}/{maxEvidencePoints}
             </span>
           </div>
           <div className="text-xs">
-            <span className="text-slate-600">Reasoning: </span>
+            <span className="text-bs-text-sub">Reasoning: </span>
             <span className="font-semibold">
               {reasoningScore}/{maxReasoningPoints}
             </span>
           </div>
           <div className="text-xs font-bold text-blue-700">
-            <span className="text-slate-600">Total: </span>
+            <span className="text-bs-text-sub">Total: </span>
             <span className="font-bold text-blue-700">
               {claimScore + evidenceScore + reasoningScore}/
               {maxClaimPoints + maxEvidencePoints + maxReasoningPoints}

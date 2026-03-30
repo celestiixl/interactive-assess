@@ -154,7 +154,7 @@ export default function WeeklyDigestPage() {
     : null;
 
   return (
-    <main className="mx-auto w-full max-w-4xl p-6 text-slate-900 dark:text-slate-100">
+    <main className="mx-auto w-full max-w-4xl p-6 text-bs-text dark:text-slate-100">
       <BackLink href="/teacher/learning-analytics" label="Back to analytics" />
       {/* Page header */}
       <section className="rounded-3xl border border-border bg-surface-1 p-5 shadow-sm">

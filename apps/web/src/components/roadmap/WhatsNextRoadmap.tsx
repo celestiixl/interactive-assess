@@ -16,22 +16,22 @@ const ROADMAP_TONE_STYLES: Record<
   }
 > = {
   emerald: {
-    panel: "border-emerald-200 bg-emerald-50/80",
-    title: "text-emerald-800",
-    badge: "border-emerald-300 text-emerald-800",
-    text: "text-emerald-900",
+    panel: "border-[rgba(74,222,128,0.2)] bg-[rgba(74,222,128,0.06)]",
+    title: "text-[#4ade80]",
+    badge: "border-emerald-300 text-[#4ade80]",
+    text: "text-[#4ade80]",
   },
   teal: {
-    panel: "border-teal-200 bg-teal-50/80",
-    title: "text-teal-800",
-    badge: "border-teal-300 text-teal-800",
-    text: "text-teal-900",
+    panel: "border-[rgba(0,212,170,0.2)] bg-[rgba(0,212,170,0.06)]",
+    title: "text-bs-teal",
+    badge: "border-teal-300 text-bs-teal",
+    text: "text-bs-teal",
   },
   amber: {
-    panel: "border-amber-200 bg-amber-50/80",
-    title: "text-amber-800",
-    badge: "border-amber-300 text-amber-800",
-    text: "text-amber-900",
+    panel: "border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.06)]/80",
+    title: "text-bs-amber",
+    badge: "border-[rgba(245,166,35,0.25)] text-bs-amber",
+    text: "text-bs-amber",
   },
 };
 
@@ -47,7 +47,7 @@ export function WhatsNextRoadmap({
   return (
     <Surface className="p-6">
       <div className="flex items-center justify-between">
-        <div className="text-sm font-semibold text-slate-900">What’s next</div>
+        <div className="text-sm font-semibold text-bs-text">What’s next</div>
         <Pill tone="amber">roadmap</Pill>
       </div>
       <div className="mt-4 space-y-3">
@@ -66,7 +66,7 @@ export function WhatsNextRoadmap({
                   {section.title}
                 </div>
                 <span
-                  className={`rounded-full border bg-white px-2 py-0.5 text-[10px] font-semibold ${toneStyles.badge}`}
+                  className={`rounded-full border bg-bs-surface px-2 py-0.5 text-[10px] font-semibold ${toneStyles.badge}`}
                 >
                   {section.statusLabel}
                 </span>
@@ -87,7 +87,7 @@ export function WhatsNextRoadmap({
         })}
       </div>
       {footer ? (
-        <div className="mt-4 text-xs text-slate-600">{footer}</div>
+        <div className="mt-4 text-xs text-bs-text-sub">{footer}</div>
       ) : null}
     </Surface>
   );
