@@ -1,666 +1,544 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { BackLink } from "@/components/nav/BackLink";
 import PageBanner from "@/components/ui/PageBanner";
 import { PageContent } from "@/components/ui/PageShell";
 import StudentFloatingDock from "@/components/student/StudentFloatingDock";
-import type { TutorMessage, TutorTrigger, TutorChatResponse } from "@/types/tutor";
+import { TutorWidget } from "@/components/student/TutorWidget";
+import type { TutorTrigger } from "@/types/tutor";
 
 // ── Demo constants ────────────────────────────────────────────────────────────
 const DEMO_STUDENT_ID = "demo-student-001";
 
-const LESSON_OPTIONS: { slug: string; label: string }[] = [
-  { slug: "biomolecules-and-cell-structure", label: "Biomolecules & Cell Structure (B.5A/B.5B)" },
-  { slug: "cell-transport-and-homeostasis", label: "Cell Transport & Homeostasis (B.5C)" },
-  { slug: "enzymes-photosynthesis-respiration", label: "Enzymes, Photosynthesis & Respiration (B.11A/B.11B)" },
-  { slug: "dna-structure-and-replication", label: "DNA Structure & Replication (B.7A)" },
-  { slug: "transcription-and-translation", label: "Transcription & Translation (B.7B)" },
-  { slug: "mutations-and-significance", label: "Mutations & Significance (B.7C)" },
-  { slug: "cell-growth", label: "Cell Growth" },
-  { slug: "disruptions-cell-cycle", label: "Disruptions of the Cell Cycle" },
-  { slug: "plant-transport-and-vascular-systems", label: "Plant Transport & Vascular Systems (B.12B)" },
-  { slug: "plant-reproduction", label: "Plant Reproduction (B.12B)" },
-  { slug: "plant-responses-and-hormones", label: "Plant Responses & Hormones (B.12B)" },
-  { slug: "plant-systems-integration", label: "Plant Systems Integration (B.12B)" },
+const LESSON_OPTIONS: { slug: string; label: string; teks: string }[] = [
+  { slug: "biomolecules-and-cell-structure", label: "Biomolecules & Cell Structure", teks: "B.5A / B.5B" },
+  { slug: "cell-transport-and-homeostasis", label: "Cell Transport & Homeostasis", teks: "B.5C" },
+  { slug: "enzymes-photosynthesis-respiration", label: "Enzymes, Photosynthesis & Respiration", teks: "B.11A / B.11B" },
+  { slug: "dna-structure-and-replication", label: "DNA Structure & Replication", teks: "B.7A" },
+  { slug: "transcription-and-translation", label: "Transcription & Translation", teks: "B.7B" },
+  { slug: "mutations-and-significance", label: "Mutations & Significance", teks: "B.7C" },
+  { slug: "cell-growth", label: "Cell Growth", teks: "" },
+  { slug: "disruptions-cell-cycle", label: "Disruptions of the Cell Cycle", teks: "" },
+  { slug: "plant-transport-and-vascular-systems", label: "Plant Transport & Vascular Systems", teks: "B.12B" },
+  { slug: "plant-reproduction", label: "Plant Reproduction", teks: "B.12B" },
+  { slug: "plant-responses-and-hormones", label: "Plant Responses & Hormones", teks: "B.12B" },
+  { slug: "plant-systems-integration", label: "Plant Systems Integration", teks: "B.12B" },
 ];
 
-const TRIGGER_OPTIONS: { value: TutorTrigger; label: string; description: string }[] = [
-  { value: "student", label: "Student-initiated", description: "Student opened the chat themselves" },
-  { value: "wrong-answer", label: "Wrong answer", description: "Triggered after an incorrect quick-check answer" },
-  { value: "failed-attempts", label: "Failed attempts", description: "Triggered after multiple failed attempts" },
-  { value: "time-on-section", label: "Time on section", description: "Student has been stuck on a section too long" },
+const TRIGGER_OPTIONS: { value: TutorTrigger; label: string; emoji: string; description: string }[] = [
+  { value: "student", emoji: "💬", label: "Student-initiated", description: "Student opened the chat themselves" },
+  { value: "wrong-answer", emoji: "❌", label: "Wrong answer", description: "Triggered after an incorrect quick-check answer" },
+  { value: "failed-attempts", emoji: "🔄", label: "Failed attempts", description: "Triggered after multiple failed attempts" },
+  { value: "time-on-section", emoji: "⏱️", label: "Time on section", description: "Student has been on a section too long" },
 ];
 
-const TIER_LABELS: Record<string, { label: string; color: string }> = {
-  "2": { label: "Tier 2 — Targeted Support", color: "#f59e0b" },
-  "3": { label: "Tier 3 — Intensive Support", color: "#ef4444" },
-  null: { label: "No Intervention", color: "#10b981" },
-};
+const FEATURE_CARDS: { icon: string; title: string; body: string }[] = [
+  {
+    icon: "🎯",
+    title: "Adaptive to mastery",
+    body: "Derives your learning level from live mastery data and adjusts the scaffolding — more guidance for developing learners, richer depth for advanced ones.",
+  },
+  {
+    icon: "🧠",
+    title: "Socratic by design",
+    body: "Never gives away answers directly. Guides you with questions, hints, and worked examples so understanding sticks rather than just passing the check.",
+  },
+  {
+    icon: "📊",
+    title: "Intervention-aware",
+    body: "Returns an intervention tier with every reply. Tier 2 triggers graphic organizers; Tier 3 unlocks intensive scaffolding and simplified materials.",
+  },
+  {
+    icon: "🔬",
+    title: "TEKS-anchored",
+    body: "Every response is grounded in the specific TEKS standard for the lesson — B.5A, B.7B, B.11A, and more — keeping feedback curriculum-aligned.",
+  },
+];
 
-// ── Dark-mode-aware color tokens ─────────────────────────────────────────────
+// ── Design tokens ─────────────────────────────────────────────────────────────
 const C = {
-  bg: "#0f1117",
-  surface: "#1a1d27",
-  surfaceAlt: "#13151f",
-  border: "#2a2d3e",
-  borderLight: "#353850",
+  bg: "#0d1117",
+  surface: "#13171f",
+  surfaceAlt: "#0f1319",
+  border: "#21262d",
+  borderLight: "#30363d",
   accent: "#6366f1",
-  accentHover: "#4f52d9",
-  userBubble: "#312e81",
-  userBubbleBorder: "#4338ca",
-  assistantBubble: "#1e2033",
-  assistantBubbleBorder: "#2a2d3e",
-  text: "#e2e8f0",
-  textMuted: "#64748b",
-  textDim: "#94a3b8",
+  accentGlow: "rgba(99,102,241,0.18)",
+  text: "#e6edf3",
+  textSub: "#8b949e",
+  textDim: "#c9d1d9",
   success: "#10b981",
   warning: "#f59e0b",
-  danger: "#ef4444",
-  inputBg: "#0d0f18",
-  inputBorder: "#353850",
-  inputFocus: "#6366f1",
-  scrollThumb: "#2a2d3e",
-  badge: "#1e2d3e",
 };
 
-// ── Types ─────────────────────────────────────────────────────────────────────
-interface ChatEntry {
-  role: "user" | "assistant";
-  content: string;
-  /** Only set after the stream finishes for assistant messages */
-  metadata?: TutorChatResponse;
-}
-
-// ── Component ─────────────────────────────────────────────────────────────────
+// ── Page component ────────────────────────────────────────────────────────────
 export default function TutorDemoPage() {
   const [lessonSlug, setLessonSlug] = useState(LESSON_OPTIONS[0].slug);
   const [trigger, setTrigger] = useState<TutorTrigger>("student");
-  const [messages, setMessages] = useState<ChatEntry[]>([]);
-  const [inputText, setInputText] = useState("");
-  const [streaming, setStreaming] = useState(false);
-  const [lastMetadata, setLastMetadata] = useState<TutorChatResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  // key forces TutorWidget to remount (reset) when lesson/trigger change
+  const [widgetKey, setWidgetKey] = useState(0);
 
-  const listRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const currentLesson = LESSON_OPTIONS.find((l) => l.slug === lessonSlug)!;
+  const currentTrigger = TRIGGER_OPTIONS.find((t) => t.value === trigger)!;
 
-  // Auto-scroll to bottom when messages update
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollTop = listRef.current.scrollHeight;
-    }
-  }, [messages]);
-
-  const clearChat = useCallback(() => {
-    setMessages([]);
-    setLastMetadata(null);
-    setError(null);
-  }, []);
-
-  const sendMessage = useCallback(async () => {
-    const text = inputText.trim();
-    if (!text || streaming) return;
-
-    setError(null);
-    setInputText("");
-
-    // Build the history from existing messages (strip metadata)
-    const history: TutorMessage[] = messages.map((m) => ({
-      role: m.role,
-      content: m.content,
-    }));
-
-    // Add user message immediately
-    setMessages((prev) => [...prev, { role: "user", content: text }]);
-    setStreaming(true);
-
-    // Add placeholder assistant message
-    setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
-
-    try {
-      const res = await fetch("/api/tutor/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-student-id": DEMO_STUDENT_ID,
-        },
-        body: JSON.stringify({
-          message: text,
-          lessonSlug,
-          studentId: DEMO_STUDENT_ID,
-          conversationHistory: history,
-          triggeredBy: trigger,
-        }),
-      });
-
-      if (!res.ok) {
-        const errData = (await res.json().catch(() => ({}))) as {
-          error?: string;
-          message?: string;
-        };
-        throw new Error(
-          errData.message ?? `HTTP ${res.status}: ${errData.error ?? "unknown error"}`,
-        );
-      }
-
-      if (!res.body) throw new Error("Response body is empty.");
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let accumulated = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        accumulated += chunk;
-
-        // Update the assistant message in real-time, excluding the metadata footer
-        const visibleText = stripMetadataFooter(accumulated);
-        setMessages((prev) => {
-          const updated = [...prev];
-          updated[updated.length - 1] = { role: "assistant", content: visibleText };
-          return updated;
-        });
-      }
-
-      // Parse the metadata footer from the full accumulated text
-      const meta = extractMetadata(accumulated);
-      const visibleText = stripMetadataFooter(accumulated);
-
-      setMessages((prev) => {
-        const updated = [...prev];
-        updated[updated.length - 1] = {
-          role: "assistant",
-          content: visibleText,
-          metadata: meta ?? undefined,
-        };
-        return updated;
-      });
-
-      if (meta) setLastMetadata(meta);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Something went wrong.";
-      setError(msg);
-      // Remove the empty assistant placeholder on error
-      setMessages((prev) => prev.slice(0, -1));
-    } finally {
-      setStreaming(false);
-      inputRef.current?.focus();
-    }
-  }, [inputText, lessonSlug, messages, streaming, trigger]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    },
-    [sendMessage],
-  );
-
-  const currentLesson = LESSON_OPTIONS.find((l) => l.slug === lessonSlug);
-  const currentTrigger = TRIGGER_OPTIONS.find((t) => t.value === trigger);
+  function applySettings() {
+    setWidgetKey((k) => k + 1);
+  }
 
   return (
     <main
-      className="ia-vh-page flex min-h-dvh flex-col"
+      className="min-h-dvh flex flex-col"
       style={{ background: C.bg, color: C.text }}
     >
       <BackLink href="/student/dashboard" label="Back to dashboard" />
 
       <PageBanner
-        title="BioSpark Tutor Demo"
-        subtitle="Live demo of the AI tutor chat — select a lesson and start a conversation"
+        title="AI Tutor — Visual Demo"
+        subtitle="Interact with the live BioSpark Tutor. Configure the context below, then click the 🧬 button."
       />
 
-      <PageContent className="flex-1 py-6 pb-24">
-        <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-          {/* ── Settings sidebar ─────────────────────────────────────── */}
-          <aside
-            className="flex flex-col gap-4 rounded-2xl p-5"
-            style={{ background: C.surface, border: `1px solid ${C.border}` }}
-          >
-            <h2 className="text-xs font-semibold uppercase tracking-widest" style={{ color: C.textMuted }}>
-              Demo Settings
-            </h2>
+      <PageContent className="flex-1 py-8 pb-28">
+        {/* ── Hero section ──────────────────────────────────────────────── */}
+        <HeroSection />
 
-            {/* Lesson selector */}
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="lesson-select"
-                className="text-xs font-medium"
-                style={{ color: C.textDim }}
-              >
-                Lesson
-              </label>
-              <select
-                id="lesson-select"
-                value={lessonSlug}
-                onChange={(e) => {
-                  setLessonSlug(e.target.value);
-                  clearChat();
-                }}
-                aria-label="Select lesson"
-                className="rounded-lg px-3 py-2 text-sm outline-none transition focus:ring-2"
-                style={{
-                  background: C.inputBg,
-                  border: `1px solid ${C.inputBorder}`,
-                  color: C.text,
-                  // Focus ring via inline not supported easily; use CSS class
-                }}
-              >
-                {LESSON_OPTIONS.map((opt) => (
-                  <option key={opt.slug} value={opt.slug}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+        {/* ── Configuration + widget showcase ───────────────────────────── */}
+        <section className="mt-10 grid gap-6 lg:grid-cols-[1fr_360px]">
+          {/* Left: config panel */}
+          <div className="flex flex-col gap-6">
+            <ConfigCard
+              lessonSlug={lessonSlug}
+              trigger={trigger}
+              currentLesson={currentLesson}
+              currentTrigger={currentTrigger}
+              onLessonChange={setLessonSlug}
+              onTriggerChange={setTrigger}
+              onApply={applySettings}
+            />
+            <FeaturesGrid />
+          </div>
 
-            {/* Trigger selector */}
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="trigger-select"
-                className="text-xs font-medium"
-                style={{ color: C.textDim }}
-              >
-                Trigger (why tutor was invoked)
-              </label>
-              <select
-                id="trigger-select"
-                value={trigger}
-                onChange={(e) => setTrigger(e.target.value as TutorTrigger)}
-                aria-label="Select trigger"
-                className="rounded-lg px-3 py-2 text-sm outline-none transition"
-                style={{
-                  background: C.inputBg,
-                  border: `1px solid ${C.inputBorder}`,
-                  color: C.text,
-                }}
-              >
-                {TRIGGER_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              {currentTrigger && (
-                <p className="text-[11px]" style={{ color: C.textMuted }}>
-                  {currentTrigger.description}
-                </p>
-              )}
-            </div>
-
-            {/* Divider */}
-            <div className="h-px" style={{ background: C.border }} />
-
-            {/* Active context */}
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: C.textMuted }}>
-                Active Context
-              </span>
-              <div
-                className="rounded-xl p-3 text-xs"
-                style={{ background: C.surfaceAlt, border: `1px solid ${C.border}` }}
-              >
-                <p className="font-medium" style={{ color: C.textDim }}>
-                  Lesson
-                </p>
-                <p className="mt-0.5 font-semibold" style={{ color: C.text }}>
-                  {currentLesson?.label ?? lessonSlug}
-                </p>
-                <p className="mt-2 font-medium" style={{ color: C.textDim }}>
-                  Student ID
-                </p>
-                <p
-                  className="mt-0.5 rounded px-1.5 py-0.5 font-mono text-[11px]"
-                  style={{ background: C.badge, color: C.accent, display: "inline-block" }}
-                >
-                  {DEMO_STUDENT_ID}
-                </p>
-              </div>
-            </div>
-
-            {/* Intervention metadata (shown after first response) */}
-            {lastMetadata && (
-              <>
-                <div className="h-px" style={{ background: C.border }} />
-                <div className="flex flex-col gap-2">
-                  <span
-                    className="text-xs font-semibold uppercase tracking-widest"
-                    style={{ color: C.textMuted }}
-                  >
-                    Tutor Metadata
-                  </span>
-                  <MetadataCard meta={lastMetadata} />
-                </div>
-              </>
-            )}
-
-            {/* Clear button */}
-            <div className="mt-auto">
-              <button
-                type="button"
-                onClick={clearChat}
-                disabled={messages.length === 0 && !error}
-                aria-label="Clear conversation"
-                className="w-full rounded-xl px-4 py-2 text-sm font-medium transition"
-                style={{
-                  background: C.surfaceAlt,
-                  border: `1px solid ${C.borderLight}`,
-                  color: messages.length > 0 ? C.text : C.textMuted,
-                  cursor: messages.length === 0 && !error ? "not-allowed" : "pointer",
-                  opacity: messages.length === 0 && !error ? 0.5 : 1,
-                }}
-              >
-                Clear conversation
-              </button>
-            </div>
-          </aside>
-
-          {/* ── Chat panel ───────────────────────────────────────────── */}
-          <section
-            className="flex flex-col rounded-2xl overflow-hidden"
-            style={{
-              background: C.surface,
-              border: `1px solid ${C.border}`,
-              minHeight: "560px",
-            }}
-          >
-            {/* Chat header */}
-            <div
-              className="flex items-center gap-3 px-5 py-4"
-              style={{ borderBottom: `1px solid ${C.border}` }}
-            >
-              <div
-                className="flex h-9 w-9 items-center justify-center rounded-xl text-lg"
-                style={{ background: C.accent, color: "#fff" }}
-                aria-hidden="true"
-              >
-                🧬
-              </div>
-              <div>
-                <p className="text-sm font-semibold" style={{ color: C.text }}>
-                  BioSpark Tutor
-                </p>
-                <p className="text-xs" style={{ color: C.textMuted }}>
-                  {streaming ? "Typing..." : "Ready to help"}
-                </p>
-              </div>
-              {streaming && (
-                <div className="ml-auto flex gap-1" aria-live="polite" aria-label="Tutor is typing">
-                  {[0, 1, 2].map((i) => (
-                    <span
-                      key={i}
-                      className="h-1.5 w-1.5 rounded-full"
-                      style={{
-                        background: C.accent,
-                        animation: `blink 1.2s ease-in-out ${i * 0.2}s infinite`,
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Message list */}
-            <div
-              ref={listRef}
-              className="flex-1 overflow-y-auto p-5"
-              style={{ scrollbarColor: `${C.scrollThumb} transparent` }}
-              aria-live="polite"
-              aria-label="Conversation"
-            >
-              {messages.length === 0 && !error && (
-                <EmptyState lessonLabel={currentLesson?.label ?? lessonSlug} />
-              )}
-
-              {messages.map((msg, i) => (
-                <MessageBubble key={i} entry={msg} />
-              ))}
-
-              {error && (
-                <div
-                  className="mx-auto mt-4 max-w-md rounded-xl px-4 py-3 text-sm"
-                  role="alert"
-                  style={{
-                    background: "#1f0f0f",
-                    border: `1px solid ${C.danger}`,
-                    color: C.danger,
-                  }}
-                >
-                  <span className="font-semibold">Error: </span>
-                  {error}
-                </div>
-              )}
-            </div>
-
-            {/* Input area */}
-            <div
-              className="px-5 py-4"
-              style={{ borderTop: `1px solid ${C.border}` }}
-            >
-              <div className="flex items-end gap-3">
-                <textarea
-                  ref={inputRef}
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Ask BioSpark Tutor anything about this lesson... (Enter to send)"
-                  rows={2}
-                  maxLength={500}
-                  disabled={streaming}
-                  aria-label="Message input"
-                  className="flex-1 resize-none rounded-xl px-4 py-3 text-sm outline-none transition"
-                  style={{
-                    background: C.inputBg,
-                    border: `1px solid ${C.inputBorder}`,
-                    color: C.text,
-                    lineHeight: "1.5",
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={sendMessage}
-                  disabled={!inputText.trim() || streaming}
-                  aria-label="Send message"
-                  className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl transition"
-                  style={{
-                    background:
-                      !inputText.trim() || streaming ? C.surfaceAlt : C.accent,
-                    border: `1px solid ${!inputText.trim() || streaming ? C.border : C.accent}`,
-                    color:
-                      !inputText.trim() || streaming ? C.textMuted : "#fff",
-                    cursor:
-                      !inputText.trim() || streaming ? "not-allowed" : "pointer",
-                  }}
-                >
-                  <SendIcon />
-                </button>
-              </div>
-              <p className="mt-1.5 text-right text-[11px]" style={{ color: C.textMuted }}>
-                {inputText.length}/500 · Shift+Enter for new line
-              </p>
-            </div>
-          </section>
-        </div>
+          {/* Right: live widget preview */}
+          <div>
+            <WidgetShowcase
+              key={widgetKey}
+              lessonSlug={lessonSlug}
+              lessonLabel={`${currentLesson.label}${currentLesson.teks ? ` (${currentLesson.teks})` : ""}`}
+              trigger={trigger}
+              studentId={DEMO_STUDENT_ID}
+            />
+          </div>
+        </section>
       </PageContent>
-
-      {/* Typing animation keyframes injected inline */}
-      <style>{`
-        @keyframes blink {
-          0%, 100% { opacity: 0.2; transform: scale(0.8); }
-          50% { opacity: 1; transform: scale(1.1); }
-        }
-      `}</style>
 
       <StudentFloatingDock />
     </main>
   );
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+// ── Section components ─────────────────────────────────────────────────────────
 
-function EmptyState({ lessonLabel }: { lessonLabel: string }) {
+function HeroSection() {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
+    <div
+      className="rounded-3xl p-8 sm:p-10 relative overflow-hidden"
+      style={{
+        background: `linear-gradient(135deg, #13152a 0%, #1a1045 50%, #0e1620 100%)`,
+        border: `1px solid rgba(99,102,241,0.3)`,
+        boxShadow: `inset 0 0 80px rgba(99,102,241,0.05)`,
+      }}
+    >
+      {/* Decorative glow */}
       <div
-        className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl text-3xl"
-        style={{ background: "#1e2033", border: `1px solid ${C.border}` }}
-      >
-        🧬
-      </div>
-      <p className="text-sm font-semibold" style={{ color: C.text }}>
-        Start a conversation
-      </p>
-      <p className="mt-1 max-w-xs text-xs leading-relaxed" style={{ color: C.textMuted }}>
-        Ask a question about <span style={{ color: C.textDim }}>{lessonLabel}</span>.
-        The tutor will guide you with questions rather than giving direct answers.
-      </p>
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "-40px",
+          right: "-40px",
+          width: "260px",
+          height: "260px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
       <div
-        className="mt-4 rounded-xl px-4 py-2.5 text-xs"
-        style={{ background: "#1e2033", border: `1px solid ${C.border}`, color: C.textDim }}
-      >
-        💡 Try: &ldquo;What is the difference between prokaryotic and eukaryotic cells?&rdquo;
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: "-60px",
+          left: "30%",
+          width: "320px",
+          height: "200px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+        {/* Avatar */}
+        <div
+          className="flex-shrink-0 flex items-center justify-center rounded-2xl"
+          style={{
+            width: "80px",
+            height: "80px",
+            background: "linear-gradient(135deg, #312e81 0%, #6366f1 100%)",
+            fontSize: "40px",
+            boxShadow: "0 8px 32px rgba(99,102,241,0.5), 0 0 0 1px rgba(99,102,241,0.4)",
+          }}
+          aria-hidden="true"
+        >
+          🧬
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-3 flex-wrap">
+            <h2 className="text-2xl font-bold" style={{ color: "#e0e7ff" }}>
+              BioSpark Tutor
+            </h2>
+            <span
+              className="rounded-full px-3 py-1 text-xs font-semibold"
+              style={{
+                background: "rgba(99,102,241,0.2)",
+                border: "1px solid rgba(99,102,241,0.4)",
+                color: "#a5b4fc",
+              }}
+            >
+              Powered by Claude
+            </span>
+            <span
+              className="rounded-full px-3 py-1 text-xs font-semibold"
+              style={{
+                background: "rgba(16,185,129,0.15)",
+                border: "1px solid rgba(16,185,129,0.3)",
+                color: "#6ee7b7",
+              }}
+            >
+              ● Live
+            </span>
+          </div>
+          <p className="text-sm leading-relaxed max-w-xl" style={{ color: "#94a3b8" }}>
+            An adaptive Socratic tutor anchored to FBISD Biology TEKS standards. Adjusts
+            scaffolding in real time based on student mastery, and flags intervention needs
+            for teachers automatically.
+          </p>
+          <div className="flex flex-wrap gap-2 mt-1">
+            {["B.5A", "B.5B", "B.7B", "B.11A", "B.11B", "B.12B"].map((t) => (
+              <span
+                key={t}
+                className="rounded px-2 py-0.5 font-mono text-xs font-semibold"
+                style={{ background: "#1e2d3e", color: "#67e8f9" }}
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function MessageBubble({ entry }: { entry: ChatEntry }) {
-  const isUser = entry.role === "user";
+function ConfigCard({
+  lessonSlug,
+  trigger,
+  currentLesson,
+  currentTrigger,
+  onLessonChange,
+  onTriggerChange,
+  onApply,
+}: {
+  lessonSlug: string;
+  trigger: TutorTrigger;
+  currentLesson: (typeof LESSON_OPTIONS)[0];
+  currentTrigger: (typeof TRIGGER_OPTIONS)[0];
+  onLessonChange: (slug: string) => void;
+  onTriggerChange: (t: TutorTrigger) => void;
+  onApply: () => void;
+}) {
+  return (
+    <div
+      className="rounded-2xl p-6"
+      style={{ background: C.surface, border: `1px solid ${C.border}` }}
+    >
+      <h3 className="text-sm font-semibold mb-4" style={{ color: C.textSub }}>
+        Demo Configuration
+      </h3>
 
-  if (isUser) {
-    return (
-      <div className="mb-4 flex justify-end">
-        <div
-          className="max-w-[72%] rounded-2xl rounded-tr-sm px-4 py-3 text-sm leading-relaxed"
-          style={{
-            background: C.userBubble,
-            border: `1px solid ${C.userBubbleBorder}`,
-            color: "#e0e7ff",
-          }}
-        >
-          {entry.content}
+      <div className="grid gap-5 sm:grid-cols-2">
+        {/* Lesson */}
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="lesson-select"
+            className="text-xs font-medium"
+            style={{ color: C.textSub }}
+          >
+            Lesson context
+          </label>
+          <select
+            id="lesson-select"
+            value={lessonSlug}
+            onChange={(e) => onLessonChange(e.target.value)}
+            aria-label="Select lesson"
+            className="rounded-xl px-3 py-2.5 text-sm outline-none appearance-none"
+            style={{
+              background: C.surfaceAlt,
+              border: `1px solid ${C.borderLight}`,
+              color: C.text,
+            }}
+          >
+            {LESSON_OPTIONS.map((opt) => (
+              <option key={opt.slug} value={opt.slug}>
+                {opt.label}
+                {opt.teks ? ` — ${opt.teks}` : ""}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Trigger */}
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="trigger-select"
+            className="text-xs font-medium"
+            style={{ color: C.textSub }}
+          >
+            Invocation trigger
+          </label>
+          <select
+            id="trigger-select"
+            value={trigger}
+            onChange={(e) => onTriggerChange(e.target.value as TutorTrigger)}
+            aria-label="Select trigger"
+            className="rounded-xl px-3 py-2.5 text-sm outline-none appearance-none"
+            style={{
+              background: C.surfaceAlt,
+              border: `1px solid ${C.borderLight}`,
+              color: C.text,
+            }}
+          >
+            {TRIGGER_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.emoji} {opt.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
-    );
-  }
 
-  return (
-    <div className="mb-4 flex items-start gap-3">
+      {/* Active summary */}
       <div
-        className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg text-sm"
-        style={{ background: C.accent, color: "#fff" }}
-        aria-hidden="true"
+        className="mt-4 rounded-xl p-3 flex flex-wrap gap-4 text-xs"
+        style={{ background: C.surfaceAlt, border: `1px solid ${C.border}` }}
       >
-        🧬
-      </div>
-      <div className="flex-1">
-        <div
-          className="rounded-2xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed"
-          style={{
-            background: C.assistantBubble,
-            border: `1px solid ${C.assistantBubbleBorder}`,
-            color: C.text,
-          }}
-        >
-          {entry.content || (
-            <span style={{ color: C.textMuted }}>
-              <span className="animate-pulse">●●●</span>
+        <div>
+          <span style={{ color: C.textSub }}>Lesson: </span>
+          <span style={{ color: C.textDim, fontWeight: 600 }}>{currentLesson.label}</span>
+          {currentLesson.teks && (
+            <span
+              className="ml-2 rounded px-1.5 py-0.5 font-mono font-semibold"
+              style={{ background: "#1e2d3e", color: "#67e8f9", fontSize: "10px" }}
+            >
+              {currentLesson.teks}
             </span>
           )}
         </div>
+        <div>
+          <span style={{ color: C.textSub }}>Trigger: </span>
+          <span style={{ color: C.textDim, fontWeight: 600 }}>
+            {currentTrigger.emoji} {currentTrigger.label}
+          </span>
+        </div>
+        <div>
+          <span style={{ color: C.textSub }}>Student: </span>
+          <span
+            className="rounded px-1.5 py-0.5 font-mono"
+            style={{ background: C.accentGlow, color: "#a5b4fc", fontSize: "10px" }}
+          >
+            {DEMO_STUDENT_ID}
+          </span>
+        </div>
       </div>
+
+      <button
+        type="button"
+        onClick={onApply}
+        aria-label="Apply configuration and reset conversation"
+        className="mt-4 w-full rounded-xl py-2.5 text-sm font-semibold transition"
+        style={{
+          background: C.accent,
+          color: "#fff",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Apply &amp; Reset Conversation
+      </button>
+      <p className="mt-1.5 text-center text-xs" style={{ color: C.textSub }}>
+        Then click the 🧬 button in the widget on the right
+      </p>
     </div>
   );
 }
 
-function MetadataCard({ meta }: { meta: TutorChatResponse }) {
-  const tierKey = String(meta.interventionTier) as keyof typeof TIER_LABELS;
-  const tier = TIER_LABELS[tierKey] ?? TIER_LABELS["null"];
+function FeaturesGrid() {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      {FEATURE_CARDS.map((card) => (
+        <div
+          key={card.title}
+          className="rounded-2xl p-5"
+          style={{
+            background: C.surface,
+            border: `1px solid ${C.border}`,
+          }}
+        >
+          <div className="text-2xl mb-3" aria-hidden="true">{card.icon}</div>
+          <p className="text-sm font-semibold mb-1" style={{ color: C.text }}>
+            {card.title}
+          </p>
+          <p className="text-xs leading-relaxed" style={{ color: C.textSub }}>
+            {card.body}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
+function WidgetShowcase({
+  lessonSlug,
+  lessonLabel,
+  trigger,
+  studentId,
+}: {
+  lessonSlug: string;
+  lessonLabel: string;
+  trigger: TutorTrigger;
+  studentId: string;
+}) {
   return (
     <div
-      className="rounded-xl p-3 text-xs"
-      style={{ background: C.surfaceAlt, border: `1px solid ${C.border}` }}
+      className="rounded-2xl p-6 flex flex-col gap-4 sticky top-20"
+      style={{ background: C.surface, border: `1px solid ${C.border}` }}
     >
-      <div className="flex items-center gap-2">
-        <span
-          className="h-2 w-2 rounded-full"
-          style={{ background: tier.color }}
-          aria-hidden="true"
-        />
-        <span className="font-semibold" style={{ color: tier.color }}>
-          {tier.label}
-        </span>
+      <div>
+        <h3 className="text-sm font-semibold" style={{ color: C.text }}>
+          Live Widget
+        </h3>
+        <p className="mt-1 text-xs leading-relaxed" style={{ color: C.textSub }}>
+          The 🧬 button below is the actual floating trigger. Click it to open the chat
+          panel and start a real conversation with the tutor.
+        </p>
       </div>
-      {meta.teks.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-1">
-          {meta.teks.map((t) => (
-            <span
-              key={t}
-              className="rounded px-1.5 py-0.5 font-mono font-semibold"
-              style={{ background: "#1e2d3e", color: "#67e8f9", fontSize: "10px" }}
-            >
-              {t}
-            </span>
+
+      {/* Simulated phone frame */}
+      <div
+        className="relative flex items-end justify-end rounded-2xl overflow-hidden"
+        style={{
+          height: "480px",
+          background:
+            "linear-gradient(160deg, #0d1117 0%, #13152a 50%, #0d1117 100%)",
+          border: `1px solid ${C.borderLight}`,
+        }}
+        aria-label="Widget preview area"
+      >
+        {/* Decorative grid pattern */}
+        <svg
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            opacity: 0.04,
+          }}
+        >
+          <defs>
+            <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+              <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#6366f1" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+
+        {/* Decorative label */}
+        <div
+          style={{
+            position: "absolute",
+            top: "16px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <span
+            className="rounded-full px-3 py-1 text-xs font-medium"
+            style={{
+              background: "rgba(99,102,241,0.12)",
+              border: "1px solid rgba(99,102,241,0.25)",
+              color: "rgba(165,180,252,0.7)",
+            }}
+          >
+            Student lesson view
+          </span>
+        </div>
+
+        {/* Mock lesson content hint */}
+        <div
+          className="absolute"
+          style={{
+            top: "52px",
+            left: "16px",
+            right: "80px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
+          aria-hidden="true"
+        >
+          {[100, 80, 90, 60].map((w, i) => (
+            <div
+              key={i}
+              style={{
+                height: i === 0 ? "14px" : "10px",
+                width: `${w}%`,
+                borderRadius: "6px",
+                background: "rgba(255,255,255,0.04)",
+              }}
+            />
+          ))}
+          <div style={{ height: "24px" }} />
+          {[85, 70, 95, 55, 75].map((w, i) => (
+            <div
+              key={i}
+              style={{
+                height: "10px",
+                width: `${w}%`,
+                borderRadius: "6px",
+                background: "rgba(255,255,255,0.03)",
+              }}
+            />
           ))}
         </div>
-      )}
+
+        {/* The actual TutorWidget — inline position inside the frame */}
+        <div style={{ position: "absolute", bottom: "16px", right: "16px" }}>
+          <TutorWidget
+            lessonSlug={lessonSlug}
+            lessonLabel={lessonLabel}
+            studentId={studentId}
+            triggeredBy={trigger}
+            defaultOpen={false}
+            position="inline"
+          />
+        </div>
+      </div>
+
+      <p className="text-xs text-center" style={{ color: C.textSub }}>
+        The widget floats at bottom-right in real lesson pages
+      </p>
     </div>
   );
-}
-
-function SendIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="m22 2-7 20-4-9-9-4Z" />
-      <path d="M22 2 11 13" />
-    </svg>
-  );
-}
-
-// ── Streaming helpers ─────────────────────────────────────────────────────────
-
-/**
- * The API appends a JSON metadata footer after a `\n\n` separator.
- * Extract it from the accumulated text. Returns null if not found.
- */
-function extractMetadata(text: string): TutorChatResponse | null {
-  const sep = text.lastIndexOf("\n\n");
-  if (sep === -1) return null;
-  const candidate = text.slice(sep + 2).trim();
-  if (!candidate.startsWith("{")) return null;
-  try {
-    return JSON.parse(candidate) as TutorChatResponse;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Return the visible tutor text without the JSON metadata footer.
- */
-function stripMetadataFooter(text: string): string {
-  const sep = text.lastIndexOf("\n\n");
-  if (sep === -1) return text;
-  const candidate = text.slice(sep + 2).trim();
-  if (!candidate.startsWith("{")) return text;
-  return text.slice(0, sep).trimEnd();
 }
