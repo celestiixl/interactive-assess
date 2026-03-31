@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { BackLink } from "@/components/nav/BackLink";
 import { PageContent, PageBanner, Card, Badge } from "@/components/ui";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import {
   type AssignmentKind,
   type AssignmentStatus,
@@ -470,7 +469,6 @@ function StudentAssignmentsPageContent() {
           </div>
         </div>
       </PageContent>
-      <StudentFloatingDock />
     </main>
   );
 }

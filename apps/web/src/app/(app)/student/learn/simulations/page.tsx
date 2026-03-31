@@ -1,5 +1,4 @@
 import Link from "next/link";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 
 const SIMULATIONS = [
   {
@@ -87,7 +86,6 @@ export default function SimulationsPage() {
         </div>
       </div>
 
-      <StudentFloatingDock />
     </main>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { BackLink } from "@/components/nav/BackLink";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import { PageBanner, PageContent } from "@/components/ui";
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -879,7 +878,6 @@ export default function PopulationGeneticsSimPage() {
         </div>
       </PageContent>
 
-      <StudentFloatingDock />
     </main>
   );
 }

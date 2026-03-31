@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import ThemeToggle from "@/components/ia/ThemeToggle";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import type { StudentProfile } from "@/types/challenge";
 import { BADGE_MILESTONES, levelTitle } from "@/lib/challengeData";
 import {
@@ -227,7 +226,6 @@ export default function StudentProfilePage() {
         </div>
       </div>
 
-      <StudentFloatingDock />
       <ThemeToggle />
     </main>
   );

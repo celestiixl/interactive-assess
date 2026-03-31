@@ -4,7 +4,6 @@ import { useState } from "react";
 import { BackLink } from "@/components/nav/BackLink";
 import PageBanner from "@/components/ui/PageBanner";
 import { PageContent } from "@/components/ui/PageShell";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import { TutorWidget } from "@/components/student/TutorWidget";
 import type { TutorTrigger } from "@/types/tutor";
 
@@ -134,7 +133,6 @@ export default function TutorDemoPage() {
         </section>
       </PageContent>
 
-      <StudentFloatingDock />
     </main>
   );
 }

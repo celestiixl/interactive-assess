@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { BackLink } from "@/components/nav/BackLink";
 import { PageBanner, PageContent } from "@/components/ui";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import SuccessionPhenomenonBanner from "@/components/student/SuccessionPhenomenonBanner";
 import SuccessionScene from "@/components/student/SuccessionScene";
 import SuccessionTimeline from "@/components/student/SuccessionTimeline";
@@ -347,7 +346,6 @@ export default function EcologicalSuccessionPage() {
         </div>
       </PageContent>
 
-      <StudentFloatingDock />
     </main>
   );
 }

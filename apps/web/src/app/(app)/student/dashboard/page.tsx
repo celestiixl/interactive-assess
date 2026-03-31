@@ -2,10 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import type { Segment } from "@/types/segment";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 
 import Link from "next/link";
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import SpecimenGrid from "@/components/student/SpecimenGrid";
 import { PageContent, Card, Section, MasteryRing } from "@/components/ui";
@@ -13,6 +12,8 @@ import { PageContent, Card, Section, MasteryRing } from "@/components/ui";
 // ---------------------------------------------------------------------------
 // Mock data — replace with real data fetch when API is ready
 // ---------------------------------------------------------------------------
+const MOCK_USER = { initials: "BS", displayName: "Student" };
+
 const MOCK_NEXT_ASSIGNMENT: {
   title: string;
   dueDate: string;
@@ -29,8 +30,6 @@ export default function StudentDashboard() {
   const router = useRouter();
 
   const [tab, setTab] = useState<"overview" | "specimens">("overview");
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   // After hydration, restore last selected tab (prevents SSR/client mismatch)
   useEffect(() => {
@@ -47,18 +46,6 @@ export default function StudentDashboard() {
       tab === "specimens" ? "specimens" : "overview",
     );
   }, [tab]);
-
-  // Close collapsible menu when clicking outside
-  useEffect(() => {
-    if (!menuOpen) return;
-    function handleClick(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [menuOpen]);
 
   // Demo segments (0..1). Replace later with real stats.
   const SEGMENTS: Segment[] = [
@@ -154,9 +141,10 @@ export default function StudentDashboard() {
       <nav
         className="sticky top-0 z-50 border-b border-bs-border bg-[#0d1e2c]/95 backdrop-blur-md"
         style={{ fontFamily: "Outfit, sans-serif" }}
+        aria-label="Student navigation"
       >
-        <div className="mx-auto flex w-full max-w-350 items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          {/* Logo */}
+        <div className="mx-auto flex h-14 w-full max-w-350 items-center justify-between px-6 sm:px-8">
+          {/* Left: Logo */}
           <Link
             href="/student/dashboard"
             className="text-xl font-bold tracking-tight text-[#00d4aa]"
@@ -165,86 +153,42 @@ export default function StudentDashboard() {
             BioSpark
           </Link>
 
-          {/* Right-side controls */}
-          <div className="relative flex items-center gap-3" ref={menuRef}>
-            {/* Hamburger for secondary links */}
-            <button
-              type="button"
-              aria-label="Open navigation menu"
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((o) => !o)}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-bs-border bg-[#132638] text-[#e8f4f0] hover:bg-bs-raised"
-            >
-              {menuOpen ? (
-                /* X icon */
-                <svg
-                  className="h-4 w-4"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path d="M2 2l12 12M14 2L2 14" />
-                </svg>
-              ) : (
-                /* Hamburger icon */
-                <svg
-                  className="h-4 w-4"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path d="M2 4h12M2 8h12M2 12h12" />
-                </svg>
-              )}
-            </button>
-
-            {/* Profile avatar — links to /student/profile */}
+          {/* Center: Horizontal nav links */}
+          <div className="flex items-center gap-1">
             <Link
-              href="/student/profile"
-              aria-label="My profile"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#00d4aa] text-xs font-bold text-[#0d1e2c] hover:opacity-90"
+              href="/student/learn"
+              className="rounded-lg px-3 py-1.5 text-sm font-semibold text-[#9abcb0] hover:bg-[#132638] hover:text-[#e8f4f0]"
             >
-              BS
+              BioSpark Quest
             </Link>
-
-            {/* Collapsible dropdown menu */}
-            {menuOpen && (
-              <div className="absolute right-0 top-11 z-50 min-w-44 rounded-2xl border border-bs-border bg-[#132638] py-2 shadow-lg">
-                <Link
-                  href="/student/learn"
-                  onClick={() => setMenuOpen(false)}
-                  className="block px-4 py-2 text-sm font-semibold text-[#e8f4f0] hover:bg-bs-raised"
-                >
-                  BioSpark Quest
-                </Link>
-                <Link
-                  href="/simulations"
-                  onClick={() => setMenuOpen(false)}
-                  className="block px-4 py-2 text-sm font-semibold text-[#e8f4f0] hover:bg-bs-raised"
-                >
-                  Simulations
-                </Link>
-                <Link
-                  href="/phenomena-studio"
-                  onClick={() => setMenuOpen(false)}
-                  className="block px-4 py-2 text-sm font-semibold text-[#e8f4f0] hover:bg-bs-raised"
-                >
-                  SparkScope
-                </Link>
-                <Link
-                  href="/student/bioart-demo"
-                  onClick={() => setMenuOpen(false)}
-                  className="block px-4 py-2 text-sm font-semibold text-[#e8f4f0] hover:bg-bs-raised"
-                >
-                  Icon Registry Demo
-                </Link>
-              </div>
-            )}
+            <Link
+              href="/simulations"
+              className="rounded-lg px-3 py-1.5 text-sm font-semibold text-[#9abcb0] hover:bg-[#132638] hover:text-[#e8f4f0]"
+            >
+              Simulations
+            </Link>
+            <Link
+              href="/phenomena-studio"
+              className="rounded-lg px-3 py-1.5 text-sm font-semibold text-[#9abcb0] hover:bg-[#132638] hover:text-[#e8f4f0]"
+            >
+              SparkScope
+            </Link>
           </div>
+
+          {/* Far right: Avatar + name inline cluster */}
+          <Link
+            href="/student/profile"
+            aria-label="My profile"
+            className="flex items-center gap-2 rounded-full border border-[#00d4aa]/30 bg-[#132638] px-3 py-1.5 hover:bg-bs-raised"
+          >
+            <div
+              aria-hidden="true"
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00d4aa] text-xs font-bold text-[#0d1e2c]"
+            >
+              {MOCK_USER.initials}
+            </div>
+            <span className="text-sm font-semibold text-[#e8f4f0]">{MOCK_USER.displayName}</span>
+          </Link>
         </div>
       </nav>
 
@@ -407,7 +351,6 @@ export default function StudentDashboard() {
           </Card>
         </div>
       </PageContent>
-      <StudentFloatingDock />
     </main>
   );
 }

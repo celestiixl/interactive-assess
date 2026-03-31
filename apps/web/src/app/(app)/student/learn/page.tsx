@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import ThemeToggle from "@/components/ia/ThemeToggle";
 import { LEARNING_UNITS } from "@/lib/learningHubContent";
 import {
@@ -365,7 +364,6 @@ export default function StudentLearningHubPage() {
         </div>
       </div>
 
-      <StudentFloatingDock />
       <ThemeToggle />
     </main>
   );

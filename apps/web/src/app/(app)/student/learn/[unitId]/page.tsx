@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import ThemeToggle from "@/components/ia/ThemeToggle";
 import { getUnitById } from "@/lib/learningHubContent";
 import { BackLink } from "@/components/nav/BackLink";
@@ -184,7 +183,6 @@ export default function Page({ params }: UnitPageProps) {
         </section>
       </div>
 
-      <StudentFloatingDock />
       <ThemeToggle />
     </main>
   );

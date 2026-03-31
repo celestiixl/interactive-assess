@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { PageContent } from "@/components/ui";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 
 function LinkCard({
   title,
@@ -182,7 +181,6 @@ export default function StudentAssessmentLabPage() {
         </div>
         </div>
       </PageContent>
-      <StudentFloatingDock />
     </main>
   );
 }

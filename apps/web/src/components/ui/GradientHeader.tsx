@@ -19,18 +19,16 @@ export function GradientHeader({
         gradientClassName,
       )}
     >
-      <div className="mx-auto w-full max-w-350 px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-semibold tracking-tight text-bs-text">
-              {title}
-            </h1>
-            {subtitle ? (
-              <p className="mt-2 text-bs-text-sub">{subtitle}</p>
-            ) : null}
-          </div>
-          {children}
+      <div className="mx-auto flex h-14 w-full max-w-350 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <div className="flex min-w-0 flex-1 items-baseline gap-3">
+          <h1 className="truncate text-xl font-semibold tracking-tight text-bs-text">
+            {title}
+          </h1>
+          {subtitle ? (
+            <p className="hidden truncate text-sm text-bs-text-sub sm:block">{subtitle}</p>
+          ) : null}
         </div>
+        {children}
       </div>
     </div>
   );
