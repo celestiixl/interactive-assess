@@ -1,88 +1,36 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { Segment } from "@/types/segment";
-import AccommodationsButton from "@/components/student/AccommodationsButton";
 import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 
 import Link from "next/link";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 
 import SpecimenGrid from "@/components/student/SpecimenGrid";
-import {
-  PageContent,
-  PageBanner,
-  Card,
-  Section,
-  MasteryRing,
-} from "@/components/ui";
+import { PageContent, Card, Section, MasteryRing } from "@/components/ui";
 
-function clamp01(n: number) {
-  if (!Number.isFinite(n)) return 0;
-  return Math.max(0, Math.min(1, n));
-}
-
-function getBiomeHealth(segments: Segment[]) {
-  const total = segments.reduce(
-    (acc, seg) => acc + (Number(seg.value) || 0),
-    0,
-  );
-  const avg = segments.length ? total / segments.length : 0;
-  const p = clamp01(avg);
-
-  if (p < 0.25) {
-    return {
-      level: "Collapsed",
-      biome: "Polluted Waters",
-      desc: "Food web is unstable.",
-      pct: Math.round(p * 100),
-      badge: "border-neutral-200 text-neutral-800",
-      joyColor: "neutral" as const,
-    };
-  }
-  if (p < 0.5) {
-    return {
-      level: "Recovering",
-      biome: "Sparse Grassland",
-      desc: "Some stability, gaps remain.",
-      pct: Math.round(p * 100),
-      badge: "border-amber-200 text-amber-900",
-      joyColor: "warning" as const,
-    };
-  }
-  if (p < 0.75) {
-    return {
-      level: "Stable",
-      biome: "Balanced Forest",
-      desc: "Most relationships are solid.",
-      pct: Math.round(p * 100),
-      badge: "border-green-200 text-green-900",
-      joyColor: "success" as const,
-    };
-  }
-  return {
-    level: "Thriving",
-    biome: "Thriving Reef",
-    desc: "Ecosystem is strong and resilient.",
-    pct: Math.round(p * 100),
-    badge: "border-cyan-200 text-cyan-900",
-    joyColor: "primary" as const,
-  };
-}
+// ---------------------------------------------------------------------------
+// Mock data — replace with real data fetch when API is ready
+// ---------------------------------------------------------------------------
+const MOCK_NEXT_ASSIGNMENT: {
+  title: string;
+  dueDate: string;
+  teks: string[];
+  type: "quiz" | "assignment";
+} | null = {
+  title: "Unit 1 Concept Check: Biomolecules",
+  dueDate: "2026-04-04",
+  teks: ["B.5A", "B.5B"],
+  type: "assignment",
+};
 
 export default function StudentDashboard() {
   const router = useRouter();
-  const pathname = usePathname();
-
-  const tabParam =
-    typeof window !== "undefined"
-      ? (
-          new URLSearchParams(window.location.search).get("tab") || ""
-        ).toLowerCase()
-      : "";
-  const initialTab = tabParam === "specimens" ? "specimens" : "overview";
 
   const [tab, setTab] = useState<"overview" | "specimens">("overview");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   // After hydration, restore last selected tab (prevents SSR/client mismatch)
   useEffect(() => {
@@ -99,6 +47,18 @@ export default function StudentDashboard() {
       tab === "specimens" ? "specimens" : "overview",
     );
   }, [tab]);
+
+  // Close collapsible menu when clicking outside
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [menuOpen]);
 
   // Demo segments (0..1). Replace later with real stats.
   const SEGMENTS: Segment[] = [
@@ -179,13 +139,6 @@ export default function StudentDashboard() {
 
   const segments = SEGMENTS;
 
-  const biome = useMemo(() => getBiomeHealth(segments), [segments]);
-
-  const nextSegment = useMemo(() => {
-    const s = [...segments].sort((a, b) => (a.value ?? 0) - (b.value ?? 0))[0];
-    return s ?? null;
-  }, [segments]);
-
   const weakestSegment = useMemo(() => {
     const sorted = [...segments].sort(
       (a, b) => (a.value ?? 0) - (b.value ?? 0),
@@ -193,134 +146,117 @@ export default function StudentDashboard() {
     return sorted[0] ?? null;
   }, [segments]);
 
-  const masteredCount = useMemo(
-    () => segments.filter((s) => (s.value ?? 0) >= 0.75).length,
-    [segments],
-  );
-
   return (
     <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-bs-text">
-      <PageBanner
-        title="Student Dashboard"
-        subtitle="Your personal mastery tracker."
+      {/* ------------------------------------------------------------------ */}
+      {/* Minimal nav bar (Part 2)                                            */}
+      {/* ------------------------------------------------------------------ */}
+      <nav
+        className="sticky top-0 z-50 border-b border-bs-border bg-[#0d1e2c]/95 backdrop-blur-md"
+        style={{ fontFamily: "Outfit, sans-serif" }}
       >
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            onClick={() => {
-              Object.keys(sessionStorage).forEach((k) => {
-                if (k.startsWith("specimen_unlocked_"))
-                  sessionStorage.removeItem(k);
-              });
-              location.reload();
-            }}
-            className="rounded-full bg-bs-surface/20 px-4 py-2 text-xs font-semibold text-white hover:bg-bs-raised/25"
-          >
-            Reset Specimen Unlocks
-          </button>
+        <div className="mx-auto flex w-full max-w-350 items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+          {/* Logo */}
           <Link
-            href="/student/assessment"
-            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
+            href="/student/dashboard"
+            className="text-xl font-bold tracking-tight text-[#00d4aa]"
+            aria-label="BioSpark home"
           >
-            Back to Assessment Lab
+            BioSpark
           </Link>
-          <Link
-            href="/student/learn"
-            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
-          >
-            Open BioSpark Quest
-          </Link>
-          <Link
-            href="/student/profile"
-            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
-          >
-            My Profile
-          </Link>
-          <Link
-            href="/student/genome-browser"
-            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
-          >
-            🧬 Genome Browser
-          </Link>
-          <Link
-            href="/student/bioart-demo"
-            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-raised/25"
-          >
-            🎨 Icon Registry Demo
-          </Link>
-          <button
-            type="button"
-            onClick={() => router.push("/simulations")}
-            className="rounded-full bg-bs-surface px-4 py-2 text-xs font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
-            aria-label="Open simulations"
-          >
-            Simulations
-          </button>
-          <button
-            type="button"
-            onClick={() => router.push("/phenomena-studio")}
-            className="rounded-full bg-bs-surface px-4 py-2 text-xs font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
-            aria-label="Open phenomenon exploration"
-          >
-            SparkScope
-          </button>
+
+          {/* Right-side controls */}
+          <div className="relative flex items-center gap-3" ref={menuRef}>
+            {/* Hamburger for secondary links */}
+            <button
+              type="button"
+              aria-label="Open navigation menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((o) => !o)}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-bs-border bg-[#132638] text-[#e8f4f0] hover:bg-bs-raised"
+            >
+              {menuOpen ? (
+                /* X icon */
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  aria-hidden="true"
+                >
+                  <path d="M2 2l12 12M14 2L2 14" />
+                </svg>
+              ) : (
+                /* Hamburger icon */
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  aria-hidden="true"
+                >
+                  <path d="M2 4h12M2 8h12M2 12h12" />
+                </svg>
+              )}
+            </button>
+
+            {/* Profile avatar — links to /student/profile */}
+            <Link
+              href="/student/profile"
+              aria-label="My profile"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#00d4aa] text-xs font-bold text-[#0d1e2c] hover:opacity-90"
+            >
+              BS
+            </Link>
+
+            {/* Collapsible dropdown menu */}
+            {menuOpen && (
+              <div className="absolute right-0 top-11 z-50 min-w-44 rounded-2xl border border-bs-border bg-[#132638] py-2 shadow-lg">
+                <Link
+                  href="/student/learn"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-2 text-sm font-semibold text-[#e8f4f0] hover:bg-bs-raised"
+                >
+                  BioSpark Quest
+                </Link>
+                <Link
+                  href="/simulations"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-2 text-sm font-semibold text-[#e8f4f0] hover:bg-bs-raised"
+                >
+                  Simulations
+                </Link>
+                <Link
+                  href="/phenomena-studio"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-2 text-sm font-semibold text-[#e8f4f0] hover:bg-bs-raised"
+                >
+                  SparkScope
+                </Link>
+                <Link
+                  href="/student/bioart-demo"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-2 text-sm font-semibold text-[#e8f4f0] hover:bg-bs-raised"
+                >
+                  Icon Registry Demo
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
-      </PageBanner>
+      </nav>
+
       <PageContent className="flex-1 min-h-0 py-4">
         <div className="ia-vh-scroll h-full min-h-0 overflow-y-auto pr-1">
           {/* MAIN CONTENT SURFACE */}
           <Card>
-            {/* Biome banner */}
-            <div className="mb-5 flex flex-wrap items-start justify-between gap-3 rounded-2xl border border-white/20 bg-linear-to-r from-violet-500 via-purple-400 to-amber-400 p-5">
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-white/85">
-                  Biome Health
-                </div>
-                <div className="mt-1 text-lg font-semibold text-white">
-                  {biome.level} • {biome.biome}{" "}
-                  <span className="ml-2 text-sm font-semibold text-white/90">
-                    ({biome.pct}%)
-                  </span>
-                </div>
-                <div className="mt-1 text-sm text-white/90">{biome.desc}</div>
-                <div className="mt-3 inline-flex items-center rounded-full border border-white/30 bg-bs-surface/20 px-3 py-1 text-xs font-semibold text-white">
-                  segments passed: {segments.length}
-                </div>
-              </div>
-
-              <div className="flex items-center">
-                <Link
-                  href={
-                    nextSegment
-                      ? `/practice?focus=${encodeURIComponent(nextSegment.key)}`
-                      : "/practice"
-                  }
-                  className="inline-flex items-center gap-2 rounded-full bg-bs-bg px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-bg"
-                >
-                  {nextSegment
-                    ? `Next: practice ${nextSegment.label}`
-                    : "Start practice"}
-                </Link>
-              </div>
-            </div>
-
             {/* Tabs */}
             <div className="mb-4 flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => {
-                  setTab("overview");
-                  if (typeof window !== "undefined")
-                    window.localStorage.setItem(
-                      "studentDashboard.activeTab",
-                      "overview",
-                    );
-                  if (typeof window !== "undefined")
-                    window.localStorage.setItem(
-                      "studentDashboard.activeTab",
-                      "overview",
-                    );
-                }}
+                onClick={() => setTab("overview")}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   tab === "overview"
                     ? "bg-bs-bg text-white"
@@ -331,19 +267,7 @@ export default function StudentDashboard() {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setTab("specimens");
-                  if (typeof window !== "undefined")
-                    window.localStorage.setItem(
-                      "studentDashboard.activeTab",
-                      "specimens",
-                    );
-                  if (typeof window !== "undefined")
-                    window.localStorage.setItem(
-                      "studentDashboard.activeTab",
-                      "specimens",
-                    );
-                }}
+                onClick={() => setTab("specimens")}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   tab === "specimens"
                     ? "bg-bs-bg text-white"
@@ -354,15 +278,7 @@ export default function StudentDashboard() {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  if (typeof window !== "undefined") {
-                    window.localStorage.setItem(
-                      "studentDashboard.activeTab",
-                      "overview",
-                    );
-                  }
-                  router.push("/student/learning-hub");
-                }}
+                onClick={() => router.push("/student/learning-hub")}
                 className="rounded-full border bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text transition hover:bg-bs-raised"
               >
                 Learning Hub
@@ -374,6 +290,36 @@ export default function StudentDashboard() {
               {tab === "overview" ? (
                 <>
                   <MasteryRing segments={segments} />
+
+                  {/* -------------------------------------------------------- */}
+                  {/* Next-best-step CTA (Part 3)                              */}
+                  {/* -------------------------------------------------------- */}
+                  <div className="mt-5 rounded-2xl border border-bs-border bg-bs-surface p-5">
+                    <div className="text-sm font-semibold text-bs-text">
+                      Next best step
+                    </div>
+                    <div className="mt-2 text-sm text-bs-text-sub">
+                      {weakestSegment
+                        ? `Focus on ${weakestSegment.label} (${weakestSegment.key}) to raise your weakest segment.`
+                        : "Focus on your lowest mastery segment."}
+                    </div>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <Link
+                        href="/student/learn/standards"
+                        className="inline-flex items-center rounded-full bg-[#00d4aa] px-4 py-2 text-sm font-semibold text-[#0d1e2c] hover:opacity-90"
+                      >
+                        {weakestSegment
+                          ? `Practice ${weakestSegment.key}`
+                          : "Practice"}
+                      </Link>
+                      <Link
+                        href="/student/learn/standards"
+                        className="inline-flex items-center rounded-full border border-bs-border bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
+                      >
+                        View all standards
+                      </Link>
+                    </div>
+                  </div>
                 </>
               ) : tab === "specimens" ? (
                 <>
@@ -385,86 +331,55 @@ export default function StudentDashboard() {
               ) : null}
             </Section>
 
-            {/* Bottom cards */}
-            <section className="mt-5 rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <div className="text-sm font-semibold text-bs-text">
-                    Assigned work
+            {/* ---------------------------------------------------------------- */}
+            {/* Assigned Work card (Part 3)                                      */}
+            {/* ---------------------------------------------------------------- */}
+            <section className="mt-5 rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-5">
+              <div className="mb-3 text-sm font-semibold text-bs-text">
+                Assigned work
+              </div>
+              {MOCK_NEXT_ASSIGNMENT ? (
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <div className="font-semibold text-bs-text">
+                      {MOCK_NEXT_ASSIGNMENT.title}
+                    </div>
+                    <div className="mt-1 text-xs text-bs-text-sub">
+                      Due{" "}
+                      {new Date(
+                        MOCK_NEXT_ASSIGNMENT.dueDate,
+                      ).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {MOCK_NEXT_ASSIGNMENT.teks.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-full bg-[#00d4aa]/15 px-2 py-0.5 text-xs font-semibold text-[#00d4aa]"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <div className="mt-1 text-xs text-bs-text-sub">
-                    Open your teacher-assigned work and quizzes.
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2">
                   <Link
                     href="/student/assignments"
-                    className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
+                    className="inline-flex items-center rounded-full bg-[#00d4aa] px-4 py-2 text-sm font-semibold text-[#0d1e2c] hover:opacity-90"
                   >
-                    Assignments
-                  </Link>
-                  <Link
-                    href="/student/assignments?kind=assessment"
-                    className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
-                  >
-                    Quizzes
+                    Start
                   </Link>
                 </div>
-              </div>
+              ) : (
+                <div className="py-4 text-center text-sm text-bs-text-sub">
+                  You&apos;re all caught up! 🎉
+                </div>
+              )}
             </section>
 
-            <section className="mt-5 rounded-2xl border border-indigo-100 bg-indigo-50 p-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <div className="text-sm font-semibold text-indigo-900">
-                    🧬 Population Genetics Simulator
-                  </div>
-                  <div className="mt-1 text-xs text-indigo-700">
-                    Explore Hardy-Weinberg equilibrium, genetic drift, natural
-                    selection, and bottleneck events interactively.
-                  </div>
-                </div>
-                <Link
-                  href="/student/learn/simulations/population-genetics"
-                  className="rounded-full bg-indigo-700 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600"
-                >
-                  Launch Simulation
-                </Link>
-              </div>
-            </section>
-
-            <section className="mt-5 grid gap-4 md:grid-cols-3">
-              <Card variant="sm">
-                <div className="text-sm font-semibold text-bs-text">
-                  Next best step
-                </div>
-                <div className="mt-2 text-sm text-bs-text-sub">
-                  {weakestSegment
-                    ? `Focus on ${weakestSegment.key} (${weakestSegment.label}) to raise your lowest mastery segment.`
-                    : "Focus on your lowest mastery segment."}
-                </div>
-                <div className="mt-4 flex gap-2">
-                  <Link
-                    className="ia-btn-primary text-sm"
-                    href={
-                      weakestSegment
-                        ? `/practice?focus=${encodeURIComponent(weakestSegment.key)}`
-                        : "/practice"
-                    }
-                  >
-                    {weakestSegment
-                      ? `Practice ${weakestSegment.key}`
-                      : "Practice"}
-                  </Link>
-                  <Link className="ia-btn text-sm" href="/student/learn/unit-3">
-                    Unit 3 Hub
-                  </Link>
-                  <Link className="ia-btn text-sm" href="/student/learn">
-                    BioSpark Quest
-                  </Link>
-                </div>
-              </Card>
-
+            <section className="mt-5 grid gap-4 md:grid-cols-2">
               <Card variant="sm">
                 <div
                   className="text-sm font-semibold text-bs-text"
