@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getLessonBySlug, getUnitById } from "@/lib/learningHubContent";
 import { FlashcardDeck } from "@/components/student/FlashcardDeck";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import ThemeToggle from "@/components/ia/ThemeToggle";
 import { BackLink } from "@/components/nav/BackLink";
 
@@ -35,7 +34,6 @@ export default async function FlashcardsPage({ params }: FlashcardsPageProps) {
           <FlashcardDeck lesson={lesson} />
         </div>
       </main>
-      <StudentFloatingDock />
       <ThemeToggle />
     </>
   );

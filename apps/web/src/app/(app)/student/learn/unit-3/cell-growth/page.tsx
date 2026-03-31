@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import ThemeToggle from "@/components/ia/ThemeToggle";
 import { getLessonBySlug, getUnitById } from "@/lib/learningHubContent";
 import LessonExperience from "@/components/student/LessonExperience";
@@ -26,7 +25,6 @@ export default function Unit3CellGrowthStubPage() {
         previousLesson={previousLesson}
         nextLesson={nextLesson}
       />
-      <StudentFloatingDock />
       <ThemeToggle />
     </>
   );

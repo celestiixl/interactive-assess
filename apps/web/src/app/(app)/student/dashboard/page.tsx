@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import type { Segment } from "@/types/segment";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
@@ -352,7 +351,6 @@ export default function StudentDashboard() {
           </Card>
         </div>
       </PageContent>
-      <StudentFloatingDock />
     </main>
   );
 }

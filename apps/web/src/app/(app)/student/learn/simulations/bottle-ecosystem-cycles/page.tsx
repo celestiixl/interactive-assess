@@ -3,7 +3,6 @@
 import { useState, useRef } from "react";
 import { BackLink } from "@/components/nav/BackLink";
 import { PageBanner, PageContent } from "@/components/ui";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -1795,7 +1794,6 @@ export default function BottleEcosystemCyclesPage() {
         </div>
       </PageContent>
 
-      <StudentFloatingDock />
     </main>
   );
 }

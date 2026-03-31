@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import LearningHub from "@/components/student/LearningHub";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import { PageBanner, PageContent, Card } from "@/components/ui";
 import { BackLink } from "@/components/nav/BackLink";
 
@@ -32,7 +31,6 @@ export default function StudentLearningHubStandalonePage() {
         </div>
       </PageContent>
 
-      <StudentFloatingDock />
     </main>
   );
 }

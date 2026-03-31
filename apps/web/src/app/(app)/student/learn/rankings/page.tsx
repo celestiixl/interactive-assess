@@ -4,7 +4,6 @@ import ThemeToggle from "@/components/ia/ThemeToggle";
 import Leaderboard from "@/components/challenges/Leaderboard";
 import { CHALLENGES } from "@/lib/challengeData";
 import { QUEST_LEADER_ROWS } from "@/lib/questRankings";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import { BackLink } from "@/components/nav/BackLink";
 
 export default function QuestRankingsPage() {
@@ -29,7 +28,6 @@ export default function QuestRankingsPage() {
         </div>
       </div>
 
-        <StudentFloatingDock />
       <ThemeToggle />
     </main>
   );

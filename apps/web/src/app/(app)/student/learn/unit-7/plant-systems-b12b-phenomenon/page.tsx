@@ -1,5 +1,4 @@
 import Link from "next/link";
-import StudentFloatingDock from "@/components/student/StudentFloatingDock";
 import { BackLink } from "@/components/nav/BackLink";
 import ThemeToggle from "@/components/ia/ThemeToggle";
 import PlantSystemsB12BPhenomenon from "@/components/student/PlantSystemsB12BPhenomenon";
@@ -50,7 +49,6 @@ export default function PlantSystemsB12BPhenomenonPage() {
         </section>
       </div>
 
-      <StudentFloatingDock />
       <ThemeToggle />
     </main>
   );
