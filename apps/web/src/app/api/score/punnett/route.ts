@@ -71,6 +71,18 @@ const RequestBodySchema = z.discriminatedUnion("type", [
 ]);
 
 // ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function deriveInterventionTier(earned: number, max: number): 2 | 3 | null {
+  if (max === 0) return null;
+  const ratio = earned / max;
+  if (ratio < 0.5) return 3;
+  if (ratio < 0.7) return 2;
+  return null;
+}
+
+// ---------------------------------------------------------------------------
 // Route handler
 // ---------------------------------------------------------------------------
 
@@ -108,39 +120,21 @@ export async function POST(req: NextRequest) {
   try {
     const { type, question, grid, followUpAnswers = {} } = parsed.data;
 
-    if (type === "monohybrid-cross") {
-      const result = scoreMonohybridResponse(
-        question as MonohybridCrossQuestion,
-        grid,
-        followUpAnswers,
-      );
-      const interventionTier =
-        result.earned / result.max < 0.5
-          ? 3
-          : result.earned / result.max < 0.7
-            ? 2
-            : null;
-      return NextResponse.json({
-        score: result.earned,
-        max: result.max,
-        correct: result.earned === result.max,
-        feedback: result,
-        interventionTier,
-      });
-    }
+    const result =
+      type === "monohybrid-cross"
+        ? scoreMonohybridResponse(
+            question as MonohybridCrossQuestion,
+            grid,
+            followUpAnswers,
+          )
+        : scoreDihybridResponse(
+            question as DihybridCrossQuestion,
+            grid,
+            followUpAnswers,
+          );
 
-    // dihybrid-cross
-    const result = scoreDihybridResponse(
-      question as DihybridCrossQuestion,
-      grid,
-      followUpAnswers,
-    );
-    const interventionTier =
-      result.earned / result.max < 0.5
-        ? 3
-        : result.earned / result.max < 0.7
-          ? 2
-          : null;
+    const interventionTier = deriveInterventionTier(result.earned, result.max);
+
     return NextResponse.json({
       score: result.earned,
       max: result.max,
