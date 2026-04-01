@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { loadBank } from "@/lib/itemBank/load";
-import ItemBankClient from "./ItemBankClient";
+import ItemBankTabsClient from "./ItemBankTabsClient";
 import { PageContent, PageBanner } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
@@ -31,8 +31,9 @@ export default async function TeacherItemBankPage() {
         </div>
       </PageBanner>
       <PageContent className="py-8">
-        <ItemBankClient items={items} />
+        <ItemBankTabsClient publicItems={items} />
       </PageContent>
     </main>
   );
 }
+
