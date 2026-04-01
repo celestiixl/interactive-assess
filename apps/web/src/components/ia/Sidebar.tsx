@@ -52,6 +52,11 @@ export function Sidebar({
             label: "Teacher Dashboard",
             description: "Builder, analytics, and assignment flow",
           },
+          {
+            href: "/teacher/assignments/create",
+            label: "New Assignment",
+            description: "Build and publish a custom assignment",
+          },
         ]}
       />
 

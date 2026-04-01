@@ -1,7 +1,10 @@
 /**
- * Item Bank – localStorage-backed repository of reusable questions.
+ * Item Bank - localStorage-backed repository of reusable questions.
  *
- * Storage key: "biospark:itembank"
+ * Storage keys:
+ *   Legacy flat key:  "biospark:itembank"
+ *   Per-teacher private bank: "biospark:itembank:private:{teacherId}"
+ *   Per-teacher pending queue: "biospark:itembank:pending:{teacherId}"
  *
  * All functions are safe to import in Server Components; the localStorage
  * reads/writes are guarded by `typeof window` checks and will silently
@@ -9,6 +12,8 @@
  */
 
 import type { Question } from "@/types/assignments";
+import publicBankData from "@/lib/itemBank/bank.example.json";
+import type { Item } from "@/lib/itemBank/schema";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -57,11 +62,28 @@ export type ItemBankFilters = {
   unitId?: string;
 };
 
+/** A question that has been submitted for review, with a submission timestamp. */
+export type PendingQuestion = AnyQuestion & { submittedAt: string };
+
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
 const STORAGE_KEY = "biospark:itembank";
+
+/** Returns the localStorage key for a teacher's private question bank. */
+const privateKey = (teacherId: string) =>
+  `biospark:itembank:private:${teacherId}`;
+
+/** Returns the localStorage key for a teacher's pending-review queue. */
+const pendingKey = (teacherId: string) =>
+  `biospark:itembank:pending:${teacherId}`;
+
+// ---------------------------------------------------------------------------
+// In-memory public bank (loaded once from bank.example.json)
+// ---------------------------------------------------------------------------
+
+const PUBLIC_BANK_ITEMS: Item[] = (publicBankData as { items: Item[] }).items;
 
 /**
  * Generate a unique id.
@@ -91,10 +113,10 @@ const LEVEL_ORDER: Record<AnyQuestion["learningLevel"], number> = {
 // Private helpers
 // ---------------------------------------------------------------------------
 
-function readRaw(): ItemBankEntry[] {
+function readRaw(key: string = STORAGE_KEY): ItemBankEntry[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = window.localStorage.getItem(key);
     if (!raw) return [];
     return JSON.parse(raw) as ItemBankEntry[];
   } catch {
@@ -102,17 +124,37 @@ function readRaw(): ItemBankEntry[] {
   }
 }
 
-function writeRaw(entries: ItemBankEntry[]): void {
+function writeRaw(entries: ItemBankEntry[], key: string = STORAGE_KEY): void {
   if (typeof window === "undefined") return;
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    window.localStorage.setItem(key, JSON.stringify(entries));
   } catch {
-    // storage unavailable — silently ignore
+    // storage unavailable - silently ignore
+  }
+}
+
+function readPendingRaw(key: string): PendingQuestion[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return [];
+    return JSON.parse(raw) as PendingQuestion[];
+  } catch {
+    return [];
+  }
+}
+
+function writePendingRaw(entries: PendingQuestion[], key: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(key, JSON.stringify(entries));
+  } catch {
+    // storage unavailable - silently ignore
   }
 }
 
 // ---------------------------------------------------------------------------
-// Public API
+// Public API - legacy flat bank (backwards compatible)
 // ---------------------------------------------------------------------------
 
 /**
@@ -120,34 +162,42 @@ function writeRaw(entries: ItemBankEntry[]): void {
  *
  * Returns an empty array when the key does not exist, the value cannot be
  * parsed, or the function is called in a server-side (no `window`) context.
+ *
+ * @param teacherId - When provided, reads from the teacher-scoped private key.
  */
-export function getItemBank(): ItemBankEntry[] {
-  return readRaw();
+export function getItemBank(teacherId?: string): ItemBankEntry[] {
+  return readRaw(teacherId ? privateKey(teacherId) : STORAGE_KEY);
 }
 
 /**
  * Persist the complete item bank array to localStorage, replacing the
  * previously stored value.
  *
- * @param entries - The full item bank to save.
+ * @param entries   - The full item bank to save.
+ * @param teacherId - When provided, writes to the teacher-scoped private key.
  */
-export function saveItemBank(entries: ItemBankEntry[]): void {
-  writeRaw(entries);
+export function saveItemBank(
+  entries: ItemBankEntry[],
+  teacherId?: string,
+): void {
+  writeRaw(entries, teacherId ? privateKey(teacherId) : STORAGE_KEY);
 }
 
 /**
  * Wrap `question` in a new {@link ItemBankEntry}, append it to the persisted
  * item bank, and return the newly created entry.
  *
- * @param question         - The question to store in the bank.
+ * @param question           - The question to store in the bank.
  * @param sourceAssignmentId - Optional id of the originating assignment.
- * @param unitId           - Optional unit identifier (e.g. `"unit-1"`).
+ * @param unitId             - Optional unit identifier (e.g. `"unit-1"`).
+ * @param teacherId          - When provided, writes to the teacher-scoped key.
  * @returns The newly created `ItemBankEntry` with `usageCount` set to `0`.
  */
 export function addToItemBank(
   question: AnyQuestion,
   sourceAssignmentId?: string,
   unitId?: string,
+  teacherId?: string,
 ): ItemBankEntry {
   const entry: ItemBankEntry = {
     id: generateId(),
@@ -157,10 +207,173 @@ export function addToItemBank(
     createdAt: new Date().toISOString(),
     usageCount: 0,
   };
-  const bank = readRaw();
+  const storageKey = teacherId ? privateKey(teacherId) : STORAGE_KEY;
+  const bank = readRaw(storageKey);
   bank.push(entry);
-  writeRaw(bank);
+  writeRaw(bank, storageKey);
   return entry;
+}
+
+// ---------------------------------------------------------------------------
+// Public API - teacher-scoped private bank
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns all questions in this teacher's private bank.
+ *
+ * Reads from localStorage key `biospark:itembank:private:{teacherId}`.
+ * Returns `[]` if nothing stored yet. SSR-safe (`typeof window` guard).
+ *
+ * @param teacherId - The teacher's unique identifier (e.g. email address).
+ */
+export function getPrivateBank(teacherId: string): ItemBankEntry[] {
+  return readRaw(privateKey(teacherId));
+}
+
+// ---------------------------------------------------------------------------
+// Public API - public bank (read-only, from bank.example.json)
+// ---------------------------------------------------------------------------
+
+/**
+ * Search the public item bank loaded from `bank.example.json`.
+ *
+ * Applies optional filters against the in-memory public question set.
+ * Returns read-only results and never mutates the source data.
+ * Safe to call from server components.
+ *
+ * @param filters - Optional filters: teks, misconceptionTarget. The
+ *   questionType, learningLevel, and unitId filters are not applicable to
+ *   public bank items and are ignored.
+ */
+export function searchPublicBank(filters?: ItemBankFilters): Item[] {
+  const results = PUBLIC_BANK_ITEMS.filter((item) => {
+    if (
+      filters?.teks !== undefined &&
+      !filters.teks.every((t) => item.teks.includes(t))
+    ) {
+      return false;
+    }
+    if (
+      filters?.misconceptionTarget === true &&
+      !(item.misconceptionTags && item.misconceptionTags.length > 0)
+    ) {
+      return false;
+    }
+    return true;
+  });
+
+  return results.slice();
+}
+
+// ---------------------------------------------------------------------------
+// Public API - submit for review / pending queue
+// ---------------------------------------------------------------------------
+
+/**
+ * Moves a question from the teacher's private bank to their pending queue.
+ * Adds a `submittedAt` ISO date field to the question before storing.
+ * Removes the question from the private bank.
+ *
+ * SSR-safe - silently no-ops when `window` is unavailable.
+ *
+ * @param question  - The question to submit.
+ * @param teacherId - The teacher's unique identifier.
+ */
+export function submitForReview(
+  question: AnyQuestion,
+  teacherId: string,
+): void {
+  if (typeof window === "undefined") return;
+
+  const privKey = privateKey(teacherId);
+  const bank = readRaw(privKey);
+  const updated = bank.filter((e) => e.question.id !== question.id);
+  writeRaw(updated, privKey);
+
+  const pendKey = pendingKey(teacherId);
+  const pending = readPendingRaw(pendKey);
+  const withTimestamp: PendingQuestion = {
+    ...question,
+    submittedAt: new Date().toISOString(),
+  };
+  pending.push(withTimestamp);
+  writePendingRaw(pending, pendKey);
+}
+
+/**
+ * Returns all questions awaiting review for this teacher.
+ *
+ * SSR-safe - returns `[]` when `window` is unavailable.
+ *
+ * @param teacherId - The teacher's unique identifier.
+ */
+export function getPendingQueue(teacherId: string): PendingQuestion[] {
+  return readPendingRaw(pendingKey(teacherId));
+}
+
+/**
+ * Removes a question from the teacher's pending queue (approval path).
+ *
+ * In this implementation, approval only clears the question from pending.
+ * To publish it to all teachers, add the question manually to
+ * `lib/itemBank/bank.example.json`.
+ *
+ * SSR-safe - silently no-ops when `window` is unavailable.
+ *
+ * @param questionId - The `id` of the question to approve.
+ * @param teacherId  - The teacher's unique identifier.
+ */
+export function approveQuestion(questionId: string, teacherId: string): void {
+  if (typeof window === "undefined") return;
+
+  console.warn(
+    `Approved question ${questionId} - add manually to bank.example.json to publish.`,
+  );
+
+  const pendKey = pendingKey(teacherId);
+  const pending = readPendingRaw(pendKey);
+  writePendingRaw(
+    pending.filter((q) => q.id !== questionId),
+    pendKey,
+  );
+}
+
+/**
+ * Moves a question back from the pending queue to the teacher's private bank.
+ * Removes the `submittedAt` field before restoring.
+ *
+ * SSR-safe - silently no-ops when `window` is unavailable.
+ *
+ * @param questionId - The `id` of the question to reject.
+ * @param teacherId  - The teacher's unique identifier.
+ */
+export function rejectQuestion(questionId: string, teacherId: string): void {
+  if (typeof window === "undefined") return;
+
+  const pendKey = pendingKey(teacherId);
+  const pending = readPendingRaw(pendKey);
+  const found = pending.find((q) => q.id === questionId);
+
+  writePendingRaw(
+    pending.filter((q) => q.id !== questionId),
+    pendKey,
+  );
+
+  if (!found) return;
+
+  // Remove the submittedAt field before restoring to the private bank
+  const { submittedAt: _removed, ...restored } = found;
+
+  const privKey = privateKey(teacherId);
+  const entry: ItemBankEntry = {
+    id: generateId(),
+    question: restored as AnyQuestion,
+    createdAt: new Date().toISOString(),
+    usageCount: 0,
+  };
+  const bank = readRaw(privKey);
+  bank.push(entry);
+  writeRaw(bank, privKey);
 }
 
 /**
