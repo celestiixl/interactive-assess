@@ -61,7 +61,7 @@ export default function EnzymeKineticsPreview() {
           y="20"
           fill="var(--bs-text-sub)"
           fontSize="10"
-          fontFamily="Outfit, sans-serif"
+          fontFamily="DynaPuff, sans-serif"
         >
           lock-and-key binding loop
         </text>

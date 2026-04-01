@@ -105,7 +105,7 @@ export default function SuccessionTimeline({
               <span
                 className="text-center"
                 style={{
-                  fontFamily: "Outfit, sans-serif",
+                  fontFamily: "DynaPuff, sans-serif",
                   fontSize: 11,
                   color: isActive ? "#00d4aa" : "#64748b",
                   whiteSpace: "nowrap",
@@ -123,7 +123,7 @@ export default function SuccessionTimeline({
               <span
                 className="hidden text-center sm:block"
                 style={{
-                  fontFamily: "Outfit, sans-serif",
+                  fontFamily: "DynaPuff, sans-serif",
                   fontSize: 10,
                   color: isActive ? "#cbd5e1" : "#475569",
                   maxWidth: 72,

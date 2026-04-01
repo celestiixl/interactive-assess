@@ -51,7 +51,7 @@ export default function SuccessionPhenomenonBanner({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <h2
           style={{
-            fontFamily: "Outfit, sans-serif",
+            fontFamily: "DynaPuff, sans-serif",
             fontWeight: 700,
             fontSize: 20,
             color: "#e2e8f0",
@@ -66,7 +66,7 @@ export default function SuccessionPhenomenonBanner({
             background: `${accentColor}22`,
             color: accentColor,
             border: `1px solid ${accentColor}66`,
-            fontFamily: "Outfit, sans-serif",
+            fontFamily: "DynaPuff, sans-serif",
           }}
         >
           {dateLabel}
@@ -77,7 +77,7 @@ export default function SuccessionPhenomenonBanner({
       <p
         className="mt-3"
         style={{
-          fontFamily: "Outfit, sans-serif",
+          fontFamily: "DynaPuff, sans-serif",
           fontSize: 14,
           color: "#94a3b8",
           lineHeight: 1.6,
@@ -100,7 +100,7 @@ export default function SuccessionPhenomenonBanner({
             <span>{icon}</span>
             <span
               style={{
-                fontFamily: "Outfit, sans-serif",
+                fontFamily: "DynaPuff, sans-serif",
                 fontSize: 13,
                 fontWeight: 600,
                 color: accentColor,
@@ -123,7 +123,7 @@ export default function SuccessionPhenomenonBanner({
           background: "#0d1e2c",
           color: "#00d4aa",
           border: "1px solid #00d4aa44",
-          fontFamily: "Outfit, sans-serif",
+          fontFamily: "DynaPuff, sans-serif",
         }}
       >
         <span>Why does this matter?</span>
@@ -150,7 +150,7 @@ export default function SuccessionPhenomenonBanner({
           <p
             className="mb-2"
             style={{
-              fontFamily: "Outfit, sans-serif",
+              fontFamily: "DynaPuff, sans-serif",
               fontWeight: 700,
               fontSize: 13,
               color: "#00d4aa",
@@ -160,7 +160,7 @@ export default function SuccessionPhenomenonBanner({
           </p>
           <p
             style={{
-              fontFamily: "Outfit, sans-serif",
+              fontFamily: "DynaPuff, sans-serif",
               fontSize: 13,
               color: "#94a3b8",
               lineHeight: 1.6,
@@ -179,7 +179,7 @@ export default function SuccessionPhenomenonBanner({
           <p
             className="mt-2"
             style={{
-              fontFamily: "Outfit, sans-serif",
+              fontFamily: "DynaPuff, sans-serif",
               fontSize: 13,
               color: "#94a3b8",
               lineHeight: 1.6,

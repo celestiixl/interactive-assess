@@ -81,9 +81,9 @@ export function validateTheme(): void {
 
   if (typeof document !== "undefined" && document.fonts) {
     const checkSize = "16px";
-    if (!document.fonts.check(`${checkSize} Outfit`)) {
+    if (!document.fonts.check(`${checkSize} DynaPuff`)) {
       console.warn(
-        "[BioSpark Theme] Outfit font not yet loaded. It may still be downloading.",
+        "[BioSpark Theme] DynaPuff font not yet loaded. It may still be downloading.",
       );
     }
     if (!document.fonts.check(`${checkSize} JetBrains Mono`)) {
