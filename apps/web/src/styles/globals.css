@@ -1,8 +1,10 @@
 @import "@fontsource/dm-sans/400.css";
 @import "@fontsource/dm-sans/500.css";
 @import "@fontsource/dm-sans/700.css";
-@import "@fontsource/syne/600.css";
-@import "@fontsource/syne/700.css";
+@import "@fontsource/dynapuff/400.css";
+@import "@fontsource/dynapuff/500.css";
+@import "@fontsource/dynapuff/600.css";
+@import "@fontsource/dynapuff/700.css";
 
 /* ── BioSpark Design System Tokens ───────────────────────────────── */
 :root {
@@ -41,7 +43,7 @@
   --bs-text:         #e8f4f0;
   --bs-text-sub:     #9abcb0;
   --bs-text-muted:   #5a7a72;
-  --bs-font-ui:      'Syne', sans-serif;
+  --bs-font-ui:      'DynaPuff', sans-serif;
   --bs-font-mono:    'JetBrains Mono', monospace;
 }
 
@@ -61,7 +63,7 @@
   h1,
   h2,
   h3 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'DynaPuff', sans-serif;
     letter-spacing: -0.015em;
   }
 

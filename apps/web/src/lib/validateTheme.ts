@@ -68,9 +68,9 @@ export function validateTheme(): void {
   const uiFont = styles.getPropertyValue("--bs-font-ui").trim();
   const monoFont = styles.getPropertyValue("--bs-font-mono").trim();
 
-  if (!uiFont.includes("Outfit")) {
+  if (!uiFont.includes("DynaPuff")) {
     console.warn(
-      "[BioSpark Theme] --bs-font-ui does not contain 'Outfit'. Check Google Fonts import.",
+      "[BioSpark Theme] --bs-font-ui does not contain 'DynaPuff'. Check font import.",
     );
   }
   if (!monoFont.includes("JetBrains Mono")) {

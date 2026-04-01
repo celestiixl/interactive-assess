@@ -42,7 +42,7 @@ export const T = {
   textMuted:   "#5a8070",
 
   // Typography
-  fontUi:      "'Outfit', sans-serif",
+  fontUi:      "'DynaPuff', sans-serif",
   fontMono:    "'JetBrains Mono', monospace",
 
   // Border radii

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
 
 @import "tailwindcss";
 
@@ -31,7 +31,7 @@
   --bs-text: #e8f4f0;
   --bs-text-sub: #9abcb0;
   --bs-text-muted: #5a8070;
-  --bs-font-ui: "Outfit", sans-serif;
+  --bs-font-ui: "DynaPuff", sans-serif;
   --bs-font-mono: "JetBrains Mono", monospace;
   --bs-r-sm: 6px;
   --bs-r-md: 10px;
