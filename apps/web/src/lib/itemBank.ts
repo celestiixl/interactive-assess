@@ -362,7 +362,6 @@ export function rejectQuestion(questionId: string, teacherId: string): void {
   if (!found) return;
 
   // Remove the submittedAt field before restoring to the private bank
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { submittedAt: _removed, ...restored } = found;
 
   const privKey = privateKey(teacherId);

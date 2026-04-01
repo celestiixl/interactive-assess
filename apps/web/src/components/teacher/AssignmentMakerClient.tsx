@@ -55,14 +55,30 @@ type TrayItem = {
 };
 
 // ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+/** Characters shown in question preview cards */
+const PREVIEW_TEXT_LENGTH = 60;
+
+/** Fallback default due date offset: 7 days from now */
+const DEFAULT_DUE_DATE_OFFSET_MS = 7 * 24 * 60 * 60 * 1000;
+
+/** Delay before redirecting after a successful publish */
+const REDIRECT_DELAY_MS = 1200;
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+let _uidCounter = 0;
 
 function uid(prefix: string): string {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
     return `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
   }
-  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+  _uidCounter += 1;
+  return `${prefix}-${Date.now().toString(36)}-${_uidCounter.toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
 function getQuestionText(q: AnyQuestion): string {
@@ -174,7 +190,7 @@ function SortableTrayItem({
   };
 
   const q = item.question;
-  const text = getQuestionText(q).slice(0, 60);
+  const text = getQuestionText(q).slice(0, PREVIEW_TEXT_LENGTH);
   const typeLabel = getTypeLabel(q.type);
 
   return (
@@ -214,7 +230,7 @@ function SortableTrayItem({
             />
           ))}
         </div>
-        <p className="mt-1 text-xs text-bs-text leading-snug line-clamp-2">{text}{text.length === 60 ? "..." : ""}</p>
+        <p className="mt-1 text-xs text-bs-text leading-snug line-clamp-2">{text}{text.length >= PREVIEW_TEXT_LENGTH ? "..." : ""}</p>
       </div>
 
       {/* Remove */}
@@ -731,7 +747,7 @@ export default function AssignmentMakerClient({
         mode: "custom",
         questions: tray.map((t) => t.question),
         teks: derivedTeks,
-        dueDate: dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        dueDate: dueDate || new Date(Date.now() + DEFAULT_DUE_DATE_OFFSET_MS).toISOString(),
         differentiationMode,
         periodIds: ["P1"],
         status,
@@ -786,7 +802,7 @@ export default function AssignmentMakerClient({
       setSuccessMessage("Assignment published! Redirecting...");
       setTimeout(() => {
         router.push("/teacher/assignments");
-      }, 1200);
+      }, REDIRECT_DELAY_MS);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Failed to publish assignment.");
     } finally {
@@ -921,7 +937,7 @@ export default function AssignmentMakerClient({
                       return (
                         <QuestionCard
                           key={item.id}
-                          previewText={item.prompt.slice(0, 80)}
+                          previewText={item.prompt.slice(0, PREVIEW_TEXT_LENGTH)}
                           typeLabel={item.itemType.replace("_", " ").toUpperCase().slice(0, 6)}
                           typeColor="border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
                           teks={item.teks}
@@ -960,7 +976,7 @@ export default function AssignmentMakerClient({
                       return (
                         <QuestionCard
                           key={entry.id}
-                          previewText={text.slice(0, 80)}
+                          previewText={text.slice(0, PREVIEW_TEXT_LENGTH)}
                           typeLabel={getTypeLabel(q.type)}
                           typeColor={typeBadgeColor(q.type)}
                           teks={q.teks}
