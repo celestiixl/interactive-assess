@@ -203,14 +203,14 @@ export default function PunnettQuestion({
             <tr role="row">
               <th
                 scope="col"
-                className="h-10 w-12 border border-[var(--bs-border)] bg-[#00d4aa] p-2"
+                className="h-10 w-12 border border-[var(--bs-border)] bg-[var(--bs-teal)] p-2"
                 aria-label="Cross header"
               />
               {colHeaders.map((h, ci) => (
                 <th
                   key={ci}
                   scope="col"
-                  className="h-10 w-20 border border-[var(--bs-border)] bg-[#00d4aa] p-2 text-center text-xs font-bold text-white"
+                  className="h-10 w-20 border border-[var(--bs-border)] bg-[var(--bs-teal)] p-2 text-center text-xs font-bold text-white"
                 >
                   {h}
                 </th>
@@ -222,7 +222,7 @@ export default function PunnettQuestion({
               <tr key={ri} role="row">
                 <th
                   scope="row"
-                  className="h-12 w-12 border border-[var(--bs-border)] bg-[#00d4aa] p-2 text-center text-xs font-bold text-white"
+                  className="h-12 w-12 border border-[var(--bs-border)] bg-[var(--bs-teal)] p-2 text-center text-xs font-bold text-white"
                 >
                   {rowHeaders[ri] ?? ""}
                 </th>
@@ -241,9 +241,9 @@ export default function PunnettQuestion({
                       className="border border-[var(--bs-border)] p-1"
                       style={{
                         backgroundColor: isRight
-                          ? "rgba(0,212,170,0.15)"
+                          ? "var(--bs-teal-dim)"
                           : isWrong
-                            ? "rgba(255,107,107,0.15)"
+                            ? "var(--bs-coral-dim)"
                             : undefined,
                       }}
                     >
@@ -256,10 +256,10 @@ export default function PunnettQuestion({
                             setCellValue(ri, ci, e.target.value)
                           }
                           aria-label={`Offspring genotype row ${ri + 1} column ${ci + 1}`}
-                          className="h-10 w-20 rounded bg-bs-surface px-1 text-center text-xs text-bs-text focus:outline-none focus:ring-1 focus:ring-[#00d4aa] disabled:opacity-70"
+                          className="h-10 w-20 rounded bg-bs-surface px-1 text-center text-xs text-bs-text focus:outline-none focus:ring-1 focus:ring-[var(--bs-teal)] disabled:opacity-70"
                         />
                         {submitted && correctVal && (
-                          <div className="absolute -bottom-4 left-0 right-0 text-center text-[10px] text-[#ff6b6b]">
+                          <div className="absolute -bottom-4 left-0 right-0 text-center text-[10px] text-bs-coral">
                             {correctVal}
                           </div>
                         )}
@@ -305,10 +305,7 @@ export default function PunnettQuestion({
                 />
                 {submitted && fqResult && (
                   <div
-                    className="text-xs font-medium"
-                    style={{
-                      color: fqResult.correct ? "#00d4aa" : "#ff6b6b",
-                    }}
+                    className={`text-xs font-medium ${fqResult.correct ? "text-bs-teal" : "text-bs-coral"}`}
                   >
                     {fqResult.correct
                       ? "Correct!"
@@ -323,7 +320,7 @@ export default function PunnettQuestion({
 
       {/* Error */}
       {error && (
-        <div role="alert" className="text-xs text-[#ff6b6b]">
+        <div role="alert" className="text-xs text-bs-coral">
           {error}
         </div>
       )}
@@ -352,7 +349,7 @@ export default function PunnettQuestion({
           onClick={handleSubmit}
           disabled={loading}
           aria-label="Submit Punnett square response"
-          className="rounded-xl bg-[#00d4aa] px-4 py-2 text-sm font-semibold text-white hover:bg-[#00b896] disabled:opacity-50"
+          className="rounded-xl bg-bs-teal px-4 py-2 text-sm font-semibold text-white hover:brightness-110 disabled:opacity-50"
         >
           {loading ? "Scoring..." : "Submit"}
         </button>

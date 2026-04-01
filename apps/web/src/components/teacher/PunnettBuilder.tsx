@@ -422,7 +422,7 @@ export default function PunnettBuilder({ onSave }: PunnettBuilderProps) {
                   type="button"
                   onClick={() => removeFollowUp(fq.id)}
                   aria-label={`Remove follow-up: ${fq.prompt}`}
-                  className="rounded-lg border border-rose-200 px-2 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/20"
+                  className="rounded-lg border border-[var(--bs-coral)] px-2 py-1 text-xs font-semibold text-bs-coral hover:bg-[var(--bs-coral-dim)]"
                 >
                   Remove
                 </button>
@@ -481,11 +481,11 @@ export default function PunnettBuilder({ onSave }: PunnettBuilderProps) {
             <table className="border-collapse text-sm">
               <thead>
                 <tr>
-                  <th className="h-9 w-12 border border-[var(--bs-border)] bg-[#00d4aa] p-2 text-center text-xs font-bold text-white" />
+                  <th className="h-9 w-12 border border-[var(--bs-border)] bg-[var(--bs-teal)] p-2 text-center text-xs font-bold text-white" />
                   {gridHeaders.col.map((h, ci) => (
                     <th
                       key={ci}
-                      className="h-9 w-20 border border-[var(--bs-border)] bg-[#00d4aa] p-2 text-center text-xs font-bold text-white"
+                      className="h-9 w-20 border border-[var(--bs-border)] bg-[var(--bs-teal)] p-2 text-center text-xs font-bold text-white"
                     >
                       {h}
                     </th>
@@ -495,7 +495,7 @@ export default function PunnettBuilder({ onSave }: PunnettBuilderProps) {
               <tbody>
                 {previewGrid.map((row, ri) => (
                   <tr key={ri}>
-                    <th className="h-12 w-12 border border-[var(--bs-border)] bg-[#00d4aa] p-2 text-center text-xs font-bold text-white">
+                    <th className="h-12 w-12 border border-[var(--bs-border)] bg-[var(--bs-teal)] p-2 text-center text-xs font-bold text-white">
                       {gridHeaders.row[ri]}
                     </th>
                     {row.map((cell, ci) => (
@@ -518,7 +518,7 @@ export default function PunnettBuilder({ onSave }: PunnettBuilderProps) {
       {saveError && (
         <div
           role="alert"
-          className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 dark:bg-rose-900/20 dark:text-rose-400"
+          className="rounded-xl border border-[var(--bs-coral)] bg-[var(--bs-coral-dim)] p-3 text-xs text-bs-coral"
         >
           {saveError}
         </div>
@@ -526,7 +526,7 @@ export default function PunnettBuilder({ onSave }: PunnettBuilderProps) {
       {saved && (
         <div
           role="status"
-          className="rounded-xl border border-[#00d4aa]/40 bg-[#00d4aa]/10 p-3 text-xs font-semibold text-[#00d4aa]"
+          className="rounded-xl border border-[var(--bs-teal)] bg-[var(--bs-teal-dim)] p-3 text-xs font-semibold text-bs-teal"
         >
           Question saved to item bank.
         </div>
@@ -538,7 +538,7 @@ export default function PunnettBuilder({ onSave }: PunnettBuilderProps) {
         onClick={handleSave}
         disabled={!validParents}
         aria-label="Save Punnett question to item bank"
-        className="rounded-xl bg-[#00d4aa] px-4 py-2 text-sm font-semibold text-white hover:bg-[#00b896] disabled:opacity-50"
+        className="rounded-xl bg-bs-teal px-4 py-2 text-sm font-semibold text-white hover:brightness-110 disabled:opacity-50"
       >
         Save to Item Bank
       </button>
