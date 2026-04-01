@@ -11,10 +11,11 @@ import {
 import TeksTooltip from "@/components/common/TeksTooltip";
 import InlineChoiceBuilder from "@/components/teacher/InlineChoiceBuilder";
 import CERBuilder from "@/components/teacher/CERBuilder";
+import PunnettBuilder from "@/components/teacher/PunnettBuilder";
 import { BuilderTypeTabs } from "@/components/features/builder/BuilderTypeTabs";
 import type { GlossaryEntry } from "@/types/item";
 
-type ItemType = "mcq" | "dragdrop" | "hotspot" | "inline_choice" | "cer";
+type ItemType = "mcq" | "dragdrop" | "hotspot" | "inline_choice" | "cer" | "punnett";
 
 type McqChoice = { id: string; text: string };
 
@@ -200,6 +201,9 @@ export default function TeacherBuilderPage() {
     evidenceBank: [],
   });
 
+  // Punnett builder state (tracks last saved question for JSON preview)
+  const [punnettSaved, setPunnettSaved] = useState<Record<string, unknown> | null>(null);
+
   // Hotspot local upload cleanup
   useEffect(() => {
     return () => {
@@ -276,6 +280,10 @@ export default function TeacherBuilderPage() {
       };
     }
 
+    if (type === "punnett") {
+      return punnettSaved ?? { ...base, type: "monohybrid-cross" };
+    }
+
     return base;
   }, [
     type,
@@ -294,6 +302,7 @@ export default function TeacherBuilderPage() {
     clozeText,
     clozeOptions,
     hotspotImage,
+    punnettSaved,
   ]);
 
   const [showSavePanel, setShowSavePanel] = useState(false);
@@ -934,6 +943,21 @@ export default function TeacherBuilderPage() {
               </div>
             ) : null}
 
+            {/* Punnett Square Builder */}
+            {type === "punnett" ? (
+              <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
+                <SectionTitle
+                  title="Punnett Square Builder"
+                  subtitle="Build a monohybrid or dihybrid cross question, preview the grid, and save to the item bank."
+                />
+                <div className="mt-4">
+                  <PunnettBuilder
+                    onSave={(q) => setPunnettSaved(q as Record<string, unknown>)}
+                  />
+                </div>
+              </div>
+            ) : null}
+
             {/* Supports */}
             <div className="rounded-3xl border bg-bs-surface p-5 shadow-sm">
               <SectionTitle
@@ -1209,6 +1233,52 @@ export default function TeacherBuilderPage() {
                         </ul>
                       </div>
                     </div>
+                  </PreviewCard>
+                ) : null}
+
+                {type === "punnett" ? (
+                  <PreviewCard>
+                    <div className="text-sm font-semibold text-bs-text">
+                      Punnett Square
+                    </div>
+                    {punnettSaved ? (
+                      <div className="mt-3 space-y-2 text-xs">
+                        <div>
+                          <span className="text-bs-text-sub">Type:</span>
+                          <span className="ml-2 font-semibold">
+                            {String(punnettSaved.type ?? "")}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-bs-text-sub">Cross:</span>
+                          <span className="ml-2 font-semibold">
+                            {String(punnettSaved.parent1Genotype ?? "")} x{" "}
+                            {String(punnettSaved.parent2Genotype ?? "")}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-bs-text-sub">TEKS:</span>
+                          <span className="ml-2 font-semibold">
+                            {Array.isArray(punnettSaved.teks)
+                              ? (punnettSaved.teks as string[]).join(", ")
+                              : ""}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-bs-text-sub">Points:</span>
+                          <span className="ml-2 font-semibold">
+                            {String(punnettSaved.points ?? "")}
+                          </span>
+                        </div>
+                        <div className="mt-1 text-[#00d4aa] font-semibold">
+                          Saved to item bank.
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mt-3 text-xs text-bs-text-sub">
+                        Configure the cross above, then click Save to Item Bank.
+                      </div>
+                    )}
                   </PreviewCard>
                 ) : null}
 

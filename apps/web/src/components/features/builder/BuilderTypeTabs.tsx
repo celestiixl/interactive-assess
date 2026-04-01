@@ -2,7 +2,7 @@
 
 import { TabGroup } from "@/components/ui/TabGroup";
 
-export type BuilderItemType = "mcq" | "inline_choice" | "dragdrop" | "hotspot" | "cer";
+export type BuilderItemType = "mcq" | "inline_choice" | "dragdrop" | "hotspot" | "cer" | "punnett";
 
 export function BuilderTypeTabs({
   value,
@@ -21,6 +21,7 @@ export function BuilderTypeTabs({
         { value: "dragdrop", label: "Card Sort" },
         { value: "hotspot", label: "Hotspot" },
         { value: "cer", label: "CER Builder" },
+        { value: "punnett", label: "Punnett Square" },
       ]}
     />
   );

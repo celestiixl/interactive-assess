@@ -5,7 +5,14 @@ import CardSort from "@/components/items/CardSort";
 import Hotspot from "@/components/items/Hotspot";
 import ShortResponse from "@/components/items/ShortResponse";
 import CER from "@/components/items/CER";
+import PunnettQuestion from "@/components/items/PunnettQuestion";
 import type { Item } from "@/types/item";
+import type {
+  DihybridCrossQuestion,
+  MonohybridCrossQuestion,
+} from "@/lib/punnetScoring";
+
+type PunnettQ = MonohybridCrossQuestion | DihybridCrossQuestion;
 
 export default function ItemRenderer({
   item,
@@ -13,7 +20,7 @@ export default function ItemRenderer({
   checkSignal,
   mcqOptions,
 }: {
-  item: Item;
+  item: Item | PunnettQ;
   onChecked: (r: { score: number; max: number }) => void;
   checkSignal?: number;
   mcqOptions?: {
@@ -21,7 +28,20 @@ export default function ItemRenderer({
     externalControls?: boolean;
   };
 }) {
-  if (!item) {
+  // Handle Punnett cross question types (discriminated by "type", not "kind")
+  const maybeType = (item as PunnettQ).type;
+  if (maybeType === "monohybrid-cross" || maybeType === "dihybrid-cross") {
+    return (
+      <PunnettQuestion
+        question={item as PunnettQ}
+        onChecked={onChecked}
+      />
+    );
+  }
+
+  const kindItem = item as Item;
+
+  if (!kindItem) {
     return (
       <div className="rounded-2xl border bg-card p-4">
         <div className="text-sm font-medium">No item loaded</div>
@@ -33,7 +53,7 @@ export default function ItemRenderer({
     );
   }
 
-  if (!item.kind) {
+  if (!kindItem.kind) {
     return (
       <div className="rounded-2xl border bg-card p-4">
         <div className="text-sm font-medium">Invalid item</div>
@@ -43,17 +63,17 @@ export default function ItemRenderer({
         </div>
 
         <pre className="mt-3 overflow-auto rounded-xl bg-muted p-3 text-xs">
-          {JSON.stringify(item, null, 2)}
+          {JSON.stringify(kindItem, null, 2)}
         </pre>
       </div>
     );
   }
 
-  switch (item.kind) {
+  switch (kindItem.kind) {
     case "mcq":
       return (
         <MCQ
-          item={item as any}
+          item={kindItem as any}
           onChecked={onChecked}
           checkSignal={checkSignal}
           hideStem={mcqOptions?.hideStem}
@@ -63,7 +83,7 @@ export default function ItemRenderer({
     case "dragDrop":
       return (
         <DragDrop
-          item={item as any}
+          item={kindItem as any}
           onChecked={onChecked}
           checkSignal={checkSignal}
         />
@@ -71,7 +91,7 @@ export default function ItemRenderer({
     case "cardSort":
       return (
         <CardSort
-          item={item as any}
+          item={kindItem as any}
           onChecked={onChecked}
           checkSignal={checkSignal}
         />
@@ -79,15 +99,15 @@ export default function ItemRenderer({
     case "hotspot":
       return (
         <Hotspot
-          item={item as any}
+          item={kindItem as any}
           onChecked={onChecked}
           checkSignal={checkSignal}
         />
       );
     case "short":
-      return <ShortResponse item={item as any} onChecked={onChecked} />;
+      return <ShortResponse item={kindItem as any} onChecked={onChecked} />;
     case "cer":
-      return <CER item={item as any} onChecked={onChecked} />;
+      return <CER item={kindItem as any} onChecked={onChecked} />;
     default:
       return null;
   }

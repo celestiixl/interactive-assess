@@ -771,6 +771,51 @@
           "correctChoiceId": "C"
         }
       }
+    },
+    {
+      "id": "bank_punnett_monohybrid_001",
+      "type": "monohybrid-cross",
+      "teks": ["B.7A"],
+      "learningLevel": "proficient",
+      "misconceptionTarget": false,
+      "points": 4,
+      "parent1Genotype": "Aa",
+      "parent2Genotype": "Aa",
+      "traitName": "seed color",
+      "dominantPhenotype": "yellow",
+      "recessivePhenotype": "green",
+      "followUpQuestions": [
+        {
+          "id": "fq_mono_001_a",
+          "prompt": "What fraction of offspring will show the dominant (yellow) phenotype?",
+          "correctAnswer": "3/4",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "id": "bank_punnett_dihybrid_001",
+      "type": "dihybrid-cross",
+      "teks": ["B.7A"],
+      "learningLevel": "proficient",
+      "misconceptionTarget": false,
+      "points": 16,
+      "parent1Genotype": "AaBb",
+      "parent2Genotype": "AaBb",
+      "trait1Name": "seed shape",
+      "trait1DominantPhenotype": "round",
+      "trait1RecessivePhenotype": "wrinkled",
+      "trait2Name": "seed color",
+      "trait2DominantPhenotype": "yellow",
+      "trait2RecessivePhenotype": "green",
+      "followUpQuestions": [
+        {
+          "id": "fq_dihybrid_001_a",
+          "prompt": "What is the expected phenotype ratio (round yellow : round green : wrinkled yellow : wrinkled green)?",
+          "correctAnswer": "9:3:3:1",
+          "points": 2
+        }
+      ]
     }
   ]
 }
