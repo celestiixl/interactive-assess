@@ -6,6 +6,10 @@
  */
 
 import type { LearningLevel } from "../lib/curriculumPolicy";
+import type {
+  MonohybridCrossQuestion,
+  DihybridCrossQuestion,
+} from "../lib/punnetScoring";
 
 // ---------------------------------------------------------------------------
 // Goal and mode
@@ -138,4 +142,8 @@ export type Question =
   | MultipleSelectionQuestion
   | DropdownQuestion
   | ShortResponseQuestion
-  | DragDropQuestion;
+  | DragDropQuestion
+  | MonohybridCrossQuestion
+  | DihybridCrossQuestion;
+
+export type { MonohybridCrossQuestion, DihybridCrossQuestion };
