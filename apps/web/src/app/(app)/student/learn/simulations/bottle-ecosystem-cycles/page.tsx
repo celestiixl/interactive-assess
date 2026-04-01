@@ -174,13 +174,13 @@ function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
         <rect x="70" y="140" width="20" height="16" fill="#e5e7eb" stroke="#64748b" strokeWidth="1.5" />
 
         {/* ── Zone labels ── */}
-        <text x="80" y="54"  textAnchor="middle" fontSize="8" fill="#4ade80" fontFamily="Outfit,sans-serif">PLANTS</text>
-        <text x="80" y="118" textAnchor="middle" fontSize="8" fill="#a16207" fontFamily="Outfit,sans-serif">SOIL</text>
-        <text x="80" y="225" textAnchor="middle" fontSize="8" fill="#1e40af" fontFamily="Outfit,sans-serif">AQUATIC</text>
+        <text x="80" y="54"  textAnchor="middle" fontSize="8" fill="#4ade80" fontFamily="DynaPuff,sans-serif">PLANTS</text>
+        <text x="80" y="118" textAnchor="middle" fontSize="8" fill="#a16207" fontFamily="DynaPuff,sans-serif">SOIL</text>
+        <text x="80" y="225" textAnchor="middle" fontSize="8" fill="#1e40af" fontFamily="DynaPuff,sans-serif">AQUATIC</text>
 
         {/* JOINED label */}
         <rect x="50" y="172" width="60" height="13" rx="6" fill="#00d4aa22" />
-        <text x="80" y="182" textAnchor="middle" fontSize="7" fill="#00d4aa" fontFamily="Outfit,sans-serif" fontWeight="bold">JOINED ✓</text>
+        <text x="80" y="182" textAnchor="middle" fontSize="7" fill="#00d4aa" fontFamily="DynaPuff,sans-serif" fontWeight="bold">JOINED ✓</text>
       </svg>
     );
   }
@@ -268,7 +268,7 @@ function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
       aria-label="Three-column bottle assembly diagram"
     >
       {/* ── COLUMN 1: Bottle 1 ──────────────────────────────────────────── */}
-      <text x={b1cx} y="12" textAnchor="middle" fontSize="11" fill={LBL} fontFamily="Outfit,sans-serif">
+      <text x={b1cx} y="12" textAnchor="middle" fontSize="11" fill={LBL} fontFamily="DynaPuff,sans-serif">
         Bottle 1
       </text>
       <path
@@ -286,14 +286,14 @@ function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
       />
       <text
         x={b1cx} y={cut1Y - 4}
-        textAnchor="middle" fontSize="8" fill={CUT} fontFamily="Outfit,sans-serif"
+        textAnchor="middle" fontSize="8" fill={CUT} fontFamily="DynaPuff,sans-serif"
         fontWeight={bottle1Cut ? "700" : "400"}
       >
         {bottle1Cut ? "✓ cut" : "cut here"}
       </text>
 
       {/* ── COLUMN 2: Bottle 2 ──────────────────────────────────────────── */}
-      <text x={b2cx} y="12" textAnchor="middle" fontSize="11" fill={LBL} fontFamily="Outfit,sans-serif">
+      <text x={b2cx} y="12" textAnchor="middle" fontSize="11" fill={LBL} fontFamily="DynaPuff,sans-serif">
         Bottle 2
       </text>
       <path
@@ -311,14 +311,14 @@ function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
       />
       <text
         x={b2cx} y={cut2Y - 4}
-        textAnchor="middle" fontSize="8" fill={CUT} fontFamily="Outfit,sans-serif"
+        textAnchor="middle" fontSize="8" fill={CUT} fontFamily="DynaPuff,sans-serif"
         fontWeight={bottle2Cut ? "700" : "400"}
       >
         {bottle2Cut ? "✓ cut" : "cut here"}
       </text>
 
       {/* ── COLUMN 3: Assembly result (ONE connected assembled bottle) ─────── */}
-      <text x={acx} y="12" textAnchor="middle" fontSize="11" fill={LBL} fontFamily="Outfit,sans-serif">
+      <text x={acx} y="12" textAnchor="middle" fontSize="11" fill={LBL} fontFamily="DynaPuff,sans-serif">
         Assembly
       </text>
 
@@ -365,7 +365,7 @@ function BottleAssemblySVG({ assembly }: BottleAssemblySVGProps) {
       />
 
       {/* Result label */}
-      <text x={acx} y={assmLabelY} textAnchor="middle" fontSize="9" fill={LBL} fontFamily="Outfit,sans-serif">
+      <text x={acx} y={assmLabelY} textAnchor="middle" fontSize="9" fill={LBL} fontFamily="DynaPuff,sans-serif">
         nested &amp; assembled
       </text>
     </svg>
@@ -454,10 +454,10 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
     <div className="space-y-4">
       <style>{SHAKE_KEYFRAMES}</style>
       <div className="rounded-2xl p-4" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-        <h3 style={{ fontFamily: "Outfit,sans-serif", fontWeight: 700, fontSize: 15, color: "#e2e8f0", marginBottom: 6 }}>
+        <h3 style={{ fontFamily: "DynaPuff,sans-serif", fontWeight: 700, fontSize: 15, color: "#e2e8f0", marginBottom: 6 }}>
           ✂️ Cut &amp; Assemble Your Bottle
         </h3>
-        <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+        <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
           You need two plastic bottles. Cut each at the marked line, flip the top of Bottle 1, and nest it into Bottle 2 to form the terrarium.
         </p>
       </div>
@@ -477,7 +477,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
               background: s.done ? "#00d4aa22" : "#0d1e2c",
               border: `1px solid ${s.done ? "#00d4aa" : "#1e3a52"}`,
               color: s.done ? "#00d4aa" : "#64748b",
-              fontFamily: "Outfit,sans-serif",
+              fontFamily: "DynaPuff,sans-serif",
             }}
           >
             {s.done ? "✅" : "○"} {s.label}
@@ -488,7 +488,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
       {/* Scalpel pickup */}
       {step === "cut" && (
         <div className="rounded-2xl p-4" style={{ background: "#0d1e2c", border: "1px solid #1e3a52" }}>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#e2e8f0", marginBottom: 10 }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#e2e8f0", marginBottom: 10 }}>
             {scalpelActive
               ? "🔪 Scalpel ready! Drag left → right across a dashed cut line."
               : "First, pick up the scalpel tool to start cutting."}
@@ -499,7 +499,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
               aria-label="Pick up scalpel tool"
               onClick={() => setScalpelActive(true)}
               className="rounded-full px-5 py-2 text-sm font-semibold transition-opacity hover:opacity-80"
-              style={{ background: "#f59e0b", color: "#0d1e2c", fontFamily: "Outfit,sans-serif" }}
+              style={{ background: "#f59e0b", color: "#0d1e2c", fontFamily: "DynaPuff,sans-serif" }}
             >
               🔪 Pick Up Scalpel
             </button>
@@ -510,7 +510,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
               {/* Bottle 1 cut zone */}
               {!assembly.bottle1Cut && (
                 <div>
-                  <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 12, color: "#f59e0b", marginBottom: 6 }}>
+                  <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 12, color: "#f59e0b", marginBottom: 6 }}>
                     Drag across Bottle 1 cut line:
                   </p>
                   <div
@@ -542,7 +542,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
                       }}
                     />
                     <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                      <span style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#f59e0b" }}>
+                      <span style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#f59e0b" }}>
                         {activeCut === "bottle1" ? `🔪 ${Math.round(dragProgress)}%` : "→ drag here →"}
                       </span>
                     </div>
@@ -551,14 +551,14 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
               )}
               {assembly.bottle1Cut && (
                 <div className="rounded-xl p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
-                  <span style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#00d4aa" }}>✅ Bottle 1 cut!</span>
+                  <span style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#00d4aa" }}>✅ Bottle 1 cut!</span>
                 </div>
               )}
 
               {/* Bottle 2 cut zone */}
               {!assembly.bottle2Cut && (
                 <div>
-                  <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 12, color: "#f59e0b", marginBottom: 6 }}>
+                  <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 12, color: "#f59e0b", marginBottom: 6 }}>
                     Now drag across Bottle 2 cut line:
                   </p>
                   <div
@@ -592,7 +592,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
                       }}
                     />
                     <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                      <span style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: assembly.bottle1Cut ? "#f59e0b" : "#64748b" }}>
+                      <span style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: assembly.bottle1Cut ? "#f59e0b" : "#64748b" }}>
                         {activeCut === "bottle2" ? `🔪 ${Math.round(dragProgress)}%` : assembly.bottle1Cut ? "→ drag here →" : "Cut Bottle 1 first"}
                       </span>
                     </div>
@@ -601,7 +601,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
               )}
               {assembly.bottle2Cut && (
                 <div className="rounded-xl p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
-                  <span style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#00d4aa" }}>✅ Bottle 2 cut!</span>
+                  <span style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#00d4aa" }}>✅ Bottle 2 cut!</span>
                 </div>
               )}
             </div>
@@ -612,10 +612,10 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
       {/* Flip & Nest step */}
       {step === "nest" && (
         <div className="rounded-2xl p-5" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-          <h4 style={{ fontFamily: "Outfit,sans-serif", fontWeight: 700, fontSize: 14, color: "#e2e8f0", marginBottom: 8 }}>
+          <h4 style={{ fontFamily: "DynaPuff,sans-serif", fontWeight: 700, fontSize: 14, color: "#e2e8f0", marginBottom: 8 }}>
             🔄 Flip &amp; Nest the Top Piece
           </h4>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6, marginBottom: 12 }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6, marginBottom: 12 }}>
             Take the <strong style={{ color: "#e2e8f0" }}>top section of Bottle 1</strong> (the part with the cap). Flip it upside-down
             so the cap points downward, then nest it inside the <strong style={{ color: "#e2e8f0" }}>bottom of Bottle 2</strong>.
             The cap hangs down like a funnel, connecting the two chambers.
@@ -624,17 +624,17 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
           <div className="flex items-center justify-center gap-6 mb-4" aria-hidden="true">
             <div className="flex flex-col items-center gap-1">
               <span style={{ fontSize: 28 }}>🍶</span>
-              <span style={{ fontSize: 10, color: "#64748b", fontFamily: "Outfit,sans-serif" }}>top piece</span>
+              <span style={{ fontSize: 10, color: "#64748b", fontFamily: "DynaPuff,sans-serif" }}>top piece</span>
             </div>
             <span style={{ fontSize: 20, color: "#94a3b8" }}>→</span>
             <div className="flex flex-col items-center gap-1">
               <span style={{ fontSize: 28 }}>🔄</span>
-              <span style={{ fontSize: 10, color: "#64748b", fontFamily: "Outfit,sans-serif" }}>flip</span>
+              <span style={{ fontSize: 10, color: "#64748b", fontFamily: "DynaPuff,sans-serif" }}>flip</span>
             </div>
             <span style={{ fontSize: 20, color: "#94a3b8" }}>→</span>
             <div className="flex flex-col items-center gap-1">
               <span style={{ fontSize: 28 }}>🫙</span>
-              <span style={{ fontSize: 10, color: "#64748b", fontFamily: "Outfit,sans-serif" }}>nest in Bottle 2</span>
+              <span style={{ fontSize: 10, color: "#64748b", fontFamily: "DynaPuff,sans-serif" }}>nest in Bottle 2</span>
             </div>
           </div>
           <button
@@ -642,7 +642,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
             aria-label="Flip and nest top piece of Bottle 1 into Bottle 2"
             onClick={handleFlipNest}
             className="rounded-full px-6 py-2.5 text-sm font-semibold transition-opacity hover:opacity-80"
-            style={{ background: "#6366f1", color: "#fff", fontFamily: "Outfit,sans-serif" }}
+            style={{ background: "#6366f1", color: "#fff", fontFamily: "DynaPuff,sans-serif" }}
           >
             🔄 Flip &amp; Nest Top Piece
           </button>
@@ -652,10 +652,10 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
       {/* Thread string step */}
       {step === "string" && (
         <div className="rounded-2xl p-5" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-          <h4 style={{ fontFamily: "Outfit,sans-serif", fontWeight: 700, fontSize: 14, color: "#e2e8f0", marginBottom: 8 }}>
+          <h4 style={{ fontFamily: "DynaPuff,sans-serif", fontWeight: 700, fontSize: 14, color: "#e2e8f0", marginBottom: 8 }}>
             🧵 Thread the Cotton String
           </h4>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6, marginBottom: 12 }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6, marginBottom: 12 }}>
             Thread a piece of cotton string through the bottle cap hole. This acts as a wick, allowing water to travel
             from the aquatic zone down through the soil — connecting the two chambers.
           </p>
@@ -663,14 +663,14 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
             <span style={{ fontSize: 24 }}>🧵</span>
             <span style={{ fontSize: 18, color: "#94a3b8" }}>→</span>
             <span style={{ fontSize: 24 }}>🔩</span>
-            <span style={{ fontSize: 12, color: "#94a3b8", fontFamily: "Outfit,sans-serif" }}>(cap hole)</span>
+            <span style={{ fontSize: 12, color: "#94a3b8", fontFamily: "DynaPuff,sans-serif" }}>(cap hole)</span>
           </div>
           <button
             type="button"
             aria-label="Thread cotton string through cap"
             onClick={handleThreadString}
             className="rounded-full px-6 py-2.5 text-sm font-semibold transition-opacity hover:opacity-80"
-            style={{ background: "#d4a574", color: "#1a0a00", fontFamily: "Outfit,sans-serif" }}
+            style={{ background: "#d4a574", color: "#1a0a00", fontFamily: "DynaPuff,sans-serif" }}
           >
             🧵 Thread String Through Cap
           </button>
@@ -679,7 +679,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
 
       {step === "done" && (
         <div className="rounded-2xl p-4" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 14, color: "#00d4aa", fontWeight: 700 }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 14, color: "#00d4aa", fontWeight: 700 }}>
             ✅ Bottle assembled! Your terrarium is ready to receive organisms.
           </p>
         </div>
@@ -738,9 +738,9 @@ function BottleSVG({ placedOrganisms, activeOrganismIds, cycleType, animating }:
       <ellipse cx="100" cy="329" rx="12" ry="5" fill="#94a3b8" opacity="0.6" clipPath="url(#btl-outer-clip)" />
 
       {/* ── Zone labels ── */}
-      <text x="80" y="58"  textAnchor="middle" fontSize="9" fill="#4ade80" fontFamily="Outfit,sans-serif">AIR</text>
-      <text x="80" y="145" textAnchor="middle" fontSize="9" fill="#a16207" fontFamily="Outfit,sans-serif">SOIL</text>
-      <text x="80" y="265" textAnchor="middle" fontSize="9" fill="#60a5fa" fontFamily="Outfit,sans-serif">AQUATIC</text>
+      <text x="80" y="58"  textAnchor="middle" fontSize="9" fill="#4ade80" fontFamily="DynaPuff,sans-serif">AIR</text>
+      <text x="80" y="145" textAnchor="middle" fontSize="9" fill="#a16207" fontFamily="DynaPuff,sans-serif">SOIL</text>
+      <text x="80" y="265" textAnchor="middle" fontSize="9" fill="#60a5fa" fontFamily="DynaPuff,sans-serif">AQUATIC</text>
 
       {aquatic.map((org, i) => {
         const isActive = activeOrganismIds.includes(org.id);
@@ -799,31 +799,31 @@ function BottleSVG({ placedOrganisms, activeOrganismIds, cycleType, animating }:
           <circle cx="138" cy="75" r="3" fill="#60a5fa" opacity="0.6">
             <animateMotion dur="3.5s" repeatCount="indefinite" begin="1.5s" path="M 0 0 L 0 90" />
           </circle>
-          <text x="80" y="95" textAnchor="middle" fontSize="8" fill="#60a5fa" fontFamily="Outfit,sans-serif" opacity="0.8">evaporation ↑</text>
-          <text x="36" y="130" textAnchor="middle" fontSize="7" fill="#60a5fa" fontFamily="Outfit,sans-serif" opacity="0.7">condensation</text>
+          <text x="80" y="95" textAnchor="middle" fontSize="8" fill="#60a5fa" fontFamily="DynaPuff,sans-serif" opacity="0.8">evaporation ↑</text>
+          <text x="36" y="130" textAnchor="middle" fontSize="7" fill="#60a5fa" fontFamily="DynaPuff,sans-serif" opacity="0.7">condensation</text>
         </g>
       )}
 
       {/* Carbon cycle animation */}
       {cycleType === "carbon" && animating && (
         <g>
-          <text x="70" y="175" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0">
+          <text x="70" y="175" fontSize="8" fill="#22c55e" fontFamily="DynaPuff,sans-serif" opacity="0">
             CO₂
             <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" />
             <animateMotion dur="2s" repeatCount="indefinite" path="M 0 0 L -15 -65" />
           </text>
-          <text x="110" y="130" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0">
+          <text x="110" y="130" fontSize="8" fill="#22c55e" fontFamily="DynaPuff,sans-serif" opacity="0">
             CO₂
             <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.5s" />
             <animateMotion dur="2.5s" repeatCount="indefinite" begin="0.5s" path="M 0 0 L -22 -50" />
           </text>
-          <text x="42" y="118" fontSize="8" fill="#4ade80" fontFamily="Outfit,sans-serif" opacity="0">
+          <text x="42" y="118" fontSize="8" fill="#4ade80" fontFamily="DynaPuff,sans-serif" opacity="0">
             O₂ →
             <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1s" />
             <animateMotion dur="2s" repeatCount="indefinite" begin="1s" path="M 0 0 L 0 -35" />
           </text>
-          <text x="80" y="52" textAnchor="middle" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0.8">photosynthesis ↓</text>
-          <text x="80" y="152" textAnchor="middle" fontSize="8" fill="#22c55e" fontFamily="Outfit,sans-serif" opacity="0.7">respiration ↑</text>
+          <text x="80" y="52" textAnchor="middle" fontSize="8" fill="#22c55e" fontFamily="DynaPuff,sans-serif" opacity="0.8">photosynthesis ↓</text>
+          <text x="80" y="152" textAnchor="middle" fontSize="8" fill="#22c55e" fontFamily="DynaPuff,sans-serif" opacity="0.7">respiration ↑</text>
         </g>
       )}
 
@@ -837,8 +837,8 @@ function BottleSVG({ placedOrganisms, activeOrganismIds, cycleType, animating }:
           <line x1="58" y1="255" x2="58" y2="285" stroke="#f59e0b" strokeWidth="2" opacity="0">
             <animate attributeName="opacity" values="0;0.8;0" dur="2s" repeatCount="indefinite" begin="0.8s" />
           </line>
-          <text x="80" y="228" textAnchor="middle" fontSize="7" fill="#f59e0b" fontFamily="Outfit,sans-serif" opacity="0.8">decomposition</text>
-          <text x="80" y="315" textAnchor="middle" fontSize="7" fill="#f59e0b" fontFamily="Outfit,sans-serif" opacity="0.8">N absorbed by roots</text>
+          <text x="80" y="228" textAnchor="middle" fontSize="7" fill="#f59e0b" fontFamily="DynaPuff,sans-serif" opacity="0.8">decomposition</text>
+          <text x="80" y="315" textAnchor="middle" fontSize="7" fill="#f59e0b" fontFamily="DynaPuff,sans-serif" opacity="0.8">N absorbed by roots</text>
           <circle cx="80" cy="250" r="5" fill="#f59e0b" opacity="0">
             <animate attributeName="opacity" values="0;0.7;0" dur="1.5s" repeatCount="indefinite" begin="0.3s" />
             <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.3s" path="M 0 0 C 8 4 -4 8 4 12" />
@@ -847,7 +847,7 @@ function BottleSVG({ placedOrganisms, activeOrganismIds, cycleType, animating }:
       )}
 
       <rect x="35" y="344" width="90" height="14" rx="7" fill="#132638" />
-      <text x="80" y="355" textAnchor="middle" fontSize="8" fill="#00d4aa" fontFamily="Outfit,sans-serif" fontWeight="bold">
+      <text x="80" y="355" textAnchor="middle" fontSize="8" fill="#00d4aa" fontFamily="DynaPuff,sans-serif" fontWeight="bold">
         BOTTLE ECOSYSTEM
       </text>
     </svg>
@@ -884,10 +884,10 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
     <div className="space-y-4">
       <style>{SHAKE_KEYFRAMES}</style>
       <div className="rounded-2xl p-4" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-        <h3 style={{ fontFamily: "Outfit,sans-serif", fontWeight: 700, fontSize: 15, color: "#e2e8f0", marginBottom: 6 }}>
+        <h3 style={{ fontFamily: "DynaPuff,sans-serif", fontWeight: 700, fontSize: 15, color: "#e2e8f0", marginBottom: 6 }}>
           🧬 Add Your Organisms
         </h3>
-        <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+        <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
           Select an organism from the tray below, then click the correct zone in the bottle.
           Terrestrial organisms live in the top (air/soil) chamber. Aquatic organisms live in the bottom chamber.
         </p>
@@ -909,7 +909,7 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
             minHeight: 90,
           }}
         >
-          <div style={{ fontFamily: "Outfit,sans-serif", fontSize: 12, color: "#4ade80", fontWeight: 700, marginBottom: 4 }}>
+          <div style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 12, color: "#4ade80", fontWeight: 700, marginBottom: 4 }}>
             🌱 TERRESTRIAL (top)
           </div>
           <div className="flex flex-wrap gap-1">
@@ -923,12 +923,12 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
             ))}
           </div>
           {selected && ALL_ORGANISMS.find((o) => o.id === selected)?.zone === "terrestrial" && (
-            <div style={{ fontFamily: "Outfit,sans-serif", fontSize: 11, color: "#4ade80", marginTop: 4 }}>
+            <div style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#4ade80", marginTop: 4 }}>
               ↑ Click to place here
             </div>
           )}
           {selected && ALL_ORGANISMS.find((o) => o.id === selected)?.zone !== "terrestrial" && (
-            <div style={{ fontFamily: "Outfit,sans-serif", fontSize: 11, color: "#ef4444", marginTop: 4 }}>
+            <div style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#ef4444", marginTop: 4 }}>
               ✗ Wrong zone for this organism
             </div>
           )}
@@ -948,7 +948,7 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
             minHeight: 90,
           }}
         >
-          <div style={{ fontFamily: "Outfit,sans-serif", fontSize: 12, color: "#60a5fa", fontWeight: 700, marginBottom: 4 }}>
+          <div style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 12, color: "#60a5fa", fontWeight: 700, marginBottom: 4 }}>
             💧 AQUATIC (bottom)
           </div>
           <div className="flex flex-wrap gap-1">
@@ -962,12 +962,12 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
             ))}
           </div>
           {selected && ALL_ORGANISMS.find((o) => o.id === selected)?.zone === "aquatic" && (
-            <div style={{ fontFamily: "Outfit,sans-serif", fontSize: 11, color: "#60a5fa", marginTop: 4 }}>
+            <div style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#60a5fa", marginTop: 4 }}>
               ↑ Click to place here
             </div>
           )}
           {selected && ALL_ORGANISMS.find((o) => o.id === selected)?.zone !== "aquatic" && (
-            <div style={{ fontFamily: "Outfit,sans-serif", fontSize: 11, color: "#ef4444", marginTop: 4 }}>
+            <div style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#ef4444", marginTop: 4 }}>
               ✗ Wrong zone for this organism
             </div>
           )}
@@ -976,11 +976,11 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
 
       {/* Organism tray */}
       <div className="rounded-2xl p-3" style={{ background: "#0d1e2c", border: "1px solid #1e3a52" }}>
-        <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 11, color: "#64748b", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>
+        <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#64748b", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>
           🗂 Organism Tray — click to select
         </p>
         {trayOrganisms.length === 0 ? (
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#00d4aa" }}>All organisms placed! ✓</p>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#00d4aa" }}>All organisms placed! ✓</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {trayOrganisms.map((org) => (
@@ -997,10 +997,10 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
                 }}
               >
                 <div style={{ fontSize: 22 }}>{org.emoji}</div>
-                <div style={{ fontFamily: "Outfit,sans-serif", fontSize: 10, color: selected === org.id ? org.color : "#94a3b8", marginTop: 2 }}>
+                <div style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 10, color: selected === org.id ? org.color : "#94a3b8", marginTop: 2 }}>
                   {org.name}
                 </div>
-                <div style={{ fontFamily: "Outfit,sans-serif", fontSize: 9, color: "#64748b", textTransform: "capitalize" }}>
+                <div style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 9, color: "#64748b", textTransform: "capitalize" }}>
                   {org.zone}
                 </div>
               </button>
@@ -1012,7 +1012,7 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
       {/* Placed list */}
       {placedOrganisms.length > 0 && (
         <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 11, color: "#64748b", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#64748b", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
             Placed — click to return to tray
           </p>
           <div className="flex flex-wrap gap-2">
@@ -1023,7 +1023,7 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
                 aria-label={`Remove ${org.name} back to tray`}
                 onClick={() => onRemove(org.id)}
                 className="rounded-xl px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-70"
-                style={{ background: `${org.color}22`, border: `1px solid ${org.color}`, color: org.color, fontFamily: "Outfit,sans-serif" }}
+                style={{ background: `${org.color}22`, border: `1px solid ${org.color}`, color: org.color, fontFamily: "DynaPuff,sans-serif" }}
               >
                 {org.emoji} {org.name} ×
               </button>
@@ -1034,7 +1034,7 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
 
       {allPlaced && (
         <div className="rounded-xl p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
-          <span style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#00d4aa" }}>
+          <span style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#00d4aa" }}>
             ✅ All organisms placed in their correct zones — ecosystem is ready!
           </span>
         </div>
@@ -1059,10 +1059,10 @@ function PredictionGate({ question, options, onSubmit, submitted }: PredictionGa
 
   return (
     <div className="rounded-2xl p-5" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-      <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#f59e0b", fontWeight: 600, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+      <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#f59e0b", fontWeight: 600, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.05em" }}>
         🔒 Prediction Gate
       </p>
-      <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 14, color: "#e2e8f0", marginBottom: 12, lineHeight: 1.6 }}>
+      <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 14, color: "#e2e8f0", marginBottom: 12, lineHeight: 1.6 }}>
         {question}
       </p>
       {options ? (
@@ -1078,7 +1078,7 @@ function PredictionGate({ question, options, onSubmit, submitted }: PredictionGa
                 background: answer === opt ? "#00d4aa22" : "#0d1e2c",
                 border: `1px solid ${answer === opt ? "#00d4aa" : "#1e3a52"}`,
                 color: answer === opt ? "#00d4aa" : "#94a3b8",
-                fontFamily: "Outfit,sans-serif",
+                fontFamily: "DynaPuff,sans-serif",
               }}
             >
               {opt}
@@ -1093,7 +1093,7 @@ function PredictionGate({ question, options, onSubmit, submitted }: PredictionGa
           rows={2}
           placeholder="Type your prediction…"
           className="w-full resize-none rounded-xl p-3 text-sm outline-none"
-          style={{ background: "#0d1e2c", border: "1px solid #1e3a52", color: "#e2e8f0", fontFamily: "Outfit,sans-serif" }}
+          style={{ background: "#0d1e2c", border: "1px solid #1e3a52", color: "#e2e8f0", fontFamily: "DynaPuff,sans-serif" }}
         />
       )}
       <button
@@ -1102,7 +1102,7 @@ function PredictionGate({ question, options, onSubmit, submitted }: PredictionGa
         onClick={() => answer.trim() && onSubmit(answer)}
         disabled={!answer.trim()}
         className="mt-3 rounded-full px-5 py-2 text-sm font-semibold transition-opacity hover:opacity-80 disabled:opacity-40"
-        style={{ background: "#00d4aa", color: "#0d1e2c", fontFamily: "Outfit,sans-serif" }}
+        style={{ background: "#00d4aa", color: "#0d1e2c", fontFamily: "DynaPuff,sans-serif" }}
       >
         Submit Prediction →
       </button>
@@ -1122,8 +1122,8 @@ function WaterCycleScene({ prediction, onPrediction, animating }: WaterCycleScen
   return (
     <div className="space-y-4">
       <div className="rounded-2xl p-4" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-        <h3 style={{ fontFamily: "Outfit,sans-serif", fontWeight: 700, fontSize: 15, color: "#60a5fa", marginBottom: 6 }}>💧 Water Cycle</h3>
-        <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+        <h3 style={{ fontFamily: "DynaPuff,sans-serif", fontWeight: 700, fontSize: 15, color: "#60a5fa", marginBottom: 6 }}>💧 Water Cycle</h3>
+        <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
           Water evaporates from the aquatic zone, condenses on the bottle walls, and drips back down. This is a closed loop — no water enters or leaves the sealed bottle.
         </p>
       </div>
@@ -1140,8 +1140,8 @@ function WaterCycleScene({ prediction, onPrediction, animating }: WaterCycleScen
       />
       {animating && prediction && (
         <div className="rounded-2xl p-4" style={{ background: "#0a2540", border: "1px solid #1e4a7a" }}>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#60a5fa", fontWeight: 600, marginBottom: 8 }}>🔵 Water Cycle Steps (animated in bottle)</p>
-          <ol style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 2, paddingLeft: 20 }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#60a5fa", fontWeight: 600, marginBottom: 8 }}>🔵 Water Cycle Steps (animated in bottle)</p>
+          <ol style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 2, paddingLeft: 20 }}>
             <li>☀️ Heat evaporates water from the aquatic zone</li>
             <li>💨 Water vapor rises and hits the cool bottle walls</li>
             <li>💧 Vapor condenses into droplets on glass surface</li>
@@ -1150,7 +1150,7 @@ function WaterCycleScene({ prediction, onPrediction, animating }: WaterCycleScen
         </div>
       )}
       {prediction && (
-        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8" }}>
+        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
           <span style={{ color: "#60a5fa", fontWeight: 600 }}>Your prediction: </span>{prediction.studentAnswer}
         </div>
       )}
@@ -1170,8 +1170,8 @@ function CarbonCycleScene({ prediction, onPrediction, animating }: CarbonCycleSc
   return (
     <div className="space-y-4">
       <div className="rounded-2xl p-4" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-        <h3 style={{ fontFamily: "Outfit,sans-serif", fontWeight: 700, fontSize: 15, color: "#22c55e", marginBottom: 6 }}>🌿 Carbon Cycle</h3>
-        <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+        <h3 style={{ fontFamily: "DynaPuff,sans-serif", fontWeight: 700, fontSize: 15, color: "#22c55e", marginBottom: 6 }}>🌿 Carbon Cycle</h3>
+        <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
           Carbon flows as CO₂ is released by the fish and cricket during cellular respiration, then captured by the plant during photosynthesis to produce oxygen and glucose.
         </p>
       </div>
@@ -1188,8 +1188,8 @@ function CarbonCycleScene({ prediction, onPrediction, animating }: CarbonCycleSc
       />
       {animating && prediction && (
         <div className="rounded-2xl p-4" style={{ background: "#0a1f0a", border: "1px solid #1a3a1a" }}>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#22c55e", fontWeight: 600, marginBottom: 8 }}>🟢 Carbon Cycle Arrows (animated in bottle)</p>
-          <div className="space-y-2" style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8" }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#22c55e", fontWeight: 600, marginBottom: 8 }}>🟢 Carbon Cycle Arrows (animated in bottle)</p>
+          <div className="space-y-2" style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
             {[
               "Fish & Cricket respiration releases CO₂",
               "Aquatic Plant absorbs CO₂ for photosynthesis",
@@ -1204,7 +1204,7 @@ function CarbonCycleScene({ prediction, onPrediction, animating }: CarbonCycleSc
         </div>
       )}
       {prediction && (
-        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8" }}>
+        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
           <span style={{ color: "#22c55e", fontWeight: 600 }}>Your prediction: </span>{prediction.studentAnswer}
         </div>
       )}
@@ -1252,16 +1252,16 @@ function NitrogenCycleScene({ prediction, onPrediction, animating }: NitrogenCyc
   return (
     <div className="space-y-4">
       <div className="rounded-2xl p-4" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-        <h3 style={{ fontFamily: "Outfit,sans-serif", fontWeight: 700, fontSize: 15, color: "#f59e0b", marginBottom: 6 }}>🪱 Nitrogen Cycle</h3>
-        <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+        <h3 style={{ fontFamily: "DynaPuff,sans-serif", fontWeight: 700, fontSize: 15, color: "#f59e0b", marginBottom: 6 }}>🪱 Nitrogen Cycle</h3>
+        <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
           Worms are decomposers that break down dead organic matter into nitrogen compounds. These compounds are absorbed by plant roots, completing the nitrogen cycle inside the bottle.
         </p>
       </div>
 
       {!prediction ? (
         <div className="rounded-2xl p-4" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#f59e0b", fontWeight: 600, marginBottom: 4 }}>🔒 Prediction Gate</p>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#e2e8f0", marginBottom: 12, lineHeight: 1.6 }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#f59e0b", fontWeight: 600, marginBottom: 4 }}>🔒 Prediction Gate</p>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#e2e8f0", marginBottom: 12, lineHeight: 1.6 }}>
             Drag to rank these events in the correct order — what happens first, second, third, fourth?
           </p>
           <div className="space-y-2">
@@ -1277,8 +1277,8 @@ function NitrogenCycleScene({ prediction, onPrediction, animating }: NitrogenCyc
                 style={{ background: "#0d1e2c", border: "1px solid #1e3a52" }}
                 aria-label={`Step ${index + 1}: ${item.label}. Drag to reorder.`}
               >
-                <span style={{ color: "#64748b", fontSize: 12, fontFamily: "Outfit,sans-serif", minWidth: 20 }}>{index + 1}.</span>
-                <span style={{ color: "#94a3b8", fontSize: 13, fontFamily: "Outfit,sans-serif", lineHeight: 1.4 }}>{item.label}</span>
+                <span style={{ color: "#64748b", fontSize: 12, fontFamily: "DynaPuff,sans-serif", minWidth: 20 }}>{index + 1}.</span>
+                <span style={{ color: "#94a3b8", fontSize: 13, fontFamily: "DynaPuff,sans-serif", lineHeight: 1.4 }}>{item.label}</span>
                 <span style={{ color: "#64748b", marginLeft: "auto" }}>⠿</span>
               </div>
             ))}
@@ -1288,7 +1288,7 @@ function NitrogenCycleScene({ prediction, onPrediction, animating }: NitrogenCyc
             aria-label="Submit nitrogen cycle ranking"
             onClick={() => onPrediction(order.map((i) => i.label).join(" → "))}
             className="mt-4 rounded-full px-5 py-2 text-sm font-semibold transition-opacity hover:opacity-80"
-            style={{ background: "#f59e0b", color: "#0d1e2c", fontFamily: "Outfit,sans-serif" }}
+            style={{ background: "#f59e0b", color: "#0d1e2c", fontFamily: "DynaPuff,sans-serif" }}
           >
             Submit Ranking →
           </button>
@@ -1297,18 +1297,18 @@ function NitrogenCycleScene({ prediction, onPrediction, animating }: NitrogenCyc
 
       {animating && prediction && (
         <div className="rounded-2xl p-4" style={{ background: "#1a0f00", border: "1px solid #3a2200" }}>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#f59e0b", fontWeight: 600, marginBottom: 8 }}>🟡 Nitrogen Cycle (animated in bottle)</p>
-          <ol style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 2, paddingLeft: 20 }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#f59e0b", fontWeight: 600, marginBottom: 8 }}>🟡 Nitrogen Cycle (animated in bottle)</p>
+          <ol style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 2, paddingLeft: 20 }}>
             {NITROGEN_STEPS.map((step, i) => (
               <li key={step.id} style={{ color: isCorrect && order[i]?.id === step.id ? "#f59e0b" : "#94a3b8" }}>{step.label}</li>
             ))}
           </ol>
-          {isCorrect && <div style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#f59e0b", marginTop: 8, fontWeight: 600 }}>✅ You ranked the steps correctly!</div>}
+          {isCorrect && <div style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#f59e0b", marginTop: 8, fontWeight: 600 }}>✅ You ranked the steps correctly!</div>}
         </div>
       )}
 
       {prediction && (
-        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8" }}>
+        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
           <span style={{ color: "#f59e0b", fontWeight: 600 }}>Your ranking: </span>submitted ✓
         </div>
       )}
@@ -1339,29 +1339,29 @@ function ReflectScene({ predictions, submitted, feedback, onSubmit }: ReflectSce
   return (
     <div className="space-y-4">
       <div className="rounded-2xl p-4" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-        <h3 style={{ fontFamily: "Outfit,sans-serif", fontWeight: 700, fontSize: 15, color: "#e2e8f0", marginBottom: 6 }}>✍️ Reflect &amp; Connect</h3>
-        <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+        <h3 style={{ fontFamily: "DynaPuff,sans-serif", fontWeight: 700, fontSize: 15, color: "#e2e8f0", marginBottom: 6 }}>✍️ Reflect &amp; Connect</h3>
+        <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
           Now that you&apos;ve observed all three cycles, use what you know to answer this CER prompt.
         </p>
       </div>
 
       {predictions.length > 0 && (
         <div className="rounded-2xl p-4 space-y-2" style={{ background: "#0d1e2c", border: "1px solid #1e3a52" }}>
-          <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 12, color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
+          <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 12, color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
             📋 Your Earlier Predictions (use as evidence)
           </p>
           {predictions.map((p) => (
             <div key={p.sceneId} className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-              <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 11, color: "#64748b", marginBottom: 2 }}>{p.questionText.slice(0, 60)}…</p>
-              <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8" }}>{p.studentAnswer}</p>
+              <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#64748b", marginBottom: 2 }}>{p.questionText.slice(0, 60)}…</p>
+              <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>{p.studentAnswer}</p>
             </div>
           ))}
         </div>
       )}
 
       <div className="rounded-2xl p-5" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
-        <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 14, color: "#e2e8f0", fontWeight: 600, marginBottom: 4 }}>CER Prompt</p>
-        <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 14, color: "#cbd5e1", lineHeight: 1.6, marginBottom: 12 }}>
+        <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 14, color: "#e2e8f0", fontWeight: 600, marginBottom: 4 }}>CER Prompt</p>
+        <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 14, color: "#cbd5e1", lineHeight: 1.6, marginBottom: 12 }}>
           &ldquo;Predict what happens if you remove the worms from the bottle ecosystem. Use one cycle to explain your reasoning.&rdquo;
         </p>
         <textarea
@@ -1372,10 +1372,10 @@ function ReflectScene({ predictions, submitted, feedback, onSubmit }: ReflectSce
           rows={5}
           placeholder="Write your Claim, Evidence, and Reasoning here…&#10;&#10;Claim: If the worms are removed...&#10;Evidence: From the nitrogen cycle, I observed that...&#10;Reasoning: This matters because..."
           className="w-full resize-none rounded-xl p-3 text-sm outline-none"
-          style={{ background: "#0d1e2c", border: "1px solid #1e3a52", color: "#e2e8f0", fontFamily: "Outfit,sans-serif", opacity: submitted ? 0.6 : 1 }}
+          style={{ background: "#0d1e2c", border: "1px solid #1e3a52", color: "#e2e8f0", fontFamily: "DynaPuff,sans-serif", opacity: submitted ? 0.6 : 1 }}
         />
         {feedback && (
-          <div className="mt-3 rounded-xl p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44", fontFamily: "Outfit,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.5 }}>
+          <div className="mt-3 rounded-xl p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.5 }}>
             <span style={{ color: "#00d4aa", fontWeight: 600 }}>Feedback: </span>{feedback}
           </div>
         )}
@@ -1386,7 +1386,7 @@ function ReflectScene({ predictions, submitted, feedback, onSubmit }: ReflectSce
             onClick={handleSubmit}
             disabled={!text.trim() || loading}
             className="mt-3 rounded-full px-5 py-2 text-sm font-semibold transition-opacity hover:opacity-80 disabled:opacity-40"
-            style={{ background: "#00d4aa", color: "#0d1e2c", fontFamily: "Outfit,sans-serif" }}
+            style={{ background: "#00d4aa", color: "#0d1e2c", fontFamily: "DynaPuff,sans-serif" }}
           >
             {loading ? "Scoring…" : "Submit CER →"}
           </button>
@@ -1557,7 +1557,7 @@ export default function BottleEcosystemCyclesPage() {
       </PageBanner>
 
       <PageContent className="flex-1 overflow-hidden">
-        <div className="mx-auto flex h-full w-full max-w-6xl gap-0 overflow-hidden" style={{ fontFamily: "Outfit,sans-serif" }}>
+        <div className="mx-auto flex h-full w-full max-w-6xl gap-0 overflow-hidden" style={{ fontFamily: "DynaPuff,sans-serif" }}>
 
           {/* ── Left Sidebar: Scene Progress ── */}
           <aside
@@ -1565,7 +1565,7 @@ export default function BottleEcosystemCyclesPage() {
             style={{ borderRight: "1px solid #1e3a52" }}
             aria-label="Scene progress navigation"
           >
-            <p style={{ fontFamily: "Outfit,sans-serif", fontSize: 11, color: "#64748b", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 4 }}>
+            <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#64748b", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 4 }}>
               Progress
             </p>
             {SCENE_META.map((scene, index) => {
@@ -1596,11 +1596,11 @@ export default function BottleEcosystemCyclesPage() {
                 >
                   <span style={{ fontSize: 18 }}>{isCompleted ? "✅" : scene.icon}</span>
                   <div>
-                    <div style={{ fontSize: 12, fontWeight: isCurrent ? 700 : 500, color: isCurrent ? "#e2e8f0" : "#94a3b8", fontFamily: "Outfit,sans-serif" }}>
+                    <div style={{ fontSize: 12, fontWeight: isCurrent ? 700 : 500, color: isCurrent ? "#e2e8f0" : "#94a3b8", fontFamily: "DynaPuff,sans-serif" }}>
                       {scene.label}
                     </div>
                     {scene.cycleType && (
-                      <div style={{ fontSize: 10, color: CYCLE_COLORS[scene.cycleType], fontFamily: "Outfit,sans-serif", marginTop: 1 }}>
+                      <div style={{ fontSize: 10, color: CYCLE_COLORS[scene.cycleType], fontFamily: "DynaPuff,sans-serif", marginTop: 1 }}>
                         {scene.cycleType} cycle
                       </div>
                     )}

@@ -68,9 +68,9 @@ export function validateTheme(): void {
   const uiFont = styles.getPropertyValue("--bs-font-ui").trim();
   const monoFont = styles.getPropertyValue("--bs-font-mono").trim();
 
-  if (!uiFont.includes("Outfit")) {
+  if (!uiFont.includes("DynaPuff")) {
     console.warn(
-      "[BioSpark Theme] --bs-font-ui does not contain 'Outfit'. Check Google Fonts import.",
+      "[BioSpark Theme] --bs-font-ui does not contain 'DynaPuff'. Check font import.",
     );
   }
   if (!monoFont.includes("JetBrains Mono")) {
@@ -81,9 +81,9 @@ export function validateTheme(): void {
 
   if (typeof document !== "undefined" && document.fonts) {
     const checkSize = "16px";
-    if (!document.fonts.check(`${checkSize} Outfit`)) {
+    if (!document.fonts.check(`${checkSize} DynaPuff`)) {
       console.warn(
-        "[BioSpark Theme] Outfit font not yet loaded. It may still be downloading.",
+        "[BioSpark Theme] DynaPuff font not yet loaded. It may still be downloading.",
       );
     }
     if (!document.fonts.check(`${checkSize} JetBrains Mono`)) {

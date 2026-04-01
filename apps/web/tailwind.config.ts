@@ -80,7 +80,7 @@ const config: Config = {
         lg: "var(--shadow-lg)",
       },
       fontFamily: {
-        sans: ["Outfit", "sans-serif"],
+        sans: ["DynaPuff", "sans-serif"],
         display: ["var(--font-display)", "sans-serif"],
         ui:   ["var(--bs-font-ui)", "sans-serif"],
         mono: ["var(--bs-font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],

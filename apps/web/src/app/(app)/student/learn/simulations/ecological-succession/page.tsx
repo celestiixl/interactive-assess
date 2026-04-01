@@ -38,7 +38,7 @@ function ReflectionPanel({ onSubmit, submitted, feedback }: ReflectionPanelProps
     >
       <h3
         style={{
-          fontFamily: "Outfit, sans-serif",
+          fontFamily: "DynaPuff, sans-serif",
           fontWeight: 700,
           fontSize: 16,
           color: "#e2e8f0",
@@ -49,7 +49,7 @@ function ReflectionPanel({ onSubmit, submitted, feedback }: ReflectionPanelProps
       </h3>
       <p
         style={{
-          fontFamily: "Outfit, sans-serif",
+          fontFamily: "DynaPuff, sans-serif",
           fontSize: 14,
           color: "#94a3b8",
           marginBottom: 12,
@@ -70,7 +70,7 @@ function ReflectionPanel({ onSubmit, submitted, feedback }: ReflectionPanelProps
           background: "#0d1e2c",
           border: "1px solid #1e3a52",
           color: "#e2e8f0",
-          fontFamily: "Outfit, sans-serif",
+          fontFamily: "DynaPuff, sans-serif",
           opacity: submitted ? 0.6 : 1,
         }}
       />
@@ -80,7 +80,7 @@ function ReflectionPanel({ onSubmit, submitted, feedback }: ReflectionPanelProps
           style={{
             background: "#00d4aa11",
             border: "1px solid #00d4aa44",
-            fontFamily: "Outfit, sans-serif",
+            fontFamily: "DynaPuff, sans-serif",
             fontSize: 13,
             color: "#94a3b8",
             lineHeight: 1.5,
@@ -100,7 +100,7 @@ function ReflectionPanel({ onSubmit, submitted, feedback }: ReflectionPanelProps
           style={{
             background: "#00d4aa",
             color: "#0d1e2c",
-            fontFamily: "Outfit, sans-serif",
+            fontFamily: "DynaPuff, sans-serif",
           }}
         >
           {loading ? "Submitting…" : "Submit Reflection"}
@@ -255,7 +255,7 @@ export default function EcologicalSuccessionPage() {
       <PageContent className="flex-1 overflow-y-auto py-6">
         <div
           className="mx-auto w-full max-w-3xl space-y-5 px-4"
-          style={{ fontFamily: "Outfit, sans-serif" }}
+          style={{ fontFamily: "DynaPuff, sans-serif" }}
         >
           {/* ── TEKS badge row ── */}
           <div className="flex flex-wrap gap-2">

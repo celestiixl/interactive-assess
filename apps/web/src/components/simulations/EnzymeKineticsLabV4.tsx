@@ -24,7 +24,7 @@ const T = {
   text: "#e8f4f0",
   textSub: "#9abcb0",
   textMuted: "#5a8070",
-  font: "'Outfit',sans-serif",
+  font: "'DynaPuff',sans-serif",
   mono: "'JetBrains Mono',monospace",
 };
 
@@ -1095,7 +1095,7 @@ export default function EnzymeKineticsLabV4() {
         color: T.text,
       }}
     >
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');*{box-sizing:border-box;margin:0;padding:0}input[type=range]{cursor:pointer;height:4px;border-radius:99px}`}</style>
+      <style>{`*{box-sizing:border-box;margin:0;padding:0}input[type=range]{cursor:pointer;height:4px;border-radius:99px}`}</style>
 
       <nav
         style={{

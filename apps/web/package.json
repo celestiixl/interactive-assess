@@ -21,7 +21,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource/dm-sans": "^5.2.8",
-    "@fontsource/syne": "^5.2.7",
+    "@fontsource/dynapuff": "^5.2.8",
     "@formkit/auto-animate": "^0.9.0",
     "@mui/joy": "5.0.0-beta.52",
     "@radix-ui/react-avatar": "^1.1.11",

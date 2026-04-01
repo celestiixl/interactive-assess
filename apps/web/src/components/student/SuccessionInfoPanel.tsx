@@ -20,7 +20,7 @@ function StatBar({ label, value, color }: StatBarProps) {
     <div>
       <div className="mb-1 flex items-center justify-between">
         <span
-          style={{ fontFamily: "Outfit, sans-serif", fontSize: 13, color: "#94a3b8" }}
+          style={{ fontFamily: "DynaPuff, sans-serif", fontSize: 13, color: "#94a3b8" }}
         >
           {label}
         </span>
@@ -80,7 +80,7 @@ export default function SuccessionInfoPanel({
       <div className="mb-3">
         <h3
           style={{
-            fontFamily: "Outfit, sans-serif",
+            fontFamily: "DynaPuff, sans-serif",
             fontWeight: 700,
             fontSize: 20,
             color: "#00d4aa",
@@ -117,7 +117,7 @@ export default function SuccessionInfoPanel({
       <div className="mb-4">
         <p
           className="mb-2"
-          style={{ fontFamily: "Outfit, sans-serif", fontSize: 12, color: "#64748b" }}
+          style={{ fontFamily: "DynaPuff, sans-serif", fontSize: 12, color: "#64748b" }}
         >
           Dominant Species
         </p>
@@ -127,7 +127,7 @@ export default function SuccessionInfoPanel({
               key={sp}
               className="rounded-full px-3 py-1"
               style={{
-                fontFamily: "Outfit, sans-serif",
+                fontFamily: "DynaPuff, sans-serif",
                 fontSize: 11,
                 background: "#00d4aa22",
                 color: "#00d4aa",
@@ -150,7 +150,7 @@ export default function SuccessionInfoPanel({
       >
         <p
           style={{
-            fontFamily: "Outfit, sans-serif",
+            fontFamily: "DynaPuff, sans-serif",
             fontSize: 13,
             color: "#94a3b8",
             lineHeight: 1.5,
@@ -171,7 +171,7 @@ export default function SuccessionInfoPanel({
               background: "#1e3a52",
               color: "#60a5fa",
               border: "1px solid #60a5fa44",
-              fontFamily: "Outfit, sans-serif",
+              fontFamily: "DynaPuff, sans-serif",
             }}
           >
             TEKS {code}
@@ -192,7 +192,7 @@ export default function SuccessionInfoPanel({
         >
           <p
             style={{
-              fontFamily: "Outfit, sans-serif",
+              fontFamily: "DynaPuff, sans-serif",
               fontWeight: 700,
               fontSize: 16,
               color: "#00d4aa",
@@ -202,7 +202,7 @@ export default function SuccessionInfoPanel({
           </p>
           <p
             style={{
-              fontFamily: "Outfit, sans-serif",
+              fontFamily: "DynaPuff, sans-serif",
               fontSize: 12,
               color: "#94a3b8",
               marginTop: 4,

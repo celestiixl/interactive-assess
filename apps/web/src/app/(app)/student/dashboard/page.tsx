@@ -140,7 +140,7 @@ export default function StudentDashboard() {
       {/* ------------------------------------------------------------------ */}
       <nav
         className="sticky top-0 z-50 border-b border-bs-border bg-[#0d1e2c]/95 backdrop-blur-md"
-        style={{ fontFamily: "Outfit, sans-serif" }}
+        style={{ fontFamily: "DynaPuff, sans-serif" }}
         aria-label="Student navigation"
       >
         <div className="mx-auto flex h-14 w-full max-w-350 items-center justify-between px-6 sm:px-8">

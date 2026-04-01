@@ -364,7 +364,7 @@ export default function SuccessionScene({
       <text
         x="6"
         y="278"
-        fontFamily="Outfit, sans-serif"
+        fontFamily="DynaPuff, sans-serif"
         fontSize="9"
         fill="#94a3b8"
       >
@@ -373,7 +373,7 @@ export default function SuccessionScene({
       <text
         x="594"
         y="278"
-        fontFamily="Outfit, sans-serif"
+        fontFamily="DynaPuff, sans-serif"
         fontSize="9"
         fill="#94a3b8"
         textAnchor="end"

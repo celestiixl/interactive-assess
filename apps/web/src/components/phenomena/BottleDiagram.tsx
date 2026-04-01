@@ -45,7 +45,7 @@ export function BottleDiagram({ className, width = 200 }: BottleDiagramProps) {
       role="img"
     >
       <style>{`
-        .bs-bottle text { font-family: Outfit, sans-serif; fill: #d6f6ec; }
+        .bs-bottle text { font-family: DynaPuff, sans-serif; fill: #d6f6ec; }
         .bs-bottle .mono { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
 
         @keyframes gentleSway {
