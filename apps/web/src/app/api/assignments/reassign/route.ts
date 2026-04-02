@@ -21,7 +21,7 @@ import {
   generateAssignmentId,
   type StoredAssignment,
   type AssignmentResult,
-} from "@/lib/serverAssignmentStore";
+} from "@/lib/serverAssignmentStore.legacy";
 
 export const runtime = "nodejs";
 

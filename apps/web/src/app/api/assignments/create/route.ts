@@ -29,7 +29,7 @@ import {
   assignmentStore,
   generateAssignmentId,
   type StoredAssignment,
-} from "@/lib/serverAssignmentStore";
+} from "@/lib/serverAssignmentStore.legacy";
 
 export const runtime = "nodejs";
 

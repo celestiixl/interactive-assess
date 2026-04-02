@@ -1,18 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MOCK_ASSIGNMENTS } from "@/lib/mockAssignments";
+import { prisma } from "@/lib/prisma";
+import { z } from "zod";
+
+const CreateAssignmentSchema = z.object({
+  title: z.string().min(1),
+  kind: z.enum(["assignment", "assessment"]),
+  teks: z.array(z.string()),
+  period: z.number().int().min(1),
+  dueAt: z.string().datetime().optional(),
+});
 
 export async function GET(req: NextRequest) {
-  const base = process.env.API_INTERNAL_URL || "http://127.0.0.1:3011";
-  try {
-    const r = await fetch(`${base}/assignments`, { cache: "no-store" });
-    if (r.ok) {
-      const data = await r.json().catch(async () => ({ text: await r.text() }));
-      return NextResponse.json(data, { status: r.status });
-    }
-  } catch (e: any) {
-    // fallthrough to return mock data
+  const { searchParams } = new URL(req.url);
+  const period = searchParams.get("period");
+
+  const assignments = await prisma.assignment.findMany({
+    where: period ? { period: parseInt(period) } : undefined,
+    orderBy: { createdAt: "desc" },
+    include: { _count: { select: { responses: true } } },
+  });
+
+  return NextResponse.json(assignments);
+}
+
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const parsed = CreateAssignmentSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  // Fallback: return mock assignments for local/dev
-  return NextResponse.json(MOCK_ASSIGNMENTS);
+  const assignment = await prisma.assignment.create({
+    data: {
+      ...parsed.data,
+      dueAt: parsed.data.dueAt ? new Date(parsed.data.dueAt) : null,
+    },
+  });
+
+  return NextResponse.json(assignment, { status: 201 });
 }

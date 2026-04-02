@@ -11,7 +11,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { assignmentStore } from "@/lib/serverAssignmentStore";
+import { assignmentStore } from "@/lib/serverAssignmentStore.legacy";
 
 export const runtime = "nodejs";
 

@@ -1,23 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MOCK_RESPONSES } from "@/lib/mockAssignments";
+import { prisma } from "@/lib/prisma";
+import { z } from "zod";
 
-export async function GET(req: NextRequest, context: any) {
-  const base = process.env.API_INTERNAL_URL || "http://127.0.0.1:3011";
-  const assignmentId = context?.params?.assignmentId;
+const SubmitResponseSchema = z.object({
+  studentId: z.string(),
+  answers: z.record(z.string(), z.unknown()),
+});
 
-  try {
-    const r = await fetch(
-      `${base}/assignments/${encodeURIComponent(assignmentId)}/responses`,
-      { cache: "no-store" },
-    );
-    if (r.ok) {
-      const data = await r.json().catch(async () => ({ text: await r.text() }));
-      return NextResponse.json(data, { status: r.status });
-    }
-  } catch (e) {
-    // fallthrough to mock
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: { assignmentId: string } }
+) {
+  const responses = await prisma.assignmentResponse.findMany({
+    where: { assignmentId: params.assignmentId },
+    include: { student: { select: { displayName: true, period: true } } },
+    orderBy: { submittedAt: "desc" },
+  });
+
+  return NextResponse.json(responses);
+}
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { assignmentId: string } }
+) {
+  const body = await req.json();
+  const parsed = SubmitResponseSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const responses = MOCK_RESPONSES[assignmentId] ?? [];
-  return NextResponse.json(responses);
+  const response = await prisma.assignmentResponse.upsert({
+    where: {
+      assignmentId_studentId: {
+        assignmentId: params.assignmentId,
+        studentId: parsed.data.studentId,
+      },
+    },
+    update: { answers: parsed.data.answers },
+    create: {
+      assignmentId: params.assignmentId,
+      studentId: parsed.data.studentId,
+      answers: parsed.data.answers,
+    },
+  });
+
+  return NextResponse.json(response, { status: 201 });
 }
