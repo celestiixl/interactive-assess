@@ -169,7 +169,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
           {(a.status === "graded" || a.status === "submitted") && (
             <Link
               href={practiceHref(a)}
-              className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-1.5 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+              className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-1.5 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
             >
               Review topics
             </Link>
@@ -177,7 +177,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
           {a.status === "in_progress" && (
             <Link
               href={`/practice?focus=${encodeURIComponent(a.teks[0] ?? "")}`}
-              className="rounded-xl bg-amber-500 px-4 py-1.5 text-xs font-semibold text-white hover:bg-amber-600"
+              className="rounded-bs bg-amber-500 px-4 py-1.5 text-xs font-semibold text-white hover:bg-amber-600"
             >
               Continue →
             </Link>
@@ -185,7 +185,7 @@ function AssignmentCard({ a }: { a: StudentAssignment }) {
           {a.status === "not_started" && (
             <Link
               href={`/practice?focus=${encodeURIComponent(a.teks[0] ?? "")}`}
-              className="rounded-xl bg-bs-bg px-4 py-1.5 text-xs font-semibold text-white hover:bg-bs-bg"
+              className="rounded-bs bg-bs-bg px-4 py-1.5 text-xs font-semibold text-white hover:bg-bs-bg"
             >
               Start →
             </Link>
@@ -433,7 +433,7 @@ function StudentAssignmentsPageContent() {
               {tab === "active" && (
                 <Link
                   href="/student/learn"
-                  className="mt-4 inline-block rounded-xl bg-bs-bg px-4 py-2 text-sm font-semibold text-white"
+                  className="mt-4 inline-block rounded-bs bg-bs-bg px-4 py-2 text-sm font-semibold text-white"
                 >
                   Go to Learning Hub →
                 </Link>

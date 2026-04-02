@@ -83,7 +83,7 @@ export default function SimulationsPage() {
                   <div className="mt-3">
                     <Link
                       href={`/student/learn/simulations/${sim.slug}`}
-                      className="inline-flex rounded-xl bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700 dark:bg-[#00d4aa] dark:text-[#0d1117] dark:hover:bg-[#00bfa0]"
+                      className="inline-flex rounded-bs bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-slate-700 dark:bg-[#00d4aa] dark:text-[#0d1117] dark:hover:bg-[#00bfa0]"
                     >
                       Open Simulation →
                     </Link>

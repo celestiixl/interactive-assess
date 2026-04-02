@@ -258,7 +258,7 @@ function LineChart({
         ref={canvasRef}
         aria-label={yLabel + " chart"}
         role="img"
-        className="rounded-xl"
+        className="rounded-bs"
       />
     </div>
   );
@@ -337,7 +337,7 @@ function Toggle({
           } ${disabled ? "opacity-40" : ""}`}
         />
         <div
-          className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform ${
+          className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-bs-surface shadow transition-transform ${
             checked ? "translate-x-4" : "translate-x-0"
           }`}
         />
@@ -473,7 +473,7 @@ export default function PopulationGeneticsSimPage() {
                       key={m}
                       type="button"
                       onClick={() => setMode(m)}
-                      className={`rounded-xl px-3 py-2 text-left text-xs font-semibold transition-colors ${
+                      className={`rounded-bs px-3 py-2 text-left text-xs font-semibold transition-colors ${
                         mode === m
                           ? "bg-indigo-600 text-white"
                           : "bg-slate-700 text-slate-300 hover:bg-slate-600"
@@ -613,7 +613,7 @@ export default function PopulationGeneticsSimPage() {
                     type="button"
                     onClick={runSimulation}
                     disabled={isRunning}
-                    className="flex-1 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-50"
+                    className="flex-1 rounded-bs bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-50"
                     aria-label="Re-run simulation"
                   >
                     ↺ Re-run
@@ -621,7 +621,7 @@ export default function PopulationGeneticsSimPage() {
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="rounded-xl border border-slate-600 bg-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-600"
+                    className="rounded-bs border border-slate-600 bg-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-600"
                     aria-label="Reset simulation"
                   >
                     Reset
@@ -644,7 +644,7 @@ export default function PopulationGeneticsSimPage() {
                   <div className="flex flex-wrap gap-3 text-xs text-slate-400">
                     <span className="flex items-center gap-1">
                       <span
-                        className="inline-block h-2.5 w-5 rounded-sm"
+                        className="inline-block h-2.5 w-5 rounded-bs-sm"
                         style={{ background: C.accent1 }}
                       />
                       Replicate runs
@@ -652,7 +652,7 @@ export default function PopulationGeneticsSimPage() {
                     {mode !== "hardy-weinberg" && (
                       <span className="flex items-center gap-1">
                         <span
-                          className="inline-block h-1 w-5 rounded-sm border-t-2 border-dashed"
+                          className="inline-block h-1 w-5 rounded-bs-sm border-t-2 border-dashed"
                           style={{ borderColor: C.accent3 }}
                         />
                         HW equilibrium

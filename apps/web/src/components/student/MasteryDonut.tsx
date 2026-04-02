@@ -81,10 +81,36 @@ function toPct(v: number) {
   return Math.max(0, Math.min(100, v));
 }
 
+/**
+ * UNIT_BASE_COLORS — BioSpark design system palette
+ *
+ * Each key is a TEKS group prefix (e.g. "B.5" covers B.5A, B.5B, etc.)
+ * Each value is the saturated base hex color for that unit group.
+ * colorForMastery() blends this toward #e2e8f0 based on mastery score.
+ *
+ * ── HOW TO ADD A NEW UNIT ──
+ * 1. Pick the TEKS group prefix for the new unit (e.g. "B.4" for Unit 4)
+ * 2. Choose a color from the BioSpark palette below that isn't already used
+ * 3. Add one line: "B.X": "#hexvalue",
+ * 4. Pass the new TEKS segments via the `segments` prop — no other changes needed.
+ *
+ * ── BIOSPARK PALETTE (use these, don't invent new ones) ──
+ * Teal dark   #006e55  → Unit 1 Biomolecules
+ * Coral       #ff4f2b  → Unit 2 Nucleic Acids
+ * Purple      #7c5cfc  → Unit 3 Cell Cycle
+ * Amber       #f5a800  → Unit 7 Plants
+ * Teal bright #00c49a  → available
+ * Blue        #2563eb  → available
+ * Pink        #db2777  → available
+ * Cyan        #06b6d4  → available
+ */
 const UNIT_BASE_COLORS: Record<string, string> = {
-  "B.5": "#2563eb",
-  "B.7": "#db2777",
-  "B.11": "#06b6d4",
+  "B.5":  "#006e55",  // Unit 1 — Biomolecules (teal dark)
+  "B.11": "#ff4f2b",  // Unit 2 — Nucleic Acids / Energy (coral)
+  "B.7":  "#7c5cfc",  // Unit 2 — Nucleic Acids / Gene Expression (purple)
+  "B.6":  "#f5a800",  // Unit 3 — Cell Cycle (amber)
+  "B.12": "#00c49a",  // Unit 7 — Plants (teal bright)
+  // ── Add new units below this line ──
 };
 
 const PRACTICE_LABELS: Record<string, string> = {
@@ -98,8 +124,10 @@ function clusterKeyFromSegmentKey(key: string) {
   return m ? m[1] : key;
 }
 
+const fallbackColor = "#8aada0"; // bs-muted — matches BioSpark token
+
 function colorForMastery(groupKey: string, masteryPct: number) {
-  const base = UNIT_BASE_COLORS[groupKey] ?? "#2563eb";
+  const base = UNIT_BASE_COLORS[groupKey] ?? fallbackColor;
   const toned = mixHex(base, "#e2e8f0", ((100 - masteryPct) / 100) * 0.72);
   return toned;
 }

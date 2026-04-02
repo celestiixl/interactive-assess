@@ -9,10 +9,10 @@ export default function StudentDashboardLoading() {
         <div className="mx-auto max-w-6xl px-6 py-8">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <Skeleton className="h-10 w-64 bg-white/30" />
-              <Skeleton className="h-5 w-48 bg-white/20" />
+              <Skeleton className="h-10 w-64 bg-bs-surface/30" />
+              <Skeleton className="h-5 w-48 bg-bs-surface/20" />
             </div>
-            <Skeleton className="h-11 w-44 rounded-2xl bg-white/30" />
+            <Skeleton className="h-11 w-44 rounded-2xl bg-bs-surface/30" />
           </div>
         </div>
       </div>

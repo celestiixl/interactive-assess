@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import MasteryDonut, { type DonutSegment } from "@/components/student/MasteryDonut";
 import { loadLearningProgress, getMostRecentLessonId } from "@/lib/learningProgress";
 import { getXP, getStreak } from "@/lib/xp";
 import { LEARNING_UNITS, type LearningLesson, type LearningUnit } from "@/lib/learningHubContent";
 import { MOCK_STUDENT_ASSIGNMENTS } from "@/lib/studentAssignments";
+import {
+  PageShell, BsCard, BsTag, BsBtn, BsCardLabel, BsCardTitle,
+} from "@/components/ui";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -125,33 +128,8 @@ type DashState = {
 };
 
 // ---------------------------------------------------------------------------
-// Card wrapper with hover effect
+// Card wrapper with hover effect (kept for internal use)
 // ---------------------------------------------------------------------------
-
-function DashCard({
-  children,
-  className = "",
-  style,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-  delay?: number;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay }}
-      whileHover={{ y: -2 }}
-      className={`rounded-2xl border border-bs-border bg-bs-surface p-5 transition-colors hover:border-bs-border-soft ${className}`}
-      style={{ transition: "border-color 0.2s, box-shadow 0.2s", ...style }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 // ---------------------------------------------------------------------------
 // Main component
@@ -284,454 +262,237 @@ export default function DashboardClient(props: DashboardClientProps) {
     return d === 0 ? 6 : d - 1;
   })();
 
+  // v4 derived values
+  const timeOfDay = hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
+  const todayLabel = new Date().toLocaleDateString("en-US", {
+    weekday: "long", month: "long", day: "numeric",
+  });
+  const weekActivity = DAY_LABELS.map((_, i) => {
+    if (i > todayIndex) return "" as const;
+    return (weeklyStreak[i] ?? false) ? "active" as const : "past" as const;
+  });
+  const teksStatus = DEFAULT_SEGMENTS.slice(0, 8).map((seg) => {
+    const v = seg.value <= 1 ? seg.value * 100 : seg.value;
+    return {
+      code: seg.key,
+      variant: (v >= 75 ? "teal" : v >= 40 ? "gray" : "coral") as "teal" | "gray" | "coral",
+    };
+  });
+  const continueHref = `/student/learn/${currentUnitId ?? "unit-1"}/${currentLesson?.slug ?? ""}`;
+  const nextHref = `/student/learn/${nextUnitId ?? "unit-1"}/${nextLesson?.slug ?? ""}`;
+  const dueLabel = dueAssignment
+    ? new Date(dueAssignment.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+    : "—";
+  const challenge = { title: "Today's Question", subject: primaryTeks, xp: 10 };
+
   return (
-    <div className="relative min-h-screen">
-      {/* Top bar */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="flex flex-col gap-3 px-4 pb-5 pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:px-8"
-      >
+    <PageShell>
+      {/* ── Topbar ── */}
+      <div className="mb-7 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1
-            className="text-lg font-bold tracking-tight text-bs-text md:text-2xl"
-            style={{ fontFamily: "var(--bs-font-ui)" }}
-          >
-            {greeting},{" "}
-            <span style={{ color: "var(--bs-teal)" }}>{studentName}</span>
-            {" "}&#10022;
+          <p className="text-[13px] text-bs-muted">Good {timeOfDay}</p>
+          <h1 className="font-display text-[40px] font-extrabold italic leading-none tracking-tight text-bs-ink">
+            <span className="text-bs-teal-dark">{studentName}</span> ✦
           </h1>
-          <p className="mt-0.5 text-sm text-bs-text-sub">
-            Period 2 &middot; Unit {heroUnitNum} &middot; Today
+          <p className="mt-1 text-[12px] text-bs-muted">
+            Period 2 · Unit {heroUnitNum} · {todayLabel}
           </p>
         </div>
-
-        <div className="flex items-center gap-2">
-          {/* Streak pill */}
-          <div
-            className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold"
-            style={{
-              background: "rgba(245,166,35,0.15)",
-              color: "var(--bs-amber)",
-              border: "1px solid rgba(245,166,35,0.25)",
-            }}
-            aria-label={`${streakDays}-day streak`}
-          >
-            <span aria-hidden="true">&#128293;</span>
-            <span>{streakDays}</span>
-            <span className="hidden sm:inline">-day streak</span>
+        <div className="flex gap-2 pt-2">
+          <div className="flex items-center gap-1.5 rounded-bs-pill border border-[rgba(0,0,0,0.07)] bg-bs-surface px-3.5 py-1.5 text-[12px] font-medium text-bs-ink-2">
+            <span className="inline-block h-[7px] w-[7px] rounded-full bg-bs-amber" />
+            {streakDays}-day streak
           </div>
-
-          {/* XP pill */}
-          <div
-            className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold"
-            style={{
-              fontFamily: "var(--bs-font-mono)",
-              background: "rgba(245,166,35,0.1)",
-              color: "var(--bs-text-sub)",
-              border: "1px solid rgba(245,166,35,0.15)",
-            }}
-            aria-label={`${xp} XP earned`}
-          >
-            <span
-              aria-hidden="true"
-              className="inline-block h-2 w-2 rounded-full"
-              style={{ background: "var(--bs-amber)" }}
-            />
-            <span>{xp} XP</span>
+          <div className="flex items-center gap-1.5 rounded-bs-pill border border-[rgba(0,0,0,0.07)] bg-bs-surface px-3.5 py-1.5 text-[12px] font-medium text-bs-ink-2">
+            <span className="inline-block h-[7px] w-[7px] rounded-full bg-bs-teal" />
+            {xp} XP
           </div>
         </div>
-      </motion.div>
-
-      {/* Main grid */}
-      <div className="grid gap-5 px-4 pb-16 sm:px-8 md:grid-cols-[1fr_300px] md:pb-10">
-        {/* ------------------------------------------------------------------ */}
-        {/* LEFT COLUMN                                                         */}
-        {/* ------------------------------------------------------------------ */}
-        <div className="flex flex-col gap-5">
-          {/* Hero card */}
-          {currentLesson ? (
-            <DashCard delay={0.04}>
-              {/* Eyebrow */}
-              <div
-                className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest"
-                style={{ fontFamily: "var(--bs-font-mono)", color: "var(--bs-teal)" }}
-              >
-                <span
-                  aria-hidden="true"
-                  className="inline-block h-2 w-2 rounded-full"
-                  style={{
-                    background: "var(--bs-teal)",
-                    boxShadow: "0 0 6px var(--bs-teal)",
-                    animation: "bsPulse 2s ease-in-out infinite",
-                  }}
-                />
-                Continue where you left off
-              </div>
-
-              {/* Title */}
-              <h2
-                className="text-xl font-bold text-bs-text md:text-2xl"
-                style={{ fontFamily: "var(--bs-font-ui)" }}
-              >
-                {currentLesson.title}
-              </h2>
-
-              {/* Meta */}
-              <p className="mt-1.5 text-sm text-bs-text-sub">
-                Unit {heroUnitNum} &middot; Lesson {heroLessonNum} &middot; {currentLesson.minutes} min read
-              </p>
-
-              {/* Progress bar */}
-              <div className="relative mt-4 h-2 overflow-hidden rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${currentLessonPercent}%`,
-                    background: "linear-gradient(90deg, var(--bs-teal), rgba(0,212,170,0.6))",
-                    boxShadow: "2px 0 8px var(--bs-teal)",
-                  }}
-                />
-                {currentLessonPercent > 0 && (
-                  <div
-                    aria-hidden="true"
-                    className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full"
-                    style={{
-                      left: `calc(${currentLessonPercent}% - 6px)`,
-                      background: "var(--bs-teal)",
-                      boxShadow: "0 0 8px var(--bs-teal)",
-                    }}
-                  />
-                )}
-              </div>
-
-              {/* Footer row */}
-              <div className="mt-4 flex flex-wrap items-center gap-3">
-                <Link
-                  href={`/student/learn/${currentUnitId ?? "unit-1"}/${currentLesson.slug}`}
-                  className="inline-flex items-center rounded-full px-5 py-2 text-sm font-bold transition hover:opacity-90"
-                  style={{
-                    background: "var(--bs-teal)",
-                    color: "#0d1e2c",
-                  }}
-                  aria-label={`Resume lesson: ${currentLesson.title}`}
-                >
-                  Resume Lesson &#8594;
-                </Link>
-
-                {/* TEKS badge */}
-                <span
-                  className="rounded-full px-3 py-1 text-xs font-semibold"
-                  style={{
-                    background: "rgba(0,212,170,0.12)",
-                    color: "var(--bs-teal)",
-                    border: "1px solid rgba(0,212,170,0.25)",
-                    fontFamily: "var(--bs-font-mono)",
-                  }}
-                >
-                  {primaryTeks}
-                </span>
-              </div>
-            </DashCard>
-          ) : (
-            <DashCard delay={0.04}>
-              <p className="text-bs-text-sub">Ready to start your biology journey?</p>
-              <Link
-                href="/student/learn"
-                className="mt-3 inline-flex items-center rounded-full px-5 py-2 text-sm font-bold transition hover:opacity-90"
-                style={{ background: "var(--bs-teal)", color: "#0d1e2c" }}
-                aria-label="Start learning"
-              >
-                Start Learning &#8594;
-              </Link>
-            </DashCard>
-          )}
-
-          {/* Row 2: Next Up + Focus Standard */}
-          <div className="grid gap-5 sm:grid-cols-2">
-            {/* Next Up card */}
-            <DashCard delay={0.1}>
-              <p
-                className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-bs-text-muted"
-                style={{ fontFamily: "var(--bs-font-mono)" }}
-              >
-                Unit {nextUnitNum} &middot; Lesson {nextLessonNum}
-              </p>
-              <h3
-                className="text-base font-bold text-bs-text"
-                style={{ fontFamily: "var(--bs-font-ui)" }}
-              >
-                {nextLesson?.title ?? "Next lesson coming soon"}
-              </h3>
-              {nextLesson && (
-                <Link
-                  href={`/student/learn/${nextUnitId ?? "unit-1"}/${nextLesson.slug}`}
-                  className="mt-3 block text-sm font-semibold transition hover:opacity-80"
-                  style={{ color: "var(--bs-teal)" }}
-                  aria-label={`Go to next lesson: ${nextLesson.title}`}
-                >
-                  View lesson &#8594;
-                </Link>
-              )}
-              {/* Empty progress bar */}
-              <div
-                className="mt-3 h-1.5 rounded-full"
-                style={{ background: "rgba(255,255,255,0.06)" }}
-              />
-            </DashCard>
-
-            {/* Focus Standard card */}
-            <DashCard
-              delay={0.1}
-              style={{ borderColor: "rgba(255,107,107,0.2)" }}
-            >
-              <p
-                className="mb-2 text-[10px] font-semibold uppercase tracking-widest"
-                style={{ fontFamily: "var(--bs-font-mono)", color: "var(--bs-coral)" }}
-              >
-                Needs practice &middot; {weakestTeks}
-              </p>
-              <h3
-                className="text-base font-bold text-bs-text"
-                style={{ fontFamily: "var(--bs-font-ui)" }}
-              >
-                {weakestTeksTitle}
-              </h3>
-              <Link
-                href="/student/learn/standards"
-                className="mt-3 block text-sm font-semibold transition hover:opacity-80"
-                style={{ color: "var(--bs-coral)" }}
-                aria-label={`Practice ${weakestTeks}`}
-              >
-                Practice now &#8594;
-              </Link>
-              {/* Coral low-mastery bar */}
-              <div
-                className="mt-3 h-1.5 overflow-hidden rounded-full"
-                style={{ background: "rgba(255,255,255,0.06)" }}
-              >
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${weakestTeksBarPct}%`,
-                    background: "var(--bs-coral)",
-                    opacity: 0.7,
-                  }}
-                />
-              </div>
-            </DashCard>
-          </div>
-
-          {/* Row 3: Activity cards */}
-          <div className="grid gap-5 sm:grid-cols-3">
-            {/* Recent lesson */}
-            <DashCard delay={0.17}>
-              <div className="mb-2 flex items-center gap-2">
-                <span
-                  aria-hidden="true"
-                  className="flex h-7 w-7 items-center justify-center rounded-full text-sm"
-                  style={{ background: "rgba(52,211,153,0.15)", color: "var(--bs-success)" }}
-                >
-                  &#10003;
-                </span>
-                <span
-                  className="text-[10px] font-semibold uppercase tracking-widest text-bs-text-muted"
-                  style={{ fontFamily: "var(--bs-font-mono)" }}
-                >
-                  Recent
-                </span>
-              </div>
-              {recentLesson ? (
-                <>
-                  <p className="line-clamp-2 text-sm font-semibold text-bs-text">
-                    {recentLesson.title}
-                  </p>
-                  <p className="mt-1 text-xs text-bs-text-sub">
-                    Completed &middot; {daysAgo(recentLesson.completedAt)} days ago
-                  </p>
-                  <p
-                    className="mt-1 text-sm font-bold"
-                    style={{ color: "var(--bs-success)" }}
-                    aria-label={`Score: ${recentLesson.score}%`}
-                  >
-                    {recentLesson.score}%
-                  </p>
-                </>
-              ) : (
-                <p className="text-sm text-bs-text-sub">No completed lessons yet.</p>
-              )}
-            </DashCard>
-
-            {/* Assignment */}
-            <DashCard delay={0.17}>
-              <div className="mb-2 flex items-center gap-2">
-                <span
-                  aria-hidden="true"
-                  className="flex h-7 w-7 items-center justify-center rounded-full text-sm"
-                  style={{ background: "rgba(245,166,35,0.15)", color: "var(--bs-amber)" }}
-                >
-                  &#128203;
-                </span>
-                <span
-                  className="text-[10px] font-semibold uppercase tracking-widest text-bs-text-muted"
-                  style={{ fontFamily: "var(--bs-font-mono)" }}
-                >
-                  Assignment
-                </span>
-              </div>
-              {dueAssignment ? (
-                <>
-                  <p className="line-clamp-2 text-sm font-semibold text-bs-text">
-                    {dueAssignment.title}
-                  </p>
-                  <p className="mt-1 text-xs text-bs-text-sub">
-                    {dueAssignment.questionCount} questions
-                  </p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <span
-                      className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase"
-                      style={{
-                        background: "rgba(245,166,35,0.15)",
-                        color: "var(--bs-amber)",
-                      }}
-                    >
-                      Due {new Date(dueAssignment.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <p className="text-sm text-bs-text-sub">All caught up! &#127881;</p>
-              )}
-            </DashCard>
-
-            {/* Daily challenge */}
-            <DashCard delay={0.17}>
-              <div className="mb-2 flex items-center gap-2">
-                <span
-                  aria-hidden="true"
-                  className="flex h-7 w-7 items-center justify-center rounded-full text-sm"
-                  style={{ background: "rgba(0,212,170,0.15)", color: "var(--bs-teal)" }}
-                >
-                  &#9889;
-                </span>
-                <span
-                  className="text-[10px] font-semibold uppercase tracking-widest text-bs-text-muted"
-                  style={{ fontFamily: "var(--bs-font-mono)" }}
-                >
-                  Daily challenge
-                </span>
-              </div>
-              <p className="text-sm font-semibold text-bs-text">Today&apos;s Question</p>
-              <p className="mt-1 text-xs text-bs-text-sub">
-                Cell Biology &middot; +10 XP available
-              </p>
-              <Link
-                href="/student/assessment/items"
-                className="mt-3 block text-sm font-bold transition hover:opacity-80"
-                style={{ color: "var(--bs-teal)" }}
-                aria-label="Take today's daily challenge"
-              >
-                Go &#8594;
-              </Link>
-            </DashCard>
-          </div>
-        </div>
-
-        {/* ------------------------------------------------------------------ */}
-        {/* RIGHT COLUMN - Mastery panel                                        */}
-        {/* ------------------------------------------------------------------ */}
-        <motion.div
-          initial={{ opacity: 0, x: 12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, delay: 0.24 }}
-          className="w-full rounded-2xl border border-bs-border bg-bs-surface p-5 md:w-auto"
-        >
-          {/* Label */}
-          <p
-            className="text-[10px] font-semibold uppercase tracking-widest text-bs-text-muted"
-            style={{ fontFamily: "var(--bs-font-mono)" }}
-          >
-            Mastery
-          </p>
-
-          {/* Donut + TEKS chips side by side on mobile, stacked on desktop */}
-          <div className="mt-3 flex flex-col items-center gap-4 sm:flex-row sm:items-start md:flex-col md:items-stretch">
-            {/* Donut */}
-            <div className="overflow-hidden">
-              <MasteryDonut segments={DEFAULT_SEGMENTS} size={280} />
-            </div>
-
-            {/* TEKS chips */}
-            <div className="flex-1">
-              <p className="mb-2 text-xs font-semibold text-bs-text-sub">TEKS Status</p>
-              <div className="flex flex-wrap gap-1.5">
-                {DEFAULT_SEGMENTS.slice(0, 6).map((seg) => {
-                  const v = seg.value <= 1 ? seg.value * 100 : seg.value;
-                  const color =
-                    v >= 75
-                      ? "rgba(52,211,153,0.15)"
-                      : v >= 50
-                      ? "rgba(245,166,35,0.15)"
-                      : "rgba(255,107,107,0.15)";
-                  const textColor =
-                    v >= 75
-                      ? "var(--bs-success)"
-                      : v >= 50
-                      ? "var(--bs-amber)"
-                      : "var(--bs-coral)";
-                  return (
-                    <span
-                      key={seg.key}
-                      className="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                      style={{ background: color, color: textColor }}
-                      aria-label={`${seg.key}: ${Math.round(v)}% mastery`}
-                    >
-                      {seg.key}
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Weekly streak dots */}
-          <div className="mt-4">
-            <p className="mb-2 text-xs font-semibold text-bs-text-sub">This Week</p>
-            <div className="flex items-center justify-between gap-1">
-              {DAY_LABELS.map((label, i) => {
-                const done = weeklyStreak[i] ?? false;
-                const isToday = i === todayIndex;
-                return (
-                  <div key={`${label}-${i}`} className="flex flex-col items-center gap-1">
-                    <div
-                      aria-label={`${label}: ${done ? "done" : isToday ? "today" : "not yet"}`}
-                      className="h-6 w-6 rounded-sm transition-all"
-                      style={{
-                        background: isToday
-                          ? "var(--bs-teal)"
-                          : done
-                          ? "rgba(0,212,170,0.3)"
-                          : "rgba(255,255,255,0.06)",
-                        border: done || isToday
-                          ? "1px solid rgba(0,212,170,0.5)"
-                          : "1px solid rgba(255,255,255,0.08)",
-                        boxShadow: isToday ? "0 0 8px rgba(0,212,170,0.5)" : "none",
-                      }}
-                    />
-                    <span
-                      className="text-[9px] font-semibold"
-                      style={{ color: isToday ? "var(--bs-teal)" : "var(--bs-text-muted)" }}
-                    >
-                      {DAY_ABBREV[i]}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </motion.div>
       </div>
-    </div>
+
+      {/* ── Hero: continue lesson ── */}
+      <div className="relative mb-3 overflow-hidden rounded-bs bg-bs-teal-deep p-7">
+        {/* decorative orbs */}
+        <div className="pointer-events-none absolute -right-16 -top-20 h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.22)_0%,transparent_70%)]" />
+        <div className="pointer-events-none absolute bottom-[-60px] right-[120px] h-[160px] w-[160px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.1)_0%,transparent_70%)]" />
+        <div className="relative z-10 flex items-center justify-between gap-4">
+          <div>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-bs-teal">
+              Continue where you left off
+            </p>
+            <h2 className="mb-1 font-display text-[26px] font-bold italic leading-snug text-white">
+              {currentLesson?.title ?? "Start Learning"}
+            </h2>
+            <p className="mb-5 text-[12px] text-white/40">
+              Unit {heroUnitNum} · {currentLesson?.minutes ?? 5} min read
+            </p>
+            <div className="flex items-center gap-2.5">
+              <Link href={continueHref} aria-label={`Resume lesson: ${currentLesson?.title ?? "Start Learning"}`}>
+                <BsBtn variant="hero" className="whitespace-nowrap">Resume lesson →</BsBtn>
+              </Link>
+              <BsTag variant="teal-inv">{primaryTeks}</BsTag>
+            </div>
+          </div>
+          {/* progress ring */}
+          <div className="flex-shrink-0 text-right">
+            <p className="mb-1.5 text-[10px] uppercase tracking-[0.05em] text-white/35">Progress</p>
+            <svg width="72" height="72" viewBox="0 0 72 72" className="ml-auto">
+              <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="7"/>
+              <circle cx="36" cy="36" r="28" fill="none" stroke="#00c49a" strokeWidth="7"
+                strokeDasharray={`${(currentLessonPercent / 100) * 175.9} 175.9`}
+                strokeLinecap="round" transform="rotate(-90 36 36)"/>
+              <text x="36" y="33" textAnchor="middle" fontSize="13" fontWeight="700"
+                fill="#fff" fontFamily="var(--font-fraunces),serif" fontStyle="italic">
+                {currentLessonPercent}%
+              </text>
+              <text x="36" y="45" textAnchor="middle" fontSize="8" fill="rgba(255,255,255,0.4)"
+                fontFamily="var(--font-dm-sans),sans-serif">done</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* ── 2-col: next up + needs practice ── */}
+      <div className="mb-3 grid grid-cols-2 gap-3">
+        <BsCard variant="teal">
+          <BsCardLabel>Unit {nextUnitNum} · Lesson {nextLessonNum}</BsCardLabel>
+          <BsCardTitle className="mb-1">{nextLesson?.title ?? "Coming soon"}</BsCardTitle>
+          <p className="mb-3 text-[12px] text-bs-muted">Next up in your playlist</p>
+          {nextLesson && (
+            <Link href={nextHref} aria-label={`View next lesson: ${nextLesson.title}`}>
+              <BsBtn variant="teal">View lesson →</BsBtn>
+            </Link>
+          )}
+        </BsCard>
+        <BsCard variant="coral">
+          <BsCardLabel className="text-bs-coral">Needs practice · {weakestTeks}</BsCardLabel>
+          <BsCardTitle className="mb-1 text-[#8a1a05]">{weakestTeksTitle}</BsCardTitle>
+          <p className="mb-3 text-[12px] text-bs-muted">Low mastery detected</p>
+          <Link href="/student/learn/standards" aria-label={`Practice ${weakestTeks}`}>
+            <BsBtn variant="coral">Practice now →</BsBtn>
+          </Link>
+        </BsCard>
+      </div>
+
+      {/* ── 3-col: streak + assignment + challenge ── */}
+      <div className="mb-3 grid grid-cols-3 gap-3">
+        <BsCard variant="amber" className="flex flex-col">
+          <BsCardLabel className="text-[#8a5e00]">Your streak</BsCardLabel>
+          <span className="font-display text-[44px] font-extrabold italic leading-none tracking-tight text-bs-amber">
+            {streakDays}
+          </span>
+          <p className="mt-0.5 mb-2.5 text-[12px] text-[#8a5e00]">
+            {streakDays === 0 ? "days — start one today!" : `day${streakDays !== 1 ? "s" : ""} and counting`}
+          </p>
+          <div className="h-1.5 overflow-hidden rounded-full bg-black/10">
+            <div className="h-full rounded-full bg-bs-amber" style={{ width: `${Math.min((xp / 50) * 100, 100)}%` }} />
+          </div>
+          <p className="mt-1 text-[10px] font-medium text-[#8a5e00]">{xp} / 50 XP to next level</p>
+        </BsCard>
+        <BsCard>
+          <BsCardLabel>Assignment</BsCardLabel>
+          <BsCardTitle size="sm" className="mb-1">
+            {dueAssignment?.title ?? "All caught up!"}
+          </BsCardTitle>
+          <p className="mb-2.5 text-[12px] text-bs-muted">
+            {dueAssignment ? `${dueAssignment.questionCount} questions` : "No assignments due"}
+          </p>
+          {dueAssignment && <BsTag variant="coral">Due {dueLabel}</BsTag>}
+        </BsCard>
+        <BsCard variant="purple">
+          <BsCardLabel className="text-[#4a2fc0]">Daily challenge</BsCardLabel>
+          <BsCardTitle size="sm" className="mb-1 text-[#1a0060]">{challenge.title}</BsCardTitle>
+          <p className="mb-2.5 text-[12px] text-[#7060c0]">{challenge.subject} · +{challenge.xp} XP</p>
+          <Link href="/student/assessment/items" aria-label="Take today's daily challenge">
+            <BsBtn variant="ghost" className="border-[rgba(124,92,252,0.25)] text-[#4a2fc0] text-[12px] px-3 py-1.5">
+              Go →
+            </BsBtn>
+          </Link>
+        </BsCard>
+      </div>
+
+      {/* ── Mastery donut + TEKS status ── */}
+      <div className="mb-3 grid grid-cols-2 gap-3">
+        <BsCard>
+          <BsCardLabel className="mb-3.5">Overall mastery</BsCardLabel>
+          <MasteryDonut segments={DEFAULT_SEGMENTS} size={200} />
+        </BsCard>
+        <BsCard>
+          <BsCardLabel>TEKS status</BsCardLabel>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {teksStatus.map((t) => (
+              <BsTag key={t.code} variant={t.variant}>{t.code}</BsTag>
+            ))}
+          </div>
+          <BsCardLabel className="mt-4 mb-2">This week</BsCardLabel>
+          <div className="flex gap-2">
+            {DAY_ABBREV.map((day, i) => (
+              <div key={i} className="flex flex-col items-center gap-1">
+                <div className={`h-[22px] w-[22px] rounded-full ${
+                  weekActivity[i] === "active" ? "bg-bs-teal-dark" :
+                  weekActivity[i] === "past"   ? "bg-bs-teal opacity-40" :
+                  "bg-black/10"
+                }`} />
+                <span className="text-[9px] font-semibold tracking-[0.05em] text-bs-muted">{day}</span>
+              </div>
+            ))}
+          </div>
+        </BsCard>
+      </div>
+
+      {/* ── AI Tutor ── */}
+      <Link
+        href="/student/learn"
+        aria-label="Ask the AI tutor"
+        className="mb-3 flex w-full cursor-pointer items-center gap-3.5 rounded-bs border-none bg-bs-ink p-[18px_24px] no-underline"
+      >
+        <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,196,154,0.2)]">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00c49a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+            <circle cx="12" cy="17" r="0.5" fill="#00c49a"/>
+          </svg>
+        </div>
+        <div className="text-left">
+          <p className="font-display text-[17px] font-bold italic text-white">Ask the AI tutor</p>
+          <p className="mt-0.5 text-[11px] text-white/40">Get help with any biology concept, anytime</p>
+        </div>
+        <div className="ml-auto flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-full bg-bs-teal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003d2e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </Link>
+
+      {/* ── Bottom nav ── */}
+      <nav className="flex justify-around rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface py-2.5 px-6" aria-label="Main navigation">
+        {/* Dashboard (active) */}
+        <Link href="/student/dashboard" aria-label="Dashboard" className="flex h-10 w-10 items-center justify-center rounded-bs-sm bg-bs-teal-soft">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+          </svg>
+        </Link>
+        {/* Lessons */}
+        <Link href="/student/learn" aria-label="Lessons" className="flex h-10 w-10 items-center justify-center rounded-bs-sm">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/><path d="M4 19h16"/><path d="M9 9h6M9 13h4"/>
+          </svg>
+        </Link>
+        {/* Assignments */}
+        <Link href="/student/assignments" aria-label="Assignments" className="flex h-10 w-10 items-center justify-center rounded-bs-sm">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/>
+          </svg>
+        </Link>
+        {/* Profile */}
+        <Link href="/student/profile" aria-label="Profile" className="flex h-10 w-10 items-center justify-center rounded-bs-sm">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        </Link>
+      </nav>
+    </PageShell>
   );
 }
+

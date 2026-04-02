@@ -18,3 +18,8 @@ export { default as SpotlightCard } from "./SpotlightCard";
 export { default as ShinyText } from "./ShinyText";
 export { Ring } from "./Ring";
 export { Stat } from "./Stat";
+export { default as BsCard }       from "./BsCard";
+export { default as BsTag }        from "./BsTag";
+export { default as BsBtn }        from "./BsBtn";
+export { default as BsCardLabel }  from "./BsCardLabel";
+export { default as BsCardTitle }  from "./BsCardTitle";

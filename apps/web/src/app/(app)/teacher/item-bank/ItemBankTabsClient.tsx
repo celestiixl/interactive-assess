@@ -19,11 +19,11 @@ export default function ItemBankTabsClient({
   return (
     <div className="space-y-5">
       {/* Tab bar */}
-      <div className="flex items-center gap-1 rounded-xl border border-[var(--bs-border)] bg-bs-surface p-1 shadow-sm w-fit">
+      <div className="flex items-center gap-1 rounded-bs border border-[var(--bs-border)] bg-bs-surface p-1 shadow-sm w-fit">
         <button
           type="button"
           onClick={() => setActiveTab("public")}
-          className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-1 ${
+          className={`rounded-bs px-4 py-2 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-1 ${
             activeTab === "public"
               ? "bg-emerald-600 text-white shadow-sm"
               : "text-bs-text-sub hover:bg-[var(--bs-raised)]"
@@ -35,7 +35,7 @@ export default function ItemBankTabsClient({
         <button
           type="button"
           onClick={() => setActiveTab("my-questions")}
-          className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-1 ${
+          className={`rounded-bs px-4 py-2 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-1 ${
             activeTab === "my-questions"
               ? "bg-emerald-600 text-white shadow-sm"
               : "text-bs-text-sub hover:bg-[var(--bs-raised)]"

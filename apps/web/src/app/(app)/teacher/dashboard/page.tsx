@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PageContent, PageBanner, Card, Button } from "@/components/ui";
+import { PageShell, BsTag } from "@/components/ui";
 import WeeklyDigestCard from "@/components/teacher/WeeklyDigestCard";
 import PeriodMasterySection from "@/components/teacher/PeriodMasterySection";
 
@@ -13,12 +14,13 @@ export default function TeacherDashboardPage() {
   const router = useRouter();
 
   return (
-    <main>
-      <PageBanner
-        title="Teacher Dashboard"
-        subtitle="Quick access to your item bank, builder, classes, and insights."
-      >
-        <div className="flex flex-wrap items-center gap-3">
+    <PageShell className="max-w-[1120px]">
+      <div className="mb-6">
+        <p className="text-[13px] text-bs-muted">Teacher Dashboard</p>
+        <h1 className="font-display text-[32px] font-bold leading-tight tracking-tight text-bs-ink">
+          Quick access to your item bank, builder, classes, and insights.
+        </h1>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
           <Button
             variant="secondary"
             size="lg"
@@ -53,133 +55,131 @@ export default function TeacherDashboardPage() {
             SparkScope
           </Button>
         </div>
-      </PageBanner>
-      <PageContent className="py-8">
-        <div className="flex flex-col gap-6">
-          {/* Weekly Digest — top misconceptions for the week */}
-          <WeeklyDigestCard take={3} showFooter />
+      </div>
+      <div className="flex flex-col gap-6">
+        {/* Weekly Digest — top misconceptions for the week */}
+        <WeeklyDigestCard take={3} showFooter />
 
-          {/* Main content */}
-          <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <Card className="p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-xl font-semibold">Recent Assessments</h2>
-                  <p className="mt-1 text-bs-text-sub">
-                    Your latest drafts and published assessments.
-                  </p>
-                </div>
+        {/* Main content */}
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <Card className="p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-semibold">Recent Assessments</h2>
+                <p className="mt-1 text-bs-text-sub">
+                  Your latest drafts and published assessments.
+                </p>
+              </div>
+
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={() => router.push("/teacher/assessments")}
+              >
+                View All
+              </Button>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-[var(--bs-border)] p-4">
+              <div className="text-bs-text-sub">No assessments yet.</div>
+
+              <div className="mt-5 flex justify-end gap-3">
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={() => router.push("/teacher/builder")}
+                >
+                  Open
+                </Button>
 
                 <Button
                   variant="secondary"
                   size="md"
-                  onClick={() => router.push("/teacher/assessments")}
+                  onClick={() => router.push("/teacher/learning-analytics")}
                 >
-                  View All
+                  Analytics
                 </Button>
               </div>
+            </div>
+          </Card>
 
+          <div className="grid gap-6">
+            <Card className="p-5">
+              <h2 className="text-xl font-semibold">My Classes</h2>
               <div className="mt-4 rounded-2xl border border-[var(--bs-border)] p-4">
-                <div className="text-bs-text-sub">No assessments yet.</div>
-
-                <div className="mt-5 flex justify-end gap-3">
-                  <Button
-                    variant="secondary"
-                    size="md"
-                    onClick={() => router.push("/teacher/builder")}
-                  >
-                    Open
-                  </Button>
-
-                  <Button
-                    variant="secondary"
-                    size="md"
-                    onClick={() => router.push("/teacher/learning-analytics")}
-                  >
-                    Analytics
-                  </Button>
-                </div>
+                <div className="text-lg font-semibold">Biology Period —</div>
+                <div className="text-bs-text-sub">Code: BIO-—</div>
               </div>
             </Card>
 
-            <div className="grid gap-6">
-              <Card className="p-5">
-                <h2 className="text-xl font-semibold">My Classes</h2>
-                <div className="mt-4 rounded-2xl border border-[var(--bs-border)] p-4">
-                  <div className="text-lg font-semibold">Biology Period —</div>
-                  <div className="text-bs-text-sub">Code: BIO-—</div>
-                </div>
-              </Card>
+            <Card
+              variant="accent"
+              accentColor="green"
+              className="p-5"
+              animate
+            >
+              <h2 className="text-xl font-semibold">AI Grading Assistant</h2>
+              <p className="mt-2 text-text-muted">
+                You have <span className="font-semibold">—</span> constructed
+                responses waiting for review.
+              </p>
+              <div className="mt-4">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="md"
+                  title="Hook this up later"
+                  disabled
+                >
+                  Open Queue
+                </Button>
+              </div>
+            </Card>
 
-              <Card
-                variant="accent"
-                accentColor="green"
-                className="p-5"
-                animate
-              >
-                <h2 className="text-xl font-semibold">AI Grading Assistant</h2>
-                <p className="mt-2 text-text-muted">
-                  You have <span className="font-semibold">—</span> constructed
-                  responses waiting for review.
-                </p>
-                <div className="mt-4">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="md"
-                    title="Hook this up later"
-                    disabled
-                  >
-                    Open Queue
-                  </Button>
-                </div>
-              </Card>
+            <Card className="p-5">
+              <h2 className="text-xl font-semibold">Learning Hub Admin</h2>
+              <p className="mt-2 text-bs-text-sub">
+                Manage visibility, playlists, curriculum quality, and imports.
+              </p>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                <Link
+                  href="/teacher/learning-controls"
+                  className="rounded-bs-sm border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
+                >
+                  Learning Controls
+                </Link>
+                <Link
+                  href="/teacher/content-quality"
+                  className="rounded-bs-sm border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
+                >
+                  Content Quality
+                </Link>
+                <Link
+                  href="/teacher/import-curriculum"
+                  className="rounded-bs-sm border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
+                >
+                  Import Validator
+                </Link>
+                <Link
+                  href="/teacher/learning-analytics"
+                  className="rounded-bs-sm border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
+                >
+                  Learning Analytics
+                </Link>
+                <Link
+                  href="/student/learn/simulations/population-genetics"
+                  className="rounded-bs-sm border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised sm:col-span-2"
+                >
+                  🧬 Population Genetics Simulator
+                </Link>
+              </div>
+            </Card>
+          </div>
+        </section>
 
-              <Card className="p-5">
-                <h2 className="text-xl font-semibold">Learning Hub Admin</h2>
-                <p className="mt-2 text-bs-text-sub">
-                  Manage visibility, playlists, curriculum quality, and imports.
-                </p>
-                <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                  <Link
-                    href="/teacher/learning-controls"
-                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
-                  >
-                    Learning Controls
-                  </Link>
-                  <Link
-                    href="/teacher/content-quality"
-                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
-                  >
-                    Content Quality
-                  </Link>
-                  <Link
-                    href="/teacher/import-curriculum"
-                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
-                  >
-                    Import Validator
-                  </Link>
-                  <Link
-                    href="/teacher/learning-analytics"
-                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
-                  >
-                    Learning Analytics
-                  </Link>
-                  <Link
-                    href="/student/learn/simulations/population-genetics"
-                    className="rounded-xl border border-indigo-200 bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100 sm:col-span-2"
-                  >
-                    🧬 Population Genetics Simulator
-                  </Link>
-                </div>
-              </Card>
-            </div>
-          </section>
-
-          {/* Period Mastery Snapshot — per-period TEKS heatmaps */}
-          <PeriodMasterySection />
-        </div>
-      </PageContent>
-    </main>
+        {/* Period Mastery Snapshot — per-period TEKS heatmaps */}
+        <PeriodMasterySection />
+      </div>
+    </PageShell>
   );
 }

@@ -64,7 +64,7 @@ export default function GuardianSnapshotPage() {
               snapshot.upcomingAssignments.map((assignment) => (
                 <div
                   key={assignment.id}
-                  className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2"
+                  className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2"
                 >
                   <div className="font-semibold">{assignment.title}</div>
                   <div className="text-xs text-bs-text-sub">
@@ -91,7 +91,7 @@ export default function GuardianSnapshotPage() {
               snapshot.missingAssignments.map((assignment) => (
                 <div
                   key={assignment.id}
-                  className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2"
+                  className="rounded-bs border border-rose-200 bg-rose-50 px-3 py-2"
                 >
                   <div className="font-semibold text-rose-900">
                     {assignment.title}

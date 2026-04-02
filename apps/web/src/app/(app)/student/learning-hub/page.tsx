@@ -16,7 +16,7 @@ export default function StudentLearningHubStandalonePage() {
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href="/student/learn"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-surface/25"
           >
             Open BioSpark Quest
           </Link>

@@ -4,8 +4,20 @@ function cx(...parts: Array<string | undefined | false>) {
   return parts.filter(Boolean).join(" ");
 }
 
-export default function PageShell({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-dvh bg-bs-bg text-bs-text">{children}</div>;
+interface PageShellProps {
+  children: React.ReactNode;
+  /** Optional extra class names for the inner container */
+  className?: string;
+}
+
+export default function PageShell({ children, className = "" }: PageShellProps) {
+  return (
+    <div className="min-h-screen bg-bs-page font-body">
+      <div className={`mx-auto max-w-[860px] px-5 py-8 pb-16 ${className}`}>
+        {children}
+      </div>
+    </div>
+  );
 }
 
 export function PageContent({

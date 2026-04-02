@@ -51,7 +51,7 @@ export default function InterventionQueuePage() {
               <div className="mt-3">
                 <Link
                   href={item.href}
-                  className="rounded-xl bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-bs-bg"
+                  className="rounded-bs bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-bs-bg"
                 >
                   Open Lesson
                 </Link>
