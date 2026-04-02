@@ -240,12 +240,12 @@ export default function MasteryDonut({
     );
 
     const hoverText = (key: string | null) => {
-      if (!key) return "Hover a unit for details.";
+      if (!key) return null;
       const it = units.find((x) => x.key === key);
       if (it) {
         return `${it.label} • ${it.masteryPct}% mastery`;
       }
-      return "Hover a unit for details.";
+      return null;
     };
 
     return {
@@ -374,9 +374,6 @@ export default function MasteryDonut({
 
         <div className="-mt-4 text-center text-sm text-bs-text-sub">
           {hoverText(hoverKey)}
-        </div>
-        <div className="mt-1 text-center text-xs text-bs-text-sub">
-          Arc width = TEKS count, radial length = mastery
         </div>
       </div>
 

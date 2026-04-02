@@ -285,7 +285,7 @@ export default function DashboardClient(props: DashboardClientProps) {
   })();
 
   return (
-    <div className="relative min-h-screen" style={{ background: "#080f12" }}>
+    <div className="relative min-h-screen">
       {/* Top bar */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
