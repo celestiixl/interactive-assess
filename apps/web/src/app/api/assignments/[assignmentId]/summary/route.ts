@@ -5,10 +5,11 @@ type ResponseRow = { score: number | null; submittedAt: Date };
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { assignmentId: string } }
+  { params }: { params: Promise<{ assignmentId: string }> }
 ) {
+  const { assignmentId } = await params;
   const responses: ResponseRow[] = await prisma.assignmentResponse.findMany({
-    where: { assignmentId: params.assignmentId },
+    where: { assignmentId },
     select: { score: true, submittedAt: true },
   });
 

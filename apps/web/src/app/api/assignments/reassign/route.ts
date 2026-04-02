@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
       select: { studentId: true, score: true },
     });
     const eligibleStudentCount = responses.filter(
-      (r) => r.score !== null && r.score < threshold,
+      (r: { studentId: string; score: number | null }) => r.score !== null && r.score < threshold,
     ).length;
 
     // ── 3. Shuffle + swap questions from original assignment metadata ──────

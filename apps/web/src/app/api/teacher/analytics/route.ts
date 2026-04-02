@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
 
   const masteryRecords = await prisma.masteryRecord.findMany({
     where: { studentId: { in: studentIds } },
+    select: { studentId: true, teks: true, score: true },
   });
 
   // Aggregate mastery per TEKS

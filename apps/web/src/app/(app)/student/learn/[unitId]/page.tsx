@@ -5,11 +5,11 @@ import { getUnitById } from "@/lib/learningHubContent";
 import { BackLink } from "@/components/nav/BackLink";
 
 type UnitPageProps = {
-  params: { unitId: string };
+  params: Promise<{ unitId: string }>;
 };
 
-export default function Page({ params }: UnitPageProps) {
-  const { unitId } = params;
+export default async function Page({ params }: UnitPageProps) {
+  const { unitId } = await params;
   const unit = getUnitById(unitId);
 
   if (!unit) notFound();
