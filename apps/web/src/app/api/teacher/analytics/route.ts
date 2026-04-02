@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-
-async function requireTeacher(req: NextRequest): Promise<boolean> {
-  const token = req.headers.get("x-teacher-token");
-  return token === process.env.TEACHER_SECRET;
-}
+import { requireTeacherToken } from "@/lib/teacherTokenAuth";
 
 // GET /api/teacher/analytics?period=1
 export async function GET(req: NextRequest) {
-  const authed = await requireTeacher(req);
+  const authed = await requireTeacherToken(req);
   if (!authed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -45,10 +41,15 @@ export async function GET(req: NextRequest) {
     .filter((t) => t.averageScore < 0.7)
     .sort((a, b) => a.averageScore - b.averageScore);
 
-  // Learning funnel
+  // Learning funnel — pre-group records by studentId for O(n+m) lookup
   const startedCount = new Set(masteryRecords.map((r) => r.studentId)).size;
+  const masteryByStudent = new Map<string, typeof masteryRecords>();
+  for (const r of masteryRecords) {
+    if (!masteryByStudent.has(r.studentId)) masteryByStudent.set(r.studentId, []);
+    masteryByStudent.get(r.studentId)!.push(r);
+  }
   const completedCount = students.filter((s) => {
-    const records = masteryRecords.filter((r) => r.studentId === s.id);
+    const records = masteryByStudent.get(s.id) ?? [];
     return records.length > 0 && records.every((r) => r.score >= 0.7);
   }).length;
 

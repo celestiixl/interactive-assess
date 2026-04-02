@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
   });
 
   // Return as a flat map: { "B.5A": 0.82, "B.7B": 0.64 }
-  const masteryMap = Object.fromEntries(records.map((record: { teks: string; score: number }) => [record.teks, record.score]));
+  const masteryMap = Object.fromEntries(records.map((record) => [record.teks, record.score]));
   return NextResponse.json(masteryMap);
 }
 

@@ -57,10 +57,7 @@ export default function TeacherLearningAnalyticsPage() {
     const url = periodNum
       ? `/api/teacher/analytics?period=${periodNum}`
       : `/api/teacher/analytics`;
-    const token = process.env.NEXT_PUBLIC_TEACHER_SECRET ?? "";
-
     fetch(url, {
-      headers: token ? { "x-teacher-token": token } : {},
       signal: controller.signal,
     })
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
