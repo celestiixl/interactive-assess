@@ -1,68 +1,48 @@
-import { NextResponse } from "next/server";
+import { neon } from "@neondatabase/serverless"
+import { NextRequest, NextResponse } from "next/server"
 
-export const runtime = "nodejs";
-
-// GET /api/mastery?userId=...&itemIds=a,b,c
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
+  const studentId = req.nextUrl.searchParams.get("studentId")
+  if (!studentId) return NextResponse.json([])
   try {
-    const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId") || "anon";
-    const itemIdsRaw = searchParams.get("itemIds") || "";
-    const itemIds = itemIdsRaw
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    // TODO: replace with real persistence (db/file). For now return deterministic mock.
-    // Shape: { userId, items: { [itemId]: { correct, total, masteryPct } } }
-    const items: Record<
-      string,
-      { correct: number; total: number; masteryPct: number }
-    > = {};
-    for (const id of itemIds) {
-      // simple stable-ish mock based on string hash
-      let h = 0;
-      for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
-      const total = 10;
-      const correct = h % (total + 1);
-      const masteryPct = Math.round((correct / total) * 100);
-      items[id] = { correct, total, masteryPct };
-    }
-
-    return NextResponse.json({ userId, items });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "unknown";
-    return NextResponse.json(
-      { error: "mastery_failed", message },
-      { status: 500 },
-    );
+    const sql = neon(process.env.DATABASE_URL!)
+    const rows = await sql`
+      SELECT teks, score, attempts, updated_at
+      FROM student_mastery
+      WHERE student_id = ${studentId}
+      ORDER BY teks ASC
+    `
+    return NextResponse.json(rows)
+  } catch (error) {
+    console.error("GET /api/mastery error:", error)
+    return NextResponse.json([])
   }
 }
 
-// POST /api/mastery
-// Body: { teks: string, score: number, lessonSlug: string, userId?: string }
-// Records a mastery event for a TEKS standard. Acknowledges receipt; persistence
-// is delegated to a future DB layer (TODO: wire to real store).
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { teks, score, lessonSlug, userId = "anon" } = body ?? {};
-
-    if (!teks || score === undefined || !lessonSlug) {
-      return NextResponse.json(
-        { error: "invalid_payload", message: "teks, score, and lessonSlug are required" },
-        { status: 400 },
-      );
+    const { studentId, teks, score, correct, lessonSlug = "" } = await req.json()
+    if (!studentId || !teks || score === undefined || correct === undefined) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
-
-    // TODO: persist mastery event to a real store (db/file).
-    // For now, acknowledge receipt so callers don't receive a 405.
-    return NextResponse.json({ ok: true, userId, teks, score, lessonSlug });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "unknown";
-    return NextResponse.json(
-      { error: "mastery_failed", message },
-      { status: 500 },
-    );
+    const sql = neon(process.env.DATABASE_URL!)
+    const [row] = await sql`
+      INSERT INTO student_mastery (student_id, teks, score, attempts, updated_at)
+      VALUES (${studentId}, ${teks}, ${score}, 1, NOW())
+      ON CONFLICT (student_id, teks)
+      DO UPDATE SET
+        score      = EXCLUDED.score,
+        attempts   = student_mastery.attempts + 1,
+        updated_at = NOW()
+      RETURNING teks, score, attempts
+    `
+    await sql`
+      INSERT INTO attempt_log (student_id, teks, lesson_slug, score, correct)
+      VALUES (${studentId}, ${teks}, ${lessonSlug}, ${score}, ${correct})
+    `
+    return NextResponse.json({ saved: true, ...row })
+  } catch (error) {
+    console.error("POST /api/mastery error:", error)
+    return NextResponse.json({ error: "Failed to save" }, { status: 500 })
   }
 }
