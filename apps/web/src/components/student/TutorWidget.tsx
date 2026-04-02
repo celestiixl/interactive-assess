@@ -3,34 +3,30 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { TutorMessage, TutorTrigger, TutorChatResponse } from "@/types/tutor";
+import { useTutorPermissions } from "@/hooks/useTutorPermissions";
 
-// ── Color tokens ──────────────────────────────────────────────────────────────
+// BioSpark color tokens
 const C = {
-  bg: "#0f1117",
-  surface: "#1a1d27",
-  surfaceAlt: "#13151f",
-  panelBg: "#0d0f1a",
-  border: "#2a2d3e",
-  accent: "#6366f1",
-  accentLight: "#818cf8",
-  accentGlow: "rgba(99,102,241,0.35)",
-  userBubble: "#312e81",
-  userBubbleBorder: "#4338ca",
-  assistantBubble: "#1a1d2e",
-  assistantBubbleBorder: "#2a2d3e",
-  text: "#e2e8f0",
+  bg: "#0d1e2c",
+  surface: "#132638",
+  header: "#1a3148",
+  accent: "#00d4aa",
+  danger: "#ff6b6b",
   textSub: "#9abcb0",
-  textMuted: "#64748b",
-  textDim: "#94a3b8",
-  success: "#10b981",
+  text: "#e8f4f0",
+  textMuted: "#5a8070",
+  textDim: "#9abcb0",
+  inputBg: "#0d1e2c",
+  border: "#1e3547",
+  userBubble: "#00543f",
+  userBubbleBorder: "#00d4aa",
+  assistantBubble: "#132638",
+  assistantBubbleBorder: "#1e3547",
+  success: "#00d4aa",
   warning: "#f59e0b",
-  danger: "#ef4444",
-  inputBg: "#0a0c14",
-  buttonBg: "#6366f1",
-  headerBg: "#13151f",
   tier2: "#f59e0b",
-  tier3: "#ef4444",
-  tierNone: "#10b981",
+  tier3: "#ff6b6b",
+  tierNone: "#00d4aa",
 };
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -41,12 +37,16 @@ interface ChatEntry {
 }
 
 export interface TutorWidgetProps {
-  /** Lesson slug for the current lesson context */
-  lessonSlug: string;
+  /** Lesson slug for the current lesson context (optional when used globally) */
+  lessonSlug?: string;
   /** Display label shown in the widget header */
   lessonLabel?: string;
-  /** The authenticated student ID */
-  studentId: string;
+  /** Lesson title - alias for lessonLabel when injected from layout */
+  lessonTitle?: string;
+  /** TEKS standards associated with the current lesson */
+  teks?: string[];
+  /** The authenticated student ID (optional - reads from profile store if omitted) */
+  studentId?: string;
   /** What caused this invocation */
   triggeredBy?: TutorTrigger;
   /** Open the panel on mount */
@@ -55,11 +55,33 @@ export interface TutorWidgetProps {
   position?: "bottom-right" | "bottom-left" | "inline";
 }
 
+const POSITION_STORAGE_KEY = "biospark:tutor:position";
+
+function readSavedPosition(): { x: number; y: number } | null {
+  try {
+    const raw = localStorage.getItem(POSITION_STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as { x: number; y: number };
+  } catch {
+    return null;
+  }
+}
+
+function writeSavedPosition(pos: { x: number; y: number }): void {
+  try {
+    localStorage.setItem(POSITION_STORAGE_KEY, JSON.stringify(pos));
+  } catch {
+    // ignore
+  }
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
 export function TutorWidget({
-  lessonSlug,
+  lessonSlug = "general",
   lessonLabel,
-  studentId,
+  lessonTitle,
+  teks,
+  studentId = "student",
   triggeredBy = "student",
   defaultOpen = false,
   position = "bottom-right",
@@ -71,9 +93,21 @@ export function TutorWidget({
   const [lastMetadata, setLastMetadata] = useState<TutorChatResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
+  // Drag state - offset from bottom-right corner
+  const [dragPos, setDragPos] = useState<{ x: number; y: number } | null>(null);
+  const dragStartRef = useRef<{ pointerX: number; pointerY: number; posX: number; posY: number } | null>(null);
+  const widgetRef = useRef<HTMLDivElement>(null);
+
+  const { hideForStudent } = useTutorPermissions();
 
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Restore saved drag position on mount
+  useEffect(() => {
+    const saved = readSavedPosition();
+    if (saved) setDragPos(saved);
+  }, []);
 
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -188,6 +222,53 @@ export function TutorWidget({
     setError(null);
   }, []);
 
+  // Drag handlers using pointer events
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!widgetRef.current) return;
+      // Prevent text selection during drag
+      e.preventDefault();
+      const rect = widgetRef.current.getBoundingClientRect();
+      // Track offset from current fixed position (right/bottom from viewport edge)
+      const currentX = dragPos?.x ?? (window.innerWidth - rect.right);
+      const currentY = dragPos?.y ?? (window.innerHeight - rect.bottom);
+      dragStartRef.current = {
+        pointerX: e.clientX,
+        pointerY: e.clientY,
+        posX: currentX,
+        posY: currentY,
+      };
+      widgetRef.current.setPointerCapture(e.pointerId);
+    },
+    [dragPos],
+  );
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!dragStartRef.current) return;
+      const dx = e.clientX - dragStartRef.current.pointerX;
+      const dy = e.clientY - dragStartRef.current.pointerY;
+      const newX = Math.max(0, dragStartRef.current.posX - dx);
+      const newY = Math.max(0, dragStartRef.current.posY - dy);
+      const pos = { x: newX, y: newY };
+      setDragPos(pos);
+    },
+    [],
+  );
+
+  const handlePointerUp = useCallback(
+    (_e: React.PointerEvent<HTMLDivElement>) => {
+      if (!dragStartRef.current) return;
+      // Persist final position
+      if (dragPos) writeSavedPosition(dragPos);
+      dragStartRef.current = null;
+    },
+    [dragPos],
+  );
+
+  const displayLabel = lessonTitle ?? lessonLabel ?? lessonSlug;
+  const displayTeks = teks ?? lastMetadata?.teks;
+
   const tierColor =
     lastMetadata?.interventionTier === 3
       ? C.tier3
@@ -204,49 +285,62 @@ export function TutorWidget({
 
   // Position styles for the floating wrapper
   const positionStyle: React.CSSProperties =
-    position === "bottom-right"
-      ? { position: "fixed", bottom: "88px", right: "24px", zIndex: 50 }
-      : position === "bottom-left"
-        ? { position: "fixed", bottom: "88px", left: "24px", zIndex: 50 }
-        : { position: "relative" };
+    position === "inline"
+      ? { position: "relative" }
+      : dragPos
+        ? {
+            position: "fixed",
+            bottom: `${dragPos.y}px`,
+            right: `${dragPos.x}px`,
+            zIndex: 50,
+          }
+        : position === "bottom-left"
+          ? { position: "fixed", bottom: "24px", left: "24px", zIndex: 50 }
+          : { position: "fixed", bottom: "24px", right: "24px", zIndex: 50 };
 
   return (
-    <div style={positionStyle}>
+    <div
+      ref={widgetRef}
+      style={positionStyle}
+      onPointerDown={position !== "inline" ? handlePointerDown : undefined}
+      onPointerMove={position !== "inline" ? handlePointerMove : undefined}
+      onPointerUp={position !== "inline" ? handlePointerUp : undefined}
+    >
       <AnimatePresence>
         {open && (
           <motion.div
             key="tutor-panel"
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 32 }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.2 }}
             style={{
               position: "absolute",
-              bottom: "calc(100% + 16px)",
+              bottom: "calc(100% + 12px)",
               right: position === "bottom-left" ? "auto" : 0,
               left: position === "bottom-left" ? 0 : "auto",
-              width: "360px",
-              maxHeight: "520px",
+              width: "320px",
+              height: "420px",
               display: "flex",
               flexDirection: "column",
-              borderRadius: "20px",
+              borderRadius: "16px",
               overflow: "hidden",
-              background: C.panelBg,
+              background: C.bg,
               border: `1px solid ${C.border}`,
-              boxShadow:
-                "0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.15)",
+              boxShadow: "0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,212,170,0.1)",
             }}
             role="dialog"
             aria-label="BioSpark Tutor chat"
             aria-modal="true"
+            onPointerDown={(e) => e.stopPropagation()}
           >
             {/* Panel header */}
             <PanelHeader
-              lessonLabel={lessonLabel ?? lessonSlug}
+              lessonLabel={displayLabel}
               streaming={streaming}
               tierColor={tierLabel ? tierColor : undefined}
               tierLabel={tierLabel}
-              teks={lastMetadata?.teks}
+              teks={displayTeks}
               onClear={clearChat}
               onClose={() => setOpen(false)}
               hasMessages={messages.length > 0}
@@ -259,6 +353,7 @@ export function TutorWidget({
                 flex: 1,
                 overflowY: "auto",
                 padding: "16px",
+                background: C.bg,
                 scrollbarWidth: "thin",
                 scrollbarColor: `${C.border} transparent`,
               }}
@@ -266,7 +361,7 @@ export function TutorWidget({
               aria-label="Conversation"
             >
               {messages.length === 0 && !error ? (
-                <EmptyState lessonLabel={lessonLabel ?? lessonSlug} />
+                <EmptyState lessonLabel={displayLabel} />
               ) : (
                 messages.map((msg, i) => (
                   <motion.div
@@ -287,7 +382,7 @@ export function TutorWidget({
                     padding: "10px 14px",
                     borderRadius: "12px",
                     fontSize: "12px",
-                    background: "#1f0f0f",
+                    background: "#1a0d0d",
                     border: `1px solid ${C.danger}`,
                     color: C.danger,
                   }}
@@ -302,7 +397,7 @@ export function TutorWidget({
               style={{
                 padding: "12px 14px",
                 borderTop: `1px solid ${C.border}`,
-                background: C.headerBg,
+                background: C.header,
               }}
             >
               <div style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}>
@@ -341,9 +436,9 @@ export function TutorWidget({
                     flexShrink: 0,
                     borderRadius: "10px",
                     background:
-                      !inputText.trim() || streaming ? "#1a1d27" : C.accent,
+                      !inputText.trim() || streaming ? C.surface : C.accent,
                     border: `1px solid ${!inputText.trim() || streaming ? C.border : C.accent}`,
-                    color: !inputText.trim() || streaming ? C.textMuted : "#fff",
+                    color: !inputText.trim() || streaming ? C.textMuted : "#0d1e2c",
                     cursor:
                       !inputText.trim() || streaming ? "not-allowed" : "pointer",
                     display: "flex",
@@ -355,16 +450,43 @@ export function TutorWidget({
                   <SendIcon />
                 </button>
               </div>
-              <p
+              <div
                 style={{
-                  marginTop: "4px",
-                  textAlign: "right",
-                  fontSize: "10px",
-                  color: C.textMuted,
+                  marginTop: "6px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                {inputText.length}/500 · Enter to send
-              </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    hideForStudent();
+                    setOpen(false);
+                  }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    cursor: "pointer",
+                    fontSize: "11px",
+                    color: C.textMuted,
+                    textDecoration: "underline",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  Hide tutor
+                </button>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "10px",
+                    color: C.textMuted,
+                  }}
+                >
+                  {inputText.length}/500
+                </p>
+              </div>
             </div>
           </motion.div>
         )}
@@ -403,18 +525,19 @@ function TriggerButton({
       whileHover={{ scale: 1.07 }}
       whileTap={{ scale: 0.95 }}
       style={{
-        width: "56px",
-        height: "56px",
+        width: "48px",
+        height: "48px",
         borderRadius: "50%",
-        background: `linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)`,
+        background: C.accent,
         border: "none",
         cursor: "pointer",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
-        boxShadow: `0 4px 20px rgba(99,102,241,0.5), 0 0 0 1px rgba(99,102,241,0.3)`,
-        fontSize: "22px",
+        boxShadow: `0 4px 20px rgba(0,212,170,0.4), 0 0 0 1px rgba(0,212,170,0.2)`,
+        fontSize: "20px",
+        color: "#0d1e2c",
       }}
     >
       {/* Pulsing glow ring when streaming */}
@@ -424,13 +547,13 @@ function TriggerButton({
             position: "absolute",
             inset: "-4px",
             borderRadius: "50%",
-            border: "2px solid rgba(99,102,241,0.6)",
-            animation: "pulse-ring 1.2s ease-out infinite",
+            border: "2px solid rgba(0,212,170,0.6)",
+            animation: "tutor-pulse-ring 1.2s ease-out infinite",
           }}
         />
       )}
 
-      {/* Icon: DNA or X */}
+      {/* Icon: spark or X */}
       <AnimatePresence mode="wait">
         {open ? (
           <motion.span
@@ -439,20 +562,20 @@ function TriggerButton({
             animate={{ rotate: 0, opacity: 1 }}
             exit={{ rotate: 90, opacity: 0 }}
             transition={{ duration: 0.15 }}
-            style={{ color: "#fff", lineHeight: 1, fontSize: "18px", fontWeight: 700 }}
+            style={{ color: "#0d1e2c", lineHeight: 1, fontSize: "16px", fontWeight: 700 }}
           >
             ✕
           </motion.span>
         ) : (
           <motion.span
-            key="dna"
+            key="spark"
             initial={{ rotate: 90, opacity: 0 }}
             animate={{ rotate: 0, opacity: 1 }}
             exit={{ rotate: -90, opacity: 0 }}
             transition={{ duration: 0.15 }}
             style={{ lineHeight: 1 }}
           >
-            🧬
+            ✦
           </motion.span>
         )}
       </AnimatePresence>
@@ -474,7 +597,7 @@ function TriggerButton({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            border: "2px solid #0f1117",
+            border: `2px solid ${C.bg}`,
           }}
           aria-label={`${unreadCount} unread message`}
         >
@@ -483,7 +606,7 @@ function TriggerButton({
       )}
 
       <style>{`
-        @keyframes pulse-ring {
+        @keyframes tutor-pulse-ring {
           0% { transform: scale(1); opacity: 0.8; }
           100% { transform: scale(1.5); opacity: 0; }
         }
@@ -515,7 +638,7 @@ function PanelHeader({
     <div
       style={{
         padding: "14px 16px",
-        background: C.headerBg,
+        background: C.header,
         borderBottom: `1px solid ${C.border}`,
         display: "flex",
         alignItems: "flex-start",
@@ -526,22 +649,23 @@ function PanelHeader({
       <div style={{ position: "relative", flexShrink: 0 }}>
         <div
           style={{
-            width: "40px",
-            height: "40px",
-            borderRadius: "12px",
-            background: `linear-gradient(135deg, #312e81 0%, #6366f1 100%)`,
+            width: "36px",
+            height: "36px",
+            borderRadius: "10px",
+            background: C.accent,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: "20px",
+            fontSize: "18px",
+            color: "#0d1e2c",
             boxShadow: streaming
-              ? `0 0 14px rgba(99,102,241,0.8), 0 0 0 2px rgba(99,102,241,0.4)`
-              : `0 0 8px rgba(99,102,241,0.3)`,
+              ? `0 0 14px rgba(0,212,170,0.6), 0 0 0 2px rgba(0,212,170,0.3)`
+              : `0 0 8px rgba(0,212,170,0.2)`,
             transition: "box-shadow 0.3s ease",
           }}
           aria-hidden="true"
         >
-          🧬
+          ✦
         </div>
         {/* Status dot */}
         <span
@@ -552,8 +676,8 @@ function PanelHeader({
             width: "10px",
             height: "10px",
             borderRadius: "50%",
-            background: streaming ? C.accent : C.success,
-            border: `2px solid ${C.headerBg}`,
+            background: streaming ? C.warning : C.success,
+            border: `2px solid ${C.header}`,
             transition: "background 0.3s",
           }}
           aria-hidden="true"
@@ -563,7 +687,7 @@ function PanelHeader({
       {/* Identity */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <p style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: C.text }}>
+          <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: C.text, fontFamily: "Syne, sans-serif" }}>
             BioSpark Tutor
           </p>
           {tierLabel && (
@@ -586,7 +710,7 @@ function PanelHeader({
           style={{
             margin: "2px 0 0",
             fontSize: "11px",
-            color: streaming ? C.accentLight : C.textSub,
+            color: streaming ? C.accent : C.textSub,
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
@@ -605,9 +729,10 @@ function PanelHeader({
                   fontWeight: 600,
                   padding: "1px 5px",
                   borderRadius: "5px",
-                  background: "#1e2d3e",
-                  color: "#67e8f9",
+                  background: "#0d2a1f",
+                  color: C.accent,
                   fontFamily: "monospace",
+                  border: `1px solid rgba(0,212,170,0.2)`,
                 }}
               >
                 {t}
@@ -685,22 +810,23 @@ function EmptyState({ lessonLabel }: { lessonLabel: string }) {
     >
       <div
         style={{
-          width: "52px",
-          height: "52px",
-          borderRadius: "16px",
-          background: "linear-gradient(135deg, #312e81 0%, #6366f1 100%)",
+          width: "48px",
+          height: "48px",
+          borderRadius: "14px",
+          background: C.accent,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "26px",
-          boxShadow: "0 8px 24px rgba(99,102,241,0.4)",
+          fontSize: "24px",
+          color: "#0d1e2c",
+          boxShadow: "0 8px 24px rgba(0,212,170,0.3)",
         }}
         aria-hidden="true"
       >
-        🧬
+        ✦
       </div>
       <div style={{ textAlign: "center" }}>
-        <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: C.text }}>
+        <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: C.text, fontFamily: "Syne, sans-serif" }}>
           Your AI Biology Tutor
         </p>
         <p
@@ -712,7 +838,7 @@ function EmptyState({ lessonLabel }: { lessonLabel: string }) {
             maxWidth: "240px",
           }}
         >
-          I'll guide you through{" "}
+          I will guide you through{" "}
           <span style={{ color: C.textDim }}>{lessonLabel}</span> with questions
           instead of direct answers.
         </p>
@@ -727,7 +853,7 @@ function EmptyState({ lessonLabel }: { lessonLabel: string }) {
             style={{
               padding: "8px 12px",
               borderRadius: "10px",
-              background: "#1a1d2e",
+              background: C.surface,
               border: `1px solid ${C.border}`,
               fontSize: "11px",
               color: C.textDim,
@@ -757,19 +883,20 @@ function MessageBubble({ entry }: { entry: ChatEntry }) {
       {!isUser && (
         <div
           style={{
-            width: "24px",
-            height: "24px",
-            borderRadius: "8px",
-            background: "linear-gradient(135deg, #312e81 0%, #6366f1 100%)",
+            width: "22px",
+            height: "22px",
+            borderRadius: "6px",
+            background: C.accent,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: "12px",
+            fontSize: "11px",
+            color: "#0d1e2c",
             flexShrink: 0,
           }}
           aria-hidden="true"
         >
-          🧬
+          ✦
         </div>
       )}
       <div
@@ -781,7 +908,7 @@ function MessageBubble({ entry }: { entry: ChatEntry }) {
           border: `1px solid ${isUser ? C.userBubbleBorder : C.assistantBubbleBorder}`,
           fontSize: "13px",
           lineHeight: 1.55,
-          color: isUser ? "#e0e7ff" : C.text,
+          color: isUser ? C.text : C.text,
         }}
       >
         {entry.content || (
@@ -840,7 +967,7 @@ function SendIcon() {
   );
 }
 
-// ── Streaming helpers ─────────────────────────────────────────────────────────
+// Streaming helpers
 function extractMetadata(text: string): TutorChatResponse | null {
   const sep = text.lastIndexOf("\n\n");
   if (sep === -1) return null;

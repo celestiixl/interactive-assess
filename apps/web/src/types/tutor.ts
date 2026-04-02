@@ -2,7 +2,26 @@
 export type TutorMessage = {
   role: "user" | "assistant";
   content: string;
+  timestamp?: number;
 };
+
+/** Teacher + student visibility controls for the floating tutor widget. */
+export interface TutorPermissions {
+  /** Master switch - teacher can disable globally, per student, or per period */
+  enabledByTeacher: boolean;
+  /** Student can hide the widget for themselves if teacher has it on globally */
+  hiddenByStudent: boolean;
+}
+
+/** A full tutor chat session including optional lesson context. */
+export interface TutorSession {
+  messages: TutorMessage[];
+  lessonContext?: {
+    lessonSlug: string;
+    teks: string[];
+    lessonTitle: string;
+  };
+}
 
 /**
  * What caused the tutor to be invoked.

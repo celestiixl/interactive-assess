@@ -11,6 +11,7 @@ import {
   saveStudentProfile,
   setStudentNameOnceWithServer,
 } from "@/lib/studentProfile";
+import { useTutorPermissions } from "@/hooks/useTutorPermissions";
 
 function masteryPercent(correct: number, total: number): number {
   if (!total) return 0;
@@ -24,6 +25,7 @@ export default function StudentProfilePage() {
   const [nameError, setNameError] = useState<string | null>(null);
   const [nameSaved, setNameSaved] = useState(false);
   const [isSavingName, setIsSavingName] = useState(false);
+  const { permissions, showForStudent } = useTutorPermissions();
 
   useEffect(() => {
     try {
@@ -147,6 +149,22 @@ export default function StudentProfilePage() {
                   <p className="mt-2 text-xs font-semibold text-emerald-700">Name saved and locked.</p>
                 )}
               </div>
+
+              {permissions.hiddenByStudent && (
+                <div className="mt-4 rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">AI Tutor</div>
+                  <p className="mt-1 text-xs text-bs-text-sub">
+                    You have hidden the AI Tutor widget. You can restore it here.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={showForStudent}
+                    className="mt-2 rounded-lg border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
+                  >
+                    Show AI Tutor
+                  </button>
+                </div>
+              )}
 
               <div className="mt-4 rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3">
                 <div className="flex items-center justify-between text-sm font-semibold text-bs-text">
