@@ -99,13 +99,7 @@ export default function StudentAssessmentLabPage() {
                   href="/student/assessment/items"
                   tone="purple"
                 />
-                <LinkCard
-                  title="Hot Question"
-                  desc="Bellringer question (if enabled)."
-                  href="/student/hotq"
-                  tone="amber"
-                  badge="beta"
-                />
+
               </div>
 
               <div className="mt-3 text-xs text-bs-text-sub">
