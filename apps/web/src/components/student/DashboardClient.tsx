@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import MasteryDonut, { type DonutSegment } from "@/components/student/MasteryDonut";
 import { loadLearningProgress, getMostRecentLessonId } from "@/lib/learningProgress";
 import { getXP, getStreak } from "@/lib/xp";
@@ -299,12 +298,14 @@ export default function DashboardClient(props: DashboardClientProps) {
           </p>
         </div>
         <div className="flex gap-2 pt-2">
-          <div className="flex items-center gap-1.5 rounded-bs-pill border border-[rgba(0,0,0,0.07)] bg-bs-surface px-3.5 py-1.5 text-[12px] font-medium text-bs-ink-2">
-            <span className="inline-block h-[7px] w-[7px] rounded-full bg-bs-amber" />
+          <div className="flex items-center gap-1.5 rounded-bs-pill border border-[rgba(0,0,0,0.07)] bg-bs-surface px-3.5 py-1.5 text-[12px] font-medium text-bs-ink-2"
+            aria-label={`${streakDays}-day streak`}>
+            <span className="inline-block h-[7px] w-[7px] rounded-full bg-bs-amber" aria-hidden="true" />
             {streakDays}-day streak
           </div>
-          <div className="flex items-center gap-1.5 rounded-bs-pill border border-[rgba(0,0,0,0.07)] bg-bs-surface px-3.5 py-1.5 text-[12px] font-medium text-bs-ink-2">
-            <span className="inline-block h-[7px] w-[7px] rounded-full bg-bs-teal" />
+          <div className="flex items-center gap-1.5 rounded-bs-pill border border-[rgba(0,0,0,0.07)] bg-bs-surface px-3.5 py-1.5 text-[12px] font-medium text-bs-ink-2"
+            aria-label={`${xp} experience points`}>
+            <span className="inline-block h-[7px] w-[7px] rounded-full bg-bs-teal" aria-hidden="true" />
             {xp} XP
           </div>
         </div>

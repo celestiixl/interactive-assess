@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { PageContent, PageBanner, Card, Button } from "@/components/ui";
-import { PageShell, BsTag } from "@/components/ui";
+import { Card, Button } from "@/components/ui";
+import { PageShell } from "@/components/ui";
 import WeeklyDigestCard from "@/components/teacher/WeeklyDigestCard";
 import PeriodMasterySection from "@/components/teacher/PeriodMasterySection";
 
