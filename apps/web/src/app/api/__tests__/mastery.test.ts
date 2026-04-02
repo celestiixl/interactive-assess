@@ -1,5 +1,8 @@
 /**
- * Tests for GET and POST /api/mastery
+ * Tests for GET and POST /api/mastery (Neon Postgres-backed)
+ *
+ * These tests exercise the API contract without a live DB connection.
+ * The handlers return empty arrays / error JSON when DATABASE_URL is absent.
  */
 import { describe, it, expect } from "vitest";
 import { GET, POST } from "@/app/api/mastery/route";
@@ -20,98 +23,35 @@ function postRequest(body: unknown): Request {
   });
 }
 
-// ─── GET /api/mastery ─────────────────────────────────────────────────────────
+// --- GET /api/mastery ---------------------------------------------------------
 
 describe("GET /api/mastery", () => {
-  it("returns a JSON response with userId and items", async () => {
-    const res = await GET(getRequest({ userId: "user1", itemIds: "a,b" }));
+  it("returns 200 with an empty array when studentId is missing", async () => {
+    const res = await GET(getRequest({}));
     expect(res.status).toBe(200);
     const data = await res.json();
-    expect(data.userId).toBe("user1");
-    expect(typeof data.items).toBe("object");
+    expect(Array.isArray(data)).toBe(true);
+    expect(data).toHaveLength(0);
   });
 
-  it("includes entries for each requested itemId", async () => {
-    const res = await GET(getRequest({ itemIds: "item1,item2,item3" }));
+  it("returns 200 with an empty array when studentId is provided but DB is unavailable", async () => {
+    const res = await GET(getRequest({ studentId: "student-1" }));
+    expect(res.status).toBe(200);
     const data = await res.json();
-    expect("item1" in data.items).toBe(true);
-    expect("item2" in data.items).toBe(true);
-    expect("item3" in data.items).toBe(true);
-  });
-
-  it("each item entry has correct, total, and masteryPct fields", async () => {
-    const res = await GET(getRequest({ itemIds: "myItem" }));
-    const data = await res.json();
-    const entry = data.items["myItem"];
-    expect(typeof entry.correct).toBe("number");
-    expect(typeof entry.total).toBe("number");
-    expect(typeof entry.masteryPct).toBe("number");
-  });
-
-  it("masteryPct is between 0 and 100 inclusive", async () => {
-    const res = await GET(getRequest({ itemIds: "x" }));
-    const data = await res.json();
-    const { masteryPct } = data.items["x"];
-    expect(masteryPct).toBeGreaterThanOrEqual(0);
-    expect(masteryPct).toBeLessThanOrEqual(100);
-  });
-
-  it("defaults userId to anon when not provided", async () => {
-    const res = await GET(getRequest({}));
-    const data = await res.json();
-    expect(data.userId).toBe("anon");
-  });
-
-  it("returns empty items when itemIds is empty", async () => {
-    const res = await GET(getRequest({ itemIds: "" }));
-    const data = await res.json();
-    expect(Object.keys(data.items)).toHaveLength(0);
-  });
-
-  it("produces deterministic results for the same itemId", async () => {
-    const a = await (await GET(getRequest({ itemIds: "stable" }))).json();
-    const b = await (await GET(getRequest({ itemIds: "stable" }))).json();
-    expect(a.items.stable.masteryPct).toBe(b.items.stable.masteryPct);
+    expect(Array.isArray(data)).toBe(true);
   });
 });
 
-// ─── POST /api/mastery ────────────────────────────────────────────────────────
+// --- POST /api/mastery --------------------------------------------------------
 
 describe("POST /api/mastery", () => {
-  it("returns ok:true for a valid payload", async () => {
-    const res = await POST(
-      postRequest({ teks: "B.5A", score: 85, lessonSlug: "biomolecules-intro" }),
-    );
-    expect(res.status).toBe(200);
-    const data = await res.json();
-    expect(data.ok).toBe(true);
-  });
-
-  it("echoes back teks, score, and lessonSlug", async () => {
-    const res = await POST(
-      postRequest({ teks: "B.11A", score: 70, lessonSlug: "energy-conversion" }),
-    );
-    const data = await res.json();
-    expect(data.teks).toBe("B.11A");
-    expect(data.score).toBe(70);
-    expect(data.lessonSlug).toBe("energy-conversion");
-  });
-
-  it("defaults userId to anon when not provided", async () => {
-    const res = await POST(
-      postRequest({ teks: "B.5A", score: 90, lessonSlug: "cell-transport" }),
-    );
-    const data = await res.json();
-    expect(data.userId).toBe("anon");
-  });
-
   it("returns 400 when teks is missing", async () => {
     const res = await POST(
       postRequest({ score: 80, lessonSlug: "lab-safety" }),
     );
     expect(res.status).toBe(400);
     const data = await res.json();
-    expect(data.error).toBe("invalid_payload");
+    expect(data.error).toBe("Missing required fields: teks and score are required");
   });
 
   it("returns 400 when score is missing", async () => {
@@ -121,8 +61,30 @@ describe("POST /api/mastery", () => {
     expect(res.status).toBe(400);
   });
 
-  it("returns 400 when lessonSlug is missing", async () => {
-    const res = await POST(postRequest({ teks: "B.5A", score: 80 }));
-    expect(res.status).toBe(400);
+  it("returns 500 when DB is unavailable (valid payload, no DB)", async () => {
+    const res = await POST(
+      postRequest({ teks: "B.5A", score: 85, lessonSlug: "biomolecules-intro" }),
+    );
+    // No live DB - handler catches the error and returns 500
+    expect(res.status).toBe(500);
+    const data = await res.json();
+    expect(data.error).toBe("Failed to save");
+  });
+
+  it("accepts POST without studentId, defaulting to anonymous", async () => {
+    // Mirrors the ecological-succession simulation which omits studentId
+    const res = await POST(
+      postRequest({ teks: "B.6D", score: 1, lessonSlug: "ecological-succession" }),
+    );
+    // DB unavailable in test env - expects 500, not 400
+    expect(res.status).toBe(500);
+  });
+
+  it("accepts POST without correct field, inferring from score", async () => {
+    const res = await POST(
+      postRequest({ studentId: "s1", teks: "B.11A", score: 0.8, lessonSlug: "energy" }),
+    );
+    // DB unavailable in test env - expects 500, not 400
+    expect(res.status).toBe(500);
   });
 });
