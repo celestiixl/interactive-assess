@@ -184,6 +184,20 @@ export default function AssessmentDashboardEntry() {
             >
               Student Lab
             </Button>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => router.push("/auth/student/login")}
+            >
+              Student Login
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => router.push("/auth/teacher/login")}
+            >
+              Teacher Login
+            </Button>
           </div>
         </Surface>
 
