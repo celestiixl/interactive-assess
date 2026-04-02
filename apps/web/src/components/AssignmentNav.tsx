@@ -18,7 +18,7 @@ export default function AssignmentNav({
         {items.map((i) => {
           const status = statusByIndex[i] ?? "unseen";
           const base =
-            "flex h-10 w-10 items-center justify-center rounded-full border text-sm font-mono transition";
+            "flex h-10 w-10 items-center justify-center rounded-full border text-sm font-medium transition";
           const palette =
             status === "correct"
               ? "bg-[#00d4aa]/20 border-[#00d4aa] text-[#00d4aa]"

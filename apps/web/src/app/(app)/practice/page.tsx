@@ -333,6 +333,7 @@ export default function PracticeByCategory() {
       <div className="flex justify-between text-sm text-[#9abcb0]">
         <button
           className="rounded-md border border-[#00d4aa]/20 px-3 py-1.5 hover:bg-[#1a3148] disabled:opacity-50"
+          aria-label="Previous question"
           onClick={() => setCurrent(Math.max(0, safeIndex - 1))}
           disabled={safeIndex === 0}
         >
@@ -465,7 +466,7 @@ export default function PracticeByCategory() {
             </div>
 
             <div className="relative z-10 mt-3 w-full">
-              <AccommodationsButton compact={true} label="Accommodations" />
+              <AccommodationsButton compact={false} label="Accommodations" />
             </div>
 
             <div className="relative z-10 mt-4">
