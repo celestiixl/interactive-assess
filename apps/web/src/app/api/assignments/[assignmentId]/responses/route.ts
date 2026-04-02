@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import type { Prisma } from "@prisma/client";
 
 const SubmitResponseSchema = z.object({
   studentId: z.string(),
@@ -30,6 +31,8 @@ export async function POST(
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
+  const answers = parsed.data.answers as Prisma.InputJsonValue;
+
   const response = await prisma.assignmentResponse.upsert({
     where: {
       assignmentId_studentId: {
@@ -37,11 +40,11 @@ export async function POST(
         studentId: parsed.data.studentId,
       },
     },
-    update: { answers: parsed.data.answers },
+    update: { answers },
     create: {
       assignmentId: params.assignmentId,
       studentId: parsed.data.studentId,
-      answers: parsed.data.answers,
+      answers,
     },
   });
 

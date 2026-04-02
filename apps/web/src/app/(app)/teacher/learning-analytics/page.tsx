@@ -46,15 +46,60 @@ export default function TeacherLearningAnalyticsPage() {
   const [tab, setTab]       = React.useState<TabId>("funnel");
   const [data, setData]     = React.useState<AnalyticsSummary | null>(null);
 
-  // Recompute analytics whenever filters change.
-  // useEffect (not lazy useState init) per repo convention for client-side
-  // data reads — keeps SSR hydration safe.
-  // TODO: replace buildAnalyticsSummary() with an async fetch to
-  //   /api/mastery?unitId=...&period=... when the API supports period rollups.
-  //   Add error handling and an AbortController to cancel in-flight requests
-  //   when filters change quickly.
+  // Fetch from /api/teacher/analytics when period is selected, falling back
+  // to the local mock builder (buildAnalyticsSummary) when the API is
+  // unavailable or no teacher token is configured.
   React.useEffect(() => {
-    setData(buildAnalyticsSummary(unit, period));
+    let cancelled = false;
+    const controller = new AbortController();
+
+    const periodNum = period === "all" ? null : period.replace("period-", "");
+    const url = periodNum
+      ? `/api/teacher/analytics?period=${periodNum}`
+      : `/api/teacher/analytics`;
+    const token = process.env.NEXT_PUBLIC_TEACHER_SECRET ?? "";
+
+    fetch(url, {
+      headers: token ? { "x-teacher-token": token } : {},
+      signal: controller.signal,
+    })
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then(
+        (apiData: {
+          period: number | null;
+          funnel: { totalStudents: number; started: number; completed: number };
+          stuckPoints: Array<{
+            teks: string;
+            averageScore: number;
+            studentsBelow70: number;
+            studentsBelow50: number;
+            totalStudents: number;
+          }>;
+          interventionQueue: { tier2: number; tier3: number };
+        }) => {
+          if (cancelled) return;
+          // Map API response fields to the existing AnalyticsSummary props.
+          // Fields not returned by the API (lessons, students, teksMap) fall
+          // back to the local mock so existing tab components stay functional.
+          const localFallback = buildAnalyticsSummary(unit, period);
+          const mapped: AnalyticsSummary = {
+            ...localFallback,
+            tier2Count: apiData.interventionQueue.tier2,
+            tier3Count: apiData.interventionQueue.tier3,
+          };
+          setData(mapped);
+        },
+      )
+      .catch(() => {
+        if (cancelled) return;
+        // API unavailable or auth failed — use local mock as fallback
+        setData(buildAnalyticsSummary(unit, period));
+      });
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   }, [unit, period]);
 
   const loading = data === null;

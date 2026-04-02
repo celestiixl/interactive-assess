@@ -11,14 +11,12 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { assignmentStore } from "@/lib/serverAssignmentStore.legacy";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   // ── Auth: teacher role required ──────────────────────────────────────────
-  // Convention: require x-teacher-id header as lightweight role indicator.
-  // Replace with a real session check once auth is wired up.
   const teacherId = req.headers.get("x-teacher-id")?.trim();
   if (!teacherId) {
     return NextResponse.json(
@@ -51,7 +49,9 @@ export async function POST(req: NextRequest) {
 
   try {
     // ── 1. Load assignment ─────────────────────────────────────────────────
-    const assignment = assignmentStore.get(assignmentId.trim());
+    const assignment = await prisma.assignment.findUnique({
+      where: { id: assignmentId.trim() },
+    });
     if (!assignment) {
       return NextResponse.json(
         { error: "Assignment not found", assignmentId },
@@ -60,9 +60,10 @@ export async function POST(req: NextRequest) {
     }
 
     // ── 2. Validate assignment has content ────────────────────────────────
-    const hasQuestions = assignment.questions.length > 0;
-    const hasPreMadeSource = Boolean(assignment.preMadeSourceId);
-    if (!hasQuestions && !hasPreMadeSource) {
+    const meta = assignment.metadata as Record<string, unknown> | null;
+    const questions = Array.isArray(meta?.["questions"]) ? meta["questions"] : [];
+    const preMadeSourceId = meta?.["preMadeSourceId"];
+    if (questions.length === 0 && !preMadeSourceId) {
       return NextResponse.json(
         {
           error:
@@ -73,8 +74,8 @@ export async function POST(req: NextRequest) {
     }
 
     // ── 3. Validate dueDate is in the future ──────────────────────────────
-    const due = new Date(assignment.dueDate);
-    if (isNaN(due.getTime()) || due.getTime() <= Date.now()) {
+    const due = assignment.dueAt;
+    if (!due || due.getTime() <= Date.now()) {
       return NextResponse.json(
         { error: "dueDate must be a valid date in the future." },
         { status: 400 },
@@ -82,9 +83,10 @@ export async function POST(req: NextRequest) {
     }
 
     // ── 4. Publish ────────────────────────────────────────────────────────
-    assignment.status = "published";
-    assignment.publishedAt = new Date().toISOString();
-    assignmentStore.set(assignment.id, assignment);
+    await prisma.assignment.update({
+      where: { id: assignment.id },
+      data: { status: "published" },
+    });
 
     return NextResponse.json({
       assignmentId: assignment.id,

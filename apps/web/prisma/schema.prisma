@@ -44,6 +44,8 @@ model Assignment {
   teks      String[]  // e.g. ["B.5A", "B.7B"]
   period    Int
   dueAt     DateTime?
+  status    String    @default("draft")  // "draft" | "published"
+  metadata  Json?     // stores questions, tracks, and other extended data
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 

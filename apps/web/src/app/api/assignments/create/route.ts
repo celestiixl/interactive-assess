@@ -18,6 +18,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import { buildDifferentiatedTracks, addToItemBank } from "@/lib/itemBank";
 import type {
   AssignmentGoal,
@@ -25,11 +26,6 @@ import type {
   DifferentiationMode,
   Question,
 } from "@/types/assignments";
-import {
-  assignmentStore,
-  generateAssignmentId,
-  type StoredAssignment,
-} from "@/lib/serverAssignmentStore.legacy";
 
 export const runtime = "nodejs";
 
@@ -54,10 +50,6 @@ function validateTeksCodes(questions: Question[]): string | null {
 
 export async function POST(req: NextRequest) {
   // ── Auth: teacher role required ──────────────────────────────────────────
-  // The platform does not yet have a server-side session layer; the
-  // convention (matching /api/tutor/chat) is to require a non-empty
-  // x-teacher-id header as a lightweight role indicator.
-  // Replace with a real session check once auth is wired up.
   const teacherId = req.headers.get("x-teacher-id")?.trim();
   if (!teacherId) {
     return NextResponse.json(
@@ -126,45 +118,47 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const assignmentId = generateAssignmentId();
-
     // ── 3. Build differentiated tracks for tiered custom assignments ──────────
-    // buildDifferentiatedTracks is a pure function — works in server context.
-    let tracks: StoredAssignment["tracks"];
+    let tracks: ReturnType<typeof buildDifferentiatedTracks> | undefined;
     if (mode === "custom" && differentiationMode === "tiered") {
       tracks = buildDifferentiatedTracks(qs);
     }
 
     // ── 4. Register custom questions in item bank for future reuse ────────────
-    // addToItemBank reads/writes localStorage and silently no-ops server-side.
-    // Client-side calls via the teacher UI populate the bank as intended.
     if (mode === "custom") {
       for (const q of qs) {
-        addToItemBank(q, assignmentId);
+        addToItemBank(q, "pending");
       }
     }
 
-    // ── 5. Persist assignment in server-side store ────────────────────────────
-    const assignment: StoredAssignment = {
-      id: assignmentId,
-      teacherId,
-      title: title.trim(),
-      goal: goal as AssignmentGoal,
-      mode: mode as AssignmentMode,
-      questions: qs,
-      preMadeSourceId:
-        typeof preMadeSourceId === "string" ? preMadeSourceId : undefined,
-      differentiationMode: differentiationMode as DifferentiationMode,
-      periodIds: periodIds as string[],
-      dueDate: dueDate.trim(),
-      status: "draft",
-      tracks,
-      createdAt: new Date().toISOString(),
-    };
-    assignmentStore.set(assignmentId, assignment);
+    // ── 5. Derive period number (use first entry) and TEKS from questions ─────
+    const periodNum = parseInt(String(periodIds[0]).replace(/\D/g, ""), 10) || 1;
+    const allTeks = Array.from(new Set(qs.flatMap((q) => q.teks)));
 
-    // ── 6. Return ─────────────────────────────────────────────────────────────
-    return NextResponse.json({ assignmentId, status: "draft" }, { status: 201 });
+    // ── 6. Persist assignment in Prisma ───────────────────────────────────────
+    const assignment = await prisma.assignment.create({
+      data: {
+        title: title.trim(),
+        kind: "assignment",
+        teks: allTeks,
+        period: periodNum,
+        dueAt: new Date(dueDate.trim()),
+        status: "draft",
+        metadata: {
+          teacherId,
+          goal,
+          mode,
+          questions: qs,
+          preMadeSourceId: typeof preMadeSourceId === "string" ? preMadeSourceId : null,
+          differentiationMode,
+          periodIds,
+          tracks: tracks ?? null,
+        },
+      },
+    });
+
+    // ── 7. Return ─────────────────────────────────────────────────────────────
+    return NextResponse.json({ assignmentId: assignment.id, status: "draft" }, { status: 201 });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "unknown error";
     return NextResponse.json({ error: message }, { status: 500 });

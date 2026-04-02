@@ -82,39 +82,24 @@ function readFromStorage(
 /**
  * Manages a vocabulary flashcard study session for a single lesson.
  *
+ * **Primary storage:** When `studentId` is provided the hook persists mastery
+ * state to `POST /api/flashcards/progress` and restores it on mount via
+ * `GET /api/flashcards/progress?studentId={studentId}`.
+ *
+ * **Fallback:** When no `studentId` is provided (or the API is unavailable)
+ * the hook falls back to `localStorage` under the key
+ * `biospark:flashcards:<lessonSlug>`, maintaining full backward-compat.
+ *
  * **localStorage key:** `biospark:flashcards:<lessonSlug>`
  *
- * **Session shape stored in localStorage:**
- * ```json
- * {
- *   "lessonSlug": "lab-safety",
- *   "cards": [...],
- *   "currentIndex": 2,
- *   "flipped": false,
- *   "seen": ["lab-safety-vocab-0"],
- *   "mastered": [],
- *   "rotation": ["lab-safety-vocab-2", "lab-safety-vocab-0", ...],
- *   "savedAt": 1710000000000
- * }
- * ```
- *
- * - Cards are built exclusively from `lesson.vocabularyTiers.contentSpecific`.
- * - On mount the hook reads any previously saved session from localStorage;
- *   if none exists it initialises a fresh session with the cards shuffled via
- *   the Fisher-Yates algorithm.
- * - `markMastered` adds the current card to `mastered` and advances the queue.
- * - `markNeedsReview` re-appends the card to the end of the rotation queue and
- *   advances the index without adding it to `mastered`.
- * - When the index reaches the end of the rotation and not all cards are
- *   mastered the index loops back to 0 (needs-review cards are still queued).
- * - `restart` clears the localStorage entry and re-initialises with a fresh
- *   shuffle.
- * - All localStorage access is SSR-safe and wrapped in try/catch so the hook
- *   always falls back to in-memory state on failure.
+ * Cards are built from `lesson.vocabularyTiers.contentSpecific`.
+ * The SM-2 scheduling algorithm is intentionally NOT run here — the API
+ * stores sensible defaults so Chunk C flashcard progress is queryable.
  */
 export function useFlashcards(
   lessonSlug: string,
   lesson: LearningLesson,
+  studentId?: string,
 ): {
   session: FlashcardSession;
   currentCard: Flashcard | null;
@@ -143,6 +128,38 @@ export function useFlashcards(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storageKey]);
 
+  // When a studentId is available, hydrate the mastered set from the API.
+  // Applied after the localStorage read so API data takes precedence for
+  // cards that were mastered in previous sessions.
+  useEffect(() => {
+    if (!studentId) return;
+    let cancelled = false;
+    fetch(`/api/flashcards/progress?studentId=${encodeURIComponent(studentId)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((records: Array<{ cardId: string; repetitions: number }> | null) => {
+        if (cancelled || !records) return;
+        const masteredFromApi = records
+          .filter((r) => r.repetitions > 0)
+          .map((r) => r.cardId);
+        if (masteredFromApi.length === 0) return;
+        setSession((prev) => {
+          // Only hydrate cards that belong to this lesson's deck
+          const deckIds = new Set(prev.cards.map((c) => c.id));
+          const toAdd = masteredFromApi.filter(
+            (id) => deckIds.has(id) && !prev.mastered.includes(id),
+          );
+          if (toAdd.length === 0) return prev;
+          return { ...prev, mastered: [...prev.mastered, ...toAdd] };
+        });
+      })
+      .catch(() => {
+        // Network failure — continue with localStorage state
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [studentId, lessonSlug]);
+
   /** Persist the latest session snapshot to localStorage. */
   const persist = useCallback(
     (next: FlashcardSession) => {
@@ -158,6 +175,32 @@ export function useFlashcards(
       }
     },
     [storageKey],
+  );
+
+  /**
+   * Fire-and-forget POST to persist card mastery to the API.
+   * Optimistic — the local state is already updated before this resolves.
+   */
+  const persistToApi = useCallback(
+    (cardId: string, mastered: boolean) => {
+      if (!studentId) return;
+      const dueAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+      fetch("/api/flashcards/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          studentId,
+          cardId,
+          interval: 1,
+          repetitions: mastered ? 1 : 0,
+          easeFactor: 2.5,
+          dueAt,
+        }),
+      }).catch(() => {
+        // Ignore network errors — state is already updated optimistically
+      });
+    },
+    [studentId],
   );
 
   /**
@@ -204,9 +247,11 @@ export function useFlashcards(
         : [...prev.mastered, cardId];
       const next = advance({ ...prev, mastered });
       persist(next);
+      // Optimistic: local state already set; API call fires in background
+      persistToApi(cardId, true);
       return next;
     });
-  }, [persist]);
+  }, [persist, persistToApi]);
 
   /**
    * Keep the current card in rotation by re-appending it to the end of the
@@ -219,9 +264,11 @@ export function useFlashcards(
       const rotation = [...prev.rotation, cardId];
       const next = advance({ ...prev, rotation });
       persist(next);
+      // Record needs-review in API so card stays due for next session
+      persistToApi(cardId, false);
       return next;
     });
-  }, [persist]);
+  }, [persist, persistToApi]);
 
   /** Clear the saved session and start over with a freshly shuffled deck. */
   const restart = useCallback(() => {

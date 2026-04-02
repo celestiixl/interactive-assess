@@ -13,15 +13,9 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import { searchItemBank } from "@/lib/itemBank";
 import type { Question } from "@/types/assignments";
-import {
-  assignmentStore,
-  resultStore,
-  generateAssignmentId,
-  type StoredAssignment,
-  type AssignmentResult,
-} from "@/lib/serverAssignmentStore.legacy";
 
 export const runtime = "nodejs";
 
@@ -42,24 +36,15 @@ function fisherYatesShuffle<T>(arr: T[]): T[] {
 }
 
 /**
- * Attempt to find an alternate question from the item bank that shares the
- * same primary TEKS code and `learningLevel` as `original`.
- *
+ * Attempt to find an alternate question from the item bank.
  * Returns the alternate when found, or the original question unchanged.
- * `searchItemBank` reads localStorage; on the server it returns `[]`, so
- * no swap takes place — the original question is preserved in that case.
- *
- * @param original  - Question to replace if an alternate exists.
- * @param excludeId - `original.id` — excluded to avoid self-swap.
  */
 function swapWithAlternate(original: Question, excludeId: string): Question {
   if (original.teks.length === 0) return original;
-
   const candidates = searchItemBank({
     teks: [original.teks[0]!],
     learningLevel: original.learningLevel,
   }).filter((e) => e.question.id !== excludeId);
-
   return candidates[0]?.question ?? original;
 }
 
@@ -69,8 +54,6 @@ function swapWithAlternate(original: Question, excludeId: string): Question {
 
 export async function POST(req: NextRequest) {
   // ── Auth: teacher role required ──────────────────────────────────────────
-  // Convention: require x-teacher-id header as lightweight role indicator.
-  // Replace with a real session check once auth is wired up.
   const teacherId = req.headers.get("x-teacher-id")?.trim();
   if (!teacherId) {
     return NextResponse.json(
@@ -101,7 +84,6 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // scoreThreshold defaults to 0.7 when absent or out of range
   const threshold =
     typeof scoreThreshold === "number" &&
     scoreThreshold >= 0 &&
@@ -110,8 +92,10 @@ export async function POST(req: NextRequest) {
       : 0.7;
 
   try {
-    // ── 1. Load original assignment and all results ───────────────────────
-    const original = assignmentStore.get(assignmentId.trim());
+    // ── 1. Load original assignment ───────────────────────────────────────
+    const original = await prisma.assignment.findUnique({
+      where: { id: assignmentId.trim() },
+    });
     if (!original) {
       return NextResponse.json(
         { error: "Assignment not found", assignmentId },
@@ -119,58 +103,48 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const allResults: AssignmentResult[] =
-      resultStore.get(assignmentId.trim()) ?? [];
+    // ── 2. Find eligible students (those who scored below threshold) ───────
+    const responses = await prisma.assignmentResponse.findMany({
+      where: { assignmentId: assignmentId.trim() },
+      select: { studentId: true, score: true },
+    });
+    const eligibleStudentCount = responses.filter(
+      (r) => r.score !== null && r.score < threshold,
+    ).length;
 
-    // ── 2 & 3. Identify eligible students ─────────────────────────────────
-    const eligibleResults = allResults.filter((r) => r.totalScore < threshold);
-    const eligibleStudentCount = eligibleResults.length;
+    // ── 3. Shuffle + swap questions from original assignment metadata ──────
+    const meta = original.metadata as Record<string, unknown> | null;
+    const origQuestions: Question[] = Array.isArray(meta?.["questions"])
+      ? (meta["questions"] as Question[])
+      : [];
 
-    // ── 4. Shuffle question order (Fisher-Yates) ───────────────────────────
-    let newQuestions: Question[] = fisherYatesShuffle(original.questions);
-
-    // ── 5. Swap in alternate questions from item bank where possible ───────
-    // searchItemBank silently returns [] server-side (no localStorage); the
-    // original question is preserved whenever no alternate is available.
+    let newQuestions: Question[] = fisherYatesShuffle(origQuestions);
     newQuestions = newQuestions.map((q) => swapWithAlternate(q, q.id));
 
-    // ── 6. Save new "second chance" assignment ─────────────────────────────
-    const newDueDate = new Date(original.dueDate);
-    newDueDate.setDate(newDueDate.getDate() + 3);
+    // ── 4. Compute new due date (original + 3 days) ────────────────────────
+    const newDueAt = original.dueAt
+      ? new Date(original.dueAt.getTime() + 3 * 24 * 60 * 60 * 1000)
+      : new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
 
-    const newAssignmentId = generateAssignmentId();
-    const newAssignment: StoredAssignment = {
-      id: newAssignmentId,
-      teacherId,
-      title: `${original.title} — second chance`,
-      goal: original.goal,
-      mode: original.mode,
-      questions: newQuestions,
-      preMadeSourceId: original.preMadeSourceId,
-      differentiationMode: original.differentiationMode,
-      periodIds: original.periodIds,
-      dueDate: newDueDate.toISOString(),
-      status: "published",
-      createdAt: new Date().toISOString(),
-      publishedAt: new Date().toISOString(),
-    };
-    assignmentStore.set(newAssignmentId, newAssignment);
+    // ── 5. Create new "second chance" assignment ───────────────────────────
+    const newAssignment = await prisma.assignment.create({
+      data: {
+        title: `${original.title} — second chance`,
+        kind: original.kind,
+        teks: original.teks,
+        period: original.period,
+        dueAt: newDueAt,
+        status: "published",
+        metadata: {
+          ...(meta ?? {}),
+          teacherId,
+          questions: newQuestions,
+        },
+      },
+    });
 
-    // Create pending AssignmentResult placeholders for each eligible student
-    // so the new assignment is immediately associated with them.
-    if (eligibleResults.length > 0) {
-      const pendingResults: AssignmentResult[] = eligibleResults.map((r) => ({
-        assignmentId: newAssignmentId,
-        studentId: r.studentId,
-        totalScore: 0,
-        answers: {},
-        submittedAt: "",
-      }));
-      resultStore.set(newAssignmentId, pendingResults);
-    }
-
-    // ── 7. Return ─────────────────────────────────────────────────────────
-    return NextResponse.json({ newAssignmentId, eligibleStudentCount });
+    // ── 6. Return ─────────────────────────────────────────────────────────
+    return NextResponse.json({ newAssignmentId: newAssignment.id, eligibleStudentCount });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "unknown error";
     return NextResponse.json({ error: message }, { status: 500 });
