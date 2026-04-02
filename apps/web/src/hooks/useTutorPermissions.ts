@@ -40,24 +40,30 @@ export function useTutorPermissions() {
     permissions.enabledByTeacher && !permissions.hiddenByStudent;
 
   const hideForStudent = useCallback(() => {
-    const next = { ...permissions, hiddenByStudent: true };
-    writePermissions(next);
-    setPermissions(next);
-  }, [permissions]);
+    setPermissions((prev) => {
+      const next = { ...prev, hiddenByStudent: true };
+      writePermissions(next);
+      return next;
+    });
+  }, []);
 
   const showForStudent = useCallback(() => {
-    const next = { ...permissions, hiddenByStudent: false };
-    writePermissions(next);
-    setPermissions(next);
-  }, [permissions]);
+    setPermissions((prev) => {
+      const next = { ...prev, hiddenByStudent: false };
+      writePermissions(next);
+      return next;
+    });
+  }, []);
 
   const setTeacherEnabled = useCallback(
     (enabled: boolean) => {
-      const next = { ...permissions, enabledByTeacher: enabled };
-      writePermissions(next);
-      setPermissions(next);
+      setPermissions((prev) => {
+        const next = { ...prev, enabledByTeacher: enabled };
+        writePermissions(next);
+        return next;
+      });
     },
-    [permissions],
+    [],
   );
 
   return {

@@ -36,6 +36,12 @@ interface ChatEntry {
   metadata?: TutorChatResponse;
 }
 
+// Decorative spark icon - shared across widget sub-components
+const SPARK = "✦";
+
+// Syne heading font - consistent with BioSpark design system
+const FONT_HEADING = "Syne, sans-serif";
+
 export interface TutorWidgetProps {
   /** Lesson slug for the current lesson context (optional when used globally) */
   lessonSlug?: string;
@@ -245,11 +251,14 @@ export function TutorWidget({
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!dragStartRef.current) return;
+      if (!dragStartRef.current || !widgetRef.current) return;
       const dx = e.clientX - dragStartRef.current.pointerX;
       const dy = e.clientY - dragStartRef.current.pointerY;
-      const newX = Math.max(0, dragStartRef.current.posX - dx);
-      const newY = Math.max(0, dragStartRef.current.posY - dy);
+      const el = widgetRef.current;
+      const elWidth = el.offsetWidth || 48;
+      const elHeight = el.offsetHeight || 48;
+      const newX = Math.max(0, Math.min(window.innerWidth - elWidth, dragStartRef.current.posX - dx));
+      const newY = Math.max(0, Math.min(window.innerHeight - elHeight, dragStartRef.current.posY - dy));
       const pos = { x: newX, y: newY };
       setDragPos(pos);
     },
@@ -260,10 +269,13 @@ export function TutorWidget({
     (_e: React.PointerEvent<HTMLDivElement>) => {
       if (!dragStartRef.current) return;
       // Persist final position
-      if (dragPos) writeSavedPosition(dragPos);
+      setDragPos((current) => {
+        if (current) writeSavedPosition(current);
+        return current;
+      });
       dragStartRef.current = null;
     },
-    [dragPos],
+    [],
   );
 
   const displayLabel = lessonTitle ?? lessonLabel ?? lessonSlug;
@@ -553,7 +565,7 @@ function TriggerButton({
         />
       )}
 
-      {/* Icon: spark or X */}
+      {/* Icon: spark or X (decorative - button aria-label conveys state) */}
       <AnimatePresence mode="wait">
         {open ? (
           <motion.span
@@ -563,6 +575,7 @@ function TriggerButton({
             exit={{ rotate: 90, opacity: 0 }}
             transition={{ duration: 0.15 }}
             style={{ color: "#0d1e2c", lineHeight: 1, fontSize: "16px", fontWeight: 700 }}
+            aria-hidden="true"
           >
             ✕
           </motion.span>
@@ -574,8 +587,9 @@ function TriggerButton({
             exit={{ rotate: -90, opacity: 0 }}
             transition={{ duration: 0.15 }}
             style={{ lineHeight: 1 }}
+            aria-hidden="true"
           >
-            ✦
+            {SPARK}
           </motion.span>
         )}
       </AnimatePresence>
@@ -665,7 +679,7 @@ function PanelHeader({
           }}
           aria-hidden="true"
         >
-          ✦
+          {SPARK}
         </div>
         {/* Status dot */}
         <span
@@ -687,7 +701,7 @@ function PanelHeader({
       {/* Identity */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: C.text, fontFamily: "Syne, sans-serif" }}>
+          <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: C.text, fontFamily: FONT_HEADING }}>
             BioSpark Tutor
           </p>
           {tierLabel && (
@@ -823,10 +837,10 @@ function EmptyState({ lessonLabel }: { lessonLabel: string }) {
         }}
         aria-hidden="true"
       >
-        ✦
+        {SPARK}
       </div>
       <div style={{ textAlign: "center" }}>
-        <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: C.text, fontFamily: "Syne, sans-serif" }}>
+        <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: C.text, fontFamily: FONT_HEADING }}>
           Your AI Biology Tutor
         </p>
         <p
@@ -896,7 +910,7 @@ function MessageBubble({ entry }: { entry: ChatEntry }) {
           }}
           aria-hidden="true"
         >
-          ✦
+          {SPARK}
         </div>
       )}
       <div
