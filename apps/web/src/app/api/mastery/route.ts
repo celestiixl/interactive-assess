@@ -17,11 +17,14 @@ export async function GET(req: NextRequest) {
 
   const records = await prisma.masteryRecord.findMany({
     where: { studentId },
+    select: { teks: true, score: true },
     orderBy: { teks: "asc" },
   });
 
   // Return as a flat map: { "B.5A": 0.82, "B.7B": 0.64 }
-  const masteryMap = Object.fromEntries(records.map((record) => [record.teks, record.score]));
+  const masteryMap = Object.fromEntries(
+    records.map((record: { teks: string; score: number }) => [record.teks, record.score]),
+  );
   return NextResponse.json(masteryMap);
 }
 
