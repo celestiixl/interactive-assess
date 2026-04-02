@@ -757,3 +757,31 @@ code,
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+/* Student login page animations */
+@keyframes drift-teal {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(60px, 40px); }
+}
+
+@keyframes drift-amber {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(-50px, 60px); }
+}
+
+@keyframes login-pulse-text {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.student-login-orb-teal {
+  animation: drift-teal 20s ease-in-out infinite alternate;
+}
+
+.student-login-orb-amber {
+  animation: drift-amber 20s ease-in-out infinite alternate;
+}
+
+.student-login-btn-pulsing {
+  animation: login-pulse-text 1.2s ease-in-out infinite;
+}
