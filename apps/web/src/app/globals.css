@@ -544,6 +544,16 @@ html[data-acc-focus="1"] [data-focus-hide="1"] {
   color-scheme: dark;
 }
 
+/* Re-scope --bs-text and --bs-text-sub for light-surface containers so that
+   any text using these tokens on an unoverridden light background achieves
+   the WCAG 2 AA minimum contrast ratio (4.5:1). */
+.bg-blue-50,
+.bg-emerald-50,
+.bg-emerald-100 {
+  --bs-text: #1a202c;
+  --bs-text-sub: #2d3748;
+}
+
 body,
 .bg-white,
 .bg-slate-50,

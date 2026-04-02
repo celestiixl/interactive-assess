@@ -796,7 +796,7 @@ export default function LessonExperience({
                   <span className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-2.5 py-1 text-[11px] font-semibold text-bs-text-sub">
                     TEKS {question.teks}
                   </span>
-                  <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-700">
+                  <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-900">
                     {question.learningLevel}
                   </span>
                 </div>

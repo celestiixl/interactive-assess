@@ -157,7 +157,7 @@ export default function StudentLearningHubPage() {
           <section className="rounded-3xl border border-blue-200 bg-blue-50 p-4 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+                <div className="text-xs font-semibold uppercase tracking-wide text-blue-900">
                   Continue where you left off
                 </div>
                 <div className="mt-1 text-sm font-semibold text-gray-900">
@@ -201,7 +201,7 @@ export default function StudentLearningHubPage() {
         <section className="rounded-3xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+              <div className="text-xs font-semibold uppercase tracking-wide text-emerald-900">
                 Newly Available
               </div>
               <div className="mt-1 text-sm font-semibold text-emerald-900">
@@ -214,7 +214,7 @@ export default function StudentLearningHubPage() {
             </div>
             <Link
               href="/student/learn/unit-7"
-              className="rounded-xl border border-emerald-200 bg-bs-surface px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
+              className="rounded-xl border border-emerald-200 bg-bs-surface px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 hover:text-emerald-900"
             >
               Open Unit 7
             </Link>

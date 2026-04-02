@@ -41,7 +41,7 @@ const DIFF_META: Record<string, { label: string; color: string; bar: string }> =
   {
     easy: {
       label: "Easy",
-      color: "border-emerald-200 bg-emerald-50 text-emerald-700",
+      color: "border-emerald-200 bg-emerald-50 text-emerald-900",
       bar: "bg-emerald-400",
     },
     medium: {
@@ -153,7 +153,7 @@ function AnswerBreakdown({ item }: { item: Item }) {
           {answer.value}
         </span>
         {answer.tolerance != null && (
-          <span className="ml-2 text-xs text-emerald-700">
+          <span className="ml-2 text-xs text-emerald-900">
             (±{answer.tolerance})
           </span>
         )}
