@@ -291,11 +291,11 @@ export default function DashboardClient(props: DashboardClientProps) {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="flex flex-wrap items-center justify-between gap-3 px-4 pb-5 pt-6 sm:px-8"
+        className="flex flex-col gap-3 px-4 pb-5 pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:px-8"
       >
         <div>
           <h1
-            className="text-2xl font-bold tracking-tight text-bs-text"
+            className="text-lg font-bold tracking-tight text-bs-text md:text-2xl"
             style={{ fontFamily: "var(--bs-font-ui)" }}
           >
             {greeting},{" "}
@@ -319,7 +319,8 @@ export default function DashboardClient(props: DashboardClientProps) {
             aria-label={`${streakDays}-day streak`}
           >
             <span aria-hidden="true">&#128293;</span>
-            <span>{streakDays}-day streak</span>
+            <span>{streakDays}</span>
+            <span className="hidden sm:inline">-day streak</span>
           </div>
 
           {/* XP pill */}
@@ -344,7 +345,7 @@ export default function DashboardClient(props: DashboardClientProps) {
       </motion.div>
 
       {/* Main grid */}
-      <div className="grid gap-5 px-4 pb-10 sm:px-8 lg:grid-cols-[1fr_300px]">
+      <div className="grid gap-5 px-4 pb-16 sm:px-8 md:grid-cols-[1fr_300px] md:pb-10">
         {/* ------------------------------------------------------------------ */}
         {/* LEFT COLUMN                                                         */}
         {/* ------------------------------------------------------------------ */}
@@ -371,7 +372,7 @@ export default function DashboardClient(props: DashboardClientProps) {
 
               {/* Title */}
               <h2
-                className="text-2xl font-bold text-bs-text"
+                className="text-xl font-bold text-bs-text md:text-2xl"
                 style={{ fontFamily: "var(--bs-font-ui)" }}
               >
                 {currentLesson.title}
@@ -644,7 +645,7 @@ export default function DashboardClient(props: DashboardClientProps) {
           initial={{ opacity: 0, x: 12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: 0.24 }}
-          className="flex flex-col gap-4 rounded-2xl border border-bs-border bg-bs-surface p-5"
+          className="w-full rounded-2xl border border-bs-border bg-bs-surface p-5 md:w-auto"
         >
           {/* Label */}
           <p
@@ -654,45 +655,48 @@ export default function DashboardClient(props: DashboardClientProps) {
             Mastery
           </p>
 
-          {/* Donut */}
-          <div className="overflow-hidden">
-            <MasteryDonut segments={DEFAULT_SEGMENTS} size={280} />
-          </div>
+          {/* Donut + TEKS chips side by side on mobile, stacked on desktop */}
+          <div className="mt-3 flex flex-col items-center gap-4 sm:flex-row sm:items-start md:flex-col md:items-stretch">
+            {/* Donut */}
+            <div className="overflow-hidden">
+              <MasteryDonut segments={DEFAULT_SEGMENTS} size={280} />
+            </div>
 
-          {/* TEKS chips */}
-          <div>
-            <p className="mb-2 text-xs font-semibold text-bs-text-sub">TEKS Status</p>
-            <div className="flex flex-wrap gap-1.5">
-              {DEFAULT_SEGMENTS.slice(0, 6).map((seg) => {
-                const v = seg.value <= 1 ? seg.value * 100 : seg.value;
-                const color =
-                  v >= 75
-                    ? "rgba(52,211,153,0.15)"
-                    : v >= 50
-                    ? "rgba(245,166,35,0.15)"
-                    : "rgba(255,107,107,0.15)";
-                const textColor =
-                  v >= 75
-                    ? "var(--bs-success)"
-                    : v >= 50
-                    ? "var(--bs-amber)"
-                    : "var(--bs-coral)";
-                return (
-                  <span
-                    key={seg.key}
-                    className="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                    style={{ background: color, color: textColor }}
-                    aria-label={`${seg.key}: ${Math.round(v)}% mastery`}
-                  >
-                    {seg.key}
-                  </span>
-                );
-              })}
+            {/* TEKS chips */}
+            <div className="flex-1">
+              <p className="mb-2 text-xs font-semibold text-bs-text-sub">TEKS Status</p>
+              <div className="flex flex-wrap gap-1.5">
+                {DEFAULT_SEGMENTS.slice(0, 6).map((seg) => {
+                  const v = seg.value <= 1 ? seg.value * 100 : seg.value;
+                  const color =
+                    v >= 75
+                      ? "rgba(52,211,153,0.15)"
+                      : v >= 50
+                      ? "rgba(245,166,35,0.15)"
+                      : "rgba(255,107,107,0.15)";
+                  const textColor =
+                    v >= 75
+                      ? "var(--bs-success)"
+                      : v >= 50
+                      ? "var(--bs-amber)"
+                      : "var(--bs-coral)";
+                  return (
+                    <span
+                      key={seg.key}
+                      className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                      style={{ background: color, color: textColor }}
+                      aria-label={`${seg.key}: ${Math.round(v)}% mastery`}
+                    >
+                      {seg.key}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {/* Weekly streak dots */}
-          <div>
+          <div className="mt-4">
             <p className="mb-2 text-xs font-semibold text-bs-text-sub">This Week</p>
             <div className="flex items-center justify-between gap-1">
               {DAY_LABELS.map((label, i) => {
