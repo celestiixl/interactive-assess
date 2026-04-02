@@ -131,7 +131,7 @@ export default function TeacherAssessmentsPage() {
                               : ""}
                         </span>
                         {getMeta(a).published ? (
-                          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 font-semibold text-emerald-700">
+                          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 font-semibold text-emerald-900">
                             Published
                           </span>
                         ) : (
@@ -148,7 +148,7 @@ export default function TeacherAssessmentsPage() {
                           </span>
                         ) : null}
                         {getMeta(a).classPeriods.length ? (
-                          <span className="rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 font-semibold text-blue-700">
+                          <span className="rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 font-semibold text-blue-900">
                             {getMeta(a).classPeriods.join(", ")}
                           </span>
                         ) : null}
@@ -163,7 +163,7 @@ export default function TeacherAssessmentsPage() {
                           "rounded-md px-3 py-1.5 text-xs font-semibold",
                           getMeta(a).published
                             ? "border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100"
-                            : "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100",
+                            : "border border-emerald-200 bg-emerald-50 text-emerald-900 hover:bg-emerald-100",
                         ].join(" ")}
                       >
                         {getMeta(a).published ? "Unpublish" : "Publish"}
