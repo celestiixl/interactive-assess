@@ -47,7 +47,8 @@ export default function StudentLoginPage() {
       } else {
         setSuggestion(null);
       }
-    } catch {
+    } catch (err) {
+      console.error("[StudentLogin] suggestion fetch failed:", err);
       setSuggestion(null);
     }
   }, []);
@@ -66,6 +67,11 @@ export default function StudentLoginPage() {
     if (e.key === "Escape") {
       setSuggestion(null);
     }
+  }
+
+  function handlePeriodChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    setPeriod(e.target.value);
+    setError(null);
   }
 
   function handleSuggestionClick() {
@@ -103,10 +109,9 @@ export default function StudentLoginPage() {
       );
 
       router.replace("/student/dashboard");
-    } catch {
-      setError(
-        "We couldn't find that name in this period. Double-check with your teacher."
-      );
+    } catch (err) {
+      console.error("[StudentLogin] login request failed:", err);
+      setError("Connection error. Please check your internet and try again.");
       setLoading(false);
     }
   }
@@ -116,44 +121,18 @@ export default function StudentLoginPage() {
       className="relative min-h-dvh overflow-hidden bg-[#0d1e2c] flex flex-col"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
-      {/* Animated background orbs */}
-      <style>{`
-        @keyframes drift-teal {
-          0%   { transform: translate(0, 0); }
-          100% { transform: translate(60px, 40px); }
-        }
-        @keyframes drift-amber {
-          0%   { transform: translate(0, 0); }
-          100% { transform: translate(-50px, 60px); }
-        }
-        .orb-teal {
-          animation: drift-teal 20s ease-in-out infinite alternate;
-        }
-        .orb-amber {
-          animation: drift-amber 20s ease-in-out infinite alternate;
-        }
-        @keyframes pulse-text {
-          0%, 100% { opacity: 1; }
-          50%       { opacity: 0.5; }
-        }
-        .pulsing {
-          animation: pulse-text 1.2s ease-in-out infinite;
-        }
-      `}</style>
-
+      {/* Animated background orbs - classes defined in globals.css */}
       <div
-        className="orb-teal pointer-events-none absolute top-[-200px] left-[-150px] w-[500px] h-[500px] rounded-full opacity-20"
+        className="student-login-orb-teal pointer-events-none absolute top-[-200px] left-[-150px] w-[500px] h-[500px] rounded-full opacity-20"
         style={{
-          background:
-            "radial-gradient(circle, #00d4aa 0%, transparent 70%)",
+          background: "radial-gradient(circle, #00d4aa 0%, transparent 70%)",
         }}
         aria-hidden="true"
       />
       <div
-        className="orb-amber pointer-events-none absolute bottom-[-150px] right-[-100px] w-[400px] h-[400px] rounded-full opacity-20"
+        className="student-login-orb-amber pointer-events-none absolute bottom-[-150px] right-[-100px] w-[400px] h-[400px] rounded-full opacity-20"
         style={{
-          background:
-            "radial-gradient(circle, #f5a623 0%, transparent 70%)",
+          background: "radial-gradient(circle, #f5a623 0%, transparent 70%)",
         }}
         aria-hidden="true"
       />
@@ -223,7 +202,7 @@ export default function StudentLoginPage() {
             <select
               aria-label="Select your class period"
               value={period}
-              onChange={(e) => { setPeriod(e.target.value); setError(null); }}
+              onChange={handlePeriodChange}
               disabled={loading}
               className="w-full bg-[#0d1e2c] border border-[#00d4aa]/30 rounded-xl px-4 py-3
                          text-[#e8f4f0] text-base
@@ -253,7 +232,7 @@ export default function StudentLoginPage() {
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
               {loading ? (
-                <span className="pulsing">Logging in...</span>
+                <span className="student-login-btn-pulsing">Logging in...</span>
               ) : (
                 "Let's go \u2192"
               )}
