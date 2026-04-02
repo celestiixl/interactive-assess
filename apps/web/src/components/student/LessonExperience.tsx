@@ -361,7 +361,7 @@ export default function LessonExperience({
   const phenomenon = getPhenomenonForLesson(lesson.id);
 
   return (
-    <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-bs-text sm:px-4 sm:py-4">
+    <main className="ia-vh-page relative min-h-dvh px-4 py-3 text-bs-text md:px-9 md:py-4">
       <div className="mx-auto grid w-full max-w-4xl gap-3">
         <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-3">
@@ -807,7 +807,7 @@ export default function LessonExperience({
                   {question.options.map((choice, optionIndex) => (
                     <label
                       key={choice}
-                      className="flex items-center gap-2 text-sm text-bs-text-sub"
+                      className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-xl border border-transparent px-3 py-2 text-sm text-bs-text-sub transition-colors hover:border-bs-border hover:bg-bs-raised"
                     >
                       <input
                         type="radio"

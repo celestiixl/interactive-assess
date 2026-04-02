@@ -430,6 +430,17 @@ html[data-acc-focus="1"] [data-focus-hide="1"] {
   background-color: rgba(var(--ia-card), 0.95) !important;
 }
 
+/* Mobile safe area inset support */
+.mobile-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (max-width: 768px) {
+  .mobile-content {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  }
+}
+
 @keyframes iaXpFillPulse {
   0% {
     filter: brightness(0.95);
