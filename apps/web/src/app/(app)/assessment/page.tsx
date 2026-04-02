@@ -119,14 +119,14 @@ export default function AssessmentDashboardEntry() {
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         <ActionCard
-          href="/student/dashboard"
+          href="/auth/student/login"
           accent="teal"
           title="Continue as Student"
           desc="Practice runner entry, interactive item testing, goals, and progress."
           chips={["Practice", "Interactive items", "Goals", "Mastery"]}
         />
         <ActionCard
-          href="/teacher/dashboard"
+          href="/auth/teacher/login"
           accent="slate"
           title="Continue as Teacher"
           desc="Build items, manage assessments, view analytics, and jump into student view."
@@ -183,20 +183,6 @@ export default function AssessmentDashboardEntry() {
               onClick={() => router.push("/student/assessment")}
             >
               Student Lab
-            </Button>
-            <Button
-              variant="secondary"
-              size="md"
-              onClick={() => router.push("/auth/student/login")}
-            >
-              Student Login
-            </Button>
-            <Button
-              variant="secondary"
-              size="md"
-              onClick={() => router.push("/auth/teacher/login")}
-            >
-              Teacher Login
             </Button>
           </div>
         </Surface>
