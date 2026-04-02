@@ -2,6 +2,7 @@
 
 import { FloatingDock } from "@/components/ui/floating-dock";
 import {
+  IconApps,
   IconBook2,
   IconChartDots3,
   IconFlask2,
@@ -18,6 +19,11 @@ export default function StudentFloatingDock() {
         <IconLayoutDashboard className="h-full w-full text-neutral-600 dark:text-neutral-300" />
       ),
       href: "/student/dashboard",
+    },
+    {
+      title: "Learning Hub",
+      icon: <IconApps className="h-full w-full text-neutral-600 dark:text-neutral-300" />,
+      href: "/student/learning-hub",
     },
     {
       title: "BioSpark Quest",

@@ -634,7 +634,7 @@ export default function LessonExperience({
                         <p className={`mb-1 text-sm font-semibold text-amber-900 ${dyslexiaMode ? "tracking-wide" : ""}`}>
                           ✗ Common misconception: &ldquo;{section.misconception}&rdquo;
                         </p>
-                        <p className={`text-sm text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                        <p className={`text-sm text-amber-900 ${dyslexiaMode ? "tracking-wide" : ""}`}>
                           <span className="font-semibold text-green-700">✓ Correction: </span>
                           {section.correction}
                         </p>
@@ -679,7 +679,7 @@ export default function LessonExperience({
                             <dt className="text-xs font-bold uppercase tracking-wide text-teal-700">
                               {el.label}
                             </dt>
-                            <dd className={`mt-0.5 text-sm text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                            <dd className={`mt-0.5 text-sm text-teal-900 ${dyslexiaMode ? "tracking-wide" : ""}`}>
                               {el.detail}
                             </dd>
                           </div>
@@ -714,11 +714,11 @@ export default function LessonExperience({
                         {section.terms.map((term) => (
                           <div key={term.term} className="rounded-lg border border-purple-100 bg-purple-50 px-3 py-2">
                             <dt className="text-sm font-bold text-purple-900">{term.term}</dt>
-                            <dd className={`mt-0.5 text-sm text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                            <dd className={`mt-0.5 text-sm text-purple-900 ${dyslexiaMode ? "tracking-wide" : ""}`}>
                               {term.definition}
                             </dd>
                             {term.example ? (
-                              <p className={`mt-1 rounded bg-white/70 px-2 py-1 text-xs italic text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                              <p className={`mt-1 rounded bg-white/70 px-2 py-1 text-xs italic text-gray-700 ${dyslexiaMode ? "tracking-wide" : ""}` }>
                                 Example: {term.example}
                               </p>
                             ) : null}
@@ -761,7 +761,7 @@ export default function LessonExperience({
                           </p>
                           <ul className="space-y-2">
                             {section.sentenceFrames.map((frame, i) => (
-                              <li key={i} className={`rounded bg-white/80 px-3 py-1.5 text-sm italic text-bs-text-sub ${dyslexiaMode ? "tracking-wide" : ""}`}>
+                              <li key={i} className={`rounded bg-white/80 px-3 py-1.5 text-sm italic text-gray-700 ${dyslexiaMode ? "tracking-wide" : ""}`}>
                                 {frame}
                               </li>
                             ))}
