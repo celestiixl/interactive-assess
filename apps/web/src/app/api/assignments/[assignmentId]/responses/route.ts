@@ -1,23 +1,54 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MOCK_RESPONSES } from "@/lib/mockAssignments";
+import { prisma } from "@/lib/prisma";
+import { z } from "zod";
 
-export async function GET(req: NextRequest, context: any) {
-  const base = process.env.API_INTERNAL_URL || "http://127.0.0.1:3011";
-  const assignmentId = context?.params?.assignmentId;
+const SubmitResponseSchema = z.object({
+  studentId: z.string(),
+  answers: z.record(z.string(), z.unknown()),
+});
 
-  try {
-    const r = await fetch(
-      `${base}/assignments/${encodeURIComponent(assignmentId)}/responses`,
-      { cache: "no-store" },
-    );
-    if (r.ok) {
-      const data = await r.json().catch(async () => ({ text: await r.text() }));
-      return NextResponse.json(data, { status: r.status });
-    }
-  } catch (e) {
-    // fallthrough to mock
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ assignmentId: string }> }
+) {
+  const { assignmentId } = await params;
+  const responses = await prisma.assignmentResponse.findMany({
+    where: { assignmentId },
+    include: { student: { select: { displayName: true, period: true } } },
+    orderBy: { submittedAt: "desc" },
+  });
+
+  return NextResponse.json(responses);
+}
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ assignmentId: string }> }
+) {
+  const { assignmentId } = await params;
+  const body = await req.json();
+  const parsed = SubmitResponseSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const responses = MOCK_RESPONSES[assignmentId] ?? [];
-  return NextResponse.json(responses);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const answers = parsed.data.answers as any;
+
+  const response = await prisma.assignmentResponse.upsert({
+    where: {
+      assignmentId_studentId: {
+        assignmentId,
+        studentId: parsed.data.studentId,
+      },
+    },
+    update: { answers },
+    create: {
+      assignmentId,
+      studentId: parsed.data.studentId,
+      answers,
+    },
+  });
+
+  return NextResponse.json(response, { status: 201 });
 }

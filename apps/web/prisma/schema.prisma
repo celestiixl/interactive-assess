@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Student {
+  id          String   @id @default(cuid())
+  displayName String
+  period      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  masteryRecords      MasteryRecord[]
+  attempts            Attempt[]
+  assignmentResponses AssignmentResponse[]
+  flashcardProgress   FlashcardProgress[]
+}
+
+model MasteryRecord {
+  id        String   @id @default(cuid())
+  studentId String
+  teks      String   // e.g. "B.5A" — always dot-format
+  score     Float    // 0.0 – 1.0
+  updatedAt DateTime @updatedAt
+
+  student   Student  @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, teks])
+  @@index([studentId])
+}
+
+model Assignment {
+  id        String    @id @default(cuid())
+  title     String
+  kind      String    // "assignment" | "assessment"
+  teks      String[]  // e.g. ["B.5A", "B.7B"]
+  period    Int
+  dueAt     DateTime?
+  status    String    @default("draft")  // "draft" | "published"
+  metadata  Json?     // stores questions, tracks, and other extended data
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  responses AssignmentResponse[]
+}
+
+model AssignmentResponse {
+  id           String   @id @default(cuid())
+  assignmentId String
+  studentId    String
+  answers      Json     // flexible — stores question responses as JSON
+  score        Float?   // 0.0 – 1.0, null until graded
+  submittedAt  DateTime @default(now())
+
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  student      Student    @relation(fields: [studentId], references: [id])
+
+  @@unique([assignmentId, studentId])
+  @@index([assignmentId])
+  @@index([studentId])
+}
+
+model Attempt {
+  id            String   @id @default(cuid())
+  studentId     String
+  quickCheckId  String
+  teks          String
+  score         Float    // 0.0 – 1.0
+  correct       Boolean
+  attemptNumber Int
+  createdAt     DateTime @default(now())
+
+  student       Student  @relation(fields: [studentId], references: [id])
+
+  @@index([studentId, teks])
+  @@index([studentId, quickCheckId])
+}
+
+model FlashcardProgress {
+  id          String    @id @default(cuid())
+  studentId   String
+  cardId      String    // matches flashcard id in curriculum data
+  interval    Int       @default(1)    // SM-2 interval in days
+  repetitions Int       @default(0)    // SM-2 repetition count
+  easeFactor  Float     @default(2.5)  // SM-2 ease factor
+  dueAt       DateTime  @default(now())
+  lastReview  DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  student     Student   @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, cardId])
+  @@index([studentId])
+}

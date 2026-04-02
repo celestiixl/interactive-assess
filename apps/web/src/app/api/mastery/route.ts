@@ -1,48 +1,51 @@
-import { neon } from "@neondatabase/serverless"
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { z } from "zod";
 
+const UpsertMasterySchema = z.object({
+  studentId: z.string(),
+  teks: z.string().regex(/^B\.\d+[A-Z]$/, "TEKS must be in B.5A format"),
+  score: z.number().min(0).max(1),
+});
+
+// GET /api/mastery?studentId=xxx
 export async function GET(req: NextRequest) {
-  const studentId = req.nextUrl.searchParams.get("studentId")
-  if (!studentId) return NextResponse.json([])
-  try {
-    const sql = neon(process.env.DATABASE_URL!)
-    const rows = await sql`
-      SELECT teks, score, attempts, updated_at
-      FROM student_mastery
-      WHERE student_id = ${studentId}
-      ORDER BY teks ASC
-    `
-    return NextResponse.json(rows)
-  } catch (error) {
-    console.error("GET /api/mastery error:", error)
-    return NextResponse.json([])
+  const studentId = new URL(req.url).searchParams.get("studentId");
+  if (!studentId) {
+    return NextResponse.json({ error: "studentId required" }, { status: 400 });
   }
+
+  const records = await prisma.masteryRecord.findMany({
+    where: { studentId },
+    select: { teks: true, score: true },
+    orderBy: { teks: "asc" },
+  });
+
+  // Return as a flat map: { "B.5A": 0.82, "B.7B": 0.64 }
+  const masteryMap = Object.fromEntries(
+    records.map((record: { teks: string; score: number }) => [record.teks, record.score]),
+  );
+  return NextResponse.json(masteryMap);
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const { studentId, teks, score, correct, lessonSlug = "" } = await req.json()
-    if (!studentId || !teks || score === undefined || correct === undefined) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
-    }
-    const sql = neon(process.env.DATABASE_URL!)
-    const [row] = await sql`
-      INSERT INTO student_mastery (student_id, teks, score, attempts, updated_at)
-      VALUES (${studentId}, ${teks}, ${score}, 1, NOW())
-      ON CONFLICT (student_id, teks)
-      DO UPDATE SET
-        score      = EXCLUDED.score,
-        attempts   = student_mastery.attempts + 1,
-        updated_at = NOW()
-      RETURNING teks, score, attempts
-    `
-    await sql`
-      INSERT INTO attempt_log (student_id, teks, lesson_slug, score, correct)
-      VALUES (${studentId}, ${teks}, ${lessonSlug}, ${score}, ${correct})
-    `
-    return NextResponse.json({ saved: true, ...row })
-  } catch (error) {
-    console.error("POST /api/mastery error:", error)
-    return NextResponse.json({ error: "Failed to save" }, { status: 500 })
+// PATCH /api/mastery
+export async function PATCH(req: NextRequest) {
+  const body = await req.json();
+  const parsed = UpsertMasterySchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
+
+  const { studentId, teks, score } = parsed.data;
+
+  const record = await prisma.masteryRecord.upsert({
+    where: { studentId_teks: { studentId, teks } },
+    update: { score },
+    create: { studentId, teks, score },
+  });
+
+  return NextResponse.json(record);
 }
+
+// Backward-compat alias — existing tests reference POST; real write path is PATCH
+export { PATCH as POST };
