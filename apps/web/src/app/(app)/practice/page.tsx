@@ -318,7 +318,7 @@ export default function PracticeByCategory() {
   const answerWorkspace = (
     <>
       {!safeItem ? (
-        <div className="p-4 border rounded bg-neutral-50">
+        <div className="rounded-xl border border-[#00d4aa]/10 bg-[#132638] p-4 text-[#9abcb0]">
           Couldn&apos;t load this item. Try another one.
         </div>
       ) : (
@@ -330,16 +330,16 @@ export default function PracticeByCategory() {
         />
       )}
 
-      <div className="flex justify-between text-sm text-neutral-600">
+      <div className="flex justify-between text-sm text-[#9abcb0]">
         <button
-          className="rounded-md border px-3 py-1.5 hover:bg-neutral-100 disabled:opacity-50"
+          className="rounded-md border border-[#00d4aa]/20 px-3 py-1.5 hover:bg-[#1a3148] disabled:opacity-50"
           onClick={() => setCurrent(Math.max(0, safeIndex - 1))}
           disabled={safeIndex === 0}
         >
-          ← Previous
+          Previous
         </button>
         <button
-          className="rounded-md border px-3 py-1.5 hover:bg-neutral-100 disabled:opacity-50"
+          className="rounded-md border border-[#00d4aa]/20 px-3 py-1.5 hover:bg-[#1a3148] disabled:opacity-50"
           onClick={handleCheckOrContinue}
           disabled={
             !safeItem ||
@@ -377,42 +377,49 @@ export default function PracticeByCategory() {
 
   return (
     <AppShell activeKey="practice" fullBleed>
-      <div className="w-full space-y-5 bg-linear-to-b from-slate-50 to-white py-4 text-[15px] leading-normal">
+      <div className="w-full space-y-5 bg-[#0d1e2c] py-4 text-[15px] leading-normal">
         <div className="w-full px-2 py-4 pb-8 space-y-5 lg:px-3">
-          <div className="relative overflow-hidden rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4 shadow-sm sm:p-5">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-14 bg-linear-to-r from-violet-100/70 via-white to-amber-100/70" />
+          <div className="relative overflow-hidden rounded-2xl border border-[#00d4aa]/20 bg-[#1a3148] p-4 shadow-sm sm:p-5">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-14 bg-linear-to-r from-[#0d1e2c]/80 to-[#1a3148]/40" />
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="relative z-10">
-                <h1 className="text-2xl font-bold text-bs-text">
+                <h1 className="font-heading text-2xl font-bold text-[#e8f4f0] drop-shadow-sm">
                   Practice: {rcParam || rcLabels[0]}
                 </h1>
-                <div className="mt-1 text-xs text-bs-text-sub">
+                <div className="mt-1 text-sm text-[#9abcb0]">
                   TEKS-aligned item flow with immediate feedback and rationale.
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <span className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-3 py-1 text-xs font-semibold text-bs-text-sub">
+                  <span className="rounded-full border border-[#00d4aa]/40 bg-[#132638] px-3 py-1 text-sm text-[#9abcb0]">
                     Mode: {mode === "learn" ? "Learn" : "Exam"}
                   </span>
-                  <span className="rounded-full border border-[var(--bs-border)] bg-bs-surface px-3 py-1 text-xs font-semibold text-bs-text-sub">
+                  <span className="rounded-full border border-[#00d4aa]/40 bg-[#132638] px-3 py-1 text-sm text-[#9abcb0]">
                     Completed: {completedCount}/
                     {Math.max(1, mergedItems.length)}
                   </span>
-                  <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                  <span
+                    className={[
+                      "rounded-full border px-3 py-1 text-sm",
+                      correctCount > 0
+                        ? "border-[#00d4aa] bg-[#00d4aa]/10 text-[#00d4aa]"
+                        : "border-[#00d4aa]/40 bg-[#132638] text-[#9abcb0]",
+                    ].join(" ")}
+                  >
                     Correct: {correctCount}
                   </span>
                 </div>
               </div>
 
               <div className="relative z-10 flex flex-wrap items-center justify-end gap-2">
-                <div className="flex rounded-xl border border-[var(--bs-border)] bg-white/70 p-1">
+                <div className="flex rounded-xl border border-[#00d4aa]/20 bg-[#132638] p-1">
                   <button
                     type="button"
                     onClick={() => setMode("learn")}
                     className={[
-                      "rounded-lg px-3 py-1.5 text-xs font-semibold",
+                      "rounded-lg px-4 py-2 text-xs font-semibold",
                       mode === "learn"
-                        ? "bg-bs-bg text-white"
-                        : "text-bs-text-sub hover:bg-[var(--bs-raised)]",
+                        ? "bg-[#00d4aa] text-[#0d1e2c]"
+                        : "text-[#9abcb0] hover:text-[#e8f4f0]",
                     ].join(" ")}
                   >
                     Learn
@@ -421,10 +428,10 @@ export default function PracticeByCategory() {
                     type="button"
                     onClick={() => setMode("exam")}
                     className={[
-                      "rounded-lg px-3 py-1.5 text-xs font-semibold",
+                      "rounded-lg px-4 py-2 text-xs font-semibold",
                       mode === "exam"
-                        ? "bg-bs-bg text-white"
-                        : "text-bs-text-sub hover:bg-[var(--bs-raised)]",
+                        ? "bg-[#00d4aa] text-[#0d1e2c]"
+                        : "text-[#9abcb0] hover:text-[#e8f4f0]",
                     ].join(" ")}
                   >
                     Exam
@@ -433,7 +440,7 @@ export default function PracticeByCategory() {
 
                 <button
                   type="button"
-                  className="rounded-xl border border-[var(--bs-border)] bg-white/70 px-3 py-2 text-xs text-bs-text-sub hover:bg-[var(--bs-raised)]"
+                  className="rounded-lg px-4 py-2 text-xs text-[#9abcb0] hover:text-[#e8f4f0]"
                 >
                   Notes
                 </button>
@@ -442,45 +449,48 @@ export default function PracticeByCategory() {
                   type="button"
                   onClick={() => setFlagged((v) => !v)}
                   className={[
-                    "rounded-xl border px-3 py-2 text-xs",
+                    "rounded-lg px-4 py-2 text-xs",
                     flagged
-                      ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                      : "border-[var(--bs-border)] bg-white/70 text-bs-text-sub hover:bg-[var(--bs-raised)]",
+                      ? "border border-[#00d4aa] bg-[#00d4aa]/10 text-[#00d4aa]"
+                      : "text-[#9abcb0] hover:text-[#e8f4f0]",
                   ].join(" ")}
                 >
                   {flagged ? "Flagged" : "Flag"}
                 </button>
 
-                <div className="rounded-full border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-1 text-xs font-semibold text-bs-text-sub">
+                <div className="rounded-full border border-[#00d4aa]/20 bg-[#132638] px-3 py-1 text-xs font-semibold text-[#9abcb0]">
                   {safeIndex + 1}/{Math.max(1, mergedItems.length)}
                 </div>
-                <AccommodationsButton compact={true} label="Accommodations" />
               </div>
+            </div>
+
+            <div className="relative z-10 mt-3 w-full">
+              <AccommodationsButton compact={true} label="Accommodations" />
             </div>
 
             <div className="relative z-10 mt-4">
               <ProgressBar percent={percent} label="Assignment progress" />
             </div>
 
-            <div className="relative z-10 mt-4 flex flex-wrap items-center gap-4 rounded-xl border border-[var(--bs-border)] bg-slate-50/70 px-3 py-2">
-              <label className="inline-flex items-center gap-2 text-sm text-bs-text-sub">
+            <div className="relative z-10 mt-4 flex flex-wrap items-center gap-4 rounded-xl border border-[#00d4aa]/20 bg-[#1a3148] px-3 py-2">
+              <label className="inline-flex items-center gap-2 text-sm text-[#9abcb0]">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 accent-emerald-600"
+                  className="h-4 w-4 accent-[#00d4aa]"
                   checked={effectiveShowSupport}
                   disabled={mode !== "learn"}
                   onChange={(e) => supports.setShowSupport(e.target.checked)}
                 />
                 Show Spanish support
-                <span className="text-bs-text-muted">
+                <span className="text-[#9abcb0] opacity-70">
                   (helper line under English)
                 </span>
               </label>
 
-              <div className="flex items-center gap-2 text-sm text-bs-text-sub">
-                <span className="text-bs-text-sub">Support language:</span>
+              <div className="flex items-center gap-2 text-sm text-[#9abcb0]">
+                <span>Support language:</span>
                 <select
-                  className="rounded-md border border-[var(--bs-border)] bg-white/80 px-2 py-1 text-bs-text"
+                  className="rounded-md border border-[#00d4aa]/20 bg-[#132638] px-2 py-1 text-[#e8f4f0]"
                   value={supports.state.supportLanguage}
                   onChange={(e) =>
                     supports.setSupportLanguage(e.target.value as any)
@@ -494,23 +504,31 @@ export default function PracticeByCategory() {
               </div>
             </div>
 
-            <div className="relative z-10 mt-4 flex flex-wrap gap-2">
-              {rcLabels.map((rc) => (
-                <button
-                  key={rc}
-                  onClick={() =>
-                    router.replace(`/practice?rc=${encodeURIComponent(rc)}`)
-                  }
-                  className={`pill ${rc === (rcParam || rcLabels[0]) ? "border-emerald-400 text-emerald-700" : ""}`}
-                >
-                  {rc}
-                </button>
-              ))}
+            <div className="relative z-10 mt-4 rounded-xl border border-[#00d4aa]/10 bg-[#132638] p-4">
+              <p className="mb-3 text-xs uppercase tracking-widest text-[#9abcb0]">Reporting Categories</p>
+              <div className="flex flex-col gap-1">
+                {rcLabels.map((rc) => (
+                  <button
+                    key={rc}
+                    onClick={() =>
+                      router.replace(`/practice?rc=${encodeURIComponent(rc)}`)
+                    }
+                    className={[
+                      "w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors",
+                      rc === (rcParam || rcLabels[0])
+                        ? "bg-[#00d4aa]/10 text-[#00d4aa]"
+                        : "text-[#e8f4f0] hover:bg-[#1a3148]",
+                    ].join(" ")}
+                  >
+                    {rc}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="relative z-10 mt-4 rounded-2xl border border-[var(--bs-border)] bg-white/80 p-3">
-              <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
-                Question navigator
+            <div className="relative z-10 mt-4 rounded-xl border border-[#00d4aa]/10 bg-[#132638] p-4">
+              <div className="mb-3 text-xs uppercase tracking-widest text-[#9abcb0]">
+                Question Navigator
               </div>
               <AssignmentNav
                 total={mergedItems.length}
@@ -523,25 +541,25 @@ export default function PracticeByCategory() {
 
           {/* Nav + Item */}
           {mergedItems.length === 0 ? (
-            <div className="p-4 border rounded bg-neutral-50">
+            <div className="rounded-xl border border-[#00d4aa]/10 bg-[#132638] p-4 text-[#9abcb0]">
               No items for this category yet.
             </div>
           ) : isHotspotItem ? (
-            <section className="overflow-hidden rounded-2xl border border-[var(--bs-border)] bg-bs-surface shadow-sm ring-1 ring-slate-100">
-              <header className="border-b border-[var(--bs-border)] bg-linear-to-r from-sky-50 via-indigo-50 to-emerald-50 px-4 py-3">
-                <div className="text-sm font-semibold text-bs-text">
+            <section className="overflow-hidden rounded-2xl border border-[#00d4aa]/20 bg-[#1a3148] shadow-sm">
+              <header className="border-b border-[#00d4aa]/10 bg-linear-to-r from-[#0d1e2c]/80 to-[#1a3148]/40 px-4 py-3">
+                <div className="text-sm font-semibold text-[#e8f4f0]">
                   Interactive Hotspot
                 </div>
-                <div className="text-xs text-bs-text-sub">
+                <div className="text-xs text-[#9abcb0]">
                   Select regions directly on the image, then check your answer.
                 </div>
               </header>
               <div className="grid gap-4 p-4 xl:grid-cols-[0.95fr_1.05fr]">
-                <div className="space-y-3 rounded-2xl border border-[var(--bs-border)] bg-slate-50/70 p-4">
+                <div className="space-y-3 rounded-xl border border-[#00d4aa]/10 bg-[#132638] p-4">
                   {questionPanel}
                 </div>
 
-                <div className="space-y-3 rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4">
+                <div className="space-y-3 rounded-xl border border-[#00d4aa]/10 bg-[#132638] p-4">
                   {answerWorkspace}
                 </div>
               </div>

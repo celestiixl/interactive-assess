@@ -18,15 +18,17 @@ export default function AssignmentNav({
         {items.map((i) => {
           const status = statusByIndex[i] ?? "unseen";
           const base =
-            "flex h-9 w-9 items-center justify-center rounded-full border text-sm font-medium transition";
+            "flex h-10 w-10 items-center justify-center rounded-full border text-sm font-mono transition";
           const palette =
             status === "correct"
-              ? "bg-[rgba(74,222,128,0.06)] text-[#4ade80] border-emerald-300"
+              ? "bg-[#00d4aa]/20 border-[#00d4aa] text-[#00d4aa]"
               : status === "wrong"
-                ? "bg-rose-50 text-rose-700 border-rose-300"
-                : "bg-bs-surface text-neutral-800 border-neutral-300 hover:bg-neutral-50";
+                ? "bg-[#ff6b6b]/20 border-[#ff6b6b] text-[#ff6b6b]"
+                : "border-[#5a8070] text-[#9abcb0] hover:bg-[#1a3148]";
           const ring =
-            i === current ? "ring-2 ring-emerald-400 ring-offset-2" : "";
+            i === current
+              ? "border-2 border-[#00d4aa] text-[#00d4aa] bg-[#00d4aa]/10"
+              : "";
           return (
             <button
               key={i}
