@@ -33,14 +33,14 @@ function LinkCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <div className="text-sm font-semibold text-bs-text">{title}</div>
+            <div className="text-sm font-semibold text-gray-900">{title}</div>
             {badge ? (
-              <span className="rounded-full border bg-white/70 backdrop-blur-sm px-2 py-0.5 text-xs text-bs-text-sub">
+              <span className="rounded-full border bg-white/70 backdrop-blur-sm px-2 py-0.5 text-xs text-gray-500">
                 {badge}
               </span>
             ) : null}
           </div>
-          <div className="mt-1 text-sm text-bs-text-sub">{desc}</div>
+          <div className="mt-1 text-sm text-gray-600">{desc}</div>
         </div>
         <div className="text-lg opacity-70 group-hover:opacity-100">→</div>
       </div>
@@ -64,7 +64,7 @@ export default function StudentAssessmentLabPage() {
             </p>
 
             <div className="mt-4 rounded-2xl border bg-white/95 p-4 shadow-sm">
-              <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
+              <div className="text-xs font-semibold uppercase tracking-wide text-gray-600">
                 Quick links
               </div>
               <div className="mt-2 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -102,7 +102,7 @@ export default function StudentAssessmentLabPage() {
 
               </div>
 
-              <div className="mt-3 text-xs text-bs-text-sub">
+              <div className="mt-3 text-xs text-gray-600">
                 Tip: Use this page as your “sandbox hub” while you build.
               </div>
             </div>
@@ -135,19 +135,19 @@ export default function StudentAssessmentLabPage() {
                 </Link>
                 <Link
                   href="/student/dashboard"
-                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-bs-text hover:bg-[var(--bs-raised)]"
+                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-[var(--bs-raised)] hover:text-white"
                 >
                   Go to Dashboard →
                 </Link>
                 <Link
                   href="/student/learn"
-                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-bs-text hover:bg-[var(--bs-raised)]"
+                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-[var(--bs-raised)] hover:text-white"
                 >
                   Open BioSpark Quest →
                 </Link>
                 <Link
                   href="/student/profile"
-                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-bs-text hover:bg-[var(--bs-raised)]"
+                  className="rounded-2xl border bg-white/95 px-4 py-3 text-sm font-semibold text-gray-900 hover:bg-[var(--bs-raised)] hover:text-white"
                 >
                   Open My Profile →
                 </Link>

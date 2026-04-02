@@ -160,11 +160,11 @@ export default function StudentLearningHubPage() {
                 <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
                   Continue where you left off
                 </div>
-                <div className="mt-1 text-sm font-semibold text-bs-text">
+                <div className="mt-1 text-sm font-semibold text-gray-900">
                   Unit {continueLesson.unit.unitNumber}:{" "}
                   {continueLesson.lesson.title}
                 </div>
-                <div className="text-xs text-bs-text-sub">
+                <div className="text-xs text-gray-600">
                   Last saved progress:{" "}
                   {progress[continueLesson.lesson.id]?.percent ?? 0}%
                 </div>

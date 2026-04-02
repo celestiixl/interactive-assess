@@ -85,7 +85,7 @@ const STATUS_LABEL: Record<LessonStatus, string> = {
 
 const STATUS_BADGE: Record<LessonStatus, string> = {
   not_started: "bg-[var(--bs-raised)] text-bs-text-sub",
-  in_progress: "bg-amber-100 text-bs-amber",
+  in_progress: "bg-amber-100 text-amber-800",
   complete: "bg-green-100 text-green-800",
 };
 
@@ -301,11 +301,11 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
                   <div className="text-[11px] font-semibold uppercase tracking-wide text-sky-700">
                     Linked Assignment
                   </div>
-                  <div className="text-xs font-semibold text-bs-text">
+                  <div className="text-xs font-semibold text-gray-900">
                     {lesson.assignmentTitle}
                   </div>
                   {lesson.dueDateLabel ? (
-                    <div className="text-[11px] text-bs-text-sub">
+                    <div className="text-[11px] text-gray-600">
                       {lesson.dueDateLabel}
                     </div>
                   ) : null}
@@ -335,13 +335,13 @@ export default function LearningHub({ streak, accuracy }: LearningHubProps) {
       {/* Daily challenge callout */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-indigo-100 bg-indigo-50 p-5">
         <div>
-          <div className="text-xs font-semibold uppercase tracking-wide text-indigo-500">
+          <div className="text-xs font-semibold uppercase tracking-wide text-indigo-700">
             Need Practice After Reading?
           </div>
-          <div className="mt-1 text-sm font-semibold text-bs-text">
+          <div className="mt-1 text-sm font-semibold text-gray-900">
             Open your assigned lessons and continue progress.
           </div>
-          <div className="mt-0.5 text-xs text-bs-text-sub">
+          <div className="mt-0.5 text-xs text-gray-600">
             Synced from teacher assignments
           </div>
         </div>
