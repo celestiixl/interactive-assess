@@ -28,6 +28,15 @@ const SIMULATIONS = [
     duration: "15 min",
     icon: "🌿",
   },
+  {
+    slug: "genome-browser",
+    title: "Genome Browser",
+    description:
+      "Explore gene sequences, annotations, and chromosomal regions",
+    teks: ["B.7A", "B.7C"],
+    duration: "15 min",
+    icon: "🧬",
+  },
 ];
 
 export default function SimulationsPage() {

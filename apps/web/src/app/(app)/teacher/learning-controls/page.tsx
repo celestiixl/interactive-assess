@@ -10,11 +10,13 @@ import {
   type LearningHubSettings,
   type PacingMode,
 } from "@/lib/learningSettings";
+import { useTutorPermissions } from "@/hooks/useTutorPermissions";
 
 export default function TeacherLearningControlsPage() {
   const [settings, setSettings] = useState<LearningHubSettings>(() =>
     defaultLearningSettings(LEARNING_UNITS.map((unit) => unit.id)),
   );
+  const { permissions, setTeacherEnabled } = useTutorPermissions();
 
   useEffect(() => {
     setSettings(loadLearningSettings(LEARNING_UNITS.map((unit) => unit.id)));
@@ -275,6 +277,22 @@ export default function TeacherLearningControlsPage() {
             );
           })}
         </div>
+      </section>
+
+      <section className="mt-4 rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
+        <div className="text-sm font-semibold text-bs-text">AI Tutor Access</div>
+        <p className="mt-1 text-xs text-bs-text-sub">
+          Students can hide the tutor themselves if enabled globally.
+        </p>
+        <label className="mt-3 flex items-center gap-3">
+          <input
+            type="checkbox"
+            checked={permissions.enabledByTeacher}
+            onChange={(e) => setTeacherEnabled(e.target.checked)}
+            className="h-4 w-4"
+          />
+          <span className="text-sm text-bs-text">Enable AI Tutor for all students</span>
+        </label>
       </section>
     </main>
   );
