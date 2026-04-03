@@ -103,14 +103,14 @@ export default function TeacherImportCurriculumPage() {
           <h2 className="text-sm font-semibold text-bs-text">Validation</h2>
           <div className="mt-2 space-y-2 text-sm">
             {errors.length === 0 ? (
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-800">
+              <div className="rounded-bs border border-emerald-200 bg-emerald-50 px-3 py-2 text-emerald-800">
                 No validation errors found.
               </div>
             ) : (
               errors.map((error) => (
                 <div
                   key={error}
-                  className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-rose-800"
+                  className="rounded-bs border border-rose-200 bg-rose-50 px-3 py-2 text-rose-800"
                 >
                   {error}
                 </div>
@@ -125,7 +125,7 @@ export default function TeacherImportCurriculumPage() {
             {parsed.rows.slice(0, 8).map((unit) => (
               <div
                 key={unit.id}
-                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2"
+                className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2"
               >
                 <div className="font-semibold">
                   {unit.id} • {unit.title}

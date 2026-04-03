@@ -39,7 +39,7 @@ export default function GenomeBrowserPage() {
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href="/student/learn"
-            className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-white/25"
+            className="rounded-2xl bg-bs-surface/20 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-bs-surface/25"
           >
             Learning Hub
           </Link>
@@ -57,7 +57,7 @@ export default function GenomeBrowserPage() {
                   key={s.id}
                   type="button"
                   onClick={() => setActiveId(s.id)}
-                  className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+                  className={`rounded-bs border px-4 py-2 text-sm font-semibold transition ${
                     activeId === s.id
                       ? "bg-indigo-600 border-indigo-600 text-white shadow"
                       : "bg-bs-surface border-[var(--bs-border)] text-bs-text-sub hover:bg-[var(--bs-raised)]"
@@ -118,7 +118,7 @@ export default function GenomeBrowserPage() {
               genome (~3.2 billion bp) with thousands of annotation tracks.
             </p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-4">
+              <div className="rounded-bs border border-[var(--bs-border)] bg-[var(--bs-raised)] p-4">
                 <div className="text-sm font-bold text-bs-text mb-2">🧬 TEKS B.7A Connection</div>
                 <p className="text-xs text-bs-text-sub leading-relaxed">
                   The sequence displayed here shows how{" "}
@@ -128,7 +128,7 @@ export default function GenomeBrowserPage() {
                   nucleotide sequence specifies traits.
                 </p>
               </div>
-              <div className="rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-4">
+              <div className="rounded-bs border border-[var(--bs-border)] bg-[var(--bs-raised)] p-4">
                 <div className="text-sm font-bold text-bs-text mb-2">🔬 TEKS B.7C Connection</div>
                 <p className="text-xs text-bs-text-sub leading-relaxed">
                   The <strong>pink mutation markers</strong> in the browser show examples
@@ -141,7 +141,7 @@ export default function GenomeBrowserPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
+            <div className="rounded-bs border border-blue-100 bg-blue-50 p-4">
               <div className="text-sm font-bold text-blue-900 mb-2">🗺️ How to Use This Browser</div>
               <ul className="text-xs text-blue-800 leading-relaxed space-y-1 list-inside list-disc">
                 <li>Use <strong>Pan ◀ ▶</strong> buttons to scroll along the sequence</li>

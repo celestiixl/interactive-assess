@@ -85,7 +85,7 @@ function EntryRow({ entry }: { entry: DigestEntry }) {
 
       {expanded && (
         <div
-          className="mt-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200"
+          className="mt-2 rounded-bs border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200"
           role="note"
           aria-label="Suggested talking point"
         >
@@ -182,7 +182,7 @@ export default function WeeklyDigestPage() {
             type="date"
             value={weekOf}
             onChange={(e) => setWeekOf(e.target.value)}
-            className="rounded-xl border border-border bg-surface-2 px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-purple"
+            className="rounded-bs border border-border bg-surface-2 px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-purple"
             aria-label="Select week starting date"
           />
         </div>
@@ -199,7 +199,7 @@ export default function WeeklyDigestPage() {
             id="periodId"
             value={periodId}
             onChange={(e) => setPeriodId(e.target.value)}
-            className="rounded-xl border border-border bg-surface-2 px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-purple"
+            className="rounded-bs border border-border bg-surface-2 px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-purple"
             aria-label="Filter by class period"
           >
             {PERIOD_OPTIONS.map((o) => (
@@ -222,7 +222,7 @@ export default function WeeklyDigestPage() {
             id="teksFilter"
             value={teksFilter}
             onChange={(e) => setTeksFilter(e.target.value)}
-            className="rounded-xl border border-border bg-surface-2 px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-purple"
+            className="rounded-bs border border-border bg-surface-2 px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-brand-purple"
             aria-label="Filter by TEKS standard"
           >
             {TEKS_OPTIONS.map((o) => (

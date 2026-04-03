@@ -41,7 +41,7 @@ export default function PlantSystemsB12BPhenomenonPage() {
           <div className="mt-3">
             <Link
               href="/student/learn/unit-7/plant-systems-b12b"
-              className="inline-flex rounded-xl bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-bs-bg"
+              className="inline-flex rounded-bs bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-bs-bg"
             >
               Continue to Lesson →
             </Link>

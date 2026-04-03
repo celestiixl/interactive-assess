@@ -91,7 +91,7 @@ function FilterSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-[var(--bs-border)] bg-bs-surface px-2 py-1.5 text-xs font-medium text-bs-text focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+        className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-2 py-1.5 text-xs font-medium text-bs-text focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
       >
         <option value="">All</option>
         {options.map((o) => (
@@ -119,7 +119,7 @@ function AnswerBreakdown({ item }: { item: Item }) {
           return (
             <div
               key={c.id}
-              className={`flex items-start gap-2.5 rounded-lg border px-3 py-2 text-sm transition-colors ${correct ? "border-emerald-200 bg-emerald-50" : "border-[var(--bs-border)] bg-[var(--bs-raised)]"}`}
+              className={`flex items-start gap-2.5 rounded-bs border px-3 py-2 text-sm transition-colors ${correct ? "border-emerald-200 bg-emerald-50" : "border-[var(--bs-border)] bg-[var(--bs-raised)]"}`}
             >
               <span
                 className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold ${correct ? "border-emerald-500 bg-emerald-500 text-white" : "border-[var(--bs-border)] text-bs-text-sub"}`}
@@ -147,7 +147,7 @@ function AnswerBreakdown({ item }: { item: Item }) {
 
   if (answer.kind === "numeric") {
     return (
-      <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3">
+      <div className="rounded-bs border border-emerald-200 bg-emerald-50 px-4 py-3">
         <span className="text-sm font-medium text-emerald-800">Answer: </span>
         <span className="text-lg font-bold text-emerald-900">
           {answer.value}
@@ -170,7 +170,7 @@ function AnswerBreakdown({ item }: { item: Item }) {
           return (
             <div
               key={col.id}
-              className="rounded-lg border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3"
+              className="rounded-bs border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3"
             >
               <div className="mb-2 text-xs font-bold uppercase tracking-wide text-bs-text-sub">
                 {col.label}
@@ -179,7 +179,7 @@ function AnswerBreakdown({ item }: { item: Item }) {
                 {cards.map((c) => (
                   <span
                     key={c.id}
-                    className="rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-900"
+                    className="rounded-bs-sm border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-900"
                   >
                     {c.label}
                   </span>
@@ -201,7 +201,7 @@ function AnswerBreakdown({ item }: { item: Item }) {
         {answer.blanks.map((b, i) => (
           <div
             key={b.id}
-            className="flex items-center gap-2 rounded-lg border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2 text-xs"
+            className="flex items-center gap-2 rounded-bs border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2 text-xs"
           >
             <span className="font-semibold text-bs-text-sub">Box {i + 1}</span>
             <span className="text-bs-text-muted">→</span>
@@ -225,7 +225,7 @@ function AnswerBreakdown({ item }: { item: Item }) {
           return (
             <div
               key={c.id}
-              className={`flex items-center gap-2.5 rounded-lg border px-3 py-2 text-sm ${isA ? "border-teal-200 bg-teal-50" : isB ? "border-violet-200 bg-violet-50" : "border-[var(--bs-border)] bg-[var(--bs-raised)]"}`}
+              className={`flex items-center gap-2.5 rounded-bs border px-3 py-2 text-sm ${isA ? "border-teal-200 bg-teal-50" : isB ? "border-violet-200 bg-violet-50" : "border-[var(--bs-border)] bg-[var(--bs-raised)]"}`}
             >
               <span
                 className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold ${isA ? "border-teal-500 bg-teal-500 text-white" : isB ? "border-violet-500 bg-violet-500 text-white" : "border-[var(--bs-border)] text-bs-text-sub"}`}
@@ -416,7 +416,7 @@ function ItemCard({
                 Question
               </div>
               {item.stimulus.kind !== "none" && (
-                <div className="mb-2 rounded-lg border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2 text-sm italic text-bs-text-sub">
+                <div className="mb-2 rounded-bs border border-[var(--bs-border)] bg-[var(--bs-raised)] px-3 py-2 text-sm italic text-bs-text-sub">
                   {item.stimulus.kind === "text"
                     ? item.stimulus.text
                     : `[${item.stimulus.kind} stimulus]`}
@@ -492,7 +492,7 @@ function StatTile({
   barColor?: string;
 }) {
   return (
-    <div className="rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3 shadow-sm">
+    <div className="rounded-bs border border-[var(--bs-border)] bg-bs-surface p-3 shadow-sm">
       <div className="text-2xl font-bold tabular-nums text-bs-text">
         {value}
       </div>
@@ -682,10 +682,10 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search by title, prompt, TEKS, topic, misconception…"
-              className="w-full rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] py-2 pl-9 pr-4 text-sm focus:border-emerald-400 focus:bg-bs-surface focus:outline-none focus:ring-2 focus:ring-emerald-200"
+              className="w-full rounded-bs border border-[var(--bs-border)] bg-[var(--bs-raised)] py-2 pl-9 pr-4 text-sm focus:border-emerald-400 focus:bg-bs-surface focus:outline-none focus:ring-2 focus:ring-emerald-200"
             />
           </div>
-          <label className="flex cursor-pointer items-center gap-1.5 rounded-xl border border-[var(--bs-border)] px-3 py-2 text-xs font-medium hover:bg-[var(--bs-raised)] select-none">
+          <label className="flex cursor-pointer items-center gap-1.5 rounded-bs border border-[var(--bs-border)] px-3 py-2 text-xs font-medium hover:bg-[var(--bs-raised)] select-none">
             <input
               type="checkbox"
               checked={staarOnly}
@@ -728,7 +728,7 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
           <button
             type="button"
             onClick={() => supports.setShowSupport(!supports.state.showSupport)}
-            className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ${supports.state.showSupport ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"}`}
+            className={`rounded-bs border px-2.5 py-1.5 text-xs font-semibold transition ${supports.state.showSupport ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-[var(--bs-raised)]"}`}
             title="Toggle bilingual glossary support"
           >
             Support: {supports.state.showSupport ? "On" : "Off"}
@@ -736,7 +736,7 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
           <select
             value={supports.state.supportLanguage}
             onChange={(e) => supports.setSupportLanguage(e.target.value as any)}
-            className="rounded-lg border border-[var(--bs-border)] bg-bs-surface px-2 py-1.5 text-xs font-medium text-bs-text focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-2 py-1.5 text-xs font-medium text-bs-text focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200"
             title="Support language"
           >
             <option value="en">EN</option>
@@ -801,7 +801,7 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
 
       {/* Draft panel (fixed bottom) */}
       {draft.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-emerald-200 bg-white/95 backdrop-blur shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-emerald-200 bg-bs-surface/95 backdrop-blur shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
           <div className="mx-auto max-w-6xl px-6 py-3">
             <div className="flex items-center gap-4">
               <div className="min-w-0 flex-1">
@@ -832,20 +832,20 @@ export default function ItemBankClient({ items }: { items: Item[] }) {
                 <button
                   type="button"
                   onClick={() => setDraft([])}
-                  className="rounded-xl border border-[var(--bs-border)] px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
+                  className="rounded-bs border border-[var(--bs-border)] px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
                 >
                   Clear
                 </button>
                 <button
                   type="button"
                   onClick={copyDraft}
-                  className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
+                  className="rounded-bs border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
                 >
                   {draftCopied ? "✓ Copied!" : "Copy as JSON"}
                 </button>
                 <Link
                   href="/teacher/builder"
-                  className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
+                  className="rounded-bs bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
                 >
                   Open Builder →
                 </Link>

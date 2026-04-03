@@ -345,14 +345,14 @@ export default function TeacherBuilderPage() {
 
           <div className="flex items-center gap-2">
             <button
-              className="rounded-xl border bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
+              className="rounded-bs border bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
               onClick={() => setShowSavePanel((v) => !v)}
               type="button"
             >
               {showSavePanel ? "Hide" : "Save / Copy Item"}
             </button>
             <button
-              className="rounded-xl bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700"
+              className="rounded-bs bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700"
               onClick={copyItem}
               type="button"
             >
@@ -435,7 +435,7 @@ export default function TeacherBuilderPage() {
                 <div className="mt-3">
                   <button
                     type="button"
-                    className="rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                    className="rounded-bs bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
                     onClick={addGlossaryEntry}
                     disabled={
                       !glossarySurface.trim() ||
@@ -452,7 +452,7 @@ export default function TeacherBuilderPage() {
                     {glossary.map((g) => (
                       <div
                         key={g.key}
-                        className="rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3"
+                        className="rounded-bs border border-[var(--bs-border)] bg-bs-surface p-3"
                       >
                         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                           <div className="text-xs font-semibold text-bs-text-sub">
@@ -461,14 +461,14 @@ export default function TeacherBuilderPage() {
                           <div className="flex gap-2">
                             <button
                               type="button"
-                              className="rounded-lg border border-[var(--bs-border)] bg-bs-surface px-2 py-1 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+                              className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-2 py-1 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                               onClick={() => insertGlossaryToken(g)}
                             >
                               Insert token
                             </button>
                             <button
                               type="button"
-                              className="rounded-lg border border-rose-200 bg-bs-surface px-2 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
+                              className="rounded-bs border border-rose-200 bg-bs-surface px-2 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
                               onClick={() => removeGlossary(g.key)}
                             >
                               Remove
@@ -619,7 +619,7 @@ export default function TeacherBuilderPage() {
                       />
                       <button
                         type="button"
-                        className="rounded-xl border bg-bs-surface px-2 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+                        className="rounded-bs border bg-bs-surface px-2 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                         onClick={() => {
                           setMcqChoices((prev) => {
                             if (prev.length <= 2) return prev;
@@ -639,7 +639,7 @@ export default function TeacherBuilderPage() {
                 <div className="mt-3">
                   <button
                     type="button"
-                    className="rounded-xl border bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+                    className="rounded-bs border bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                     onClick={() =>
                       setMcqChoices((prev) => [
                         ...prev,
@@ -671,7 +671,7 @@ export default function TeacherBuilderPage() {
                         />
                         <button
                           type="button"
-                          className="rounded-xl border bg-bs-surface px-2 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+                          className="rounded-bs border bg-bs-surface px-2 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                           onClick={() => {
                             setBuckets((prev) =>
                               prev.filter((x) => x.id !== b.id),
@@ -698,7 +698,7 @@ export default function TeacherBuilderPage() {
                   </div>
                   <button
                     type="button"
-                    className="mt-3 rounded-xl border bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+                    className="mt-3 rounded-bs border bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                     onClick={() =>
                       setBuckets((prev) => [
                         ...prev,
@@ -743,7 +743,7 @@ export default function TeacherBuilderPage() {
 
                         <button
                           type="button"
-                          className="rounded-xl border bg-bs-surface px-2 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+                          className="rounded-bs border bg-bs-surface px-2 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                           onClick={() => {
                             setCards((prev) =>
                               prev.filter((x) => x.id !== c.id),
@@ -769,7 +769,7 @@ export default function TeacherBuilderPage() {
 
                   <button
                     type="button"
-                    className="mt-3 rounded-xl border bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+                    className="mt-3 rounded-bs border bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                     onClick={() =>
                       setCards((prev) => [...prev, { id: uid("c"), text: "" }])
                     }
@@ -845,7 +845,7 @@ export default function TeacherBuilderPage() {
                     />
                     <label
                       htmlFor="hotspotFileInput"
-                      className="mt-2 inline-flex cursor-pointer items-center justify-center rounded-xl border bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
+                      className="mt-2 inline-flex cursor-pointer items-center justify-center rounded-bs border bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text shadow-sm hover:bg-bs-raised"
                     >
                       Choose file
                     </label>
@@ -859,7 +859,7 @@ export default function TeacherBuilderPage() {
                           </span>{" "}
                           <button
                             type="button"
-                            className="ml-2 rounded-lg border bg-bs-surface px-2 py-1 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+                            className="ml-2 rounded-bs border bg-bs-surface px-2 py-1 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                             onClick={() => {
                               setHotspotLocalUrl((prev) => {
                                 if (prev) URL.revokeObjectURL(prev);
@@ -1085,7 +1085,7 @@ export default function TeacherBuilderPage() {
                           {cards.map((c) => (
                             <div
                               key={c.id}
-                              className="rounded-xl border bg-bs-surface px-3 py-2 text-sm shadow-sm text-bs-text"
+                              className="rounded-bs border bg-bs-surface px-3 py-2 text-sm shadow-sm text-bs-text"
                             >
                               {c.text.trim() ? c.text : "Card…"}
                             </div>
@@ -1125,7 +1125,7 @@ export default function TeacherBuilderPage() {
 
                             {/* Drop space */}
                             <div className="p-3">
-                              <div className="min-h-27.5 rounded-xl border border-dashed border-[var(--bs-border)] p-3">
+                              <div className="min-h-27.5 rounded-bs border border-dashed border-[var(--bs-border)] p-3">
                                 <div className="text-sm text-bs-text-sub">
                                   Drop cards here.
                                 </div>
@@ -1136,7 +1136,7 @@ export default function TeacherBuilderPage() {
                                     .map((c) => (
                                       <div
                                         key={c.id}
-                                        className="w-full rounded-xl border bg-bs-surface px-3 py-2 text-sm shadow-sm text-bs-text"
+                                        className="w-full rounded-bs border bg-bs-surface px-3 py-2 text-sm shadow-sm text-bs-text"
                                       >
                                         {c.text.trim() ? c.text : "Card…"}
                                       </div>

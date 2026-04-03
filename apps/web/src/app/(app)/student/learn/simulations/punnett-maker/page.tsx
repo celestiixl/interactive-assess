@@ -59,7 +59,7 @@ function Input({
 }) {
   return (
     <input
-      className={`w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 ${mono ? "font-mono tracking-widest" : ""}`}
+      className={`w-full rounded-bs border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 ${mono ? "font-mono tracking-widest" : ""}`}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
@@ -232,7 +232,7 @@ function FollowUpBuilder({
       {items.map((fq, i) => (
         <div
           key={fq.id}
-          className="rounded-lg border border-slate-700 bg-slate-800/50 p-3 space-y-2"
+          className="rounded-bs border border-slate-700 bg-slate-800/50 p-3 space-y-2"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-400">
@@ -265,7 +265,7 @@ function FollowUpBuilder({
                 type="number"
                 min={1}
                 max={10}
-                className="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-bs border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
                 value={fq.points}
                 onChange={(e) =>
                   update(fq.id, { points: Number(e.target.value) })
@@ -301,7 +301,7 @@ function JsonPanel({ data }: { data: object }) {
   }
 
   return (
-    <div className="relative rounded-xl border border-slate-700 bg-slate-900">
+    <div className="relative rounded-bs border border-slate-700 bg-slate-900">
       <div className="flex items-center justify-between border-b border-slate-700 px-4 py-2">
         <span className="text-xs font-mono text-slate-400">
           Generated question JSON
@@ -427,7 +427,7 @@ function MonohybridForm() {
           <div className="grid grid-cols-2 gap-3">
             <Field label="Learning level">
               <select
-                className="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-bs border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
                 value={q.learningLevel}
                 onChange={(e) =>
                   setQ({
@@ -447,7 +447,7 @@ function MonohybridForm() {
                 type="number"
                 min={1}
                 max={20}
-                className="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-bs border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
                 value={q.points}
                 onChange={(e) =>
                   setQ({ ...q, points: Number(e.target.value) })
@@ -470,7 +470,7 @@ function MonohybridForm() {
       {/* Right - preview + JSON */}
       <div className="space-y-6">
         {/* Grid preview */}
-        <div className="rounded-xl border border-slate-700 bg-slate-900 p-5">
+        <div className="rounded-bs border border-slate-700 bg-slate-900 p-5">
           <SectionTitle title="Live grid preview" />
           {gridReady ? (
             <>
@@ -641,7 +641,7 @@ function DihybridForm() {
           <div className="grid grid-cols-2 gap-3">
             <Field label="Learning level">
               <select
-                className="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-bs border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
                 value={q.learningLevel}
                 onChange={(e) =>
                   setQ({
@@ -661,7 +661,7 @@ function DihybridForm() {
                 type="number"
                 min={1}
                 max={32}
-                className="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-bs border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
                 value={q.points}
                 onChange={(e) =>
                   setQ({ ...q, points: Number(e.target.value) })
@@ -683,7 +683,7 @@ function DihybridForm() {
 
       {/* Right - preview + JSON */}
       <div className="space-y-6">
-        <div className="rounded-xl border border-slate-700 bg-slate-900 p-5">
+        <div className="rounded-bs border border-slate-700 bg-slate-900 p-5">
           <SectionTitle title="Live 4x4 grid preview" />
           {gridReady ? (
             <>

@@ -515,7 +515,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
                   </p>
                   <div
                     ref={cutZoneRef1}
-                    className={`relative select-none overflow-hidden rounded-xl ${shakingEl === "cut-bottle1" ? "bel-shake" : ""}`}
+                    className={`relative select-none overflow-hidden rounded-bs ${shakingEl === "cut-bottle1" ? "bel-shake" : ""}`}
                     style={{
                       height: 48,
                       background: wrongFlash === "bottle1" ? "#ef444422" : "#132638",
@@ -550,7 +550,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
                 </div>
               )}
               {assembly.bottle1Cut && (
-                <div className="rounded-xl p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
+                <div className="rounded-bs p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
                   <span style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#00d4aa" }}>✅ Bottle 1 cut!</span>
                 </div>
               )}
@@ -563,7 +563,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
                   </p>
                   <div
                     ref={cutZoneRef2}
-                    className={`relative select-none overflow-hidden rounded-xl ${shakingEl === "cut-bottle2" ? "bel-shake" : ""}`}
+                    className={`relative select-none overflow-hidden rounded-bs ${shakingEl === "cut-bottle2" ? "bel-shake" : ""}`}
                     style={{
                       height: 48,
                       background: wrongFlash === "bottle2" ? "#ef444422" : "#132638",
@@ -600,7 +600,7 @@ function CutAndAssembleScene({ assembly, onAssemblyChange }: CutAndAssembleScene
                 </div>
               )}
               {assembly.bottle2Cut && (
-                <div className="rounded-xl p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
+                <div className="rounded-bs p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
                   <span style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#00d4aa" }}>✅ Bottle 2 cut!</span>
                 </div>
               )}
@@ -990,7 +990,7 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
                 aria-pressed={selected === org.id}
                 aria-label={`Select ${org.name} (${org.role}, ${org.zone})`}
                 onClick={() => handleOrganismClick(org.id)}
-                className={`rounded-xl p-2 transition-all hover:opacity-80 ${shakeId === org.id ? "bel-shake" : ""}`}
+                className={`rounded-bs p-2 transition-all hover:opacity-80 ${shakeId === org.id ? "bel-shake" : ""}`}
                 style={{
                   background: selected === org.id ? `${org.color}33` : "#132638",
                   border: `2px solid ${selected === org.id ? org.color : "#1e3a52"}`,
@@ -1011,7 +1011,7 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
 
       {/* Placed list */}
       {placedOrganisms.length > 0 && (
-        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
+        <div className="rounded-bs p-3" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
           <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#64748b", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
             Placed — click to return to tray
           </p>
@@ -1022,7 +1022,7 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
                 type="button"
                 aria-label={`Remove ${org.name} back to tray`}
                 onClick={() => onRemove(org.id)}
-                className="rounded-xl px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-70"
+                className="rounded-bs px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-70"
                 style={{ background: `${org.color}22`, border: `1px solid ${org.color}`, color: org.color, fontFamily: "DynaPuff,sans-serif" }}
               >
                 {org.emoji} {org.name} ×
@@ -1033,7 +1033,7 @@ function AddOrganismsScene({ placedOrganisms, onPlace, onRemove, shakeId }: AddO
       )}
 
       {allPlaced && (
-        <div className="rounded-xl p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
+        <div className="rounded-bs p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44" }}>
           <span style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#00d4aa" }}>
             ✅ All organisms placed in their correct zones — ecosystem is ready!
           </span>
@@ -1073,7 +1073,7 @@ function PredictionGate({ question, options, onSubmit, submitted }: PredictionGa
               type="button"
               aria-pressed={answer === opt}
               onClick={() => setAnswer(opt)}
-              className="rounded-xl px-4 py-2 text-sm font-semibold text-left transition-all"
+              className="rounded-bs px-4 py-2 text-sm font-semibold text-left transition-all"
               style={{
                 background: answer === opt ? "#00d4aa22" : "#0d1e2c",
                 border: `1px solid ${answer === opt ? "#00d4aa" : "#1e3a52"}`,
@@ -1092,7 +1092,7 @@ function PredictionGate({ question, options, onSubmit, submitted }: PredictionGa
           onChange={(e) => setAnswer(e.target.value)}
           rows={2}
           placeholder="Type your prediction…"
-          className="w-full resize-none rounded-xl p-3 text-sm outline-none"
+          className="w-full resize-none rounded-bs p-3 text-sm outline-none"
           style={{ background: "#0d1e2c", border: "1px solid #1e3a52", color: "#e2e8f0", fontFamily: "DynaPuff,sans-serif" }}
         />
       )}
@@ -1150,7 +1150,7 @@ function WaterCycleScene({ prediction, onPrediction, animating }: WaterCycleScen
         </div>
       )}
       {prediction && (
-        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
+        <div className="rounded-bs p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
           <span style={{ color: "#60a5fa", fontWeight: 600 }}>Your prediction: </span>{prediction.studentAnswer}
         </div>
       )}
@@ -1204,7 +1204,7 @@ function CarbonCycleScene({ prediction, onPrediction, animating }: CarbonCycleSc
         </div>
       )}
       {prediction && (
-        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
+        <div className="rounded-bs p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
           <span style={{ color: "#22c55e", fontWeight: 600 }}>Your prediction: </span>{prediction.studentAnswer}
         </div>
       )}
@@ -1273,7 +1273,7 @@ function NitrogenCycleScene({ prediction, onPrediction, animating }: NitrogenCyc
                 onDragEnter={() => handleDragEnter(index)}
                 onDragEnd={handleDragEnd}
                 onDragOver={(e) => e.preventDefault()}
-                className="flex cursor-grab items-center gap-3 rounded-xl p-3 transition-all active:cursor-grabbing"
+                className="flex cursor-grab items-center gap-3 rounded-bs p-3 transition-all active:cursor-grabbing"
                 style={{ background: "#0d1e2c", border: "1px solid #1e3a52" }}
                 aria-label={`Step ${index + 1}: ${item.label}. Drag to reorder.`}
               >
@@ -1308,7 +1308,7 @@ function NitrogenCycleScene({ prediction, onPrediction, animating }: NitrogenCyc
       )}
 
       {prediction && (
-        <div className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
+        <div className="rounded-bs p-3" style={{ background: "#132638", border: "1px solid #1e3a52", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>
           <span style={{ color: "#f59e0b", fontWeight: 600 }}>Your ranking: </span>submitted ✓
         </div>
       )}
@@ -1351,7 +1351,7 @@ function ReflectScene({ predictions, submitted, feedback, onSubmit }: ReflectSce
             📋 Your Earlier Predictions (use as evidence)
           </p>
           {predictions.map((p) => (
-            <div key={p.sceneId} className="rounded-xl p-3" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
+            <div key={p.sceneId} className="rounded-bs p-3" style={{ background: "#132638", border: "1px solid #1e3a52" }}>
               <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 11, color: "#64748b", marginBottom: 2 }}>{p.questionText.slice(0, 60)}…</p>
               <p style={{ fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8" }}>{p.studentAnswer}</p>
             </div>
@@ -1371,11 +1371,11 @@ function ReflectScene({ predictions, submitted, feedback, onSubmit }: ReflectSce
           onChange={(e) => setText(e.target.value)}
           rows={5}
           placeholder="Write your Claim, Evidence, and Reasoning here…&#10;&#10;Claim: If the worms are removed...&#10;Evidence: From the nitrogen cycle, I observed that...&#10;Reasoning: This matters because..."
-          className="w-full resize-none rounded-xl p-3 text-sm outline-none"
+          className="w-full resize-none rounded-bs p-3 text-sm outline-none"
           style={{ background: "#0d1e2c", border: "1px solid #1e3a52", color: "#e2e8f0", fontFamily: "DynaPuff,sans-serif", opacity: submitted ? 0.6 : 1 }}
         />
         {feedback && (
-          <div className="mt-3 rounded-xl p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.5 }}>
+          <div className="mt-3 rounded-bs p-3" style={{ background: "#00d4aa11", border: "1px solid #00d4aa44", fontFamily: "DynaPuff,sans-serif", fontSize: 13, color: "#94a3b8", lineHeight: 1.5 }}>
             <span style={{ color: "#00d4aa", fontWeight: 600 }}>Feedback: </span>{feedback}
           </div>
         )}
@@ -1586,7 +1586,7 @@ export default function BottleEcosystemCyclesPage() {
                   aria-label={`${scene.label}${isCompleted ? " (completed)" : isLocked ? " (locked)" : ""}`}
                   onClick={() => !isLocked && goToScene(index)}
                   disabled={isLocked}
-                  className="flex items-center gap-3 rounded-xl p-3 text-left transition-all"
+                  className="flex items-center gap-3 rounded-bs p-3 text-left transition-all"
                   style={{
                     background: isCurrent ? "#132638" : "transparent",
                     border: `1px solid ${isCurrent ? "#1e3a52" : "transparent"}`,

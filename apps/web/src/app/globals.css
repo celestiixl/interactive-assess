@@ -97,6 +97,38 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* ── BioSpark v4 color tokens ── */
+  --bs-teal:          #00c49a;
+  --bs-teal-dark:     #006e55;
+  --bs-teal-deep:     #003d2e;
+  --bs-teal-soft:     #d6f5ed;
+
+  --bs-coral:         #ff4f2b;
+  --bs-coral-soft:    #ffe8e3;
+
+  --bs-amber:         #f5a800;
+  --bs-amber-soft:    #fff5d6;
+
+  --bs-purple:        #7c5cfc;
+  --bs-purple-soft:   #eeebff;
+
+  --bs-ink:           #0a1a14;
+  --bs-ink-2:         #2d4d3f;
+  --bs-muted:         #8aada0;
+
+  --bs-page-bg:       #f0f4f2;
+  --bs-surface:       #ffffff;
+  --bs-card-border:   rgba(0, 0, 0, 0.06);
+
+  /* ── BioSpark v4 typography tokens ── */
+  --font-display:     var(--font-fraunces), Georgia, serif;
+  --font-body:        var(--font-dm-sans), system-ui, sans-serif;
+
+  /* ── BioSpark v4 radius tokens ── */
+  --bs-radius:        16px;
+  --bs-radius-sm:     10px;
+  --bs-radius-pill:   20px;
 }
 
 :root[data-theme="dark"] {

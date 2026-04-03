@@ -118,7 +118,7 @@ export default function TeacherAssessmentsPage() {
           ) : assignments && assignments.length > 0 ? (
             <div className="space-y-3">
               {assignments.map((a) => (
-                <div key={a.id} className="rounded-lg border p-3">
+                <div key={a.id} className="rounded-bs border p-3">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="font-medium">{a.title || a.id}</div>
@@ -160,7 +160,7 @@ export default function TeacherAssessmentsPage() {
                         type="button"
                         onClick={() => togglePublish(a)}
                         className={[
-                          "rounded-md px-3 py-1.5 text-xs font-semibold",
+                          "rounded-bs-sm px-3 py-1.5 text-xs font-semibold",
                           getMeta(a).published
                             ? "border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100"
                             : "border border-emerald-200 bg-emerald-50 text-emerald-900 hover:bg-emerald-100",
@@ -174,7 +174,7 @@ export default function TeacherAssessmentsPage() {
                         onClick={() =>
                           setExpandedId((prev) => (prev === a.id ? null : a.id))
                         }
-                        className="rounded-md border border-[var(--bs-border)] bg-bs-surface px-3 py-1.5 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
+                        className="rounded-bs-sm border border-[var(--bs-border)] bg-bs-surface px-3 py-1.5 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
                       >
                         Publishing Settings
                       </button>
@@ -189,7 +189,7 @@ export default function TeacherAssessmentsPage() {
                   </div>
 
                   {expandedId === a.id ? (
-                    <div className="mt-3 rounded-xl border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3">
+                    <div className="mt-3 rounded-bs border border-[var(--bs-border)] bg-[var(--bs-raised)] p-3">
                       <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">
                         Publish Assignment
                       </div>
@@ -204,7 +204,7 @@ export default function TeacherAssessmentsPage() {
                               dueDate: event.target.value || null,
                             })
                           }
-                          className="mt-1 w-full rounded-lg border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm"
+                          className="mt-1 w-full rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm"
                         />
                       </label>
 
@@ -237,7 +237,7 @@ export default function TeacherAssessmentsPage() {
 
                       {!getMeta(a).dueDate ||
                       getMeta(a).classPeriods.length === 0 ? (
-                        <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                        <div className="mt-3 rounded-bs border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
                           Set a due date and select at least one class period
                           before publishing.
                         </div>

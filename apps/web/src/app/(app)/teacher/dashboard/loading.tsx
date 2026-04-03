@@ -13,8 +13,8 @@ export default function TeacherDashboardLoading() {
               <Skeleton className="h-5 w-80" />
             </div>
             <div className="flex items-center gap-3">
-              <Skeleton className="h-10 w-28 rounded-xl" />
-              <Skeleton className="h-10 w-24 rounded-xl" />
+              <Skeleton className="h-10 w-28 rounded-bs" />
+              <Skeleton className="h-10 w-24 rounded-bs" />
             </div>
           </header>
 
@@ -33,7 +33,7 @@ export default function TeacherDashboardLoading() {
                   <Skeleton className="h-7 w-48" />
                   <Skeleton className="h-4 w-64" />
                 </div>
-                <Skeleton className="h-9 w-24 rounded-xl" />
+                <Skeleton className="h-9 w-24 rounded-bs" />
               </div>
               <div className="mt-4 rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
                 <Skeleton className="h-4 w-40" />
@@ -51,9 +51,9 @@ export default function TeacherDashboardLoading() {
               </Card>
 
               <div className="rounded-2xl bg-emerald-700 p-5">
-                <Skeleton className="h-7 w-48 bg-white/30 mb-2" />
-                <Skeleton className="h-4 w-64 bg-white/20 mb-4" />
-                <Skeleton className="h-9 w-32 rounded-xl bg-white/20" />
+                <Skeleton className="h-7 w-48 bg-bs-surface/30 mb-2" />
+                <Skeleton className="h-4 w-64 bg-bs-surface/20 mb-4" />
+                <Skeleton className="h-9 w-32 rounded-bs bg-bs-surface/20" />
               </div>
             </div>
           </section>

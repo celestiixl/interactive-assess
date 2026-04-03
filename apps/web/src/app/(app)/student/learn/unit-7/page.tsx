@@ -90,7 +90,7 @@ export default function Unit7Page() {
                 <div className="mt-3">
                   <Link
                     href={`/student/learn/${unit.id}/${lesson.slug}`}
-                    className="inline-flex rounded-xl bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-bs-bg"
+                    className="inline-flex rounded-bs bg-bs-bg px-3 py-2 text-xs font-semibold text-white hover:bg-bs-bg"
                   >
                     Open Lesson →
                   </Link>
@@ -120,7 +120,7 @@ export default function Unit7Page() {
               <div className="mt-3">
                 <Link
                   href="/student/learn/unit-7/plant-systems-b12b-phenomenon"
-                  className="inline-flex rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
+                  className="inline-flex rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
                 >
                   Open Phenomenon →
                 </Link>
@@ -149,7 +149,7 @@ export default function Unit7Page() {
               <div className="mt-3">
                 <Link
                   href="/student/learn/simulations/bottle-ecosystem-cycles"
-                  className="inline-flex rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
+                  className="inline-flex rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-[var(--bs-raised)]"
                 >
                   Open Simulation →
                 </Link>

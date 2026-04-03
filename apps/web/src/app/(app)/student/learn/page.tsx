@@ -133,19 +133,19 @@ export default function StudentLearningHubPage() {
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/student/learn/standards"
-                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
+                className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
               >
                 Standards Heatmap
               </Link>
               <Link
                 href="/student/learn/interventions"
-                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
+                className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
               >
                 Interventions
               </Link>
               <Link
                 href="/student/guardian"
-                className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
+                className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-4 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
               >
                 Guardian Snapshot
               </Link>
@@ -160,7 +160,7 @@ export default function StudentLearningHubPage() {
                 <div className="text-xs font-semibold uppercase tracking-wide text-blue-900">
                   Continue where you left off
                 </div>
-                <div className="mt-1 text-sm font-semibold text-gray-900">
+                <div className="mt-1 text-sm font-semibold text-bs-ink">
                   Unit {continueLesson.unit.unitNumber}:{" "}
                   {continueLesson.lesson.title}
                 </div>
@@ -171,7 +171,7 @@ export default function StudentLearningHubPage() {
               </div>
               <Link
                 href={`/student/learn/${continueLesson.unit.id}/${continueLesson.lesson.slug}`}
-                className="rounded-xl bg-bs-bg px-4 py-2 text-sm font-semibold text-white hover:bg-bs-bg"
+                className="rounded-bs bg-bs-bg px-4 py-2 text-sm font-semibold text-white hover:bg-bs-bg"
               >
                 Resume Lesson
               </Link>
@@ -214,7 +214,7 @@ export default function StudentLearningHubPage() {
             </div>
             <Link
               href="/student/learn/unit-7"
-              className="rounded-xl border border-emerald-200 bg-bs-surface px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 hover:text-emerald-900"
+              className="rounded-bs border border-emerald-200 bg-bs-surface px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 hover:text-emerald-900"
             >
               Open Unit 7
             </Link>
@@ -264,7 +264,7 @@ export default function StudentLearningHubPage() {
                       </div>
                       <Link
                         href={`/student/learn/${unit.id}`}
-                        className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
+                        className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs font-semibold text-bs-text-sub hover:bg-bs-raised"
                       >
                         Open Unit
                       </Link>
@@ -296,7 +296,7 @@ export default function StudentLearningHubPage() {
                                 : "#"
                             }
                             aria-disabled={!unlocked}
-                            className={`rounded-xl border px-3 py-2 text-xs font-semibold ${
+                            className={`rounded-bs border px-3 py-2 text-xs font-semibold ${
                               unlocked
                                 ? "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub hover:bg-bs-raised"
                                 : "cursor-not-allowed border-[var(--bs-border)] bg-bs-raised text-bs-text-muted"
@@ -322,7 +322,7 @@ export default function StudentLearningHubPage() {
                 {weakestTeks.map((row) => (
                   <div
                     key={row.teks}
-                    className="rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs"
+                    className="rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-xs"
                   >
                     <div className="font-semibold text-bs-text">
                       {row.teks}
@@ -345,7 +345,7 @@ export default function StudentLearningHubPage() {
                   <Link
                     key={item.lessonId}
                     href={item.href}
-                    className="block rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs hover:bg-amber-100"
+                    className="block rounded-bs border border-amber-200 bg-amber-50 px-3 py-2 text-xs hover:bg-amber-100"
                   >
                     <div className="font-semibold text-amber-900">
                       {item.lessonTitle}
