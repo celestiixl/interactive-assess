@@ -7,6 +7,7 @@ import { loadLearningProgress, getMostRecentLessonId } from "@/lib/learningProgr
 import { getXP, getStreak } from "@/lib/xp";
 import { LEARNING_UNITS, type LearningLesson, type LearningUnit } from "@/lib/learningHubContent";
 import { MOCK_STUDENT_ASSIGNMENTS } from "@/lib/studentAssignments";
+import { loadStudentProfile } from "@/lib/studentProfile";
 import PageShell from "@/components/ui/PageShell";
 import BsCard from "@/components/ui/BsCard";
 import BsTag, { type TagVariant } from "@/components/ui/BsTag";
@@ -156,6 +157,12 @@ export default function DashboardClient(props: DashboardClientProps) {
     try {
       const n = window.localStorage.getItem("biospark.studentName");
       if (n) storedName = n;
+    } catch {}
+
+    // Student profile name (set during onboarding) takes highest priority
+    try {
+      const profile = loadStudentProfile();
+      if (profile.name?.trim()) storedName = profile.name.trim();
     } catch {}
 
     const progress = loadLearningProgress();
@@ -416,9 +423,15 @@ export default function DashboardClient(props: DashboardClientProps) {
         </BsCard>
         <BsCard>
           <BsCardLabel>Assignment</BsCardLabel>
-          <BsCardTitle size="sm" className="mb-1">{assignmentData.title}</BsCardTitle>
-          <p className="mb-2.5 text-[12px] text-bs-muted">{assignmentData.questionCount} questions</p>
-          <BsTag variant="coral">Due {assignmentData.dueLabel}</BsTag>
+          {dueAssignment ? (
+            <>
+              <BsCardTitle size="sm" className="mb-1 text-bs-ink">{assignmentData.title}</BsCardTitle>
+              <p className="mb-2.5 text-[12px] text-bs-muted">{assignmentData.questionCount} questions</p>
+              <BsTag variant="coral">Due {assignmentData.dueLabel}</BsTag>
+            </>
+          ) : (
+            <p className="text-[12px] text-bs-muted italic mt-1">No assignments due</p>
+          )}
         </BsCard>
         <BsCard variant="purple">
           <BsCardLabel className="text-[#4a2fc0]">Daily challenge</BsCardLabel>
@@ -436,9 +449,9 @@ export default function DashboardClient(props: DashboardClientProps) {
 
       {/* ── Mastery donut + TEKS status ── */}
       <div className="mb-3 grid grid-cols-2 gap-3">
-        <BsCard>
+        <BsCard className="min-h-[220px]">
           <BsCardLabel className="mb-3.5">Overall mastery</BsCardLabel>
-          <MasteryDonut segments={DEFAULT_SEGMENTS} size={200} />
+          <MasteryDonut segments={DEFAULT_SEGMENTS} size={180} />
         </BsCard>
         <BsCard>
           <BsCardLabel>TEKS status</BsCardLabel>
