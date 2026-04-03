@@ -466,18 +466,18 @@ export default function DashboardClient(props: DashboardClientProps) {
       {/* ── AI Tutor ── */}
       <Link
         href="/student/tutor"
-        className="mb-3 flex w-full cursor-pointer items-center gap-3.5 rounded-bs border-none bg-bs-ink p-[18px_24px] no-underline"
+        className="mb-3 flex w-full cursor-pointer items-center gap-3.5 rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface p-[18px_24px] no-underline"
         aria-label="Open AI tutor"
       >
-        <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,196,154,0.2)]">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00c49a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,196,154,0.15)]">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-            <circle cx="12" cy="17" r="0.5" fill="#00c49a"/>
+            <circle cx="12" cy="17" r="0.5" fill="#006e55"/>
           </svg>
         </div>
         <div className="text-left">
-          <p className="font-display text-[17px] font-bold italic text-white">Ask the AI tutor</p>
-          <p className="mt-0.5 text-[11px] text-white/40">Get help with any biology concept, anytime</p>
+          <p className="font-display text-[17px] font-bold italic text-bs-ink">Ask the AI tutor</p>
+          <p className="mt-0.5 text-[11px] text-bs-muted">Get help with any biology concept, anytime</p>
         </div>
         <div className="ml-auto flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-full bg-bs-teal">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003d2e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
