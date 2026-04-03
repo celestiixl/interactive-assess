@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import PageShell from "@/components/ui/PageShell";
 import OfflineSupport from "@/components/common/OfflineSupport";
+import DevBypassProvider from "@/components/common/DevBypassProvider";
 
 export const metadata: Metadata = {
   title: { default: "BioSpark", template: "%s | BioSpark" },
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <div className="ambient" aria-hidden="true" />
         <PageShell>{children}</PageShell>
         <OfflineSupport />
+        <DevBypassProvider />
       </body>
     </html>
   );
