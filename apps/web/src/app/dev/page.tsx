@@ -18,71 +18,25 @@ export default function DevPage() {
   ];
 
   return (
-    <div
-      style={{
-        fontFamily: "system-ui",
-        padding: 32,
-        maxWidth: 480,
-        margin: "0 auto",
-      }}
-    >
-      <div
-        style={{
-          display: "inline-block",
-          background: "#f5a800",
-          color: "#412402",
-          fontSize: 11,
-          fontWeight: 700,
-          padding: "3px 10px",
-          borderRadius: 20,
-          letterSpacing: "0.06em",
-          fontFamily: "monospace",
-          marginBottom: 12,
-        }}
-      >
+    <div className="mx-auto max-w-[480px] p-8 font-sans">
+      <span className="mb-3 inline-block rounded-full bg-[#f5a800] px-2.5 py-[3px] font-mono text-[11px] font-bold tracking-[0.06em] text-[#412402]">
         DEV BYPASS ACTIVE
-      </div>
-      <h1
-        style={{
-          fontSize: 22,
-          fontWeight: 700,
-          margin: "0 0 4px",
-          color: "#0a1a14",
-        }}
-      >
+      </span>
+      <h1 className="mb-1 mt-0 text-[22px] font-bold text-[#0a1a14]">
         BioSpark Dev Nav
       </h1>
-      <p
-        style={{
-          fontSize: 13,
-          color: "#8aada0",
-          marginTop: 0,
-          marginBottom: 20,
-        }}
-      >
+      <p className="mb-5 mt-0 text-[13px] text-[#8aada0]">
         Quick links — local only, redirects to / in production
       </p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div className="flex flex-col gap-2">
         {links.map(({ label, href }) => (
           <a
             key={href}
             href={href}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "10px 14px",
-              background: "#fff",
-              border: "1px solid rgba(0,0,0,0.08)",
-              borderRadius: 10,
-              fontSize: 13,
-              fontWeight: 500,
-              color: "#006e55",
-              textDecoration: "none",
-            }}
+            className="flex items-center justify-between rounded-[10px] border border-black/[0.08] bg-white px-3.5 py-2.5 text-[13px] font-medium text-[#006e55] no-underline"
           >
             {label}
-            <span style={{ color: "#8aada0", fontSize: 12 }}>{href}</span>
+            <span className="text-[12px] text-[#8aada0]">{href}</span>
           </a>
         ))}
       </div>

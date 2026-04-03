@@ -33,16 +33,24 @@ export function useDevBypass() {
     if (!IS_DEV_BYPASS) return;
 
     // Only seed if there is no existing student session
-    const studentRaw = localStorage.getItem("biospark:student:session");
-    const studentParsed = studentRaw ? JSON.parse(studentRaw) : null;
-    if (!studentParsed?.state?.student) {
+    try {
+      const studentRaw = localStorage.getItem("biospark:student:session");
+      const studentParsed = studentRaw ? JSON.parse(studentRaw) : null;
+      if (!studentParsed?.state?.student) {
+        useStudentAuth.setState({ student: DEV_STUDENT });
+      }
+    } catch {
       useStudentAuth.setState({ student: DEV_STUDENT });
     }
 
     // Only seed if there is no existing teacher session
-    const teacherRaw = localStorage.getItem("ia-teacher-auth");
-    const teacherParsed = teacherRaw ? JSON.parse(teacherRaw) : null;
-    if (!teacherParsed?.state?.teacher) {
+    try {
+      const teacherRaw = localStorage.getItem("ia-teacher-auth");
+      const teacherParsed = teacherRaw ? JSON.parse(teacherRaw) : null;
+      if (!teacherParsed?.state?.teacher) {
+        useTeacherAuth.setState({ teacher: DEV_TEACHER });
+      }
+    } catch {
       useTeacherAuth.setState({ teacher: DEV_TEACHER });
     }
   }, []);

@@ -13,23 +13,7 @@ export default function DevBypassProvider() {
   if (process.env.NEXT_PUBLIC_DEV_BYPASS !== "true") return null;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: 12,
-        left: 12,
-        zIndex: 9999,
-        background: "#f5a800",
-        color: "#412402",
-        fontSize: 11,
-        fontWeight: 700,
-        padding: "4px 10px",
-        borderRadius: 20,
-        letterSpacing: "0.05em",
-        fontFamily: "monospace",
-        pointerEvents: "none",
-      }}
-    >
+    <div className="fixed bottom-3 left-3 z-[9999] pointer-events-none bg-[#f5a800] text-[#412402] text-[11px] font-bold font-mono py-1 px-2.5 rounded-full tracking-[0.05em]">
       DEV BYPASS ACTIVE
     </div>
   );
