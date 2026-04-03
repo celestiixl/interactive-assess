@@ -25,11 +25,13 @@ export default function BsBtn({
   children,
   variant = "ghost",
   className = "",
+  disabled,
   ...props
 }: BsBtnProps) {
   return (
     <button
-      className={`inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border px-4 py-2 text-[13px] font-medium font-body transition-opacity ${variantClasses[variant]} ${className}`}
+      disabled={disabled}
+      className={`inline-flex items-center gap-1 rounded-bs-sm border px-4 py-2 text-[13px] font-medium font-body transition-opacity ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${variantClasses[variant]} ${className}`}
       {...props}
     >
       {children}
