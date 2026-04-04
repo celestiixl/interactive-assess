@@ -7,7 +7,7 @@ import { loadLearningProgress, getMostRecentLessonId } from "@/lib/learningProgr
 import { getXP, getStreak } from "@/lib/xp";
 import { LEARNING_UNITS, type LearningLesson, type LearningUnit } from "@/lib/learningHubContent";
 import { MOCK_STUDENT_ASSIGNMENTS } from "@/lib/studentAssignments";
-import { loadStudentProfile } from "@/lib/studentProfile";
+import { useStudentAuth } from "@/lib/studentAuth";
 import PageShell from "@/components/ui/PageShell";
 import BsCard from "@/components/ui/BsCard";
 import BsTag, { type TagVariant } from "@/components/ui/BsTag";
@@ -130,10 +130,23 @@ type DashState = {
 };
 
 // ---------------------------------------------------------------------------
+// Builds DonutSegment[] from a flat mastery map { "B.5A": 0.82, ... }
+// ---------------------------------------------------------------------------
+
+function buildSegments(masteryMap: Record<string, number>): DonutSegment[] {
+  return DEFAULT_SEGMENTS.map((seg) => ({
+    ...seg,
+    value: masteryMap[seg.key] ?? seg.value,
+  }));
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
 
 export default function DashboardClient(props: DashboardClientProps) {
+  const student = useStudentAuth((s) => s.student);
+
   const [state, setState] = useState<DashState>({
     studentName: props.studentName,
     xp: props.xp,
@@ -147,23 +160,17 @@ export default function DashboardClient(props: DashboardClientProps) {
     currentLessonPercent: 0,
   });
 
+  const [masterySegments, setMasterySegments] = useState<DonutSegment[]>(DEFAULT_SEGMENTS);
+  const [isLoadingMastery, setIsLoadingMastery] = useState(false);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const xpVal = getXP();
     const streakVal = getStreak();
 
-    let storedName = props.studentName;
-    try {
-      const n = window.localStorage.getItem("biospark.studentName");
-      if (n) storedName = n;
-    } catch {}
-
-    // Student profile name (set during onboarding) takes highest priority
-    try {
-      const profile = loadStudentProfile();
-      if (profile.name?.trim()) storedName = profile.name.trim();
-    } catch {}
+    // Student name: prefer Zustand auth store (DB displayName), fall back to props
+    const storedName = student?.displayName ?? props.studentName;
 
     const progress = loadLearningProgress();
     const { currentLesson: cl, currentUnit: cu, nextLesson: nl, nextUnit: nu } =
@@ -203,7 +210,24 @@ export default function DashboardClient(props: DashboardClientProps) {
       currentLessonPercent,
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [student?.displayName]);
+
+  // Fetch mastery data from Prisma when student ID is available
+  useEffect(() => {
+    if (!student?.id) return;
+    setIsLoadingMastery(true);
+    fetch(`/api/mastery?studentId=${student.id}`)
+      .then((r) => r.json())
+      .then((masteryMap: Record<string, number>) => {
+        setMasterySegments(buildSegments(masteryMap));
+      })
+      .catch(() => {
+        // Fall back to defaults on error
+      })
+      .finally(() => {
+        setIsLoadingMastery(false);
+      });
+  }, [student?.id]);
 
   const { studentName, xp, streakDays, weeklyStreak, currentLesson, currentUnitId, nextLesson, nextUnitId, currentLessonPercent } = state;
 
@@ -303,7 +327,7 @@ export default function DashboardClient(props: DashboardClientProps) {
   const challenge = { title: "Today's Question", subject: "Cell Biology", xp: 10 };
 
   // Period / unit info
-  const period = "2";
+  const period = student?.period ?? "—";
   const currentUnit = heroUnit?.title ?? "Unit 1";
   const todayLabel = new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 
@@ -314,7 +338,7 @@ export default function DashboardClient(props: DashboardClientProps) {
         <div>
           <p className="text-[13px] text-bs-muted">Good {timeOfDay}</p>
           <h1 className="font-display text-[40px] font-extrabold italic leading-none tracking-tight text-bs-ink">
-            <span className="text-bs-teal-dark">{studentName}</span> ✦
+            <span className="text-bs-teal-dark">{student?.displayName ?? studentName}</span> ✦
           </h1>
           <p className="mt-1 text-[12px] text-bs-muted">
             Period {period} · {currentUnit} · {todayLabel}
@@ -451,7 +475,13 @@ export default function DashboardClient(props: DashboardClientProps) {
       <div className="mb-3 grid grid-cols-2 gap-3">
         <BsCard className="min-h-[220px]">
           <BsCardLabel className="mb-3.5">Overall mastery</BsCardLabel>
-          <MasteryDonut segments={DEFAULT_SEGMENTS} size={180} />
+          {isLoadingMastery ? (
+            <div className="flex h-[180px] items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00c49a] border-t-transparent" />
+            </div>
+          ) : (
+            <MasteryDonut segments={masterySegments} size={180} />
+          )}
         </BsCard>
         <BsCard>
           <BsCardLabel>TEKS status</BsCardLabel>

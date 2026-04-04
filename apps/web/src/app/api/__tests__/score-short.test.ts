@@ -2,10 +2,11 @@
  * Tests for POST /api/score/short
  */
 import { describe, it, expect } from "vitest";
+import { NextRequest } from "next/server";
 import { POST } from "@/app/api/score/short/route";
 
-function jsonRequest(body: unknown): Request {
-  return new Request("http://localhost/api/score/short", {
+function jsonRequest(body: unknown): NextRequest {
+  return new NextRequest("http://localhost/api/score/short", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

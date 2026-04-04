@@ -58,7 +58,7 @@ describe("updateLessonProgress", () => {
     const before = new Date().toISOString();
     updateLessonProgress("lesson-1", { percent: 10 });
     const progress = getLessonProgress("lesson-1");
-    expect(progress?.lastVisitedAt >= before).toBe(true);
+    expect(progress!.lastVisitedAt >= before).toBe(true);
   });
 
   it("returns the full updated progress map", () => {
