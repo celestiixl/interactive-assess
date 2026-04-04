@@ -8,12 +8,11 @@ import { getXP, getStreak } from "@/lib/xp";
 import { LEARNING_UNITS, type LearningLesson, type LearningUnit } from "@/lib/learningHubContent";
 import { MOCK_STUDENT_ASSIGNMENTS } from "@/lib/studentAssignments";
 import { loadStudentProfile } from "@/lib/studentProfile";
-import PageShell from "@/components/ui/PageShell";
 import BsCard from "@/components/ui/BsCard";
 import BsTag, { type TagVariant } from "@/components/ui/BsTag";
-import BsBtn from "@/components/ui/BsBtn";
 import BsCardLabel from "@/components/ui/BsCardLabel";
 import BsCardTitle from "@/components/ui/BsCardTitle";
+import { useStudentAuth } from "@/lib/studentAuth";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -165,6 +164,12 @@ export default function DashboardClient(props: DashboardClientProps) {
       if (profile.name?.trim()) storedName = profile.name.trim();
     } catch {}
 
+    // Auth store name takes ultimate priority (set at login)
+    try {
+      const authName = useStudentAuth.getState().student?.name?.trim();
+      if (authName) storedName = authName;
+    } catch {}
+
     const progress = loadLearningProgress();
     const { currentLesson: cl, currentUnit: cu, nextLesson: nl, nextUnit: nu } =
       resolveCurrentAndNext(progress);
@@ -308,9 +313,9 @@ export default function DashboardClient(props: DashboardClientProps) {
   const todayLabel = new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 
   return (
-    <PageShell>
+    <div className="min-h-screen bg-[#f0f4f2] p-6 font-body text-[#0a1a14]">
       {/* ── Topbar ── */}
-      <div className="mb-7 flex flex-wrap items-start justify-between gap-3">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[13px] text-bs-muted">Good {timeOfDay}</p>
           <h1 className="font-display text-[40px] font-extrabold italic leading-none tracking-tight text-bs-ink">
@@ -338,7 +343,7 @@ export default function DashboardClient(props: DashboardClientProps) {
         <div className="pointer-events-none absolute -right-16 -top-20 h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.22)_0%,transparent_70%)]" />
         <div className="pointer-events-none absolute bottom-[-60px] right-[120px] h-[160px] w-[160px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.1)_0%,transparent_70%)]" />
         <div className="relative z-10 flex items-center justify-between gap-4">
-          <div>
+          <div className="flex-1">
             <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-bs-teal">
               Continue where you left off
             </p>
@@ -378,129 +383,140 @@ export default function DashboardClient(props: DashboardClientProps) {
         </div>
       </div>
 
-      {/* ── 2-col: next up + needs practice ── */}
-      <div className="mb-3 grid grid-cols-2 gap-3">
-        <BsCard variant="teal">
-          <BsCardLabel>Unit {nextLessonData.unit} · Lesson {nextLessonData.lesson}</BsCardLabel>
-          <BsCardTitle className="mb-1">{nextLessonData.title}</BsCardTitle>
-          <p className="mb-3 text-[12px] text-bs-muted">Next up in your playlist</p>
-          <Link
-            href={nextLessonData.href}
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-teal-dark px-4 py-2 text-[13px] font-medium font-body text-[#0a1a14] hover:opacity-90"
-            aria-label={`View lesson: ${nextLessonData.title}`}
-          >
-            View lesson →
-          </Link>
-        </BsCard>
-        <BsCard variant="coral">
-          <BsCardLabel className="text-bs-coral">Needs practice · {weakestTeks}</BsCardLabel>
-          <BsCardTitle className="mb-1 text-[#8a1a05]">{weakestTeksTitle}</BsCardTitle>
-          <p className="mb-3 text-[12px] text-bs-muted">Low mastery detected</p>
-          <Link
-            href="/student/learn/standards"
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-coral px-4 py-2 text-[13px] font-medium font-body text-[#0a1a14] hover:opacity-90"
-            aria-label={`Practice ${weakestTeks}`}
-          >
-            Practice now →
-          </Link>
-        </BsCard>
-      </div>
+      {/* ── Two-column main layout ── */}
+      <div className="mt-3 flex items-start gap-3">
 
-      {/* ── 3-col: streak + assignment + challenge ── */}
-      <div className="mb-3 grid grid-cols-3 gap-3">
-        <BsCard variant="amber" className="flex flex-col">
-          <BsCardLabel className="text-[#8a5e00]">Your streak</BsCardLabel>
-          <span className="font-display text-[44px] font-extrabold italic leading-none tracking-tight text-bs-amber">
-            {streakDays}
-          </span>
-          <p className="mt-0.5 mb-2.5 text-[12px] text-[#8a5e00]">
-            {streakDays === 0 ? "days — start one today!" : `day${streakDays !== 1 ? "s" : ""} and counting`}
-          </p>
-          <div className="h-1.5 overflow-hidden rounded-full bg-black/10">
-            <div className="h-full rounded-full bg-bs-amber" style={{ width: `${Math.min((xp / 50) * 100, 100)}%` }} />
+        {/* LEFT: main content */}
+        <div className="flex min-w-0 flex-[3] flex-col gap-3">
+          {/* 2-col: next up + needs practice */}
+          <div className="grid grid-cols-2 gap-3">
+            <BsCard variant="teal">
+              <BsCardLabel>Unit {nextLessonData.unit} · Lesson {nextLessonData.lesson}</BsCardLabel>
+              <BsCardTitle className="mb-1">{nextLessonData.title}</BsCardTitle>
+              <p className="mb-3 text-[12px] text-bs-muted">Next up in your playlist</p>
+              <Link
+                href={nextLessonData.href}
+                className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-teal-dark px-4 py-2 text-[13px] font-medium font-body text-[#0a1a14] hover:opacity-90"
+                aria-label={`View lesson: ${nextLessonData.title}`}
+              >
+                View lesson →
+              </Link>
+            </BsCard>
+            <BsCard variant="coral">
+              <BsCardLabel className="text-bs-coral">Needs practice · {weakestTeks}</BsCardLabel>
+              <BsCardTitle className="mb-1 text-[#8a1a05]">{weakestTeksTitle}</BsCardTitle>
+              <p className="mb-3 text-[12px] text-bs-muted">Low mastery detected</p>
+              <Link
+                href="/student/learn/standards"
+                className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-coral px-4 py-2 text-[13px] font-medium font-body text-[#0a1a14] hover:opacity-90"
+                aria-label={`Practice ${weakestTeks}`}
+              >
+                Practice now →
+              </Link>
+            </BsCard>
           </div>
-          <p className="mt-1 text-[10px] font-medium text-[#8a5e00]">{xp} / 50 XP to next level</p>
-        </BsCard>
-        <BsCard>
-          <BsCardLabel>Assignment</BsCardLabel>
-          {dueAssignment ? (
-            <>
-              <BsCardTitle size="sm" className="mb-1 text-bs-ink">{assignmentData.title}</BsCardTitle>
-              <p className="mb-2.5 text-[12px] text-bs-muted">{assignmentData.questionCount} questions</p>
-              <BsTag variant="coral">Due {assignmentData.dueLabel}</BsTag>
-            </>
-          ) : (
-            <p className="text-[12px] text-bs-muted italic mt-1">No assignments due</p>
-          )}
-        </BsCard>
-        <BsCard variant="purple">
-          <BsCardLabel className="text-[#4a2fc0]">Daily challenge</BsCardLabel>
-          <BsCardTitle size="sm" className="mb-1 text-[#1a0060]">{challenge.title}</BsCardTitle>
-          <p className="mb-2.5 text-[12px] text-[#7060c0]">{challenge.subject} · +{challenge.xp} XP</p>
-          <Link
-            href="/student/assessment/items"
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-[rgba(124,92,252,0.25)] bg-transparent px-3 py-1.5 text-[12px] font-medium font-body text-[#4a2fc0] hover:bg-bs-teal-soft"
-            aria-label="Take today's daily challenge"
-          >
-            Go →
-          </Link>
-        </BsCard>
-      </div>
 
-      {/* ── Mastery donut + TEKS status ── */}
-      <div className="mb-3 grid grid-cols-2 gap-3">
-        <BsCard className="min-h-[220px]">
-          <BsCardLabel className="mb-3.5">Overall mastery</BsCardLabel>
-          <MasteryDonut segments={DEFAULT_SEGMENTS} size={180} />
-        </BsCard>
-        <BsCard>
-          <BsCardLabel>TEKS status</BsCardLabel>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {teksStatus.map((t) => (
-              <BsTag key={t.code} variant={t.variant}>{t.code}</BsTag>
-            ))}
-          </div>
-          <BsCardLabel className="mt-4 mb-2">This week</BsCardLabel>
-          <div className="flex gap-2">
-            {DAY_ABBREV.map((day, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <div className={`h-[22px] w-[22px] rounded-full ${
-                  weekActivity[i] === "active" ? "bg-bs-teal-dark" :
-                  weekActivity[i] === "past"   ? "bg-bs-teal opacity-40" :
-                  "bg-black/10"
-                }`} />
-                <span className="text-[9px] font-semibold tracking-[0.05em] text-bs-muted">{day}</span>
+          {/* 3-col: streak + assignment + challenge */}
+          <div className="grid grid-cols-3 gap-3">
+            <BsCard variant="amber" className="flex flex-col">
+              <BsCardLabel className="text-[#8a5e00]">Your streak</BsCardLabel>
+              <span className="font-display text-[44px] font-extrabold italic leading-none tracking-tight text-bs-amber">
+                {streakDays}
+              </span>
+              <p className="mt-0.5 mb-2.5 text-[12px] text-[#8a5e00]">
+                {streakDays === 0 ? "days — start one today!" : `day${streakDays !== 1 ? "s" : ""} and counting`}
+              </p>
+              <div className="h-1.5 overflow-hidden rounded-full bg-black/10">
+                <div className="h-full rounded-full bg-bs-amber" style={{ width: `${Math.min((xp / 50) * 100, 100)}%` }} />
               </div>
-            ))}
+              <p className="mt-1 text-[10px] font-medium text-[#8a5e00]">{xp} / 50 XP to next level</p>
+            </BsCard>
+            <BsCard>
+              <BsCardLabel>Assignment</BsCardLabel>
+              {dueAssignment ? (
+                <>
+                  <BsCardTitle size="sm" className="mb-1 text-bs-ink">{assignmentData.title}</BsCardTitle>
+                  <p className="mb-2.5 text-[12px] text-bs-muted">{assignmentData.questionCount} questions</p>
+                  <BsTag variant="coral">Due {assignmentData.dueLabel}</BsTag>
+                </>
+              ) : (
+                <p className="text-[12px] text-bs-muted italic mt-1">No assignments due</p>
+              )}
+            </BsCard>
+            <BsCard variant="purple">
+              <BsCardLabel className="text-[#4a2fc0]">Daily challenge</BsCardLabel>
+              <BsCardTitle size="sm" className="mb-1 text-[#1a0060]">{challenge.title}</BsCardTitle>
+              <p className="mb-2.5 text-[12px] text-[#7060c0]">{challenge.subject} · +{challenge.xp} XP</p>
+              <Link
+                href="/student/assessment/items"
+                className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-[rgba(124,92,252,0.25)] bg-transparent px-3 py-1.5 text-[12px] font-medium font-body text-[#4a2fc0] hover:bg-bs-teal-soft"
+                aria-label="Take today's daily challenge"
+              >
+                Go →
+              </Link>
+            </BsCard>
           </div>
-        </BsCard>
-      </div>
+        </div>
 
-      {/* ── AI Tutor ── */}
-      <Link
-        href="/student/tutor"
-        className="mb-3 flex w-full cursor-pointer items-center gap-3.5 rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface p-[18px_24px] no-underline"
-        aria-label="Open AI tutor"
-      >
-        <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,196,154,0.15)]">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-            <circle cx="12" cy="17" r="0.5" fill="#006e55"/>
-          </svg>
+        {/* RIGHT: sidebar */}
+        <div className="flex min-w-0 flex-[2] flex-col gap-3">
+          {/* Mastery donut */}
+          <BsCard className="min-h-[220px]">
+            <BsCardLabel className="mb-3.5">Overall mastery</BsCardLabel>
+            <MasteryDonut segments={DEFAULT_SEGMENTS} size={180} />
+          </BsCard>
+
+          {/* TEKS status + this week */}
+          <BsCard>
+            <BsCardLabel>TEKS status</BsCardLabel>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {teksStatus.map((t) => (
+                <BsTag key={t.code} variant={t.variant}>{t.code}</BsTag>
+              ))}
+            </div>
+            <BsCardLabel className="mt-4 mb-2">This week</BsCardLabel>
+            <div className="flex gap-2">
+              {DAY_ABBREV.map((day, i) => (
+                <div key={i} className="flex flex-col items-center gap-1">
+                  <div className={`h-[22px] w-[22px] rounded-full ${
+                    weekActivity[i] === "active" ? "bg-bs-teal-dark" :
+                    weekActivity[i] === "past"   ? "bg-bs-teal opacity-40" :
+                    "bg-black/10"
+                  }`} />
+                  <span className="text-[9px] font-semibold tracking-[0.05em] text-bs-muted">{day}</span>
+                </div>
+              ))}
+            </div>
+          </BsCard>
+
+          {/* AI Tutor */}
+          <Link
+            href="/student/tutor"
+            className="flex w-full cursor-pointer items-center gap-3.5 rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface p-[18px_24px] no-underline"
+            aria-label="Open AI tutor"
+          >
+            <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,196,154,0.15)]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+                <circle cx="12" cy="17" r="0.5" fill="#006e55"/>
+              </svg>
+            </div>
+            <div className="text-left">
+              <p className="font-display text-[17px] font-bold italic text-bs-ink">Ask the AI tutor</p>
+              <p className="mt-0.5 text-[11px] text-bs-muted">Get help with any biology concept, anytime</p>
+            </div>
+            <div className="ml-auto flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-full bg-bs-teal">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003d2e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </Link>
         </div>
-        <div className="text-left">
-          <p className="font-display text-[17px] font-bold italic text-bs-ink">Ask the AI tutor</p>
-          <p className="mt-0.5 text-[11px] text-bs-muted">Get help with any biology concept, anytime</p>
-        </div>
-        <div className="ml-auto flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-full bg-bs-teal">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003d2e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </div>
-      </Link>
+
+      </div>
 
       {/* ── Bottom nav ── */}
-      <nav className="flex justify-around rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface py-2.5 px-6" aria-label="Main navigation">
+      <nav className="mt-3 flex justify-around rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface py-2.5 px-6" aria-label="Main navigation">
         {/* Dashboard */}
         <Link href="/student/dashboard" className="flex h-10 w-10 items-center justify-center rounded-bs-sm bg-bs-teal-soft" aria-label="Dashboard">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -534,6 +550,6 @@ export default function DashboardClient(props: DashboardClientProps) {
           </svg>
         </Link>
       </nav>
-    </PageShell>
+    </div>
   );
 }
