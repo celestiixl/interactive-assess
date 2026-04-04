@@ -27,10 +27,12 @@ const DEV_TEACHER: Teacher = {
  * when NEXT_PUBLIC_DEV_BYPASS=true, so every page is accessible without
  * logging in. Only runs on the client; no-ops in production where the
  * env var is unset.
+ *
+ * Pass enabled=false to skip seeding (e.g. on /admin or /beta routes).
  */
-export function useDevBypass() {
+export function useDevBypass(enabled = true) {
   useEffect(() => {
-    if (!IS_DEV_BYPASS) return;
+    if (!IS_DEV_BYPASS || !enabled) return;
 
     // Only seed if there is no existing student session
     try {
@@ -53,5 +55,5 @@ export function useDevBypass() {
     } catch {
       useTeacherAuth.setState({ teacher: DEV_TEACHER });
     }
-  }, []);
+  }, [enabled]);
 }

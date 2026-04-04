@@ -15,6 +15,9 @@ export default function DevPage() {
     { label: "Teacher analytics", href: "/teacher/learning-analytics" },
     { label: "Teacher controls", href: "/teacher/learning-controls" },
     { label: "Assessment", href: "/assessment" },
+    { label: "Admin dashboard", href: "/admin/dashboard" },
+    { label: "Admin login", href: "/admin/login" },
+    { label: "Beta join", href: "/beta/join" },
   ];
 
   return (

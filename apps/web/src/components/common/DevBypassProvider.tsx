@@ -1,14 +1,24 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useDevBypass } from "@/lib/devBypass";
+
+// Routes where the dev bypass must never auto-seed sessions
+const BYPASS_EXCLUDED_PREFIXES = ["/admin", "/beta"];
 
 /**
  * Wires in the dev bypass hook and renders the amber "DEV BYPASS ACTIVE"
  * badge when NEXT_PUBLIC_DEV_BYPASS=true.
  * Renders nothing in production.
+ * Never seeds sessions on /admin/* or /beta/* routes.
  */
 export default function DevBypassProvider() {
-  useDevBypass();
+  const pathname = usePathname();
+  const isExcluded = BYPASS_EXCLUDED_PREFIXES.some((prefix) =>
+    pathname.startsWith(prefix),
+  );
+
+  useDevBypass(!isExcluded);
 
   if (process.env.NEXT_PUBLIC_DEV_BYPASS !== "true") return null;
 
@@ -18,3 +28,4 @@ export default function DevBypassProvider() {
     </div>
   );
 }
+
