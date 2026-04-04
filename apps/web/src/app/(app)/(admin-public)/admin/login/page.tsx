@@ -39,7 +39,7 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-bs-bg px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-bs-border bg-bs-surface p-8 shadow-[var(--bs-shadow-md)]">
+      <div className="w-full max-w-sm rounded-2xl border border-bs-border bg-bs-raised p-8 shadow-[var(--bs-shadow-md)]">
         <h1 className="mb-1 font-[var(--bs-font-ui)] text-xl font-bold text-bs-text">
           Admin Access
         </h1>
