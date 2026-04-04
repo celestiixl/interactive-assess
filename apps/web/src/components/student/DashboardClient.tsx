@@ -386,7 +386,7 @@ export default function DashboardClient(props: DashboardClientProps) {
           <p className="mb-3 text-[12px] text-bs-muted">Next up in your playlist</p>
           <Link
             href={nextLessonData.href}
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-teal-dark px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
+            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-teal-dark px-4 py-2 text-[13px] font-medium font-body text-[#0a1a14] hover:opacity-90"
             aria-label={`View lesson: ${nextLessonData.title}`}
           >
             View lesson →
@@ -398,7 +398,7 @@ export default function DashboardClient(props: DashboardClientProps) {
           <p className="mb-3 text-[12px] text-bs-muted">Low mastery detected</p>
           <Link
             href="/student/learn/standards"
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-coral px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
+            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-coral px-4 py-2 text-[13px] font-medium font-body text-[#0a1a14] hover:opacity-90"
             aria-label={`Practice ${weakestTeks}`}
           >
             Practice now →

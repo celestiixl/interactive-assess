@@ -12,7 +12,7 @@ interface PageShellProps {
 
 export default function PageShell({ children, className = "" }: PageShellProps) {
   return (
-    <div className="min-h-screen bg-bs-page font-body">
+    <div className="min-h-screen bg-[#f0f4f2] text-[#0a1a14] font-body">
       <div className={cx("mx-auto max-w-[860px] px-5 py-8 pb-16", className)}>
         {children}
       </div>
