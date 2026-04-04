@@ -153,12 +153,8 @@ export default function DashboardClient(props: DashboardClientProps) {
     const streakVal = getStreak();
 
     let storedName = props.studentName;
-    try {
-      const n = window.localStorage.getItem("biospark.studentName");
-      if (n) storedName = n;
-    } catch {}
 
-    // Student profile name (set during onboarding) takes highest priority
+    // Student profile name (set during onboarding) takes higher priority
     try {
       const profile = loadStudentProfile();
       if (profile.name?.trim()) storedName = profile.name.trim();
