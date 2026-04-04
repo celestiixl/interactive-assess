@@ -64,10 +64,11 @@ function saveCodes(codes: BetaCode[]) {
 
 function generateCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let suffix = "";
-  for (let i = 0; i < 4; i++) {
-    suffix += chars[Math.floor(Math.random() * chars.length)];
-  }
+  const randomValues = new Uint8Array(4);
+  crypto.getRandomValues(randomValues);
+  const suffix = Array.from(randomValues)
+    .map((v) => chars[v % chars.length])
+    .join("");
   return `FBISD-${suffix}-${new Date().getFullYear()}`;
 }
 

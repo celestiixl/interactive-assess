@@ -19,8 +19,9 @@ export default function StudentLoginPage() {
     setError(null);
     setLoading(true);
 
-    // Try logging in first; if no account exists, register with a default password
-    // derived from the school ID so students only need name + ID
+    // Try logging in first. The existing studentAuth prototype stores the schoolId
+    // as the password when registering via name+ID (prototype-only behaviour —
+    // a production build must use a proper auth provider).
     const loginResult = login(schoolId, schoolId);
     if (loginResult.ok) {
       router.push("/student/dashboard");
