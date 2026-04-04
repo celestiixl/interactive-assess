@@ -92,13 +92,13 @@ export default function StudentProfilePage() {
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/student/learn"
-                className="rounded-xl border border-[var(--bs-border)] px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
+                className="rounded-bs border border-[var(--bs-border)] px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
               >
                 BioSpark Quest
               </Link>
               <Link
                 href="/student/dashboard"
-                className="rounded-xl border border-[var(--bs-border)] px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
+                className="rounded-bs border border-[var(--bs-border)] px-3 py-2 text-sm font-semibold text-bs-text-sub hover:bg-bs-raised"
               >
                 Dashboard
               </Link>
@@ -113,7 +113,7 @@ export default function StudentProfilePage() {
               <div className="mt-2 text-xl font-bold text-bs-text">{profile.name || "New Explorer"}</div>
               <div className="mt-1 text-sm text-bs-text-sub">Class Code: {profile.classCode}</div>
 
-              <div className="mt-4 rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3">
+              <div className="mt-4 rounded-bs border border-[var(--bs-border)] bg-bs-surface p-3">
                 <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">Account name</div>
                 <p className="mt-1 text-xs text-bs-text-sub">
                   You can set your display name once during account creation.
@@ -129,14 +129,14 @@ export default function StudentProfilePage() {
                     }}
                     disabled={profile.nameLocked}
                     placeholder="Enter your display name"
-                    className="w-full max-w-sm rounded-lg border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm text-bs-text disabled:cursor-not-allowed disabled:bg-bs-raised"
+                    className="w-full max-w-sm rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm text-bs-text disabled:cursor-not-allowed disabled:bg-bs-raised"
                     maxLength={24}
                   />
                   <button
                     type="button"
                     onClick={handleSetNameOnce}
                     disabled={profile.nameLocked || isSavingName}
-                    className="rounded-lg bg-bs-bg px-3 py-2 text-sm font-semibold text-white hover:bg-[var(--bs-raised)] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-bs bg-bs-bg px-3 py-2 text-sm font-semibold text-white hover:bg-[var(--bs-raised)] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSavingName ? "Checking..." : "Set name permanently"}
                   </button>
@@ -151,7 +151,7 @@ export default function StudentProfilePage() {
               </div>
 
               {permissions.hiddenByStudent && (
-                <div className="mt-4 rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3">
+                <div className="mt-4 rounded-bs border border-[var(--bs-border)] bg-bs-surface p-3">
                   <div className="text-xs font-semibold uppercase tracking-wide text-bs-text-sub">AI Tutor</div>
                   <p className="mt-1 text-xs text-bs-text-sub">
                     You have hidden the AI Tutor widget. You can restore it here.
@@ -159,14 +159,14 @@ export default function StudentProfilePage() {
                   <button
                     type="button"
                     onClick={showForStudent}
-                    className="mt-2 rounded-lg border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
+                    className="mt-2 rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm font-semibold text-bs-text hover:bg-bs-raised"
                   >
                     Show AI Tutor
                   </button>
                 </div>
               )}
 
-              <div className="mt-4 rounded-xl border border-[var(--bs-border)] bg-bs-surface p-3">
+              <div className="mt-4 rounded-bs border border-[var(--bs-border)] bg-bs-surface p-3">
                 <div className="flex items-center justify-between text-sm font-semibold text-bs-text">
                   <span>XP Progress</span>
                   <span>{xpInLevel}/100</span>
@@ -180,15 +180,15 @@ export default function StudentProfilePage() {
               </div>
 
               <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                <div className="rounded-xl border border-[var(--bs-border)] p-3 text-center">
+                <div className="rounded-bs border border-[var(--bs-border)] p-3 text-center">
                   <div className="text-xs text-bs-text-sub">Streak</div>
                   <div className="text-lg font-bold text-amber-700">🔥 {profile.streak}</div>
                 </div>
-                <div className="rounded-xl border border-[var(--bs-border)] p-3 text-center">
+                <div className="rounded-bs border border-[var(--bs-border)] p-3 text-center">
                   <div className="text-xs text-bs-text-sub">Badges</div>
                   <div className="text-lg font-bold text-emerald-700">{profile.badges.length}</div>
                 </div>
-                <div className="rounded-xl border border-[var(--bs-border)] p-3 text-center">
+                <div className="rounded-bs border border-[var(--bs-border)] p-3 text-center">
                   <div className="text-xs text-bs-text-sub">Preferred Mode</div>
                   <div className="text-sm font-bold text-violet-700 capitalize">{profile.preferredMode}</div>
                 </div>
@@ -203,7 +203,7 @@ export default function StudentProfilePage() {
                   return (
                     <div
                       key={badge.key}
-                      className={`rounded-lg border p-2.5 text-xs ${
+                      className={`rounded-bs border p-2.5 text-xs ${
                         unlocked
                           ? "border-emerald-200 bg-emerald-50 text-emerald-900"
                           : "border-[var(--bs-border)] bg-bs-surface text-bs-text-sub"
@@ -225,7 +225,7 @@ export default function StudentProfilePage() {
             ) : (
               <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                 {topicRows.map((row) => (
-                  <div key={row.topic} className="rounded-xl border border-[var(--bs-border)] p-3">
+                  <div key={row.topic} className="rounded-bs border border-[var(--bs-border)] p-3">
                     <div className="mb-1 flex items-center justify-between text-xs font-semibold text-bs-text-sub">
                       <span>{row.topic}</span>
                       <span>{row.percent}%</span>

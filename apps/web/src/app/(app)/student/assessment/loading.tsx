@@ -14,7 +14,7 @@ export default function StudentAssessmentLoading() {
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[0, 1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="rounded-3xl border bg-white/95 p-5 shadow-sm flex flex-col gap-2">
+            <div key={i} className="rounded-3xl border bg-bs-surface/95 p-5 shadow-sm flex flex-col gap-2">
               <Skeleton className="h-4 w-32" />
               <Skeleton className="h-4 w-48" />
             </div>

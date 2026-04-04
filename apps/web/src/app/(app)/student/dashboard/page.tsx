@@ -1,4 +1,3 @@
-import AmbientBackground from "@/components/student/AmbientBackground";
 import DashboardClient from "@/components/student/DashboardClient";
 import { LEARNING_UNITS } from "@/lib/learningHubContent";
 import { MOCK_STUDENT_ASSIGNMENTS } from "@/lib/studentAssignments";
@@ -21,25 +20,20 @@ export default function StudentDashboard() {
   })();
 
   return (
-    <div className="relative min-h-screen" style={{ background: "#080f12" }}>
-      <AmbientBackground />
-      <div className="relative z-10">
-        <DashboardClient
-          studentName="Student"
-          currentLesson={firstLesson}
-          currentUnitId={firstUnit?.id ?? null}
-          nextLesson={secondLesson}
-          nextUnitId={firstUnit?.id ?? null}
-          weakestTeks={null}
-          weakestTeksTitle={null}
-          recentLesson={null}
-          dueAssignment={dueAssignment}
-          xp={0}
-          streakDays={0}
-          weeklyStreak={[false, false, false, false, false, false, false]}
-          masteryPercent={0}
-        />
-      </div>
-    </div>
+    <DashboardClient
+      studentName="Student"
+      currentLesson={firstLesson}
+      currentUnitId={firstUnit?.id ?? null}
+      nextLesson={secondLesson}
+      nextUnitId={firstUnit?.id ?? null}
+      weakestTeks={null}
+      weakestTeksTitle={null}
+      recentLesson={null}
+      dueAssignment={dueAssignment}
+      xp={0}
+      streakDays={0}
+      weeklyStreak={[false, false, false, false, false, false, false]}
+      masteryPercent={0}
+    />
   );
 }

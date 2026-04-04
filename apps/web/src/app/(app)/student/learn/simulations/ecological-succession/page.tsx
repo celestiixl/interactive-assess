@@ -65,7 +65,7 @@ function ReflectionPanel({ onSubmit, submitted, feedback }: ReflectionPanelProps
         onChange={(e) => setText(e.target.value)}
         rows={4}
         placeholder="Type your answer here…"
-        className="w-full resize-none rounded-xl p-3 text-sm outline-none"
+        className="w-full resize-none rounded-bs p-3 text-sm outline-none"
         style={{
           background: "#0d1e2c",
           border: "1px solid #1e3a52",
@@ -76,7 +76,7 @@ function ReflectionPanel({ onSubmit, submitted, feedback }: ReflectionPanelProps
       />
       {feedback && (
         <div
-          className="mt-3 rounded-xl p-3"
+          className="mt-3 rounded-bs p-3"
           style={{
             background: "#00d4aa11",
             border: "1px solid #00d4aa44",

@@ -146,7 +146,7 @@ export default function TeacherLearningControlsPage() {
                     event.target.value as PacingMode,
                   )
                 }
-                className="mt-2 w-full rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm"
+                className="mt-2 w-full rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm"
               >
                 <option value="on_track">On Track</option>
                 <option value="review">Review Focus</option>
@@ -218,7 +218,7 @@ export default function TeacherLearningControlsPage() {
                     onChange={(event) =>
                       setPeriodDueDate(period, event.target.value)
                     }
-                    className="mt-1 w-full rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm"
+                    className="mt-1 w-full rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm"
                   />
                 </label>
 
@@ -230,7 +230,7 @@ export default function TeacherLearningControlsPage() {
                       event.target.value = "";
                     }}
                     defaultValue=""
-                    className="mt-1 w-full rounded-xl border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm"
+                    className="mt-1 w-full rounded-bs border border-[var(--bs-border)] bg-bs-surface px-3 py-2 text-sm"
                   >
                     <option value="" disabled>
                       Select lesson
@@ -256,7 +256,7 @@ export default function TeacherLearningControlsPage() {
                       return (
                         <div
                           key={lessonId}
-                          className="flex items-center justify-between gap-2 rounded-lg border border-[var(--bs-border)] bg-bs-surface px-2 py-1.5 text-xs"
+                          className="flex items-center justify-between gap-2 rounded-bs border border-[var(--bs-border)] bg-bs-surface px-2 py-1.5 text-xs"
                         >
                           <span className="text-bs-text-sub">{label}</span>
                           <button
@@ -264,7 +264,7 @@ export default function TeacherLearningControlsPage() {
                             onClick={() =>
                               removeLessonFromPeriod(period, lessonId)
                             }
-                            className="rounded-md border border-[var(--bs-border)] bg-bs-surface px-2 py-1 font-semibold text-bs-text-sub hover:bg-bs-raised"
+                            className="rounded-bs-sm border border-[var(--bs-border)] bg-bs-surface px-2 py-1 font-semibold text-bs-text-sub hover:bg-bs-raised"
                           >
                             Remove
                           </button>

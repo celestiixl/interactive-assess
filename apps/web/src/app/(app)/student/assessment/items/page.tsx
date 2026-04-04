@@ -21,7 +21,7 @@ export default function InteractiveItemsTestScreen() {
           <div className="flex gap-2">
             <Link
               href="/practice"
-              className="rounded-lg border px-3 py-2 text-sm hover:bg-muted"
+              className="rounded-bs border px-3 py-2 text-sm hover:bg-muted"
             >
               Practice
             </Link>
