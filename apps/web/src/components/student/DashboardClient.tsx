@@ -360,7 +360,7 @@ export default function DashboardClient(props: DashboardClientProps) {
       </div>
 
       {/* ── Hero: continue lesson ── */}
-      <div className="relative mb-3 overflow-hidden rounded-bs bg-bs-teal-deep p-7">
+      <div className="relative mb-3 overflow-hidden rounded-bs bg-bs-teal-deep p-5">
         {/* decorative orbs */}
         <div className="pointer-events-none absolute -right-16 -top-20 h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.22)_0%,transparent_70%)]" />
         <div className="pointer-events-none absolute bottom-[-60px] right-[120px] h-[160px] w-[160px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.1)_0%,transparent_70%)]" />
@@ -369,7 +369,7 @@ export default function DashboardClient(props: DashboardClientProps) {
             <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-bs-teal">
               Continue where you left off
             </p>
-            <h2 className="mb-1 font-display text-[26px] font-bold italic leading-snug text-white">
+            <h2 className="mb-1 font-display text-[22px] font-bold italic leading-snug text-white">
               {continueLesson.title}
             </h2>
             <p className="mb-5 text-[12px] text-white/40">
@@ -483,24 +483,27 @@ export default function DashboardClient(props: DashboardClientProps) {
         </div>
 
         {/* RIGHT column — sidebar */}
-        <div className="flex flex-col gap-3 min-w-0 w-full md:[flex:0_0_40%]">
+        <div
+          className="flex flex-col gap-3 min-w-0 w-full md:[flex:0_0_40%]"
+          style={{ position: "sticky", top: "24px", maxHeight: "calc(100vh - 120px)", overflowY: "auto" }}
+        >
 
           {/* Mastery donut */}
-          <BsCard className="min-h-[220px]">
+          <BsCard>
             <BsCardLabel className="mb-3.5">Overall mastery</BsCardLabel>
             {isLoadingMastery ? (
-              <div className="flex h-[180px] items-center justify-center">
+              <div className="flex h-[160px] items-center justify-center">
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00c49a] border-t-transparent" />
               </div>
             ) : masteryError ? (
-              <div className="flex h-[180px] items-center justify-center">
+              <div className="flex h-[160px] items-center justify-center">
                 <p className="text-center text-[12px] text-bs-muted">
                   Could not load mastery data.
                   <br />Showing defaults.
                 </p>
               </div>
             ) : (
-              <MasteryDonut segments={masterySegments} size={180} />
+              <MasteryDonut segments={masterySegments} size={160} showColorKey={false} />
             )}
           </BsCard>
 

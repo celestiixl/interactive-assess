@@ -24,7 +24,7 @@ export default function BsCard({
 }: BsCardProps) {
   return (
     <div
-      className={`rounded-bs border p-5 ${variantClasses[variant]} ${className}`}
+      className={`rounded-bs border p-4 ${variantClasses[variant]} ${className}`}
     >
       {children}
     </div>
