@@ -339,8 +339,7 @@ export default function DashboardClient(props: DashboardClientProps) {
         <div>
           <p className="text-[13px] text-bs-muted">Good {timeOfDay}</p>
           <h1
-            className="font-display text-[40px] font-extrabold italic leading-none tracking-tight"
-            style={{ color: "var(--bs-teal-dark)" }}
+            className="font-display text-[40px] font-extrabold italic leading-none tracking-tight text-bs-teal-dark"
           >
             {student?.displayName ?? studentName} ✦
           </h1>
@@ -410,7 +409,7 @@ export default function DashboardClient(props: DashboardClientProps) {
       <div className="flex flex-col md:flex-row gap-3 items-start">
 
         {/* LEFT column — main cards */}
-        <div className="flex flex-col gap-3 min-w-0 w-full" style={{ flex: "0 0 58%" }}>
+        <div className="flex flex-col gap-3 min-w-0 w-full md:[flex:0_0_58%]">
 
           {/* 2-col: next up + needs practice */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -484,7 +483,7 @@ export default function DashboardClient(props: DashboardClientProps) {
         </div>
 
         {/* RIGHT column — sidebar */}
-        <div className="flex flex-col gap-3 min-w-0 w-full" style={{ flex: "0 0 40%" }}>
+        <div className="flex flex-col gap-3 min-w-0 w-full md:[flex:0_0_40%]">
 
           {/* Mastery donut */}
           <BsCard className="min-h-[220px]">
