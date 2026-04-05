@@ -483,10 +483,7 @@ export default function DashboardClient(props: DashboardClientProps) {
         </div>
 
         {/* RIGHT column — sidebar */}
-        <div
-          className="flex flex-col gap-3 min-w-0 w-full md:[flex:0_0_40%]"
-          style={{ position: "sticky", top: "24px", maxHeight: "calc(100vh - 120px)", overflowY: "auto" }}
-        >
+        <div className="flex flex-col gap-3 min-w-0 w-full md:[flex:0_0_40%] md:sticky md:top-6 md:max-h-[calc(100vh-120px)] md:overflow-y-auto">
 
           {/* Mastery donut */}
           <BsCard>
