@@ -17,7 +17,7 @@ export default function StandardsHeatmapPage() {
   const weakest = useMemo(() => getWeakestTeks(progress, 3), [progress]);
 
   return (
-    <main className="mx-auto w-full max-w-6xl p-6 text-bs-text">
+    <main className="mx-auto min-h-screen w-full max-w-6xl bg-bs-page p-6 text-bs-text">
       <BackLink href="/student/learn" label="Back to hub" />
       <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
         <div>

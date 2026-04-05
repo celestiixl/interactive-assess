@@ -102,7 +102,7 @@ export default function StudentLearningHubPage() {
   );
 
   return (
-    <main className="ia-vh-page relative min-h-dvh px-3 py-3 text-bs-text sm:px-4 sm:py-4">
+    <main className="ia-vh-page relative min-h-dvh bg-bs-page px-3 py-3 text-bs-text sm:px-4 sm:py-4">
       <div className="mx-auto grid w-full max-w-6xl gap-3">
         <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -164,7 +164,7 @@ export default function StudentLearningHubPage() {
                   Unit {continueLesson.unit.unitNumber}:{" "}
                   {continueLesson.lesson.title}
                 </div>
-                <div className="text-xs text-gray-600">
+                <div className="text-xs text-bs-muted">
                   Last saved progress:{" "}
                   {progress[continueLesson.lesson.id]?.percent ?? 0}%
                 </div>

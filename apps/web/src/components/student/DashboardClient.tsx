@@ -11,7 +11,6 @@ import { useStudentAuth } from "@/lib/studentAuth";
 import PageShell from "@/components/ui/PageShell";
 import BsCard from "@/components/ui/BsCard";
 import BsTag, { type TagVariant } from "@/components/ui/BsTag";
-import BsBtn from "@/components/ui/BsBtn";
 import BsCardLabel from "@/components/ui/BsCardLabel";
 import BsCardTitle from "@/components/ui/BsCardTitle";
 
@@ -336,11 +335,14 @@ export default function DashboardClient(props: DashboardClientProps) {
   return (
     <PageShell>
       {/* ── Topbar ── */}
-      <div className="mb-7 flex flex-wrap items-start justify-between gap-3">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[13px] text-bs-muted">Good {timeOfDay}</p>
-          <h1 className="font-display text-[40px] font-extrabold italic leading-none tracking-tight text-bs-ink">
-            <span className="text-bs-teal-dark">{student?.displayName ?? studentName}</span> ✦
+          <h1
+            className="font-display text-[40px] font-extrabold italic leading-none tracking-tight"
+            style={{ color: "var(--bs-teal-dark)" }}
+          >
+            {student?.displayName ?? studentName} ✦
           </h1>
           <p className="mt-1 text-[12px] text-bs-muted">
             Period {period} · {currentUnit} · {todayLabel}
@@ -364,7 +366,7 @@ export default function DashboardClient(props: DashboardClientProps) {
         <div className="pointer-events-none absolute -right-16 -top-20 h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.22)_0%,transparent_70%)]" />
         <div className="pointer-events-none absolute bottom-[-60px] right-[120px] h-[160px] w-[160px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.1)_0%,transparent_70%)]" />
         <div className="relative z-10 flex items-center justify-between gap-4">
-          <div>
+          <div className="flex-1 min-w-0">
             <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-bs-teal">
               Continue where you left off
             </p>
@@ -404,170 +406,184 @@ export default function DashboardClient(props: DashboardClientProps) {
         </div>
       </div>
 
-      {/* ── 2-col: next up + needs practice ── */}
-      <div className="mb-3 grid grid-cols-2 gap-3">
-        <BsCard variant="teal">
-          <BsCardLabel>Unit {nextLessonData.unit} · Lesson {nextLessonData.lesson}</BsCardLabel>
-          <BsCardTitle className="mb-1">{nextLessonData.title}</BsCardTitle>
-          <p className="mb-3 text-[12px] text-bs-muted">Next up in your playlist</p>
-          <Link
-            href={nextLessonData.href}
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-teal-dark px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
-            aria-label={`View lesson: ${nextLessonData.title}`}
-          >
-            View lesson →
-          </Link>
-        </BsCard>
-        <BsCard variant="coral">
-          <BsCardLabel className="text-bs-coral">Needs practice · {weakestTeks}</BsCardLabel>
-          <BsCardTitle className="mb-1 text-[#8a1a05]">{weakestTeksTitle}</BsCardTitle>
-          <p className="mb-3 text-[12px] text-bs-muted">Low mastery detected</p>
-          <Link
-            href="/student/learn/standards"
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-coral px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
-            aria-label={`Practice ${weakestTeks}`}
-          >
-            Practice now →
-          </Link>
-        </BsCard>
-      </div>
+      {/* ── Two-column layout ── */}
+      <div className="flex flex-col md:flex-row gap-3 items-start">
 
-      {/* ── 3-col: streak + assignment + challenge ── */}
-      <div className="mb-3 grid grid-cols-3 gap-3">
-        <BsCard variant="amber" className="flex flex-col">
-          <BsCardLabel className="text-[#8a5e00]">Your streak</BsCardLabel>
-          <span className="font-display text-[44px] font-extrabold italic leading-none tracking-tight text-bs-amber">
-            {streakDays}
-          </span>
-          <p className="mt-0.5 mb-2.5 text-[12px] text-[#8a5e00]">
-            {streakDays === 0 ? "days — start one today!" : `day${streakDays !== 1 ? "s" : ""} and counting`}
-          </p>
-          <div className="h-1.5 overflow-hidden rounded-full bg-black/10">
-            <div className="h-full rounded-full bg-bs-amber" style={{ width: `${Math.min((xp / 50) * 100, 100)}%` }} />
+        {/* LEFT column — main cards */}
+        <div className="flex flex-col gap-3 min-w-0 w-full" style={{ flex: "0 0 58%" }}>
+
+          {/* 2-col: next up + needs practice */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <BsCard variant="teal">
+              <BsCardLabel>Unit {nextLessonData.unit} · Lesson {nextLessonData.lesson}</BsCardLabel>
+              <BsCardTitle className="mb-1">{nextLessonData.title}</BsCardTitle>
+              <p className="mb-3 text-[12px] text-bs-muted">Next up in your playlist</p>
+              <Link
+                href={nextLessonData.href}
+                className="inline-flex min-h-[44px] cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-teal-dark px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
+                aria-label={`View lesson: ${nextLessonData.title}`}
+              >
+                View lesson →
+              </Link>
+            </BsCard>
+            <BsCard variant="coral">
+              <BsCardLabel className="text-bs-coral">Needs practice · {weakestTeks}</BsCardLabel>
+              <BsCardTitle className="mb-1 text-[#8a1a05]">{weakestTeksTitle}</BsCardTitle>
+              <p className="mb-3 text-[12px] text-bs-muted">Low mastery detected</p>
+              <Link
+                href="/student/learn/standards"
+                className="inline-flex min-h-[44px] cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-coral px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
+                aria-label={`Practice ${weakestTeks}`}
+              >
+                Practice now →
+              </Link>
+            </BsCard>
           </div>
-          <p className="mt-1 text-[10px] font-medium text-[#8a5e00]">{xp} / 50 XP to next level</p>
-        </BsCard>
-        <BsCard>
-          <BsCardLabel>Assignment</BsCardLabel>
-          {dueAssignment ? (
-            <>
-              <BsCardTitle size="sm" className="mb-1 text-bs-ink">{assignmentData.title}</BsCardTitle>
-              <p className="mb-2.5 text-[12px] text-bs-muted">{assignmentData.questionCount} questions</p>
-              <BsTag variant="coral">Due {assignmentData.dueLabel}</BsTag>
-            </>
-          ) : (
-            <p className="text-[12px] text-bs-muted italic mt-1">No assignments due</p>
-          )}
-        </BsCard>
-        <BsCard variant="purple">
-          <BsCardLabel className="text-[#4a2fc0]">Daily challenge</BsCardLabel>
-          <BsCardTitle size="sm" className="mb-1 text-[#1a0060]">{challenge.title}</BsCardTitle>
-          <p className="mb-2.5 text-[12px] text-[#7060c0]">{challenge.subject} · +{challenge.xp} XP</p>
-          <Link
-            href="/student/assessment/items"
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-[rgba(124,92,252,0.25)] bg-transparent px-3 py-1.5 text-[12px] font-medium font-body text-[#4a2fc0] hover:bg-bs-teal-soft"
-            aria-label="Take today's daily challenge"
-          >
-            Go →
-          </Link>
-        </BsCard>
-      </div>
 
-      {/* ── Mastery donut + TEKS status ── */}
-      <div className="mb-3 grid grid-cols-2 gap-3">
-        <BsCard className="min-h-[220px]">
-          <BsCardLabel className="mb-3.5">Overall mastery</BsCardLabel>
-          {isLoadingMastery ? (
-            <div className="flex h-[180px] items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00c49a] border-t-transparent" />
-            </div>
-          ) : masteryError ? (
-            <div className="flex h-[180px] items-center justify-center">
-              <p className="text-center text-[12px] text-bs-muted">
-                Could not load mastery data.
-                <br />Showing defaults.
+          {/* 3-col: streak + assignment + challenge */}
+          <div className="grid grid-cols-3 gap-3">
+            <BsCard variant="amber" className="flex flex-col">
+              <BsCardLabel className="text-[#8a5e00]">Your streak</BsCardLabel>
+              <span className="font-display text-[44px] font-extrabold italic leading-none tracking-tight text-bs-amber">
+                {streakDays}
+              </span>
+              <p className="mt-0.5 mb-2.5 text-[12px] text-[#8a5e00]">
+                {streakDays === 0 ? "days — start one today!" : `day${streakDays !== 1 ? "s" : ""} and counting`}
               </p>
-            </div>
-          ) : (
-            <MasteryDonut segments={masterySegments} size={180} />
-          )}
-        </BsCard>
-        <BsCard>
-          <BsCardLabel>TEKS status</BsCardLabel>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {teksStatus.map((t) => (
-              <BsTag key={t.code} variant={t.variant}>{t.code}</BsTag>
-            ))}
-          </div>
-          <BsCardLabel className="mt-4 mb-2">This week</BsCardLabel>
-          <div className="flex gap-2">
-            {DAY_ABBREV.map((day, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <div className={`h-[22px] w-[22px] rounded-full ${
-                  weekActivity[i] === "active" ? "bg-bs-teal-dark" :
-                  weekActivity[i] === "past"   ? "bg-bs-teal opacity-40" :
-                  "bg-black/10"
-                }`} />
-                <span className="text-[9px] font-semibold tracking-[0.05em] text-bs-muted">{day}</span>
+              <div className="h-1.5 overflow-hidden rounded-full bg-black/10">
+                <div className="h-full rounded-full bg-bs-amber" style={{ width: `${Math.min((xp / 50) * 100, 100)}%` }} />
               </div>
-            ))}
+              <p className="mt-1 text-[10px] font-medium text-[#8a5e00]">{xp} / 50 XP to next level</p>
+            </BsCard>
+            <BsCard>
+              <BsCardLabel>Assignment</BsCardLabel>
+              {dueAssignment ? (
+                <>
+                  <BsCardTitle size="sm" className="mb-1 text-bs-ink">{assignmentData.title}</BsCardTitle>
+                  <p className="mb-2.5 text-[12px] text-bs-muted">{assignmentData.questionCount} questions</p>
+                  <BsTag variant="coral">Due {assignmentData.dueLabel}</BsTag>
+                </>
+              ) : (
+                <p className="text-[12px] text-bs-muted italic mt-1">No assignments due</p>
+              )}
+            </BsCard>
+            <BsCard variant="purple">
+              <BsCardLabel className="text-[#4a2fc0]">Daily challenge</BsCardLabel>
+              <BsCardTitle size="sm" className="mb-1 text-[#1a0060]">{challenge.title}</BsCardTitle>
+              <p className="mb-2.5 text-[12px] text-[#7060c0]">{challenge.subject} · +{challenge.xp} XP</p>
+              <Link
+                href="/student/assessment/items"
+                className="inline-flex min-h-[44px] cursor-pointer items-center gap-1 rounded-bs-sm border border-[rgba(124,92,252,0.25)] bg-transparent px-3 py-1.5 text-[12px] font-medium font-body text-[#4a2fc0] hover:bg-bs-teal-soft"
+                aria-label="Take today's daily challenge"
+              >
+                Go →
+              </Link>
+            </BsCard>
           </div>
-        </BsCard>
-      </div>
 
-      {/* ── AI Tutor ── */}
-      <Link
-        href="/student/tutor"
-        className="mb-3 flex w-full cursor-pointer items-center gap-3.5 rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface p-[18px_24px] no-underline"
-        aria-label="Open AI tutor"
-      >
-        <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,196,154,0.15)]">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-            <circle cx="12" cy="17" r="0.5" fill="#006e55"/>
-          </svg>
         </div>
-        <div className="text-left">
-          <p className="font-display text-[17px] font-bold italic text-bs-ink">Ask the AI tutor</p>
-          <p className="mt-0.5 text-[11px] text-bs-muted">Get help with any biology concept, anytime</p>
+
+        {/* RIGHT column — sidebar */}
+        <div className="flex flex-col gap-3 min-w-0 w-full" style={{ flex: "0 0 40%" }}>
+
+          {/* Mastery donut */}
+          <BsCard className="min-h-[220px]">
+            <BsCardLabel className="mb-3.5">Overall mastery</BsCardLabel>
+            {isLoadingMastery ? (
+              <div className="flex h-[180px] items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00c49a] border-t-transparent" />
+              </div>
+            ) : masteryError ? (
+              <div className="flex h-[180px] items-center justify-center">
+                <p className="text-center text-[12px] text-bs-muted">
+                  Could not load mastery data.
+                  <br />Showing defaults.
+                </p>
+              </div>
+            ) : (
+              <MasteryDonut segments={masterySegments} size={180} />
+            )}
+          </BsCard>
+
+          {/* TEKS status */}
+          <BsCard>
+            <BsCardLabel>TEKS status</BsCardLabel>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {teksStatus.map((t) => (
+                <BsTag key={t.code} variant={t.variant}>{t.code}</BsTag>
+              ))}
+            </div>
+            <BsCardLabel className="mt-4 mb-2">This week</BsCardLabel>
+            <div className="flex gap-2">
+              {DAY_ABBREV.map((day, i) => (
+                <div key={i} className="flex flex-col items-center gap-1">
+                  <div className={`h-[22px] w-[22px] rounded-full ${
+                    weekActivity[i] === "active" ? "bg-bs-teal-dark" :
+                    weekActivity[i] === "past"   ? "bg-bs-teal opacity-40" :
+                    "bg-black/10"
+                  }`} />
+                  <span className="text-[9px] font-semibold tracking-[0.05em] text-bs-muted">{day}</span>
+                </div>
+              ))}
+            </div>
+          </BsCard>
+
+          {/* AI Tutor */}
+          <Link
+            href="/student/tutor"
+            className="flex w-full cursor-pointer items-center gap-3.5 rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface p-[18px_24px] no-underline"
+            aria-label="Open AI tutor"
+          >
+            <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,196,154,0.15)]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+                <circle cx="12" cy="17" r="0.5" fill="#006e55"/>
+              </svg>
+            </div>
+            <div className="text-left">
+              <p className="font-display text-[17px] font-bold italic text-bs-ink">Ask the AI tutor</p>
+              <p className="mt-0.5 text-[11px] text-bs-muted">Get help with any biology concept, anytime</p>
+            </div>
+            <div className="ml-auto flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-full bg-bs-teal">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003d2e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </Link>
+
         </div>
-        <div className="ml-auto flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-full bg-bs-teal">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003d2e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </div>
-      </Link>
+      </div>
 
       {/* ── Bottom nav ── */}
-      <nav className="flex justify-around rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface py-2.5 px-6" aria-label="Main navigation">
+      <nav className="mt-3 flex justify-around rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface py-2.5 px-6" aria-label="Main navigation">
         {/* Dashboard */}
-        <Link href="/student/dashboard" className="flex h-10 w-10 items-center justify-center rounded-bs-sm bg-bs-teal-soft" aria-label="Dashboard">
+        <Link href="/student/dashboard" className="flex h-11 w-11 items-center justify-center rounded-bs-sm bg-bs-teal-soft" aria-label="Dashboard">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
             <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
           </svg>
         </Link>
         {/* Lessons */}
-        <Link href="/student/learn" className="flex h-10 w-10 items-center justify-center rounded-bs-sm" aria-label="Lessons">
+        <Link href="/student/learn" className="flex h-11 w-11 items-center justify-center rounded-bs-sm" aria-label="Lessons">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/><path d="M4 19h16"/><path d="M9 9h6M9 13h4"/>
           </svg>
         </Link>
         {/* Assignments */}
-        <Link href="/student/assignments" className="flex h-10 w-10 items-center justify-center rounded-bs-sm" aria-label="Assignments">
+        <Link href="/student/assignments" className="flex h-11 w-11 items-center justify-center rounded-bs-sm" aria-label="Assignments">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
             <polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/>
           </svg>
         </Link>
         {/* Standards */}
-        <Link href="/student/learn/standards" className="flex h-10 w-10 items-center justify-center rounded-bs-sm" aria-label="Standards">
+        <Link href="/student/learn/standards" className="flex h-11 w-11 items-center justify-center rounded-bs-sm" aria-label="Standards">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="6" width="20" height="14" rx="2"/><path d="M16 2H8l-2 4h12l-2-4z"/>
           </svg>
         </Link>
         {/* Profile */}
-        <Link href="/student/profile" className="flex h-10 w-10 items-center justify-center rounded-bs-sm" aria-label="Profile">
+        <Link href="/student/profile" className="flex h-11 w-11 items-center justify-center rounded-bs-sm" aria-label="Profile">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
           </svg>

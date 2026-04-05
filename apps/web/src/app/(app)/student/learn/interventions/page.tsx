@@ -11,7 +11,7 @@ export default function InterventionQueuePage() {
   const queue = useMemo(() => buildInterventionQueue(progress), [progress]);
 
   return (
-    <main className="mx-auto w-full max-w-5xl p-6 text-bs-text">
+    <main className="mx-auto min-h-screen w-full max-w-5xl bg-bs-page p-6 text-bs-text">
       <BackLink href="/student/learn" label="Back to hub" />
       <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
         <div>
