@@ -42,6 +42,10 @@ const config: Config = {
         "teks-rc5": "rgb(var(--teks-rc5) / <alpha-value>)",
         "teks-rc6": "rgb(var(--teks-rc6) / <alpha-value>)",
         // BioSpark design system tokens (bs-*)
+        // NOTE: Tailwind v4 (@tailwindcss/postcss) requires static hex values here —
+        // CSS variable references (e.g. "var(--bs-teal-soft)") are not resolvable at
+        // build time and result in those utility classes being silently dropped from
+        // the compiled CSS. Keep these hex values in sync with globals.css :root.
         bs: {
           bg:          "var(--bs-bg)",
           surface:     "var(--bs-surface)",
@@ -50,18 +54,18 @@ const config: Config = {
           border:      "var(--bs-border)",
           "border-soft": "var(--bs-border-soft)",
           teal:        "var(--bs-teal)",
-          "teal-dark": "var(--bs-teal-dark)",
-          "teal-deep": "var(--bs-teal-deep)",
-          "teal-soft": "var(--bs-teal-soft)",
+          "teal-dark": "#006e55",
+          "teal-deep": "#003d2e",
+          "teal-soft": "#d6f5ed",
           "teal-dim":  "var(--bs-teal-dim)",
           coral:       "var(--bs-coral)",
-          "coral-soft":"var(--bs-coral-soft)",
+          "coral-soft": "#ffe8e3",
           "coral-dim": "var(--bs-coral-dim)",
           amber:       "var(--bs-amber)",
-          "amber-soft":"var(--bs-amber-soft)",
+          "amber-soft": "#fff5d6",
           "amber-dim": "var(--bs-amber-dim)",
           purple:      "var(--bs-purple)",
-          "purple-soft":"var(--bs-purple-soft)",
+          "purple-soft": "#eeebff",
           ink:         "var(--bs-ink)",
           "ink-2":     "var(--bs-ink-2)",
           muted:       "var(--bs-muted)",
