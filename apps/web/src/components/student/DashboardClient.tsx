@@ -333,12 +333,15 @@ export default function DashboardClient(props: DashboardClientProps) {
   const todayLabel = new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
 
   // ── Compact mastery ring (3-slice: mastered / learned / attempted) ──────────
-  const toPctVal = (v: number) => (v <= 1 ? v * 100 : v);
-  const masteryTotal = masterySegments.length || 1;
-  const ringMastered  = masterySegments.filter(s => toPctVal(s.value) >= 75).length;
-  const ringLearned   = masterySegments.filter(s => { const v = toPctVal(s.value); return v >= 40 && v < 75; }).length;
+  // normalizeToPercentage: values in [0,1] are multiplied ×100; values >1 pass through
+  const normalizeToPercentage = (v: number) => (v <= 1 ? v * 100 : v);
+  const masteryTotal = masterySegments.length > 0 ? masterySegments.length : 1;
+  const ringMastered  = masterySegments.filter(s => normalizeToPercentage(s.value) >= 75).length;
+  const ringLearned   = masterySegments.filter(s => { const v = normalizeToPercentage(s.value); return v >= 40 && v < 75; }).length;
   const ringAttempted = masteryTotal - ringMastered - ringLearned;
-  const ringOverallPct = Math.round(masterySegments.reduce((a, s) => a + toPctVal(s.value), 0) / masteryTotal);
+  const ringOverallPct = masterySegments.length > 0
+    ? Math.round(masterySegments.reduce((a, s) => a + normalizeToPercentage(s.value), 0) / masterySegments.length)
+    : 0;
   const RING_R    = 52;
   const RING_CIRC = 2 * Math.PI * RING_R;
   const RING_SW   = 13;
@@ -566,7 +569,11 @@ export default function DashboardClient(props: DashboardClientProps) {
                   weekActivity[i] === "active" ? "bg-bs-teal-dark" :
                   weekActivity[i] === "past"   ? "bg-bs-teal opacity-40" :
                   "bg-black/10"
-                }`} aria-label={weekActivity[i] === "active" || weekActivity[i] === "past" ? `${day} active` : day} />
+                }`} aria-label={
+                  weekActivity[i] === "active" ? `${day} — today` :
+                  weekActivity[i] === "past"   ? `${day} — completed` :
+                  `${day} — no activity`
+                } />
                 <span className="text-[9px] font-semibold tracking-[0.05em] text-bs-muted">{day}</span>
               </div>
             ))}
