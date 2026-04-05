@@ -19,16 +19,24 @@ export async function POST(req: NextRequest) {
 
   const { displayName, period } = parsed.data;
 
-  const student = await prisma.student.upsert({
-    where: {
-      displayName_period: { displayName, period },
-    },
-    update: {},
-    create: {
-      displayName,
-      period,
-    },
-  });
+  try {
+    const student = await prisma.student.upsert({
+      where: {
+        displayName_period: { displayName, period },
+      },
+      update: {},
+      create: {
+        displayName,
+        period,
+      },
+    });
 
-  return NextResponse.json(student);
+    return NextResponse.json(student);
+  } catch (error) {
+    console.error("Student login error:", error);
+    return NextResponse.json(
+      { error: String(error) },
+      { status: 500 },
+    );
+  }
 }
