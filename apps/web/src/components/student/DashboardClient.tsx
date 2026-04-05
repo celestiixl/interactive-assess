@@ -162,6 +162,7 @@ export default function DashboardClient(props: DashboardClientProps) {
 
   const [masterySegments, setMasterySegments] = useState<DonutSegment[]>(DEFAULT_SEGMENTS);
   const [isLoadingMastery, setIsLoadingMastery] = useState(false);
+  const [masteryError, setMasteryError] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -216,13 +217,14 @@ export default function DashboardClient(props: DashboardClientProps) {
   useEffect(() => {
     if (!student?.id) return;
     setIsLoadingMastery(true);
+    setMasteryError(false);
     fetch(`/api/mastery?studentId=${student.id}`)
       .then((r) => r.json())
       .then((masteryMap: Record<string, number>) => {
         setMasterySegments(buildSegments(masteryMap));
       })
       .catch(() => {
-        // Fall back to defaults on error
+        setMasteryError(true);
       })
       .finally(() => {
         setIsLoadingMastery(false);
@@ -478,6 +480,13 @@ export default function DashboardClient(props: DashboardClientProps) {
           {isLoadingMastery ? (
             <div className="flex h-[180px] items-center justify-center">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00c49a] border-t-transparent" />
+            </div>
+          ) : masteryError ? (
+            <div className="flex h-[180px] items-center justify-center">
+              <p className="text-center text-[12px] text-bs-muted">
+                Could not load mastery data.
+                <br />Showing defaults.
+              </p>
             </div>
           ) : (
             <MasteryDonut segments={masterySegments} size={180} />

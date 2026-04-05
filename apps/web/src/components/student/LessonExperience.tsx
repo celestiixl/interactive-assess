@@ -340,10 +340,10 @@ export default function LessonExperience({
       const studentId = student.id;
       const scoreNormalized = pct / 100;
 
-      // Save one Attempt record per question
-      for (const question of questions) {
+      // Save one Attempt record per question — run concurrently
+      const attemptPromises = questions.map((question) => {
         const { correct } = results[question.id] ?? { correct: false };
-        fetch("/api/attempts", {
+        return fetch("/api/attempts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -353,18 +353,20 @@ export default function LessonExperience({
             score: correct ? 1 : 0,
             correct,
           }),
-        }).catch(() => {});
-      }
+        });
+      });
 
-      // Update mastery for each TEKS covered by this quick-check
+      // Update mastery for each TEKS covered by this quick-check — run concurrently
       const teksSet = new Set(questions.map((q) => q.teks));
-      for (const teks of teksSet) {
+      const masteryPromises = Array.from(teksSet).map((teks) =>
         fetch("/api/mastery", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ studentId, teks, score: scoreNormalized }),
-        }).catch(() => {});
-      }
+        }),
+      );
+
+      Promise.all([...attemptPromises, ...masteryPromises]).catch(() => {});
     }
 
     setInterventionTier(tier);
