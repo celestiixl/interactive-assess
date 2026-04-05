@@ -1,20 +1,44 @@
 /**
- * Tests for GET and POST /api/mastery
+ * Tests for GET and PATCH /api/mastery
+ *
+ * The current route:
+ *   GET  /api/mastery?studentId=xxx  → flat map { "B.5A": 0.82, ... }
+ *   PATCH /api/mastery               → upsert mastery record { studentId, teks, score (0-1) }
  */
-import { describe, it, expect } from "vitest";
-import { GET, POST } from "@/app/api/mastery/route";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { NextRequest } from "next/server";
 
-function getRequest(params: Record<string, string>): Request {
+// ---------------------------------------------------------------------------
+// Mock Prisma so tests run without a real database.
+// vi.mock is hoisted, so factories must not reference outer variables.
+// ---------------------------------------------------------------------------
+
+vi.mock("@/lib/prisma", () => ({
+  prisma: {
+    masteryRecord: {
+      findMany: vi.fn(),
+      upsert: vi.fn(),
+    },
+  },
+}));
+
+import { GET, PATCH, POST } from "@/app/api/mastery/route";
+import { prisma } from "@/lib/prisma";
+
+const mockFindMany = vi.mocked(prisma.masteryRecord.findMany);
+const mockUpsert = vi.mocked(prisma.masteryRecord.upsert);
+
+function getRequest(params: Record<string, string>): NextRequest {
   const url = new URL("http://localhost/api/mastery");
   for (const [k, v] of Object.entries(params)) {
     url.searchParams.set(k, v);
   }
-  return new Request(url.toString(), { method: "GET" });
+  return new NextRequest(url.toString(), { method: "GET" });
 }
 
-function postRequest(body: unknown): Request {
-  return new Request("http://localhost/api/mastery", {
-    method: "POST",
+function patchRequest(body: unknown): NextRequest {
+  return new NextRequest("http://localhost/api/mastery", {
+    method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
@@ -23,106 +47,91 @@ function postRequest(body: unknown): Request {
 // ─── GET /api/mastery ─────────────────────────────────────────────────────────
 
 describe("GET /api/mastery", () => {
-  it("returns a JSON response with userId and items", async () => {
-    const res = await GET(getRequest({ userId: "user1", itemIds: "a,b" }));
+  beforeEach(() => {
+    mockFindMany.mockResolvedValue([]);
+  });
+
+  it("returns 400 when studentId is missing", async () => {
+    const res = await GET(getRequest({}));
+    expect(res.status).toBe(400);
+  });
+
+  it("returns a flat mastery map for a valid studentId", async () => {
+    mockFindMany.mockResolvedValueOnce([
+      { id: "r1", studentId: "student-1", teks: "B.5A", score: 0.82, updatedAt: new Date() },
+      { id: "r2", studentId: "student-1", teks: "B.7B", score: 0.64, updatedAt: new Date() },
+    ]);
+    const res = await GET(getRequest({ studentId: "student-1" }));
     expect(res.status).toBe(200);
     const data = await res.json();
-    expect(data.userId).toBe("user1");
-    expect(typeof data.items).toBe("object");
+    expect(data["B.5A"]).toBe(0.82);
+    expect(data["B.7B"]).toBe(0.64);
   });
 
-  it("includes entries for each requested itemId", async () => {
-    const res = await GET(getRequest({ itemIds: "item1,item2,item3" }));
+  it("returns an empty object when student has no mastery records", async () => {
+    mockFindMany.mockResolvedValueOnce([]);
+    const res = await GET(getRequest({ studentId: "new-student" }));
+    expect(res.status).toBe(200);
     const data = await res.json();
-    expect("item1" in data.items).toBe(true);
-    expect("item2" in data.items).toBe(true);
-    expect("item3" in data.items).toBe(true);
-  });
-
-  it("each item entry has correct, total, and masteryPct fields", async () => {
-    const res = await GET(getRequest({ itemIds: "myItem" }));
-    const data = await res.json();
-    const entry = data.items["myItem"];
-    expect(typeof entry.correct).toBe("number");
-    expect(typeof entry.total).toBe("number");
-    expect(typeof entry.masteryPct).toBe("number");
-  });
-
-  it("masteryPct is between 0 and 100 inclusive", async () => {
-    const res = await GET(getRequest({ itemIds: "x" }));
-    const data = await res.json();
-    const { masteryPct } = data.items["x"];
-    expect(masteryPct).toBeGreaterThanOrEqual(0);
-    expect(masteryPct).toBeLessThanOrEqual(100);
-  });
-
-  it("defaults userId to anon when not provided", async () => {
-    const res = await GET(getRequest({}));
-    const data = await res.json();
-    expect(data.userId).toBe("anon");
-  });
-
-  it("returns empty items when itemIds is empty", async () => {
-    const res = await GET(getRequest({ itemIds: "" }));
-    const data = await res.json();
-    expect(Object.keys(data.items)).toHaveLength(0);
-  });
-
-  it("produces deterministic results for the same itemId", async () => {
-    const a = await (await GET(getRequest({ itemIds: "stable" }))).json();
-    const b = await (await GET(getRequest({ itemIds: "stable" }))).json();
-    expect(a.items.stable.masteryPct).toBe(b.items.stable.masteryPct);
+    expect(Object.keys(data)).toHaveLength(0);
   });
 });
 
-// ─── POST /api/mastery ────────────────────────────────────────────────────────
+// ─── PATCH /api/mastery ───────────────────────────────────────────────────────
 
-describe("POST /api/mastery", () => {
-  it("returns ok:true for a valid payload", async () => {
-    const res = await POST(
-      postRequest({ teks: "B.5A", score: 85, lessonSlug: "biomolecules-intro" }),
-    );
+describe("PATCH /api/mastery", () => {
+  beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mockUpsert.mockResolvedValue({ id: "rec-1", studentId: "s1", teks: "B.5A", score: 0.85 } as any);
+  });
+
+  it("returns 200 for a valid payload", async () => {
+    const res = await PATCH(patchRequest({ studentId: "s1", teks: "B.5A", score: 0.85 }));
     expect(res.status).toBe(200);
-    const data = await res.json();
-    expect(data.ok).toBe(true);
   });
 
-  it("echoes back teks, score, and lessonSlug", async () => {
-    const res = await POST(
-      postRequest({ teks: "B.11A", score: 70, lessonSlug: "energy-conversion" }),
-    );
-    const data = await res.json();
-    expect(data.teks).toBe("B.11A");
-    expect(data.score).toBe(70);
-    expect(data.lessonSlug).toBe("energy-conversion");
-  });
-
-  it("defaults userId to anon when not provided", async () => {
-    const res = await POST(
-      postRequest({ teks: "B.5A", score: 90, lessonSlug: "cell-transport" }),
-    );
-    const data = await res.json();
-    expect(data.userId).toBe("anon");
+  it("returns 400 when studentId is missing", async () => {
+    const res = await PATCH(patchRequest({ teks: "B.5A", score: 0.8 }));
+    expect(res.status).toBe(400);
   });
 
   it("returns 400 when teks is missing", async () => {
-    const res = await POST(
-      postRequest({ score: 80, lessonSlug: "lab-safety" }),
-    );
+    const res = await PATCH(patchRequest({ studentId: "s1", score: 0.8 }));
     expect(res.status).toBe(400);
-    const data = await res.json();
-    expect(data.error).toBe("invalid_payload");
   });
 
   it("returns 400 when score is missing", async () => {
-    const res = await POST(
-      postRequest({ teks: "B.5A", lessonSlug: "lab-safety" }),
-    );
+    const res = await PATCH(patchRequest({ studentId: "s1", teks: "B.5A" }));
     expect(res.status).toBe(400);
   });
 
-  it("returns 400 when lessonSlug is missing", async () => {
-    const res = await POST(postRequest({ teks: "B.5A", score: 80 }));
+  it("returns 400 when teks format is invalid", async () => {
+    const res = await PATCH(patchRequest({ studentId: "s1", teks: "b5a", score: 0.8 }));
+    expect(res.status).toBe(400);
+  });
+
+  it("returns 400 when score is out of range", async () => {
+    const res = await PATCH(patchRequest({ studentId: "s1", teks: "B.5A", score: 1.5 }));
     expect(res.status).toBe(400);
   });
 });
+
+// ─── POST aliased to PATCH ────────────────────────────────────────────────────
+
+describe("POST /api/mastery (backward-compat alias)", () => {
+  beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mockUpsert.mockResolvedValue({ id: "rec-2", studentId: "s2", teks: "B.11A", score: 0.7 } as any);
+  });
+
+  it("POST returns 200 for a valid payload", async () => {
+    const req = new NextRequest("http://localhost/api/mastery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ studentId: "s2", teks: "B.11A", score: 0.7 }),
+    });
+    const res = await POST(req);
+    expect(res.status).toBe(200);
+  });
+});
+

@@ -23,7 +23,7 @@ import {
 import PhenomenonBanner from "@/components/student/PhenomenonBanner";
 import { getPhenomenonForLesson } from "@/lib/texasPhenomena";
 import LessonNotebook from "@/components/student/LessonNotebook";
-import { loadStudentProfile } from "@/lib/studentProfile";
+import { useStudentAuth } from "@/lib/studentAuth";
 import { speakText, stopSpeaking } from "@/lib/accommodations";
 import { useAccommodations } from "@/lib/useAccommodations";
 
@@ -144,6 +144,7 @@ export default function LessonExperience({
   nextLesson,
 }: LessonExperienceProps) {
   const { acc } = useAccommodations();
+  const student = useStudentAuth((s) => s.student);
   const {
     completedSections,
     lastSectionId,
@@ -162,17 +163,6 @@ export default function LessonExperience({
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState<number | null>(null);
-  // Lazy-initialize student ID from profile (read-once on mount).
-  // StudentProfile has no stable `id` field — `name` is the best available
-  // per-device identifier for this local-first v1 prototype.
-  const [studentId] = useState<string>(() => {
-    try {
-      const profile = loadStudentProfile();
-      return profile.name || "anonymous";
-    } catch {
-      return "anonymous";
-    }
-  });
   const [questionResults, setQuestionResults] = useState<
     Record<string, { correct: boolean }>
   >({});
@@ -344,6 +334,40 @@ export default function LessonExperience({
       completed: readingProgress === 100 && pct >= 70,
       percent: readingProgress,
     });
+
+    // Persist attempt + mastery to Prisma if the student is logged in
+    if (student?.id) {
+      const studentId = student.id;
+      const scoreNormalized = pct / 100;
+
+      // Save one Attempt record per question — run concurrently
+      const attemptPromises = questions.map((question) => {
+        const { correct } = results[question.id] ?? { correct: false };
+        return fetch("/api/attempts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            studentId,
+            quickCheckId: `${lesson.id}:${question.id}`,
+            teks: question.teks,
+            score: correct ? 1 : 0,
+            correct,
+          }),
+        });
+      });
+
+      // Update mastery for each TEKS covered by this quick-check — run concurrently
+      const teksSet = new Set(questions.map((q) => q.teks));
+      const masteryPromises = Array.from(teksSet).map((teks) =>
+        fetch("/api/mastery", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ studentId, teks, score: scoreNormalized }),
+        }),
+      );
+
+      Promise.all([...attemptPromises, ...masteryPromises]).catch(() => {});
+    }
 
     setInterventionTier(tier);
     setScore(pct);
@@ -777,7 +801,7 @@ export default function LessonExperience({
         </section>
 
         {/* Lab Notebook — between lesson content and quick-checks */}
-        <LessonNotebook lessonSlug={lesson.slug} studentId={studentId} />
+        <LessonNotebook lessonSlug={lesson.slug} studentId={student?.id ?? "anonymous"} />
 
         <section className="rounded-3xl border border-[var(--bs-border)] bg-bs-surface p-5 shadow-sm">
           <div className="text-sm font-semibold text-bs-text">
