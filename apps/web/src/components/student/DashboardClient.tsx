@@ -31,6 +31,7 @@ const C = {
   purpleSoft:"#eeebff",
   purpleText:"#4a2fc0",
   purpleDark:"#1a0060",
+  purpleMid: "#7060c0",
   ink:       "#0a1a14",
   inkAlt:    "#2d4d3f",
   muted:     "#8aada0",
@@ -573,7 +574,7 @@ export default function DashboardClient(props: DashboardClientProps) {
                 <h3 style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 15, fontWeight: 700, color: C.purpleDark, marginBottom: 4 }}>
                   {challenge.title}
                 </h3>
-                <p style={{ fontSize: 12, color: "#7060c0", marginBottom: 10 }}>{challenge.subject} · +{challenge.xp} XP</p>
+                <p style={{ fontSize: 12, color: C.purpleMid, marginBottom: 10 }}>{challenge.subject} · +{challenge.xp} XP</p>
                 <Link
                   href="/student/assessment/items"
                   style={{ background: "transparent", border: "1px solid rgba(124,92,252,0.25)", color: C.purpleText, borderRadius: 10, padding: "6px 12px", fontSize: 12, textDecoration: "none", display: "inline-block" }}

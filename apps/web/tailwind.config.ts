@@ -42,6 +42,10 @@ const config: Config = {
         "teks-rc5": "rgb(var(--teks-rc5) / <alpha-value>)",
         "teks-rc6": "rgb(var(--teks-rc6) / <alpha-value>)",
         // BioSpark design system tokens (bs-*)
+        // NOTE: Tailwind v4 (@tailwindcss/postcss) requires static hex values here —
+        // CSS variable references (e.g. "var(--bs-teal-soft)") are not resolvable at
+        // build time and result in those utility classes being silently dropped from
+        // the compiled CSS. Keep these hex values in sync with globals.css :root.
         bs: {
           bg:          "var(--bs-bg)",
           surface:     "var(--bs-surface)",
