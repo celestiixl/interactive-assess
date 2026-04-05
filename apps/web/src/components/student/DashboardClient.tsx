@@ -11,6 +11,33 @@ import { useStudentAuth } from "@/lib/studentAuth";
 import BsTag, { type TagVariant } from "@/components/ui/BsTag";
 
 // ---------------------------------------------------------------------------
+// Design token constants (hex values must stay in sync with globals.css :root)
+// Tailwind v4 requires static values here — CSS var refs are not resolvable at build time.
+// ---------------------------------------------------------------------------
+
+const C = {
+  pageBg:    "#f0f4f2",
+  tealDark:  "#006e55",
+  tealDeep:  "#003d2e",
+  teal:      "#00c49a",
+  tealSoft:  "#d6f5ed",
+  coral:     "#ff4f2b",
+  coralSoft: "#ffe8e3",
+  coralDark: "#8a1a05",
+  amber:     "#f5a800",
+  amberSoft: "#fff5d6",
+  amberText: "#8a5e00",
+  purple:    "#7c5cfc",
+  purpleSoft:"#eeebff",
+  purpleText:"#4a2fc0",
+  purpleDark:"#1a0060",
+  ink:       "#0a1a14",
+  inkAlt:    "#2d4d3f",
+  muted:     "#8aada0",
+  surface:   "#ffffff",
+} as const;
+
+// ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
@@ -351,37 +378,37 @@ export default function DashboardClient(props: DashboardClientProps) {
   return (
     <div
       className="min-h-screen font-body"
-      style={{ background: "#f0f4f2" }}
+      style={{ background: C.pageBg }}
     >
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 20px 60px" }}>
 
         {/* ── TOPBAR ── */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
           <div>
-            <p style={{ fontSize: 13, color: "#8aada0", marginBottom: 2 }}>Good {timeOfDay}</p>
+            <p style={{ fontSize: 13, color: C.muted, marginBottom: 2 }}>Good {timeOfDay}</p>
             <h1 style={{
               fontFamily: "var(--font-fraunces), Georgia, serif",
               fontSize: 40,
               fontWeight: 800,
               fontStyle: "italic",
-              color: "#006e55",
+              color: C.tealDark,
               lineHeight: 1,
               letterSpacing: "-0.02em",
               margin: 0,
             }}>
               {student?.displayName ?? studentName} ✦
             </h1>
-            <p style={{ fontSize: 12, color: "#8aada0", marginTop: 5 }}>
+            <p style={{ fontSize: 12, color: C.muted, marginTop: 5 }}>
               Period {period} · {currentUnit} · {todayLabel}
             </p>
           </div>
           <div style={{ display: "flex", gap: 8, paddingTop: 8 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 20, background: "white", border: "1px solid rgba(0,0,0,0.07)", fontSize: 12, fontWeight: 500, color: "#2d4d3f" }}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#f5a800", display: "inline-block" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 20, background: C.surface, border: "1px solid rgba(0,0,0,0.07)", fontSize: 12, fontWeight: 500, color: C.inkAlt }}>
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: C.amber, display: "inline-block" }} />
               {streakDays}-day streak
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 20, background: "white", border: "1px solid rgba(0,0,0,0.07)", fontSize: 12, fontWeight: 500, color: "#2d4d3f" }}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#00c49a", display: "inline-block" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 20, background: C.surface, border: "1px solid rgba(0,0,0,0.07)", fontSize: 12, fontWeight: 500, color: C.inkAlt }}>
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: C.teal, display: "inline-block" }} />
               {xp} XP
             </div>
           </div>
@@ -389,7 +416,7 @@ export default function DashboardClient(props: DashboardClientProps) {
 
         {/* ── HERO CARD ── */}
         <div style={{
-          background: "#003d2e",
+          background: C.tealDeep,
           borderRadius: 16,
           padding: "28px 30px 24px",
           marginBottom: 12,
@@ -405,7 +432,7 @@ export default function DashboardClient(props: DashboardClientProps) {
           }} />
           <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#00c49a", marginBottom: 8 }}>
+              <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: C.teal, marginBottom: 8 }}>
                 Continue where you left off
               </p>
               <h2 style={{
@@ -422,7 +449,7 @@ export default function DashboardClient(props: DashboardClientProps) {
                 <Link
                   href={continueLesson.href}
                   style={{
-                    background: "#00c49a", color: "#003d2e",
+                    background: C.teal, color: C.tealDeep,
                     border: "none", borderRadius: 10,
                     padding: "10px 20px", fontSize: 13, fontWeight: 700,
                     cursor: "pointer", textDecoration: "none",
@@ -432,13 +459,7 @@ export default function DashboardClient(props: DashboardClientProps) {
                 >
                   Resume lesson →
                 </Link>
-                <span style={{
-                  background: "rgba(0,196,154,0.18)", color: "#00c49a",
-                  fontSize: 10, fontWeight: 700, padding: "4px 10px",
-                  borderRadius: 20, letterSpacing: "0.05em",
-                }}>
-                  {continueLesson.teks}
-                </span>
+                <BsTag variant="teal-inv">{continueLesson.teks}</BsTag>
               </div>
             </div>
             {/* Progress ring */}
@@ -446,7 +467,7 @@ export default function DashboardClient(props: DashboardClientProps) {
               <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.05em", color: "rgba(255,255,255,0.35)", marginBottom: 6 }}>Progress</p>
               <svg width="72" height="72" viewBox="0 0 72 72">
                 <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="7"/>
-                <circle cx="36" cy="36" r="28" fill="none" stroke="#00c49a" strokeWidth="7"
+                <circle cx="36" cy="36" r="28" fill="none" stroke={C.teal} strokeWidth="7"
                   strokeDasharray={`${((continueLesson.progress ?? 0) / 100) * 175.9} 175.9`}
                   strokeLinecap="round" transform="rotate(-90 36 36)"/>
                 <text x="36" y="33" textAnchor="middle" fontSize="13" fontWeight="700"
@@ -470,17 +491,17 @@ export default function DashboardClient(props: DashboardClientProps) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
 
               {/* Next lesson — TEAL */}
-              <div style={{ background: "#d6f5ed", borderRadius: 16, border: "1px solid rgba(0,196,154,0.15)", padding: 20 }}>
-                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#006e55", marginBottom: 7 }}>
+              <div style={{ background: C.tealSoft, borderRadius: 16, border: "1px solid rgba(0,196,154,0.15)", padding: 20 }}>
+                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.tealDark, marginBottom: 7 }}>
                   Unit {nextLessonData.unit} · Lesson {nextLessonData.lesson}
                 </p>
-                <h3 style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 16, fontWeight: 700, color: "#0a1a14", marginBottom: 3, lineHeight: 1.3 }}>
+                <h3 style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 16, fontWeight: 700, color: C.ink, marginBottom: 3, lineHeight: 1.3 }}>
                   {nextLessonData.title}
                 </h3>
-                <p style={{ fontSize: 12, color: "#8aada0", marginBottom: 14 }}>Next up in your playlist</p>
+                <p style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>Next up in your playlist</p>
                 <Link
                   href={nextLessonData.href}
-                  style={{ background: "#006e55", color: "white", borderRadius: 10, padding: "8px 16px", fontSize: 12, fontWeight: 600, textDecoration: "none", display: "inline-block" }}
+                  style={{ background: C.tealDark, color: "white", borderRadius: 10, padding: "8px 16px", fontSize: 12, fontWeight: 600, textDecoration: "none", display: "inline-block" }}
                   aria-label={`View lesson: ${nextLessonData.title}`}
                 >
                   View lesson →
@@ -488,17 +509,17 @@ export default function DashboardClient(props: DashboardClientProps) {
               </div>
 
               {/* Needs practice — CORAL */}
-              <div style={{ background: "#ffe8e3", borderRadius: 16, border: "1px solid rgba(255,79,43,0.12)", padding: 20 }}>
-                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#ff4f2b", marginBottom: 7 }}>
+              <div style={{ background: C.coralSoft, borderRadius: 16, border: "1px solid rgba(255,79,43,0.12)", padding: 20 }}>
+                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.coral, marginBottom: 7 }}>
                   Needs practice · {weakestTeks}
                 </p>
-                <h3 style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 16, fontWeight: 700, color: "#8a1a05", marginBottom: 3, lineHeight: 1.3 }}>
+                <h3 style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 16, fontWeight: 700, color: C.coralDark, marginBottom: 3, lineHeight: 1.3 }}>
                   {weakestTeksTitle}
                 </h3>
-                <p style={{ fontSize: 12, color: "#8aada0", marginBottom: 14 }}>Low mastery detected</p>
+                <p style={{ fontSize: 12, color: C.muted, marginBottom: 14 }}>Low mastery detected</p>
                 <Link
                   href="/student/learn/standards"
-                  style={{ background: "#ff4f2b", color: "white", borderRadius: 10, padding: "8px 16px", fontSize: 12, fontWeight: 600, textDecoration: "none", display: "inline-block" }}
+                  style={{ background: C.coral, color: "white", borderRadius: 10, padding: "8px 16px", fontSize: 12, fontWeight: 600, textDecoration: "none", display: "inline-block" }}
                   aria-label={`Practice ${weakestTeks}`}
                 >
                   Practice now →
@@ -510,52 +531,52 @@ export default function DashboardClient(props: DashboardClientProps) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
 
               {/* Streak — AMBER */}
-              <div style={{ background: "#fff5d6", borderRadius: 16, border: "1px solid rgba(245,168,0,0.15)", padding: 20 }}>
-                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8a5e00", marginBottom: 7 }}>Your streak</p>
+              <div style={{ background: C.amberSoft, borderRadius: 16, border: "1px solid rgba(245,168,0,0.15)", padding: 20 }}>
+                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.amberText, marginBottom: 7 }}>Your streak</p>
                 <span style={{
                   fontFamily: "var(--font-fraunces), serif",
                   fontSize: 44, fontWeight: 800, fontStyle: "italic",
-                  color: "#f5a800", lineHeight: 1, display: "block",
+                  color: C.amber, lineHeight: 1, display: "block",
                 }}>
                   {streakDays}
                 </span>
-                <p style={{ fontSize: 12, color: "#8a5e00", marginTop: 2, marginBottom: 10 }}>
+                <p style={{ fontSize: 12, color: C.amberText, marginTop: 2, marginBottom: 10 }}>
                   {streakDays === 0 ? "days — start one today!" : `day${streakDays !== 1 ? "s" : ""} and counting`}
                 </p>
                 <div style={{ height: 6, background: "rgba(0,0,0,0.08)", borderRadius: 3, overflow: "hidden" }}>
-                  <div style={{ height: "100%", width: `${Math.min((xp / 50) * 100, 100)}%`, background: "#f5a800", borderRadius: 3 }} />
+                  <div style={{ height: "100%", width: `${Math.min((xp / 50) * 100, 100)}%`, background: C.amber, borderRadius: 3 }} />
                 </div>
-                <p style={{ fontSize: 10, color: "#8a5e00", fontWeight: 500, marginTop: 4 }}>{xp} / 50 XP to next level</p>
+                <p style={{ fontSize: 10, color: C.amberText, fontWeight: 500, marginTop: 4 }}>{xp} / 50 XP to next level</p>
               </div>
 
               {/* Assignment — WHITE */}
-              <div style={{ background: "white", borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)", padding: 20 }}>
-                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8aada0", marginBottom: 7 }}>Assignment</p>
+              <div style={{ background: C.surface, borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)", padding: 20 }}>
+                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.muted, marginBottom: 7 }}>Assignment</p>
                 {dueAssignment ? (
                   <>
-                    <h3 style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 15, fontWeight: 700, color: "#0a1a14", marginBottom: 4 }}>
+                    <h3 style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 4 }}>
                       {assignmentData.title}
                     </h3>
-                    <p style={{ fontSize: 12, color: "#8aada0", marginBottom: 10 }}>{assignmentData.questionCount} questions</p>
+                    <p style={{ fontSize: 12, color: C.muted, marginBottom: 10 }}>{assignmentData.questionCount} questions</p>
                     <span style={{ background: "rgba(255,79,43,0.13)", color: "#c02a10", fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 20 }}>
                       Due {assignmentData.dueLabel}
                     </span>
                   </>
                 ) : (
-                  <p style={{ fontSize: 12, color: "#8aada0", fontStyle: "italic", marginTop: 4 }}>No assignments due</p>
+                  <p style={{ fontSize: 12, color: C.muted, fontStyle: "italic", marginTop: 4 }}>No assignments due</p>
                 )}
               </div>
 
               {/* Challenge — PURPLE */}
-              <div style={{ background: "#eeebff", borderRadius: 16, border: "1px solid rgba(124,92,252,0.15)", padding: 20 }}>
-                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#4a2fc0", marginBottom: 7 }}>Daily challenge</p>
-                <h3 style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 15, fontWeight: 700, color: "#1a0060", marginBottom: 4 }}>
+              <div style={{ background: C.purpleSoft, borderRadius: 16, border: "1px solid rgba(124,92,252,0.15)", padding: 20 }}>
+                <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.purpleText, marginBottom: 7 }}>Daily challenge</p>
+                <h3 style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 15, fontWeight: 700, color: C.purpleDark, marginBottom: 4 }}>
                   {challenge.title}
                 </h3>
                 <p style={{ fontSize: 12, color: "#7060c0", marginBottom: 10 }}>{challenge.subject} · +{challenge.xp} XP</p>
                 <Link
                   href="/student/assessment/items"
-                  style={{ background: "transparent", border: "1px solid rgba(124,92,252,0.25)", color: "#4a2fc0", borderRadius: 10, padding: "6px 12px", fontSize: 12, textDecoration: "none", display: "inline-block" }}
+                  style={{ background: "transparent", border: "1px solid rgba(124,92,252,0.25)", color: C.purpleText, borderRadius: 10, padding: "6px 12px", fontSize: 12, textDecoration: "none", display: "inline-block" }}
                   aria-label="Take today's daily challenge"
                 >
                   Go →
@@ -568,18 +589,18 @@ export default function DashboardClient(props: DashboardClientProps) {
           <div style={{ flex: "0 0 40%", minWidth: 0, display: "flex", flexDirection: "column", gap: 12, position: "sticky", top: 24 }}>
 
             {/* Mastery ring */}
-            <div style={{ background: "white", borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)", padding: 20 }}>
-              <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8aada0", marginBottom: 14 }}>Overall mastery</p>
+            <div style={{ background: C.surface, borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)", padding: 20 }}>
+              <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.muted, marginBottom: 14 }}>Overall mastery</p>
               <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
                 {isLoadingMastery ? (
                   <div style={{ width: 120, height: 120, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <div style={{ width: 32, height: 32, borderRadius: "50%", border: "4px solid #00c49a", borderTopColor: "transparent" }} />
+                    <div style={{ width: 32, height: 32, borderRadius: "50%", border: `4px solid ${C.teal}`, borderTopColor: "transparent" }} />
                   </div>
                 ) : (
                   <svg width="120" height="120" viewBox="0 0 140 140" style={{ flexShrink: 0 }} aria-label={`${ringOverallPct}% overall mastery`}>
                     <circle cx="70" cy="70" r={RING_R} fill="none" stroke="#e2e8f0" strokeWidth={RING_SW} />
                     {ringMastered > 0 && (
-                      <circle cx="70" cy="70" r={RING_R} fill="none" stroke="#00c49a" strokeWidth={RING_SW}
+                      <circle cx="70" cy="70" r={RING_R} fill="none" stroke={C.teal} strokeWidth={RING_SW}
                         strokeDasharray={`${solidMastered} ${RING_CIRC}`} strokeDashoffset={0}
                         transform="rotate(-90 70 70)" strokeLinecap="round" />
                     )}
@@ -593,45 +614,45 @@ export default function DashboardClient(props: DashboardClientProps) {
                         strokeDasharray={`${solidAttempted} ${RING_CIRC}`} strokeDashoffset={arcMastered + arcLearned}
                         transform="rotate(-90 70 70)" strokeLinecap="round" />
                     )}
-                    <text x="70" y="66" textAnchor="middle" fontSize="26" fontWeight="800" fill="#0a1a14"
+                    <text x="70" y="66" textAnchor="middle" fontSize="26" fontWeight="800" fill={C.ink}
                       fontFamily="var(--font-fraunces),serif" fontStyle="italic">{ringOverallPct}%</text>
-                    <text x="70" y="83" textAnchor="middle" fontSize="11" fill="#8aada0"
+                    <text x="70" y="83" textAnchor="middle" fontSize="11" fill={C.muted}
                       fontFamily="var(--font-dm-sans),sans-serif">overall</text>
                   </svg>
                 )}
                 <ul style={{ display: "flex", flexDirection: "column", gap: 10, listStyle: "none", margin: 0, padding: 0 }}>
                   <li style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
-                    <span style={{ width: 10, height: 10, flexShrink: 0, borderRadius: "50%", background: "#00c49a", display: "inline-block" }} aria-hidden="true" />
-                    <span style={{ color: "#0a1a14" }}>Mastered: <strong>{ringMastered}</strong></span>
+                    <span style={{ width: 10, height: 10, flexShrink: 0, borderRadius: "50%", background: C.teal, display: "inline-block" }} aria-hidden="true" />
+                    <span style={{ color: C.ink }}>Mastered: <strong>{ringMastered}</strong></span>
                   </li>
                   <li style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
                     <span style={{ width: 10, height: 10, flexShrink: 0, borderRadius: "50%", background: "#7de3cb", display: "inline-block" }} aria-hidden="true" />
-                    <span style={{ color: "#0a1a14" }}>Learned: <strong>{ringLearned}</strong></span>
+                    <span style={{ color: C.ink }}>Learned: <strong>{ringLearned}</strong></span>
                   </li>
                   <li style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
                     <span style={{ width: 10, height: 10, flexShrink: 0, borderRadius: "50%", background: "#ffa694", display: "inline-block" }} aria-hidden="true" />
-                    <span style={{ color: "#0a1a14" }}>Attempted: <strong>{ringAttempted}</strong></span>
+                    <span style={{ color: C.ink }}>Attempted: <strong>{ringAttempted}</strong></span>
                   </li>
                 </ul>
               </div>
             </div>
 
             {/* TEKS status + this week */}
-            <div style={{ background: "white", borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)", padding: 20 }}>
-              <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8aada0", marginBottom: 8 }}>TEKS status</p>
+            <div style={{ background: C.surface, borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)", padding: 20 }}>
+              <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.muted, marginBottom: 8 }}>TEKS status</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                 {teksStatus.map((t) => (
                   <BsTag key={t.code} variant={t.variant}>{t.code}</BsTag>
                 ))}
               </div>
-              <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "#8aada0", marginTop: 14, marginBottom: 8 }}>This week</p>
+              <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.muted, marginTop: 14, marginBottom: 8 }}>This week</p>
               <div style={{ display: "flex", gap: 7 }}>
                 {DAY_ABBREV.map((day, i) => (
                   <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                     <div
                       style={{
                         width: 22, height: 22, borderRadius: "50%",
-                        background: weekActivity[i] === "active" ? "#006e55" :
+                        background: weekActivity[i] === "active" ? C.tealDark :
                                     weekActivity[i] === "past"   ? "rgba(0,196,154,0.4)" :
                                     "rgba(0,0,0,0.1)",
                       }}
@@ -641,7 +662,7 @@ export default function DashboardClient(props: DashboardClientProps) {
                         `${day} — no activity`
                       }
                     />
-                    <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.05em", color: "#8aada0" }}>{day}</span>
+                    <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.05em", color: C.muted }}>{day}</span>
                   </div>
                 ))}
               </div>
@@ -651,7 +672,7 @@ export default function DashboardClient(props: DashboardClientProps) {
             <Link
               href="/student/tutor"
               style={{
-                background: "#0a1a14", borderRadius: 16,
+                background: C.ink, borderRadius: 16,
                 padding: "16px 22px", display: "flex", alignItems: "center", gap: 14,
                 cursor: "pointer", textDecoration: "none",
               }}
@@ -662,9 +683,9 @@ export default function DashboardClient(props: DashboardClientProps) {
                 borderRadius: 11, display: "flex", alignItems: "center",
                 justifyContent: "center", flexShrink: 0,
               }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00c49a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.teal} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-                  <circle cx="12" cy="17" r="0.5" fill="#00c49a"/>
+                  <circle cx="12" cy="17" r="0.5" fill={C.teal}/>
                 </svg>
               </div>
               <div>
@@ -673,10 +694,10 @@ export default function DashboardClient(props: DashboardClientProps) {
               </div>
               <div style={{
                 marginLeft: "auto", width: 34, height: 34,
-                background: "#00c49a", borderRadius: "50%",
+                background: C.teal, borderRadius: "50%",
                 display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
               }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003d2e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.tealDeep} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </div>
