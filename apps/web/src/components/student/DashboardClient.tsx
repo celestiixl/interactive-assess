@@ -380,7 +380,7 @@ export default function DashboardClient(props: DashboardClientProps) {
       </div>
 
       {/* ── Hero: continue lesson ── */}
-      <div className="relative mb-3 overflow-hidden rounded-bs bg-bs-teal-deep p-5">
+      <div className="relative mb-3 overflow-hidden rounded-bs bg-bs-teal-deep p-5" style={{ background: "#003d2e" }}>
         {/* decorative orbs */}
         <div className="pointer-events-none absolute -right-16 -top-20 h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.22)_0%,transparent_70%)]" />
         <div className="pointer-events-none absolute bottom-[-60px] right-[120px] h-[160px] w-[160px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.1)_0%,transparent_70%)]" />
