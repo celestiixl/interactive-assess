@@ -13,6 +13,7 @@ import BsCard from "@/components/ui/BsCard";
 import BsTag, { type TagVariant } from "@/components/ui/BsTag";
 import BsCardLabel from "@/components/ui/BsCardLabel";
 import BsCardTitle from "@/components/ui/BsCardTitle";
+import { AxoMascot } from "@/components/ui";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -366,6 +367,9 @@ export default function DashboardClient(props: DashboardClientProps) {
           <p className="mt-1 text-[12px] text-bs-muted">
             Period {period} · {currentUnit} · {todayLabel}
           </p>
+        </div>
+        <div className="flex items-end justify-end">
+          <AxoMascot size={96} />
         </div>
         <div className="flex gap-2 pt-2">
           <div className="flex items-center gap-1.5 rounded-bs-pill border border-[rgba(0,0,0,0.07)] bg-bs-surface px-3.5 py-1.5 text-[12px] font-medium text-bs-ink-2">
