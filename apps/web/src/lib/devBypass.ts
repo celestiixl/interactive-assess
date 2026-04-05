@@ -10,9 +10,9 @@ const IS_DEV_BYPASS = process.env.NEXT_PUBLIC_DEV_BYPASS === "true";
 
 // Matches the StudentProfile interface in studentAuth.ts
 const DEV_STUDENT: StudentProfile = {
-  schoolId: "DEV001",
-  name: "Dev Student",
-  period: "2",
+  id: "dev-student-001",
+  displayName: "Dev Student",
+  period: 2,
 };
 
 // Matches the Teacher interface in teacherAuth.ts

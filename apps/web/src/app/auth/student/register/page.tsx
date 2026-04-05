@@ -7,46 +7,47 @@ import { useStudentAuth } from "@/lib/studentAuth";
 
 export default function StudentRegisterPage() {
   const router = useRouter();
-  const { register } = useStudentAuth();
+  const setStudent = useStudentAuth((s) => s.setStudent);
 
-  const [schoolId, setSchoolId] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [period, setPeriod] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [period, setPeriod] = useState("1");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const schoolIdRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    schoolIdRef.current?.focus();
+    nameRef.current?.focus();
   }, []);
-
-  function clearError() {
-    setError(null);
-  }
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
-    if (!schoolId.trim() || !name.trim() || !password) return;
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
+    if (!displayName.trim()) return;
 
     setLoading(true);
     setError(null);
 
-    const result = register(schoolId, name, password, period || undefined);
-    if (!result.ok) {
-      setError(result.error ?? "Registration failed.");
-      setLoading(false);
-      return;
-    }
+    try {
+      const res = await fetch("/api/student/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ displayName: displayName.trim(), period: Number(period) }),
+      });
 
-    router.replace("/student/dashboard");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError((data as { error?: string }).error ?? "Registration failed.");
+        setLoading(false);
+        return;
+      }
+
+      const student = await res.json() as { id: string; displayName: string; period: number };
+      setStudent({ id: student.id, displayName: student.displayName, period: student.period });
+      router.replace("/student/dashboard");
+    } catch {
+      setError("Could not connect. Please try again.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -97,7 +98,7 @@ export default function StudentRegisterPage() {
             Set up your account
           </h1>
           <p className="mt-2 text-sm text-[#9abcb0]">
-            Create your password to get started
+            Enter your name and class period to get started
           </p>
         </div>
 
@@ -107,46 +108,22 @@ export default function StudentRegisterPage() {
           className="w-full max-w-sm rounded-2xl border border-[#00d4aa]/20 bg-[#132638] p-8"
         >
           <div className="flex flex-col gap-5">
-            {/* School ID */}
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="schoolId"
-                className="text-sm font-medium text-[#9abcb0]"
-              >
-                School ID
-              </label>
-              <input
-                ref={schoolIdRef}
-                id="schoolId"
-                type="text"
-                aria-label="School ID"
-                placeholder="e.g. S12345"
-                value={schoolId}
-                onChange={(e) => { setSchoolId(e.target.value); clearError(); }}
-                disabled={loading}
-                autoComplete="username"
-                className="w-full bg-[#0d1e2c] border border-[#00d4aa]/30 rounded-xl px-4 py-3
-                           text-[#e8f4f0] placeholder-[#5a8070] text-base
-                           focus:outline-none focus:border-[#00d4aa] focus:ring-1 focus:ring-[#00d4aa]/40
-                           transition-all duration-200 disabled:opacity-50"
-              />
-            </div>
-
             {/* Name */}
             <div className="flex flex-col gap-1.5">
               <label
-                htmlFor="name"
+                htmlFor="displayName"
                 className="text-sm font-medium text-[#9abcb0]"
               >
                 Your name
               </label>
               <input
-                id="name"
+                ref={nameRef}
+                id="displayName"
                 type="text"
                 aria-label="Your full name"
                 placeholder="First and last name"
-                value={name}
-                onChange={(e) => { setName(e.target.value); clearError(); }}
+                value={displayName}
+                onChange={(e) => { setDisplayName(e.target.value); setError(null); }}
                 disabled={loading}
                 autoComplete="name"
                 className="w-full bg-[#0d1e2c] border border-[#00d4aa]/30 rounded-xl px-4 py-3
@@ -168,82 +145,23 @@ export default function StudentRegisterPage() {
                 id="period"
                 aria-label="Select your class period"
                 value={period}
-                onChange={(e) => { setPeriod(e.target.value); clearError(); }}
+                onChange={(e) => { setPeriod(e.target.value); setError(null); }}
                 disabled={loading}
                 className="w-full bg-[#0d1e2c] border border-[#00d4aa]/30 rounded-xl px-4 py-3
                            text-[#e8f4f0] text-base
                            focus:outline-none focus:border-[#00d4aa]
                            disabled:opacity-50"
               >
-                <option value="">Select your class period...</option>
-                <option value="1">Period 1</option>
-                <option value="2">Period 2</option>
-                <option value="3">Period 3</option>
-                <option value="4">Period 4</option>
-                <option value="5">Period 5</option>
-                <option value="6">Period 6</option>
-                <option value="7">Period 7</option>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((p) => (
+                  <option key={p} value={p}>Period {p}</option>
+                ))}
               </select>
-            </div>
-
-            {/* Password */}
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium text-[#9abcb0]"
-              >
-                Create a password
-              </label>
-              <input
-                id="password"
-                type="password"
-                aria-label="Create a password"
-                placeholder="At least 6 characters"
-                value={password}
-                onChange={(e) => { setPassword(e.target.value); clearError(); }}
-                disabled={loading}
-                autoComplete="new-password"
-                className="w-full bg-[#0d1e2c] border border-[#00d4aa]/30 rounded-xl px-4 py-3
-                           text-[#e8f4f0] placeholder-[#5a8070] text-base
-                           focus:outline-none focus:border-[#00d4aa] focus:ring-1 focus:ring-[#00d4aa]/40
-                           transition-all duration-200 disabled:opacity-50"
-              />
-            </div>
-
-            {/* Confirm password */}
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="confirmPassword"
-                className="text-sm font-medium text-[#9abcb0]"
-              >
-                Confirm password
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                aria-label="Confirm your password"
-                placeholder="Repeat your password"
-                value={confirmPassword}
-                onChange={(e) => { setConfirmPassword(e.target.value); clearError(); }}
-                disabled={loading}
-                autoComplete="new-password"
-                className="w-full bg-[#0d1e2c] border border-[#00d4aa]/30 rounded-xl px-4 py-3
-                           text-[#e8f4f0] placeholder-[#5a8070] text-base
-                           focus:outline-none focus:border-[#00d4aa] focus:ring-1 focus:ring-[#00d4aa]/40
-                           transition-all duration-200 disabled:opacity-50"
-              />
             </div>
 
             {/* Submit button */}
             <button
               type="submit"
-              disabled={
-                !schoolId.trim() ||
-                !name.trim() ||
-                !password ||
-                !confirmPassword ||
-                loading
-              }
+              disabled={!displayName.trim() || loading}
               className="w-full bg-[#00d4aa] text-[#0d1e2c] font-bold rounded-xl py-3
                          text-base tracking-wide
                          hover:bg-[#00e8bb] transition-all duration-200

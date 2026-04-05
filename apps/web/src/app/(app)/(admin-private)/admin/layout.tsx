@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAdminAuth } from "@/lib/adminAuth";
 
 /**
- * Guards all /admin/* routes.
+ * Guards all /admin/* routes (except /admin/login which lives in (admin-public)).
  * Redirects to /admin/login when no admin session exists.
  */
 export default function AdminLayout({

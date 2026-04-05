@@ -22,6 +22,8 @@ model Student {
   attempts            Attempt[]
   assignmentResponses AssignmentResponse[]
   flashcardProgress   FlashcardProgress[]
+
+  @@unique([displayName, period])
 }
 
 model MasteryRecord {

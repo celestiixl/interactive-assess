@@ -6,11 +6,10 @@ import { useStudentAuth } from "@/lib/studentAuth";
 
 export default function StudentLoginPage() {
   const router = useRouter();
-  const login = useStudentAuth((s) => s.login);
-  const register = useStudentAuth((s) => s.register);
+  const setStudent = useStudentAuth((s) => s.setStudent);
 
-  const [name, setName] = useState("");
-  const [schoolId, setSchoolId] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [period, setPeriod] = useState<number>(1);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,24 +18,27 @@ export default function StudentLoginPage() {
     setError(null);
     setLoading(true);
 
-    // Try logging in first. The existing studentAuth prototype stores the schoolId
-    // as the password when registering via name+ID (prototype-only behaviour —
-    // a production build must use a proper auth provider).
-    const loginResult = login(schoolId, schoolId);
-    if (loginResult.ok) {
-      router.push("/student/dashboard");
-      return;
-    }
+    try {
+      const res = await fetch("/api/student/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ displayName: displayName.trim(), period }),
+      });
 
-    // No existing account — register with schoolId as password
-    const registerResult = register(schoolId, name, schoolId);
-    if (registerResult.ok) {
-      router.push("/student/dashboard");
-      return;
-    }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError((data as { error?: string }).error ?? "Something went wrong. Please try again.");
+        return;
+      }
 
-    setError(registerResult.error ?? "Something went wrong. Please try again.");
-    setLoading(false);
+      const student = await res.json() as { id: string; displayName: string; period: number };
+      setStudent({ id: student.id, displayName: student.displayName, period: student.period });
+      router.push("/student/dashboard");
+    } catch {
+      setError("Could not connect. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -46,11 +48,11 @@ export default function StudentLoginPage() {
           Welcome to BioSpark 🌱
         </h1>
         <p className="mb-6 text-sm text-bs-text-sub">
-          Enter your name and school ID to get started.
+          Enter your name and class period to get started.
         </p>
 
         <form onSubmit={handleSubmit} noValidate>
-          {/* Name field */}
+          {/* Display name field */}
           <label
             htmlFor="student-name"
             className="mb-1.5 block text-sm font-medium text-bs-text-sub"
@@ -61,8 +63,8 @@ export default function StudentLoginPage() {
             id="student-name"
             type="text"
             autoComplete="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
             disabled={loading}
             required
             aria-required="true"
@@ -71,27 +73,29 @@ export default function StudentLoginPage() {
             className="mb-4 w-full rounded-xl border border-bs-border bg-bs-bg px-4 py-2.5 text-sm text-bs-text placeholder-bs-text-muted outline-none focus:border-bs-teal focus:ring-1 focus:ring-bs-teal disabled:opacity-50"
           />
 
-          {/* School ID field */}
+          {/* Period dropdown */}
           <label
-            htmlFor="school-id"
+            htmlFor="student-period"
             className="mb-1.5 block text-sm font-medium text-bs-text-sub"
           >
-            School ID
+            Class period
           </label>
-          <input
-            id="school-id"
-            type="text"
-            inputMode="numeric"
-            autoComplete="username"
-            value={schoolId}
-            onChange={(e) => setSchoolId(e.target.value)}
+          <select
+            id="student-period"
+            value={period}
+            onChange={(e) => setPeriod(Number(e.target.value))}
             disabled={loading}
             required
             aria-required="true"
             aria-describedby={error ? "student-error" : undefined}
-            placeholder="123456"
-            className="mb-4 w-full rounded-xl border border-bs-border bg-bs-bg px-4 py-2.5 text-sm text-bs-text placeholder-bs-text-muted outline-none focus:border-bs-teal focus:ring-1 focus:ring-bs-teal disabled:opacity-50"
-          />
+            className="mb-4 w-full rounded-xl border border-bs-border bg-bs-bg px-4 py-2.5 text-sm text-bs-text outline-none focus:border-bs-teal focus:ring-1 focus:ring-bs-teal disabled:opacity-50"
+          >
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((p) => (
+              <option key={p} value={p}>
+                Period {p}
+              </option>
+            ))}
+          </select>
 
           {error && (
             <p
@@ -105,7 +109,7 @@ export default function StudentLoginPage() {
 
           <button
             type="submit"
-            disabled={loading || !name.trim() || !schoolId.trim()}
+            disabled={loading || !displayName.trim()}
             className="w-full rounded-full bg-bs-teal py-2.5 text-sm font-bold text-[#04231f] transition-all hover:-translate-y-px hover:shadow-[var(--bs-teal-glow)] disabled:pointer-events-none disabled:opacity-50"
           >
             {loading ? "Loading…" : "Let's go!"}
@@ -115,4 +119,5 @@ export default function StudentLoginPage() {
     </div>
   );
 }
+
 

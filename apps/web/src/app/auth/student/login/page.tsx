@@ -7,44 +7,47 @@ import { useStudentAuth } from "@/lib/studentAuth";
 
 export default function StudentLoginPage() {
   const router = useRouter();
-  const { login } = useStudentAuth();
+  const setStudent = useStudentAuth((s) => s.setStudent);
 
-  const [schoolId, setSchoolId] = useState("");
-  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [period, setPeriod] = useState("1");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const schoolIdRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    schoolIdRef.current?.focus();
+    nameRef.current?.focus();
   }, []);
-
-  function handleSchoolIdChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setSchoolId(e.target.value);
-    setError(null);
-  }
-
-  function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setPassword(e.target.value);
-    setError(null);
-  }
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    if (!schoolId.trim() || !password) return;
+    if (!displayName.trim()) return;
 
     setLoading(true);
     setError(null);
 
-    const result = login(schoolId, password);
-    if (!result.ok) {
-      setError(result.error ?? "Login failed.");
-      setLoading(false);
-      return;
-    }
+    try {
+      const res = await fetch("/api/student/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ displayName: displayName.trim(), period: Number(period) }),
+      });
 
-    router.replace("/student/dashboard");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError((data as { error?: string }).error ?? "Login failed.");
+        setLoading(false);
+        return;
+      }
+
+      const student = await res.json() as { id: string; displayName: string; period: number };
+      setStudent({ id: student.id, displayName: student.displayName, period: student.period });
+      router.replace("/student/dashboard");
+    } catch {
+      setError("Could not connect. Please try again.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -95,7 +98,7 @@ export default function StudentLoginPage() {
             Welcome back, scientist
           </h1>
           <p className="mt-2 text-sm text-[#9abcb0]">
-            Sign in with your school ID and password
+            Enter your name and class period to sign in
           </p>
         </div>
 
@@ -105,24 +108,24 @@ export default function StudentLoginPage() {
           className="w-full max-w-sm rounded-2xl border border-[#00d4aa]/20 bg-[#132638] p-8"
         >
           <div className="flex flex-col gap-5">
-            {/* School ID input */}
+            {/* Name input */}
             <div className="flex flex-col gap-1.5">
               <label
-                htmlFor="schoolId"
+                htmlFor="displayName"
                 className="text-sm font-medium text-[#9abcb0]"
               >
-                School ID
+                Your name
               </label>
               <input
-                ref={schoolIdRef}
-                id="schoolId"
+                ref={nameRef}
+                id="displayName"
                 type="text"
-                aria-label="School ID"
-                placeholder="e.g. S12345"
-                value={schoolId}
-                onChange={handleSchoolIdChange}
+                aria-label="Your name"
+                placeholder="First Last"
+                value={displayName}
+                onChange={(e) => { setDisplayName(e.target.value); setError(null); }}
                 disabled={loading}
-                autoComplete="username"
+                autoComplete="name"
                 className="w-full bg-[#0d1e2c] border border-[#00d4aa]/30 rounded-xl px-4 py-3
                            text-[#e8f4f0] placeholder-[#5a8070] text-base
                            focus:outline-none focus:border-[#00d4aa] focus:ring-1 focus:ring-[#00d4aa]/40
@@ -130,34 +133,35 @@ export default function StudentLoginPage() {
               />
             </div>
 
-            {/* Password input */}
+            {/* Period select */}
             <div className="flex flex-col gap-1.5">
               <label
-                htmlFor="password"
+                htmlFor="period"
                 className="text-sm font-medium text-[#9abcb0]"
               >
-                Password
+                Class period
               </label>
-              <input
-                id="password"
-                type="password"
-                aria-label="Password"
-                placeholder="Your password"
-                value={password}
-                onChange={handlePasswordChange}
+              <select
+                id="period"
+                aria-label="Class period"
+                value={period}
+                onChange={(e) => { setPeriod(e.target.value); setError(null); }}
                 disabled={loading}
-                autoComplete="current-password"
                 className="w-full bg-[#0d1e2c] border border-[#00d4aa]/30 rounded-xl px-4 py-3
-                           text-[#e8f4f0] placeholder-[#5a8070] text-base
-                           focus:outline-none focus:border-[#00d4aa] focus:ring-1 focus:ring-[#00d4aa]/40
-                           transition-all duration-200 disabled:opacity-50"
-              />
+                           text-[#e8f4f0] text-base
+                           focus:outline-none focus:border-[#00d4aa]
+                           disabled:opacity-50"
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((p) => (
+                  <option key={p} value={p}>Period {p}</option>
+                ))}
+              </select>
             </div>
 
             {/* Submit button */}
             <button
               type="submit"
-              disabled={!schoolId.trim() || !password || loading}
+              disabled={!displayName.trim() || loading}
               className="w-full bg-[#00d4aa] text-[#0d1e2c] font-bold rounded-xl py-3
                          text-base tracking-wide
                          hover:bg-[#00e8bb] transition-all duration-200
@@ -183,23 +187,8 @@ export default function StudentLoginPage() {
             )}
           </div>
         </form>
-
-        {/* Register link */}
-        <p className="mt-4 text-sm text-[#9abcb0] text-center">
-          First time?{" "}
-          <Link
-            href="/auth/student/register"
-            className="text-[#00d4aa] font-semibold hover:underline"
-          >
-            Set up your account
-          </Link>
-        </p>
-
-        {/* Footer */}
-        <p className="mt-3 text-xs text-[#5a8070] text-center">
-          Forgot your password? Ask your teacher to reset it.
-        </p>
       </div>
     </div>
   );
 }
+

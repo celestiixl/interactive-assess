@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && prisma db push --accept-data-loss && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
@@ -43,6 +43,7 @@
     "@tsparticles/engine": "^3.9.1",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.1",
+    "@vercel/speed-insights": "^2.0.0",
     "@vitest/coverage-v8": "^4.1.2",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",

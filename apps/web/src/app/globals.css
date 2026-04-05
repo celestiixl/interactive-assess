@@ -98,7 +98,10 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* ── BioSpark v4 color tokens ── */
+  /* ── BioSpark v4 light-theme tokens ── */
+  /* NOTE: these override dark-theme tokens from the block above. */
+  /* Admin/assessment pages must use --bs-raised, --bs-bg etc (not overridden) */
+  /* rather than --bs-surface which resolves to #ffffff here. */
   --bs-teal:          #00c49a;
   --bs-teal-dark:     #006e55;
   --bs-teal-deep:     #003d2e;
