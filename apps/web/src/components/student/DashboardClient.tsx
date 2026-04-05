@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import MasteryDonut, { type DonutSegment } from "@/components/student/MasteryDonut";
+import { type DonutSegment } from "@/components/student/MasteryDonut";
 import { loadLearningProgress, getMostRecentLessonId } from "@/lib/learningProgress";
 import { getXP, getStreak } from "@/lib/xp";
 import { LEARNING_UNITS, type LearningLesson, type LearningUnit } from "@/lib/learningHubContent";
@@ -11,7 +11,6 @@ import { useStudentAuth } from "@/lib/studentAuth";
 import PageShell from "@/components/ui/PageShell";
 import BsCard from "@/components/ui/BsCard";
 import BsTag, { type TagVariant } from "@/components/ui/BsTag";
-import BsBtn from "@/components/ui/BsBtn";
 import BsCardLabel from "@/components/ui/BsCardLabel";
 import BsCardTitle from "@/components/ui/BsCardTitle";
 
@@ -330,17 +329,39 @@ export default function DashboardClient(props: DashboardClientProps) {
 
   // Period / unit info
   const period = student?.period ?? "—";
-  const currentUnit = heroUnit?.title ?? "Unit 1";
-  const todayLabel = new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  const currentUnit = `Unit ${heroUnitNum}`;
+  const todayLabel = new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
+
+  // ── Compact mastery ring (3-slice: mastered / learned / attempted) ──────────
+  // normalizeToPercentage: values in [0,1] are multiplied ×100; values >1 pass through
+  const normalizeToPercentage = (v: number) => (v <= 1 ? v * 100 : v);
+  const masteryTotal = masterySegments.length > 0 ? masterySegments.length : 1;
+  const ringMastered  = masterySegments.filter(s => normalizeToPercentage(s.value) >= 75).length;
+  const ringLearned   = masterySegments.filter(s => { const v = normalizeToPercentage(s.value); return v >= 40 && v < 75; }).length;
+  const ringAttempted = masteryTotal - ringMastered - ringLearned;
+  const ringOverallPct = masterySegments.length > 0
+    ? Math.round(masterySegments.reduce((a, s) => a + normalizeToPercentage(s.value), 0) / masterySegments.length)
+    : 0;
+  const RING_R    = 52;
+  const RING_CIRC = 2 * Math.PI * RING_R;
+  const RING_SW   = 13;
+  const RING_GAP  = 2.5;
+  const arcMastered  = (ringMastered  / masteryTotal) * RING_CIRC;
+  const arcLearned   = (ringLearned   / masteryTotal) * RING_CIRC;
+  const solidMastered  = Math.max(0, arcMastered  - RING_GAP);
+  const solidLearned   = Math.max(0, arcLearned   - RING_GAP);
+  const solidAttempted = Math.max(0, RING_CIRC - arcMastered - arcLearned - RING_GAP);
 
   return (
     <PageShell>
       {/* ── Topbar ── */}
-      <div className="mb-7 flex flex-wrap items-start justify-between gap-3">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[13px] text-bs-muted">Good {timeOfDay}</p>
-          <h1 className="font-display text-[40px] font-extrabold italic leading-none tracking-tight text-bs-ink">
-            <span className="text-bs-teal-dark">{student?.displayName ?? studentName}</span> ✦
+          <h1
+            className="font-display text-[40px] font-extrabold italic leading-none tracking-tight text-bs-teal-dark"
+          >
+            {student?.displayName ?? studentName} ✦
           </h1>
           <p className="mt-1 text-[12px] text-bs-muted">
             Period {period} · {currentUnit} · {todayLabel}
@@ -359,19 +380,19 @@ export default function DashboardClient(props: DashboardClientProps) {
       </div>
 
       {/* ── Hero: continue lesson ── */}
-      <div className="relative mb-3 overflow-hidden rounded-bs bg-bs-teal-deep p-7">
+      <div className="relative mb-3 overflow-hidden rounded-bs bg-bs-teal-deep p-5">
         {/* decorative orbs */}
         <div className="pointer-events-none absolute -right-16 -top-20 h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.22)_0%,transparent_70%)]" />
         <div className="pointer-events-none absolute bottom-[-60px] right-[120px] h-[160px] w-[160px] rounded-full bg-[radial-gradient(circle,rgba(0,196,154,0.1)_0%,transparent_70%)]" />
         <div className="relative z-10 flex items-center justify-between gap-4">
-          <div>
+          <div className="flex-1 min-w-0">
             <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-bs-teal">
               Continue where you left off
             </p>
-            <h2 className="mb-1 font-display text-[26px] font-bold italic leading-snug text-white">
+            <h2 className="mb-1 font-display text-[22px] font-bold italic leading-snug text-white">
               {continueLesson.title}
             </h2>
-            <p className="mb-5 text-[12px] text-white/40">
+            <p className="mb-3 text-[12px] text-white/40">
               {continueLesson.unitLabel} · {continueLesson.readTime}
             </p>
             <div className="flex items-center gap-2.5">
@@ -385,7 +406,7 @@ export default function DashboardClient(props: DashboardClientProps) {
               <BsTag variant="teal-inv">{continueLesson.teks}</BsTag>
             </div>
           </div>
-          {/* progress ring */}
+          {/* progress ring — plain SVG */}
           <div className="flex-shrink-0 text-right">
             <p className="mb-1.5 text-[10px] uppercase tracking-[0.05em] text-white/35">Progress</p>
             <svg width="72" height="72" viewBox="0 0 72 72" className="ml-auto">
@@ -405,14 +426,14 @@ export default function DashboardClient(props: DashboardClientProps) {
       </div>
 
       {/* ── 2-col: next up + needs practice ── */}
-      <div className="mb-3 grid grid-cols-2 gap-3">
+      <div className="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <BsCard variant="teal">
           <BsCardLabel>Unit {nextLessonData.unit} · Lesson {nextLessonData.lesson}</BsCardLabel>
           <BsCardTitle className="mb-1">{nextLessonData.title}</BsCardTitle>
           <p className="mb-3 text-[12px] text-bs-muted">Next up in your playlist</p>
           <Link
             href={nextLessonData.href}
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-teal-dark px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
+            className="inline-flex min-h-[44px] cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-teal-dark px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
             aria-label={`View lesson: ${nextLessonData.title}`}
           >
             View lesson →
@@ -424,7 +445,7 @@ export default function DashboardClient(props: DashboardClientProps) {
           <p className="mb-3 text-[12px] text-bs-muted">Low mastery detected</p>
           <Link
             href="/student/learn/standards"
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-coral px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
+            className="inline-flex min-h-[44px] cursor-pointer items-center gap-1 rounded-bs-sm border border-transparent bg-bs-coral px-4 py-2 text-[13px] font-medium font-body text-white hover:opacity-90"
             aria-label={`Practice ${weakestTeks}`}
           >
             Practice now →
@@ -465,7 +486,7 @@ export default function DashboardClient(props: DashboardClientProps) {
           <p className="mb-2.5 text-[12px] text-[#7060c0]">{challenge.subject} · +{challenge.xp} XP</p>
           <Link
             href="/student/assessment/items"
-            className="inline-flex cursor-pointer items-center gap-1 rounded-bs-sm border border-[rgba(124,92,252,0.25)] bg-transparent px-3 py-1.5 text-[12px] font-medium font-body text-[#4a2fc0] hover:bg-bs-teal-soft"
+            className="inline-flex min-h-[44px] cursor-pointer items-center gap-1 rounded-bs-sm border border-[rgba(124,92,252,0.25)] bg-transparent px-3 py-1.5 text-[12px] font-medium font-body text-[#4a2fc0] hover:bg-bs-teal-soft"
             aria-label="Take today's daily challenge"
           >
             Go →
@@ -473,25 +494,66 @@ export default function DashboardClient(props: DashboardClientProps) {
         </BsCard>
       </div>
 
-      {/* ── Mastery donut + TEKS status ── */}
-      <div className="mb-3 grid grid-cols-2 gap-3">
-        <BsCard className="min-h-[220px]">
-          <BsCardLabel className="mb-3.5">Overall mastery</BsCardLabel>
-          {isLoadingMastery ? (
-            <div className="flex h-[180px] items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00c49a] border-t-transparent" />
-            </div>
-          ) : masteryError ? (
-            <div className="flex h-[180px] items-center justify-center">
-              <p className="text-center text-[12px] text-bs-muted">
-                Could not load mastery data.
-                <br />Showing defaults.
-              </p>
-            </div>
-          ) : (
-            <MasteryDonut segments={masterySegments} size={180} />
-          )}
+      {/* ── 2-col: overall mastery + TEKS status ── */}
+      <div className="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+        {/* Mastery card — compact 3-slice SVG ring + legend */}
+        <BsCard>
+          <BsCardLabel>Overall mastery</BsCardLabel>
+          <div className="mt-3 flex items-center gap-5">
+            {isLoadingMastery ? (
+              <div className="flex h-[120px] w-[120px] flex-shrink-0 items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#00c49a] border-t-transparent" />
+              </div>
+            ) : (
+              /* Plain SVG ring: 3 stroked arcs stacked on one circle path */
+              <svg width="120" height="120" viewBox="0 0 140 140" className="flex-shrink-0" aria-label={`${ringOverallPct}% overall mastery`}>
+                {/* background track */}
+                <circle cx="70" cy="70" r={RING_R} fill="none" stroke="#e2e8f0" strokeWidth={RING_SW} />
+                {/* mastered arc (dark teal) */}
+                {ringMastered > 0 && (
+                  <circle cx="70" cy="70" r={RING_R} fill="none" stroke="#00c49a" strokeWidth={RING_SW}
+                    strokeDasharray={`${solidMastered} ${RING_CIRC}`} strokeDashoffset={0}
+                    transform="rotate(-90 70 70)" strokeLinecap="round" />
+                )}
+                {/* learned arc (light teal) */}
+                {ringLearned > 0 && (
+                  <circle cx="70" cy="70" r={RING_R} fill="none" stroke="#7de3cb" strokeWidth={RING_SW}
+                    strokeDasharray={`${solidLearned} ${RING_CIRC}`} strokeDashoffset={arcMastered}
+                    transform="rotate(-90 70 70)" strokeLinecap="round" />
+                )}
+                {/* attempted arc (salmon) */}
+                {ringAttempted > 0 && (
+                  <circle cx="70" cy="70" r={RING_R} fill="none" stroke="#ffa694" strokeWidth={RING_SW}
+                    strokeDasharray={`${solidAttempted} ${RING_CIRC}`} strokeDashoffset={arcMastered + arcLearned}
+                    transform="rotate(-90 70 70)" strokeLinecap="round" />
+                )}
+                {/* center label */}
+                <text x="70" y="66" textAnchor="middle" fontSize="26" fontWeight="800" fill="#0a1a14"
+                  fontFamily="var(--font-fraunces),serif" fontStyle="italic">{ringOverallPct}%</text>
+                <text x="70" y="83" textAnchor="middle" fontSize="11" fill="#8aada0"
+                  fontFamily="var(--font-dm-sans),sans-serif">overall</text>
+              </svg>
+            )}
+            {/* legend */}
+            <ul className="flex flex-col gap-2.5 list-none m-0 p-0">
+              <li className="flex items-center gap-2 text-[13px]">
+                <span className="inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full bg-[#00c49a]" aria-hidden="true" />
+                <span className="text-bs-ink">Mastered: <strong>{ringMastered}</strong></span>
+              </li>
+              <li className="flex items-center gap-2 text-[13px]">
+                <span className="inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full bg-[#7de3cb]" aria-hidden="true" />
+                <span className="text-bs-ink">Learned: <strong>{ringLearned}</strong></span>
+              </li>
+              <li className="flex items-center gap-2 text-[13px]">
+                <span className="inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full bg-[#ffa694]" aria-hidden="true" />
+                <span className="text-bs-ink">Attempted: <strong>{ringAttempted}</strong></span>
+              </li>
+            </ul>
+          </div>
         </BsCard>
+
+        {/* TEKS status + this week */}
         <BsCard>
           <BsCardLabel>TEKS status</BsCardLabel>
           <div className="mt-2 flex flex-wrap gap-1.5">
@@ -507,7 +569,11 @@ export default function DashboardClient(props: DashboardClientProps) {
                   weekActivity[i] === "active" ? "bg-bs-teal-dark" :
                   weekActivity[i] === "past"   ? "bg-bs-teal opacity-40" :
                   "bg-black/10"
-                }`} />
+                }`} aria-label={
+                  weekActivity[i] === "active" ? `${day} — today` :
+                  weekActivity[i] === "past"   ? `${day} — completed` :
+                  `${day} — no activity`
+                } />
                 <span className="text-[9px] font-semibold tracking-[0.05em] text-bs-muted">{day}</span>
               </div>
             ))}
@@ -515,64 +581,28 @@ export default function DashboardClient(props: DashboardClientProps) {
         </BsCard>
       </div>
 
-      {/* ── AI Tutor ── */}
+      {/* ── AI Tutor — full-width dark bar ── */}
       <Link
         href="/student/tutor"
-        className="mb-3 flex w-full cursor-pointer items-center gap-3.5 rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface p-[18px_24px] no-underline"
+        className="flex w-full cursor-pointer items-center gap-4 rounded-bs bg-bs-teal-deep p-4 no-underline"
         aria-label="Open AI tutor"
       >
-        <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,196,154,0.15)]">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <div className="flex h-[42px] w-[42px] flex-shrink-0 items-center justify-center rounded-[12px] bg-[rgba(0,196,154,0.2)]">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00c49a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-            <circle cx="12" cy="17" r="0.5" fill="#006e55"/>
+            <circle cx="12" cy="17" r="0.5" fill="#00c49a"/>
           </svg>
         </div>
         <div className="text-left">
-          <p className="font-display text-[17px] font-bold italic text-bs-ink">Ask the AI tutor</p>
-          <p className="mt-0.5 text-[11px] text-bs-muted">Get help with any biology concept, anytime</p>
+          <p className="font-display text-[17px] font-bold italic text-white">Ask the AI tutor</p>
+          <p className="mt-0.5 text-[11px] text-white/60">Get help with any biology concept, anytime</p>
         </div>
         <div className="ml-auto flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-full bg-bs-teal">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003d2e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003d2e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
         </div>
       </Link>
-
-      {/* ── Bottom nav ── */}
-      <nav className="flex justify-around rounded-bs border border-[rgba(0,0,0,0.06)] bg-bs-surface py-2.5 px-6" aria-label="Main navigation">
-        {/* Dashboard */}
-        <Link href="/student/dashboard" className="flex h-10 w-10 items-center justify-center rounded-bs-sm bg-bs-teal-soft" aria-label="Dashboard">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#006e55" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
-            <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
-          </svg>
-        </Link>
-        {/* Lessons */}
-        <Link href="/student/learn" className="flex h-10 w-10 items-center justify-center rounded-bs-sm" aria-label="Lessons">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 19V6a2 2 0 012-2h12a2 2 0 012 2v13"/><path d="M4 19h16"/><path d="M9 9h6M9 13h4"/>
-          </svg>
-        </Link>
-        {/* Assignments */}
-        <Link href="/student/assignments" className="flex h-10 w-10 items-center justify-center rounded-bs-sm" aria-label="Assignments">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/>
-          </svg>
-        </Link>
-        {/* Standards */}
-        <Link href="/student/learn/standards" className="flex h-10 w-10 items-center justify-center rounded-bs-sm" aria-label="Standards">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2" y="6" width="20" height="14" rx="2"/><path d="M16 2H8l-2 4h12l-2-4z"/>
-          </svg>
-        </Link>
-        {/* Profile */}
-        <Link href="/student/profile" className="flex h-10 w-10 items-center justify-center rounded-bs-sm" aria-label="Profile">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8aada0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-          </svg>
-        </Link>
-      </nav>
     </PageShell>
   );
 }

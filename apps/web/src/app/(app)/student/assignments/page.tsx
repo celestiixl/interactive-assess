@@ -270,7 +270,7 @@ function StudentAssignmentsPageContent() {
       : null;
 
   return (
-    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden text-bs-text">
+    <main className="ia-vh-page flex h-dvh flex-col overflow-hidden bg-bs-page text-bs-text">
       <BackLink href="/student/dashboard" label="Back to dashboard" />
       <PageBanner
         title="My Assignments"

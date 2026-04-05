@@ -160,9 +160,11 @@ function clampPct(value: number) {
 export default function MasteryDonut({
   segments,
   size = 360,
+  showColorKey = true,
 }: {
   segments: DonutSegment[];
   size?: number;
+  showColorKey?: boolean;
 }) {
   const [hoverKey, setHoverKey] = useState<string | null>(null);
 
@@ -345,7 +347,7 @@ export default function MasteryDonut({
   const remainingWidth = totalCount ? (remainingCount / totalCount) * 100 : 0;
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[380px_1fr]">
+    <div className={showColorKey ? "grid gap-4 lg:grid-cols-[380px_1fr]" : "flex flex-col items-center"}>
       <div className="flex flex-col items-center">
         <div className="w-full max-w-85">
           <div className="h-3 overflow-hidden rounded-full bg-white/5">
@@ -404,53 +406,55 @@ export default function MasteryDonut({
         </div>
       </div>
 
-      <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3">
-        <div className="mb-2 text-sm font-semibold text-bs-text">
-          Color key by unit + TEKS
-        </div>
-        <div className="max-h-90 space-y-2 overflow-y-auto pr-1">
-          {units.map((unit) => {
-            const isHover = hoverKey === unit.key;
-            return (
-              <button
-                type="button"
-                key={unit.key}
-                onMouseEnter={() => setHoverKey(unit.key)}
-                onMouseLeave={() => setHoverKey(null)}
-                className={`w-full rounded-xl border px-3 py-2 text-left transition ${
-                  isHover
-                    ? "border-[var(--bs-border)] bg-[var(--bs-raised)]"
-                    : "border-[var(--bs-border)] bg-bs-surface hover:bg-[var(--bs-raised)]"
-                }`}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex min-w-0 items-center gap-2">
-                    <span
-                      className="inline-block h-3 w-3 shrink-0 rounded-full"
-                      style={{ backgroundColor: unit.color }}
-                    />
-                    <span className="truncate text-sm font-semibold text-bs-text">
-                      {unit.label}
+      {showColorKey && (
+        <div className="rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-3">
+          <div className="mb-2 text-sm font-semibold text-bs-text">
+            Color key by unit + TEKS
+          </div>
+          <div className="max-h-90 space-y-2 overflow-y-auto pr-1">
+            {units.map((unit) => {
+              const isHover = hoverKey === unit.key;
+              return (
+                <button
+                  type="button"
+                  key={unit.key}
+                  onMouseEnter={() => setHoverKey(unit.key)}
+                  onMouseLeave={() => setHoverKey(null)}
+                  className={`w-full rounded-xl border px-3 py-2 text-left transition ${
+                    isHover
+                      ? "border-[var(--bs-border)] bg-[var(--bs-raised)]"
+                      : "border-[var(--bs-border)] bg-bs-surface hover:bg-[var(--bs-raised)]"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span
+                        className="inline-block h-3 w-3 shrink-0 rounded-full"
+                        style={{ backgroundColor: unit.color }}
+                      />
+                      <span className="truncate text-sm font-semibold text-bs-text">
+                        {unit.label}
+                      </span>
+                    </div>
+                    <span className="text-xs font-bold text-bs-text-sub">
+                      {unit.masteryPct}%
                     </span>
                   </div>
-                  <span className="text-xs font-bold text-bs-text-sub">
-                    {unit.masteryPct}%
-                  </span>
-                </div>
-                <div className="mt-1 text-[11px] text-bs-text-sub">
-                  {unit.teksCount} TEKS • {unit.masteredCount} mastered •{" "}
-                  {unit.remainingCount} need support
-                </div>
-                {unit.weakestTeks.length > 0 ? (
                   <div className="mt-1 text-[11px] text-bs-text-sub">
-                    Focus: {unit.weakestTeks.join(" • ")}
+                    {unit.teksCount} TEKS • {unit.masteredCount} mastered •{" "}
+                    {unit.remainingCount} need support
                   </div>
-                ) : null}
-              </button>
-            );
-          })}
+                  {unit.weakestTeks.length > 0 ? (
+                    <div className="mt-1 text-[11px] text-bs-text-sub">
+                      Focus: {unit.weakestTeks.join(" • ")}
+                    </div>
+                  ) : null}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

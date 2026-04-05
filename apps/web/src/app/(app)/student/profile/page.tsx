@@ -81,7 +81,7 @@ export default function StudentProfilePage() {
   }
 
   return (
-    <main className="ia-vh-page relative h-dvh overflow-hidden px-3 py-3 text-bs-text sm:px-4 sm:py-4">
+    <main className="ia-vh-page relative h-dvh overflow-hidden bg-bs-page px-3 py-3 text-bs-text sm:px-4 sm:py-4">
       <div className="ia-vh-grid grid h-full min-h-0 grid-rows-[auto_1fr] gap-3">
         <section className="ia-vh-tight rounded-2xl border border-[var(--bs-border)] bg-bs-surface p-4">
           <div className="flex flex-wrap items-start justify-between gap-3">
