@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Fraunces, DM_Sans } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import OfflineSupport from "@/components/common/OfflineSupport";
 import DevBypassProvider from "@/components/common/DevBypassProvider";
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {children}
         <OfflineSupport />
         <DevBypassProvider />
+        <SpeedInsights />
       </body>
     </html>
   );
