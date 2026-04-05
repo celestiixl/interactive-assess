@@ -368,7 +368,7 @@ export default function DashboardClient(props: DashboardClientProps) {
             Period {period} · {currentUnit} · {todayLabel}
           </p>
         </div>
-        <div className="flex items-end justify-end">
+        <div className="flex items-end">
           <AxoMascot size={96} />
         </div>
         <div className="flex gap-2 pt-2">

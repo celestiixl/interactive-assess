@@ -18,7 +18,7 @@ export { default as SpotlightCard } from "./SpotlightCard";
 export { default as ShinyText } from "./ShinyText";
 export { Ring } from "./Ring";
 export { Stat } from "./Stat";
-export { AxoMascot } from './AxoMascot'
+export { AxoMascot } from "./AxoMascot";
 // BioSpark v4 design system primitives
 export { default as BsCard }      from "./BsCard";
 export { default as BsTag }       from "./BsTag";

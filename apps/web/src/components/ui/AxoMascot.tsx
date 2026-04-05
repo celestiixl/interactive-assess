@@ -77,6 +77,12 @@ export function AxoMascot({ size = 120, className }: AxoMascotProps) {
           transform-box: fill-box;
           transform-origin: center;
         }
+        @media (prefers-reduced-motion: reduce) {
+          #axo-body, #axo-gills-left, #axo-gills-right,
+          #axo-tail, #axo-eyelid-left, #axo-eyelid-right {
+            animation: none;
+          }
+        }
       `}</style>
 
       {/* ── Tail ── */}
